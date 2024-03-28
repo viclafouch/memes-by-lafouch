@@ -1,19 +1,19 @@
 import type { Config } from 'tailwindcss'
+import { withUt } from 'uploadthing/tw'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { nextui } = require('@nextui-org/react')
 
-const config: Config = {
+const config: Config = withUt({
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{ts,tsx,mdx}'
   ],
   theme: {
     extend: {}
   },
   darkMode: 'class',
   plugins: [nextui()]
-}
+})
+
 export default config
