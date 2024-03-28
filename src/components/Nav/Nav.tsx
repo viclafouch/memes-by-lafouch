@@ -15,8 +15,6 @@ import {
 const Nav = () => {
   const pathname = usePathname()
 
-  console.log(pathname)
-
   return (
     <Navbar>
       <NavbarBrand>

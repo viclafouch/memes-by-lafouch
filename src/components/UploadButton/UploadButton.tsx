@@ -9,7 +9,7 @@ export const UploadButtonGenerated = generateUploadButton<OurFileRouter>()
 const UploadButton = () => {
   return (
     <UploadButtonGenerated
-      endpoint="imageUploader"
+      endpoint="videoUploader"
       onClientUploadComplete={(response) => {
         // Do something with the response
         console.log('Files: ', response)

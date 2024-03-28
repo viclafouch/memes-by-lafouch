@@ -18,12 +18,17 @@
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "uploadthing": "^6.7.0"
+    "tailwind-merge": "^2.2.2",
+    "uploadthing": "^6.7.0",
+    "usehooks-ts": "^3.0.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@iconify/react": "^4.1.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@viclafouch/eslint-config-viclafouch": "^4.9.0",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "postcss": "^8",

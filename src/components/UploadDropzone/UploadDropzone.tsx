@@ -8,7 +8,7 @@ export const UploadDropzoneGenerated = generateUploadDropzone<OurFileRouter>()
 const UploadDropzone = () => {
   return (
     <UploadDropzoneGenerated
-      endpoint="imageUploader"
+      endpoint="videoUploader"
       onClientUploadComplete={(response) => {
         // Do something with the response
         console.log('Files: ', response)
