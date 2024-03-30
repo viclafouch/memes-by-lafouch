@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { MemeFiltersOrderBy } from '@/constants/meme'
 import { Select, SelectItem } from '@nextui-org/react'
 
@@ -9,9 +9,10 @@ export type MemesOrderByProps = {
   value: MemeFiltersOrderBy
 }
 
-const MemesOrderBy = ({ value }: MemesOrderByProps) => {
+const MemesOrderBy = () => {
   const router = useRouter()
-  const [optimisticValue, setOptimisticValue] = React.useOptimistic(value)
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = event.target.value as MemeFiltersOrderBy
@@ -20,14 +21,13 @@ const MemesOrderBy = ({ value }: MemesOrderByProps) => {
       return
     }
 
-    const newParams = new URLSearchParams({ orderBy: newValue })
+    const params = new URLSearchParams(searchParams)
+    params.set('orderBy', newValue)
 
-    React.startTransition(() => {
-      setOptimisticValue(newValue)
-
-      router.push(`?${newParams}`)
-    })
+    router.replace(`${pathname}?${params.toString()}`)
   }
+
+  const value = searchParams.get('orderBy') ?? 'most_recent'
 
   return (
     <Select
@@ -35,7 +35,7 @@ const MemesOrderBy = ({ value }: MemesOrderByProps) => {
       className="w-40"
       radius="full"
       selectionMode="single"
-      selectedKeys={[optimisticValue]}
+      selectedKeys={[value]}
       onChange={handleChange}
       variant="bordered"
     >

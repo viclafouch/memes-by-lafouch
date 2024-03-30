@@ -30,7 +30,7 @@ const RootLayout = ({
         )}
       >
         <Providers>
-          <div className="flex justify-between flex-col h-screen">
+          <div className="flex flex-col min-h-screen">
             <Nav />
             {children}
             <Footer />

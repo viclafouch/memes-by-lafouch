@@ -20,7 +20,12 @@ async function getMemes({ filters }: MemesListProps) {
 }
 
 const MemesList = async ({ filters }: MemesListProps) => {
-  const memes = await getMemes({ filters })
+  const [memes] = await Promise.all([
+    getMemes({ filters }),
+    new Promise((resolve) => {
+      return setTimeout(resolve, 1000)
+    })
+  ])
 
   return (
     <div className="py-4 grid w-full gap-5 md:grid-cols-3 lg:grid-cols-4">

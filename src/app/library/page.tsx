@@ -12,9 +12,12 @@ const Page = ({
   const filters = memeFilters.parse(searchParams)
 
   return (
-    <Container className="flex flex-col gap-6">
-      <MemesListHeader filters={filters} />
-      <React.Suspense fallback={<div>Loading...</div>}>
+    <Container className="flex flex-col gap-6 mt-10 flex-1">
+      <MemesListHeader />
+      <React.Suspense
+        key={JSON.stringify(filters)}
+        fallback={<div>Loading...</div>}
+      >
         <MemesList filters={filters} />
       </React.Suspense>
     </Container>

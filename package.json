@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
+    "@phosphor-icons/react": "^2.1.4",
     "@prisma/client": "^5.11.0",
+    "@tanstack/react-query": "^5.28.9",
     "@uploadthing/react": "^6.4.1",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.22",
@@ -20,6 +22,7 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.2.2",
     "uploadthing": "^6.7.0",
+    "use-debounce": "^10.0.0",
     "usehooks-ts": "^3.0.2",
     "zod": "^3.22.4"
   },
