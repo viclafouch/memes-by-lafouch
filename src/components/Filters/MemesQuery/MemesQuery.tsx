@@ -3,8 +3,8 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
-import { Icon } from '@iconify/react'
 import { Input } from '@nextui-org/react'
+import { MagnifyingGlass } from '@phosphor-icons/react'
 
 const MemesQuery = () => {
   const searchParams = useSearchParams()
@@ -38,7 +38,7 @@ const MemesQuery = () => {
       radius="full"
       defaultValue={searchParams.get('query')?.toString()}
       onChange={handleChange}
-      startContent={<Icon icon="solar:magnifer-linear" />}
+      startContent={<MagnifyingGlass size={16} />}
       variant="bordered"
     />
   )

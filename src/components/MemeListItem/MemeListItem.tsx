@@ -1,69 +1,62 @@
-'use client'
-
 import React from 'react'
-import { downloadBlob } from '@/utils/download'
+import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
-  CardHeader
+  CardHeader,
+  Skeleton
 } from '@nextui-org/react'
-import { DownloadSimple } from '@phosphor-icons/react/dist/ssr'
 import type { Meme } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
 
-export type MemeListItemProps = {
-  meme: Meme
-}
+export type MemeListItemProps =
+  | {
+      meme: Meme
+      isLoading?: never
+    }
+  | {
+      meme?: never
+      isLoading: true
+    }
 
 const MemeListItem = ({ meme }: MemeListItemProps) => {
-  const downloadMutation = useMutation({
-    mutationFn: async () => {
-      const response = await fetch(meme.videoUrl)
-
-      return response.blob()
-    },
-    onSuccess: (blob) => {
-      downloadBlob(blob, meme.title)
-    }
-  })
-
-  const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-
-    if (downloadMutation.isPending) {
-      return
-    }
-
-    downloadMutation.mutate()
-  }
-
   return (
-    <Card className="py-4" key={meme.id}>
+    <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <h4 className="font-bold text-large">{meme.title}</h4>
+        {meme ? (
+          <h4 className="font-bold text-large">{meme.title}</h4>
+        ) : (
+          <Skeleton className="w-4/5 rounded-lg">
+            <div className="w-full text-large">
+              <span className="bg-default-200">{'\u00A0'}</span>
+            </div>
+          </Skeleton>
+        )}
       </CardHeader>
       <CardBody className="overflow-visible py-2">
-        <video
-          controls
-          className="w-full object-cover rounded-xl"
-          src={meme.videoUrl}
-          width={270}
-          preload="metadata"
-          height={200}
-        />
+        <div className="h-56 aspect-video w-full">
+          {meme ? (
+            <video
+              controls
+              className="w-full h-full object-cover rounded-lg"
+              src={meme.videoUrl}
+              width={270}
+              preload="metadata"
+              height={200}
+            />
+          ) : (
+            <Skeleton className="rounded-lg w-full h-full" />
+          )}
+        </div>
       </CardBody>
       <CardFooter>
-        <Button
-          isLoading={downloadMutation.isPending}
-          isIconOnly
-          color="primary"
-          onClick={handleDownload}
-          aria-label="Télécharger"
-        >
-          <DownloadSimple fontSize={20} />
-        </Button>
+        {meme ? (
+          <DownloadMemeButton meme={meme} />
+        ) : (
+          <Skeleton className="rounded-lg">
+            <div className="h-3 w-4/5 rounded-lg bg-default-200" />
+          </Skeleton>
+        )}
       </CardFooter>
     </Card>
   )

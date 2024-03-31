@@ -16,7 +16,7 @@ const Page = ({
       <MemesListHeader />
       <React.Suspense
         key={JSON.stringify(filters)}
-        fallback={<div>Loading...</div>}
+        fallback={<MemesList isLoading />}
       >
         <MemesList filters={filters} />
       </React.Suspense>
