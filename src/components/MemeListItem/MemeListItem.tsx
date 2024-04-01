@@ -24,7 +24,9 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         {meme ? (
-          <h4 className="font-bold text-large">{meme.title}</h4>
+          <div className="w-full">
+            <h4 className="font-bold text-large truncate">{meme.title}</h4>
+          </div>
         ) : (
           <Skeleton className="w-4/5 rounded-lg">
             <div className="w-full text-large">
@@ -34,7 +36,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
         )}
       </CardHeader>
       <CardBody className="overflow-visible py-2">
-        <div className="h-56 aspect-video w-full">
+        <div className="h-56 lg:h-44 aspect-video w-full">
           {meme ? (
             <video
               controls
