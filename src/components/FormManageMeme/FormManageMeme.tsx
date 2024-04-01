@@ -2,19 +2,15 @@
 
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
+import { useSnackbar } from 'notistack'
 import UploadDropzone from '@/components/UploadDropzone'
+import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { createMeme, type FormStateValue } from '@/serverActions/createMeme'
 import { updateMeme } from '@/serverActions/updateMeme'
 import { Button, Input } from '@nextui-org/react'
 import { Meme } from '@prisma/client'
 
-const SubmitButton = ({
-  formState,
-  isEdit
-}: {
-  formState: FormStateValue
-  isEdit: boolean
-}) => {
+const SubmitButton = ({ isEdit }: { isEdit: boolean }) => {
   const status = useFormStatus()
 
   return (
@@ -27,34 +23,49 @@ const SubmitButton = ({
       >
         {isEdit ? 'Modifier' : 'Ajouter'} le mème
       </Button>
-      <span
-        aria-live="polite"
-        className="text-center text-tiny text-danger p-1 min-h-6 block"
-      >
-        {!formState.success && formState.errorMessage && !status.pending
-          ? formState.errorMessage
-          : ''}
-      </span>
     </div>
   )
 }
 
-const initialState: FormStateValue = {
-  errorMessage: '',
-  success: false,
-  formErrors: null
-}
+const initialState: FormStateValue = null
 
 export type FormManageMemeProps = {
   meme?: Meme
 }
 
 const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
+  const isEditMode = Boolean(meme)
+  const { enqueueSnackbar } = useSnackbar()
   const [formState, formAction] = useFormState(
     meme ? updateMeme : createMeme,
     initialState
   )
-  const formErrors = formState.success ? null : formState.formErrors
+
+  useFormStateCallback(formState, {
+    isError: (values) => {
+      return values?.success === false && values.errorMessage ? values : false
+    },
+    isSuccess: (values) => {
+      return values?.success === true ? values : false
+    },
+    onError: (values) => {
+      enqueueSnackbar({
+        message: values.errorMessage,
+        variant: 'error'
+      })
+    },
+    onSuccess: () => {
+      enqueueSnackbar({
+        message: isEditMode
+          ? 'Mème mis à jour avec succès !'
+          : 'Mème ajouté avec succès !',
+        variant: 'success'
+      })
+    }
+  })
+
+  const formErrors =
+    formState && !formState.success ? formState.formErrors : null
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">
@@ -80,14 +91,14 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
       ) : (
         <video
           controls
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full max-h-72 object-cover rounded-lg"
           src={meme.videoUrl}
           width={270}
           preload="metadata"
           height={200}
         />
       )}
-      <SubmitButton isEdit={Boolean(meme)} formState={formState} />
+      <SubmitButton isEdit={isEditMode} />
     </form>
   )
 }

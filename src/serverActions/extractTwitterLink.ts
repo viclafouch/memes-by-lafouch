@@ -1,7 +1,13 @@
+/* eslint-disable consistent-return */
 'use server'
 
+import { revalidatePath } from 'next/cache'
+import { redirect, RedirectType } from 'next/navigation'
+import { filesize } from 'filesize'
 import { z } from 'zod'
+import { MAX_SIZE_MEME_IN_BYTES } from '@/constants/meme'
 import prisma from '@/db'
+import { Meme } from '@prisma/client'
 
 const tweetbinderSchema = z.object({
   statusId: z.coerce.number(),
@@ -45,7 +51,9 @@ export type FormStateValue =
 export async function extractTwitterLink(
   prevState: FormStateValue,
   formData: FormData
-): Promise<FormStateValue> {
+): Promise<FormStateValue | void> {
+  let memeId: Meme['id']
+
   try {
     const safeParsedResult = schemaTwitterLink.safeParse(formData.get('link'))
 
@@ -70,21 +78,28 @@ export async function extractTwitterLink(
     const data = tweetbinderSchema.parse(json)
     const video = data.videos.at(-1)!
 
-    await prisma.meme.create({
+    if (video.size > MAX_SIZE_MEME_IN_BYTES) {
+      return {
+        success: false,
+        errorMessage: `Video size is too big: ${filesize(video.size)}`
+      }
+    }
+
+    const meme = await prisma.meme.create({
       data: {
         title: data.url,
         videoUrl: video.url
       }
     })
 
-    return {
-      success: true,
-      data: data.videos
-    }
+    memeId = meme.id
   } catch (error) {
     return {
       success: false,
       errorMessage: 'An unknown error occurred'
     }
   }
+
+  revalidatePath('/library', 'page')
+  redirect(`/library/${memeId}`, RedirectType.push)
 }

@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect, RedirectType } from 'next/navigation'
 import { UTApi } from 'uploadthing/server'
 import { z } from 'zod'
+import { MAX_SIZE_MEME_IN_BYTES } from '@/constants/meme'
 import prisma from '@/db'
 import { getFileExtension } from '@/utils/file'
 
@@ -26,7 +27,7 @@ const schema = z.object({
       (file) => {
         const sizeInBytes = Math.round(file.size / 1024)
 
-        return sizeInBytes < 16384
+        return sizeInBytes < MAX_SIZE_MEME_IN_BYTES
       },
       {
         message: 'Video file size must not exceed 16 MB'
@@ -53,6 +54,7 @@ export type FormStateValue =
   | {
       success: true
     }
+  | null
 
 const utapi = new UTApi()
 

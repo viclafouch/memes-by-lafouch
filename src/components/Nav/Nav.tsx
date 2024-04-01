@@ -18,15 +18,17 @@ const Nav = () => {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit">Viclafouch memes</p>
+        <NextLink href="/" className="px-4 py-2 font-bold text-inherit">
+          Viclafouch memes
+        </NextLink>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive={pathname === '/'}>
-          <Link as={NextLink} href="/" color="foreground">
-            Uploader
+        <NavbarItem isActive={pathname === '/new'}>
+          <Link as={NextLink} href="/new" color="foreground">
+            Uploader un fichier
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={pathname.startsWith('/library')}>
+        <NavbarItem isActive={pathname === '/library'}>
           <Link as={NextLink} href="/library" color="foreground">
             Bibliothèque
           </Link>

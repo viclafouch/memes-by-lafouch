@@ -5,6 +5,9 @@ export const memeFilters = z.object({
   query: z.string().catch('')
 })
 
+const SIZE_IN_MB = 16
+export const MAX_SIZE_MEME_IN_BYTES = SIZE_IN_MB * 1024 * 1024
+
 export type MemeFilters = z.infer<typeof memeFilters>
 
 export type MemeFiltersOrderBy = MemeFilters['orderBy']

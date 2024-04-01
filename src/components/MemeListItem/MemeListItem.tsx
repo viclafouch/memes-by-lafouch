@@ -30,7 +30,11 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         {meme ? (
           <div className="w-3/4">
-            <h4 className="font-semibold text-medium truncate">{meme.title}</h4>
+            <Link href={`/library/${meme.id}`}>
+              <h4 className="font-semibold text-medium truncate">
+                {meme.title}
+              </h4>
+            </Link>
           </div>
         ) : (
           <Skeleton className="w-4/5 rounded-lg">

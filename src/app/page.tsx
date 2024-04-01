@@ -8,7 +8,7 @@ const Page = () => {
     <Container className="py-32">
       <div className="flex flex-col justify-center gap-8">
         <h1 className="text-4xl text-center">
-          Ajouter une vidéo via <span className="sr-only">x</span>
+          Ajouter un mème via <span className="sr-only">x</span>
           <span className="inline-flex align-middle bg-black px-2 rounded-lg">
             <XLogo size={54} className="inline text-white" />
           </span>
