@@ -1,12 +1,17 @@
 import React from 'react'
+import Link from 'next/link'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  Skeleton
+  Divider,
+  Skeleton,
+  Spacer
 } from '@nextui-org/react'
+import { DownloadSimple, Pen } from '@phosphor-icons/react/dist/ssr'
 import type { Meme } from '@prisma/client'
 
 export type MemeListItemProps =
@@ -21,11 +26,11 @@ export type MemeListItemProps =
 
 const MemeListItem = ({ meme }: MemeListItemProps) => {
   return (
-    <Card className="py-4">
+    <Card>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         {meme ? (
-          <div className="w-full">
-            <h4 className="font-bold text-large truncate">{meme.title}</h4>
+          <div className="w-3/4">
+            <h4 className="font-semibold text-medium truncate">{meme.title}</h4>
           </div>
         ) : (
           <Skeleton className="w-4/5 rounded-lg">
@@ -51,9 +56,25 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
           )}
         </div>
       </CardBody>
+      <Spacer y={2} />
+      <Divider />
       <CardFooter>
         {meme ? (
-          <DownloadMemeButton meme={meme} />
+          <div className="w-full flex justify-end gap-2">
+            <DownloadMemeButton size="sm" isIconOnly meme={meme}>
+              <DownloadSimple size={20} />
+            </DownloadMemeButton>
+            <Button
+              as={Link}
+              href={`/library/${meme.id}`}
+              size="sm"
+              isIconOnly
+              color="primary"
+              aria-label="Editer"
+            >
+              <Pen size={20} />
+            </Button>
+          </div>
         ) : (
           <Skeleton className="rounded-lg">
             <div className="h-3 w-4/5 rounded-lg bg-default-200" />

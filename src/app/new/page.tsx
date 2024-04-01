@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from '@/components/Container'
-import FormCreateMeme from '@/components/FormCreateMeme'
+import FormManageMeme from '@/components/FormManageMeme'
 
 const Page = () => {
   return (
@@ -9,7 +9,7 @@ const Page = () => {
         Ajouter un mème à la bibliothèque
       </h1>
       <div className="mt-6 w-full max-w-screen-md mx-auto">
-        <FormCreateMeme />
+        <FormManageMeme />
       </div>
     </Container>
   )

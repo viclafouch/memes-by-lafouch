@@ -1,47 +1,44 @@
 'use client'
 
 import React from 'react'
-import { downloadBlob } from '@/utils/download'
-import { Button } from '@nextui-org/react'
-import { DownloadSimple } from '@phosphor-icons/react'
+import { useDownload } from '@/hooks/useDownload'
+import { Button, ButtonProps } from '@nextui-org/react'
 import { Meme } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
 
 export type DownloadMemeButtonProps = {
   meme: Meme
-}
+  children: React.ReactNode
+} & Partial<ButtonProps>
 
-const DownloadMemeButton = ({ meme }: DownloadMemeButtonProps) => {
-  const downloadMutation = useMutation({
-    mutationFn: async () => {
-      const response = await fetch(meme.videoUrl)
-
-      return response.blob()
-    },
-    onSuccess: (blob) => {
-      downloadBlob(blob, meme.title)
-    }
-  })
+const DownloadMemeButton = ({
+  meme,
+  children,
+  ...restButtonProps
+}: DownloadMemeButtonProps) => {
+  const { mutate: download, isPending } = useDownload()
 
   const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (downloadMutation.isPending) {
+    if (isPending) {
       return
     }
 
-    downloadMutation.mutate()
+    download({
+      filename: meme.title,
+      url: meme.videoUrl
+    })
   }
 
   return (
     <Button
-      isLoading={downloadMutation.isPending}
-      isIconOnly
+      isLoading={isPending}
       color="primary"
       onClick={handleDownload}
       aria-label="Télécharger"
+      {...restButtonProps}
     >
-      <DownloadSimple fontSize={20} />
+      {children}
     </Button>
   )
 }

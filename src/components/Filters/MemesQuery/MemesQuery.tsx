@@ -36,6 +36,7 @@ const MemesQuery = () => {
       labelPlacement="outside"
       placeholder="Rechercher un mème"
       radius="full"
+      size="lg"
       defaultValue={searchParams.get('query')?.toString()}
       onChange={handleChange}
       startContent={<MagnifyingGlass size={16} />}

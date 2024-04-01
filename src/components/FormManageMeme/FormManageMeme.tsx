@@ -4,9 +4,17 @@ import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import UploadDropzone from '@/components/UploadDropzone'
 import { createMeme, type FormStateValue } from '@/serverActions/createMeme'
+import { updateMeme } from '@/serverActions/updateMeme'
 import { Button, Input } from '@nextui-org/react'
+import { Meme } from '@prisma/client'
 
-const SubmitButton = ({ formState }: { formState: FormStateValue }) => {
+const SubmitButton = ({
+  formState,
+  isEdit
+}: {
+  formState: FormStateValue
+  isEdit: boolean
+}) => {
   const status = useFormStatus()
 
   return (
@@ -17,7 +25,7 @@ const SubmitButton = ({ formState }: { formState: FormStateValue }) => {
         color="primary"
         size="lg"
       >
-        Ajouter le mème
+        {isEdit ? 'Modifier' : 'Ajouter'} le mème
       </Button>
       <span
         aria-live="polite"
@@ -37,30 +45,51 @@ const initialState: FormStateValue = {
   formErrors: null
 }
 
-const FormCreateMeme = () => {
-  const [formState, formAction] = useFormState(createMeme, initialState)
+export type FormManageMemeProps = {
+  meme?: Meme
+}
+
+const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
+  const [formState, formAction] = useFormState(
+    meme ? updateMeme : createMeme,
+    initialState
+  )
   const formErrors = formState.success ? null : formState.formErrors
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">
+      {meme ? (
+        <input type="hidden" className="hidden" name="id" value={meme.id} />
+      ) : null}
       <Input
         label="Titre"
         isRequired
         name="title"
-        defaultValue=""
+        defaultValue={meme?.title || ''}
         className="w-full"
         isInvalid={Boolean(formErrors?.fieldErrors.title?.[0])}
         errorMessage={formErrors?.fieldErrors.title?.[0]}
         labelPlacement="inside"
       />
-      <UploadDropzone
-        isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
-        errorMessage={formErrors?.fieldErrors.video?.[0]}
-        inputProps={{ name: 'video', accept: 'video/*' }}
-      />
-      <SubmitButton formState={formState} />
+      {!meme ? (
+        <UploadDropzone
+          isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
+          errorMessage={formErrors?.fieldErrors.video?.[0]}
+          inputProps={{ name: 'video', accept: 'video/*' }}
+        />
+      ) : (
+        <video
+          controls
+          className="w-full h-full object-cover rounded-lg"
+          src={meme.videoUrl}
+          width={270}
+          preload="metadata"
+          height={200}
+        />
+      )}
+      <SubmitButton isEdit={Boolean(meme)} formState={formState} />
     </form>
   )
 }
 
-export default FormCreateMeme
+export default FormManageMeme
