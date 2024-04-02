@@ -7,17 +7,20 @@ const postData: Prisma.MemeCreateInput[] = [
   {
     title: 'Meme 1',
     videoUrl:
-      'https://utfs.io/f/5c0af5ce-9632-4dd0-9282-59235dd8aabf-z3zuq.com_vickymykh_616207.mp4'
+      'https://utfs.io/f/5c0af5ce-9632-4dd0-9282-59235dd8aabf-z3zuq.com_vickymykh_616207.mp4',
+    videoKey: 'test5'
   },
   {
     title: 'Meme 2',
     videoUrl:
-      'https://utfs.io/f/5c0af5ce-9632-4dd0-9282-59235dd8aabf-z3zuq.com_vickymykh_616207.mp4'
+      'https://utfs.io/f/5c0af5ce-9632-4dd0-9282-59235dd8aabf-z3zuq.com_vickymykh_616207.mp4',
+    videoKey: 'videoKey4'
   },
   {
     title: 'Meme 3',
     videoUrl:
-      'https://utfs.io/f/5c0af5ce-9632-4dd0-9282-59235dd8aabf-z3zuq.com_vickymykh_616207.mp4'
+      'https://utfs.io/f/5c0af5ce-9632-4dd0-9282-59235dd8aabf-z3zuq.com_vickymykh_616207.mp4',
+    videoKey: 'videoKey3'
   }
 ]
 

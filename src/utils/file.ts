@@ -1,3 +1,7 @@
+export function getFilenameExtension(filename: string) {
+  return filename.split('.').pop() as string
+}
+
 export function getFileExtension(file: File) {
-  return file.name.split('.').pop() as string
+  return getFilenameExtension(file.name)
 }

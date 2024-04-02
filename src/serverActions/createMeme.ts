@@ -3,14 +3,16 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect, RedirectType } from 'next/navigation'
-import { UTApi } from 'uploadthing/server'
 import { z } from 'zod'
-import { MAX_SIZE_MEME_IN_BYTES } from '@/constants/meme'
+import { MAX_SIZE_MEME_IN_BYTES, TWITTER_URL_REGEX } from '@/constants/meme'
 import prisma from '@/db'
+import { SimpleFormState } from '@/serverActions/types'
+import { utapi } from '@/uploadthing'
 import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
   title: z.string().min(3),
+  twitterUrl: z.string().regex(TWITTER_URL_REGEX).nullable(),
   video: z
     // Need Node >= v20
     // See https://github.com/colinhacks/zod/issues/387#issuecomment-1774603011
@@ -45,49 +47,39 @@ const schema = z.object({
     )
 })
 
-export type FormStateValue =
-  | {
-      errorMessage: string
-      success: false
-      formErrors: z.typeToFlattenedError<z.infer<typeof schema>> | null
-    }
-  | {
-      success: true
-    }
-  | null
-
-const utapi = new UTApi()
+export type CreateMemeFormState = SimpleFormState<unknown, typeof schema>
 
 export async function createMeme(
-  prevState: FormStateValue,
+  prevState: CreateMemeFormState,
   formData: FormData
-) {
+): Promise<CreateMemeFormState> {
   try {
     const validatedFields = schema.safeParse({
       title: formData.get('title'),
-      video: formData.get('video')
+      video: formData.get('video'),
+      twitterUrl: formData.get('twitterUrl') || null
     })
 
     if (!validatedFields.success) {
       return {
         formErrors: validatedFields.error.flatten(),
         errorMessage: '',
-        success: false
+        status: 'error'
       }
     }
 
-    const response = await utapi.uploadFiles(validatedFields.data.video)
+    const uploadFileResult = await utapi.uploadFiles(validatedFields.data.video)
 
-    if (response.error) {
-      return await Promise.reject(response.error)
+    if (uploadFileResult.error) {
+      return await Promise.reject(uploadFileResult.error.message)
     }
-
-    const uploadedVideo = response.data
 
     await prisma.meme.create({
       data: {
         title: validatedFields.data.title,
-        videoUrl: uploadedVideo.url
+        videoUrl: uploadFileResult.data.url,
+        videoKey: uploadFileResult.data.key,
+        twitterUrl: validatedFields.data.twitterUrl
       }
     })
   } catch (error) {
@@ -95,7 +87,7 @@ export async function createMeme(
     console.error(error)
 
     return {
-      success: false,
+      status: 'error',
       errorMessage: 'An unknown error occurred',
       formErrors: null
     }

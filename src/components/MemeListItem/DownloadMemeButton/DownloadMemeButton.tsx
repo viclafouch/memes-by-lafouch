@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { useDownload } from '@/hooks/useDownload'
+import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
+import { getFilenameExtension } from '@/utils/file'
 import { Button, ButtonProps } from '@nextui-org/react'
 import { Meme } from '@prisma/client'
 
@@ -24,10 +26,19 @@ const DownloadMemeButton = ({
       return
     }
 
-    download({
-      filename: meme.title,
-      url: meme.videoUrl
-    })
+    const extension = getFilenameExtension(meme.videoUrl)
+
+    download(
+      {
+        filename: `${meme.title}.${extension}`,
+        url: meme.videoUrl
+      },
+      {
+        onSuccess: () => {
+          incrementDownloadCount(meme.id)
+        }
+      }
+    )
   }
 
   return (

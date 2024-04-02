@@ -2,29 +2,34 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { TWITTER_URL_REGEX } from '@/constants/meme'
 import prisma from '@/db'
-import { FormStateValue } from '@/serverActions/createMeme'
+import { SimpleFormState } from '@/serverActions/types'
 
 const schema = z.object({
   title: z.string().min(3),
-  memeId: z.string()
+  memeId: z.string(),
+  twitterUrl: z.string().regex(TWITTER_URL_REGEX).nullable()
 })
 
+export type UpdateMemeFormState = SimpleFormState<unknown, typeof schema>
+
 export async function updateMeme(
-  prevState: FormStateValue,
+  prevState: UpdateMemeFormState,
   formData: FormData
-): Promise<FormStateValue> {
+): Promise<UpdateMemeFormState> {
   try {
     const validatedFields = schema.safeParse({
       title: formData.get('title'),
-      memeId: formData.get('id')
+      memeId: formData.get('id'),
+      twitterUrl: formData.get('twitterUrl') || null
     })
 
     if (!validatedFields.success) {
       return {
         formErrors: validatedFields.error.flatten(),
         errorMessage: '',
-        success: false
+        status: 'error'
       }
     }
 
@@ -33,21 +38,22 @@ export async function updateMeme(
         id: validatedFields.data.memeId
       },
       data: {
-        title: validatedFields.data.title
+        title: validatedFields.data.title,
+        twitterUrl: validatedFields.data.twitterUrl
       }
     })
 
     revalidatePath(`/library/${validatedFields.data.memeId}`, 'page')
 
     return {
-      success: true
+      status: 'success'
     }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error)
 
     return {
-      success: false,
+      status: 'error',
       errorMessage: 'An unknown error occurred',
       formErrors: null
     }

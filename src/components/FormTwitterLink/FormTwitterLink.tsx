@@ -3,13 +3,17 @@
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import {
-  extractTwitterLink,
-  FormStateValue
+  ExtractTwitterFormState,
+  extractTwitterLink
 } from '@/serverActions/extractTwitterLink'
 import { Button, Input } from '@nextui-org/react'
 import { CloudArrowDown, Link as LinkIcon } from '@phosphor-icons/react'
 
-const SubmitButton = ({ formState }: { formState: FormStateValue }) => {
+const SubmitButton = ({
+  formState
+}: {
+  formState: ExtractTwitterFormState
+}) => {
   const status = useFormStatus()
 
   return (
@@ -27,8 +31,7 @@ const SubmitButton = ({ formState }: { formState: FormStateValue }) => {
         aria-live="polite"
         className="text-center text-tiny text-danger p-1 min-h-6 block"
       >
-        {formState &&
-        !formState.success &&
+        {formState.status === 'error' &&
         formState.errorMessage &&
         !status.pending
           ? formState.errorMessage
@@ -38,7 +41,9 @@ const SubmitButton = ({ formState }: { formState: FormStateValue }) => {
   )
 }
 
-const initialState: FormStateValue = null
+const initialState: ExtractTwitterFormState = {
+  status: 'idle'
+}
 
 const FormTwitterLink = () => {
   const [formState, formAction] = useFormState(extractTwitterLink, initialState)

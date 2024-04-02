@@ -4,9 +4,12 @@
 import { revalidatePath } from 'next/cache'
 import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
+import { UTFile } from 'uploadthing/server'
 import { z } from 'zod'
-import { MAX_SIZE_MEME_IN_BYTES } from '@/constants/meme'
+import { MAX_SIZE_MEME_IN_BYTES, TWITTER_URL_REGEX } from '@/constants/meme'
 import prisma from '@/db'
+import { SimpleFormState } from '@/serverActions/types'
+import { utapi } from '@/uploadthing'
 import { Meme } from '@prisma/client'
 
 const tweetbinderSchema = z.object({
@@ -26,48 +29,36 @@ const tweetbinderSchema = z.object({
   )
 })
 
-const schemaTwitterLink = z
-  .string()
-  .regex(/^https:\/\/twitter\.com\/([A-Za-z0-9_]+)\/status\/(\d+)/)
-  .transform((link) => {
-    const matchId = link.match(
-      /^https:\/\/twitter\.com\/([A-Za-z0-9_]+)\/status\/(\d+)/
-    ) as RegExpMatchArray
+const schema = z.string().regex(TWITTER_URL_REGEX)
 
-    return matchId.at(2) as string
-  })
-
-export type FormStateValue =
-  | {
-      success: false
-      errorMessage: string
-    }
-  | {
-      data: z.infer<typeof tweetbinderSchema>['videos']
-      success: true
-    }
-  | null
+export type ExtractTwitterFormState = SimpleFormState<
+  { meme: Meme },
+  typeof schema
+>
 
 export async function extractTwitterLink(
-  prevState: FormStateValue,
+  prevState: ExtractTwitterFormState,
   formData: FormData
-): Promise<FormStateValue | void> {
+): Promise<ExtractTwitterFormState> {
   let memeId: Meme['id']
 
   try {
-    const safeParsedResult = schemaTwitterLink.safeParse(formData.get('link'))
+    const safeParsedResult = schema.safeParse(formData.get('link'))
 
     if (!safeParsedResult.success) {
       return {
-        success: false,
+        status: 'error',
+        formErrors: null,
         errorMessage: 'URL is not a valid X link'
       }
     }
 
+    const twitterLink = safeParsedResult.data
+    const matchId = twitterLink.match(TWITTER_URL_REGEX) as RegExpMatchArray
+    const twitterId = z.string().parse(matchId.at(2))
+
     const response = (await Promise.race([
-      fetch(
-        `https://pub.tweetbinder.com:51026/twitter/status/${safeParsedResult.data}`
-      ),
+      fetch(`https://pub.tweetbinder.com:51026/twitter/status/${twitterId}`),
       new Promise((resolve, reject) => {
         return setTimeout(reject, 5000)
       })
@@ -78,24 +69,40 @@ export async function extractTwitterLink(
     const data = tweetbinderSchema.parse(json)
     const video = data.videos.at(-1)!
 
-    if (video.size > MAX_SIZE_MEME_IN_BYTES) {
+    const responseTwitterVideo = await fetch(video.url)
+
+    const blob = await responseTwitterVideo.blob()
+
+    if (blob.size > MAX_SIZE_MEME_IN_BYTES) {
       return {
-        success: false,
+        status: 'error',
+        formErrors: null,
         errorMessage: `Video size is too big: ${filesize(video.size)}`
       }
     }
 
+    const videoFile = new UTFile([blob], `${Date.now().toString()}.mp4`)
+
+    const uploadFileResult = await utapi.uploadFiles(videoFile)
+
+    if (uploadFileResult.error) {
+      return await Promise.reject(uploadFileResult.error.message)
+    }
+
     const meme = await prisma.meme.create({
       data: {
-        title: data.url,
-        videoUrl: video.url
+        title: 'Titre inconnu',
+        videoUrl: uploadFileResult.data.url,
+        videoKey: uploadFileResult.data.key,
+        twitterUrl: twitterLink
       }
     })
 
     memeId = meme.id
   } catch (error) {
     return {
-      success: false,
+      status: 'error',
+      formErrors: null,
       errorMessage: 'An unknown error occurred'
     }
   }

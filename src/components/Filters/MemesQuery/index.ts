@@ -1,5 +1,3 @@
-import MemesQuery, { MemesQueryProps } from './MemesQuery'
-
-export type { MemesQueryProps }
+import MemesQuery from './MemesQuery'
 
 export default MemesQuery

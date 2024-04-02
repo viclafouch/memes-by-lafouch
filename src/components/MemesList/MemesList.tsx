@@ -56,8 +56,6 @@ const MemesList = async ({ filters, isLoading }: MemesListProps) => {
 
   const memes = await getMemes(filters)
 
-  console.log(memes)
-
   return (
     <WrapperList>
       {memes.map((meme) => {

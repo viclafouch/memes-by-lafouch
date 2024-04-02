@@ -11,7 +11,7 @@ import {
   Skeleton,
   Spacer
 } from '@nextui-org/react'
-import { DownloadSimple, Pen } from '@phosphor-icons/react/dist/ssr'
+import { DownloadSimple, Pen, XLogo } from '@phosphor-icons/react/dist/ssr'
 import type { Meme } from '@prisma/client'
 
 export type MemeListItemProps =
@@ -38,7 +38,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
           </div>
         ) : (
           <Skeleton className="w-4/5 rounded-lg">
-            <div className="w-full text-large">
+            <div className="w-full text-medium">
               <span className="bg-default-200">{'\u00A0'}</span>
             </div>
           </Skeleton>
@@ -78,6 +78,19 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
             >
               <Pen size={20} />
             </Button>
+            {meme.twitterUrl ? (
+              <Button
+                as="a"
+                href={meme.twitterUrl}
+                target="_blank"
+                size="sm"
+                isIconOnly
+                className="bg-black text-white"
+                aria-label="Visiter le status Twitter"
+              >
+                <XLogo size={20} />
+              </Button>
+            ) : null}
           </div>
         ) : (
           <Skeleton className="rounded-lg">

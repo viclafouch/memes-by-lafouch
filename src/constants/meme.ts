@@ -5,6 +5,9 @@ export const memeFilters = z.object({
   query: z.string().catch('')
 })
 
+export const TWITTER_URL_REGEX =
+  /^https:\/\/twitter\.com\/([A-Za-z0-9_]+)\/status\/(\d+)/
+
 const SIZE_IN_MB = 16
 export const MAX_SIZE_MEME_IN_BYTES = SIZE_IN_MB * 1024 * 1024
 

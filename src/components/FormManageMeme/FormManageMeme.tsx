@@ -5,8 +5,14 @@ import { useFormState, useFormStatus } from 'react-dom'
 import { useSnackbar } from 'notistack'
 import UploadDropzone from '@/components/UploadDropzone'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
-import { createMeme, type FormStateValue } from '@/serverActions/createMeme'
-import { updateMeme } from '@/serverActions/updateMeme'
+import {
+  createMeme,
+  type CreateMemeFormState
+} from '@/serverActions/createMeme'
+import {
+  updateMeme,
+  type UpdateMemeFormState
+} from '@/serverActions/updateMeme'
 import { Button, Input } from '@nextui-org/react'
 import { Meme } from '@prisma/client'
 
@@ -27,11 +33,13 @@ const SubmitButton = ({ isEdit }: { isEdit: boolean }) => {
   )
 }
 
-const initialState: FormStateValue = null
-
 export type FormManageMemeProps = {
   meme?: Meme
 }
+
+const initialState = {
+  status: 'idle'
+} as CreateMemeFormState | UpdateMemeFormState
 
 const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
   const isEditMode = Boolean(meme)
@@ -43,10 +51,10 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
 
   useFormStateCallback(formState, {
     isError: (values) => {
-      return values?.success === false && values.errorMessage ? values : false
+      return values.status === 'error' && values.errorMessage ? values : false
     },
     isSuccess: (values) => {
-      return values?.success === true ? values : false
+      return values.status === 'success' ? values : false
     },
     onError: (values) => {
       enqueueSnackbar({
@@ -64,8 +72,7 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
     }
   })
 
-  const formErrors =
-    formState && !formState.success ? formState.formErrors : null
+  const formErrors = formState.status === 'error' ? formState.formErrors : null
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">
@@ -82,9 +89,22 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
         errorMessage={formErrors?.fieldErrors.title?.[0]}
         labelPlacement="inside"
       />
+      <Input
+        label="Twitter URL"
+        name="twitterUrl"
+        defaultValue={meme?.twitterUrl || ''}
+        className="w-full"
+        isReadOnly={Boolean(meme?.twitterUrl)}
+        isDisabled={Boolean(meme?.twitterUrl)}
+        isInvalid={Boolean(formErrors?.fieldErrors.twitterUrl?.[0])}
+        errorMessage={formErrors?.fieldErrors.twitterUrl?.[0]}
+        labelPlacement="inside"
+      />
       {!meme ? (
         <UploadDropzone
+          // @ts-expect-error
           isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
+          // @ts-expect-error
           errorMessage={formErrors?.fieldErrors.video?.[0]}
           inputProps={{ name: 'video', accept: 'video/*' }}
         />
