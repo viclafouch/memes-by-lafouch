@@ -2,14 +2,14 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { TWITTER_URL_REGEX } from '@/constants/meme'
+import { TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 
 const schema = z.object({
   title: z.string().min(3),
   memeId: z.string(),
-  twitterUrl: z.string().regex(TWITTER_URL_REGEX).nullable()
+  twitterUrl: TWITTER_LINK_SCHEMA
 })
 
 export type UpdateMemeFormState = SimpleFormState<unknown, typeof schema>
@@ -39,7 +39,7 @@ export async function updateMeme(
       },
       data: {
         title: validatedFields.data.title,
-        twitterUrl: validatedFields.data.twitterUrl
+        twitterUrl: validatedFields.data.twitterUrl.url
       }
     })
 

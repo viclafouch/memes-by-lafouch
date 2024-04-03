@@ -4,7 +4,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
-import { MAX_SIZE_MEME_IN_BYTES, TWITTER_URL_REGEX } from '@/constants/meme'
+import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
@@ -12,7 +12,7 @@ import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
   title: z.string().min(3),
-  twitterUrl: z.string().regex(TWITTER_URL_REGEX).nullable(),
+  twitterUrl: TWITTER_LINK_SCHEMA,
   video: z
     // Need Node >= v20
     // See https://github.com/colinhacks/zod/issues/387#issuecomment-1774603011
@@ -79,7 +79,7 @@ export async function createMeme(
         title: validatedFields.data.title,
         videoUrl: uploadFileResult.data.url,
         videoKey: uploadFileResult.data.key,
-        twitterUrl: validatedFields.data.twitterUrl
+        twitterUrl: validatedFields.data.twitterUrl.url
       }
     })
   } catch (error) {

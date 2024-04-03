@@ -6,10 +6,11 @@ import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
 import { UTFile } from 'uploadthing/server'
 import { z } from 'zod'
-import { MAX_SIZE_MEME_IN_BYTES, TWITTER_URL_REGEX } from '@/constants/meme'
+import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
+import { withTimeout } from '@/utils/promise'
 import { Meme } from '@prisma/client'
 
 const tweetbinderSchema = z.object({
@@ -29,7 +30,7 @@ const tweetbinderSchema = z.object({
   )
 })
 
-const schema = z.string().regex(TWITTER_URL_REGEX)
+const schema = TWITTER_LINK_SCHEMA
 
 export type ExtractTwitterFormState = SimpleFormState<
   { meme: Meme },
@@ -53,16 +54,12 @@ export async function extractTwitterLink(
       }
     }
 
-    const twitterLink = safeParsedResult.data
-    const matchId = twitterLink.match(TWITTER_URL_REGEX) as RegExpMatchArray
-    const twitterId = z.string().parse(matchId.at(2))
-
-    const response = (await Promise.race([
-      fetch(`https://pub.tweetbinder.com:51026/twitter/status/${twitterId}`),
-      new Promise((resolve, reject) => {
-        return setTimeout(reject, 5000)
-      })
-    ])) as Response
+    const response = await withTimeout(
+      fetch(
+        `https://pub.tweetbinder.com:51026/twitter/status/${safeParsedResult.data.twitterId}`
+      ),
+      5000
+    )
 
     const json = await response.json()
 
@@ -70,7 +67,6 @@ export async function extractTwitterLink(
     const video = data.videos.at(-1)!
 
     const responseTwitterVideo = await fetch(video.url)
-
     const blob = await responseTwitterVideo.blob()
 
     if (blob.size > MAX_SIZE_MEME_IN_BYTES) {
@@ -94,7 +90,7 @@ export async function extractTwitterLink(
         title: 'Titre inconnu',
         videoUrl: uploadFileResult.data.url,
         videoKey: uploadFileResult.data.key,
-        twitterUrl: twitterLink
+        twitterUrl: safeParsedResult.data.url
       }
     })
 
