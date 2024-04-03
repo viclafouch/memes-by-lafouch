@@ -1,4 +1,5 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import {
@@ -11,8 +12,20 @@ import {
   Skeleton,
   Spacer
 } from '@nextui-org/react'
-import { DownloadSimple, Pen, XLogo } from '@phosphor-icons/react/dist/ssr'
+import {
+  DownloadSimple,
+  Pen,
+  Share,
+  XLogo
+} from '@phosphor-icons/react/dist/ssr'
 import type { Meme } from '@prisma/client'
+
+const ShareMemeButton = dynamic(
+  () => {
+    return import('@/components/MemeListItem/ShareMemeButton')
+  },
+  { ssr: false }
+)
 
 export type MemeListItemProps =
   | {
@@ -65,6 +78,9 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
       <CardFooter>
         {meme ? (
           <div className="w-full flex justify-end gap-2">
+            <ShareMemeButton size="sm" isIconOnly meme={meme}>
+              <Share size={20} />
+            </ShareMemeButton>
             <DownloadMemeButton size="sm" isIconOnly meme={meme}>
               <DownloadSimple size={20} />
             </DownloadMemeButton>
