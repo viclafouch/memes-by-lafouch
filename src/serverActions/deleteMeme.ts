@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 'use server'
 
+import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
 import prisma from '@/db'
@@ -30,7 +31,16 @@ export async function deleteMeme(
     if (!deleteFileResult.success) {
       return await Promise.reject(new Error('Failed to delete file'))
     }
-  } catch (error: unknown) {
+
+    redirect('/library', RedirectType.replace)
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+
+    // eslint-disable-next-line no-console
+    console.error(error)
+
     return {
       status: 'error',
       errorMessage:
@@ -38,6 +48,4 @@ export async function deleteMeme(
       formErrors: null
     }
   }
-
-  redirect('/library', RedirectType.replace)
 }

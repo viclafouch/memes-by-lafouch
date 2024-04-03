@@ -2,6 +2,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
 import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
@@ -74,7 +75,7 @@ export async function createMeme(
       return await Promise.reject(uploadFileResult.error.message)
     }
 
-    await prisma.meme.create({
+    const meme = await prisma.meme.create({
       data: {
         title: validatedFields.data.title,
         videoUrl: uploadFileResult.data.url,
@@ -82,7 +83,14 @@ export async function createMeme(
         twitterUrl: validatedFields.data.twitterUrl.url
       }
     })
+
+    revalidatePath('/library', 'page')
+    redirect(`/library/${meme.id}`, RedirectType.push)
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+
     // eslint-disable-next-line no-console
     console.error(error)
 
@@ -92,7 +100,4 @@ export async function createMeme(
       formErrors: null
     }
   }
-
-  revalidatePath('/library', 'page')
-  redirect('/library', RedirectType.push)
 }

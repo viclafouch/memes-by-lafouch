@@ -14,7 +14,7 @@ model Meme {
   videoUrl String
   downloadCount Int @default(0)
   videoKey String  @unique
-  twitterUrl String?
+  twitterUrl String? @unique
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }

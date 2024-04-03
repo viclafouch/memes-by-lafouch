@@ -2,6 +2,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
 import { UTFile } from 'uploadthing/server'
@@ -41,8 +42,6 @@ export async function extractTwitterLink(
   prevState: ExtractTwitterFormState,
   formData: FormData
 ): Promise<ExtractTwitterFormState> {
-  let memeId: Meme['id']
-
   try {
     const safeParsedResult = schema.safeParse(formData.get('link'))
 
@@ -52,6 +51,16 @@ export async function extractTwitterLink(
         formErrors: null,
         errorMessage: 'URL is not a valid X link'
       }
+    }
+
+    const existedMeme = await prisma.meme.findFirst({
+      where: {
+        twitterUrl: safeParsedResult.data.url
+      }
+    })
+
+    if (existedMeme) {
+      redirect(`/library/${existedMeme.id}`, RedirectType.push)
     }
 
     const response = await withTimeout(
@@ -94,15 +103,20 @@ export async function extractTwitterLink(
       }
     })
 
-    memeId = meme.id
+    revalidatePath('/library', 'page')
+    redirect(`/library/${meme.id}`, RedirectType.push)
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+
+    // eslint-disable-next-line no-console
+    console.error(error)
+
     return {
       status: 'error',
       formErrors: null,
       errorMessage: 'An unknown error occurred'
     }
   }
-
-  revalidatePath('/library', 'page')
-  redirect(`/library/${memeId}`, RedirectType.push)
 }
