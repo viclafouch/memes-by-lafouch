@@ -2,6 +2,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
+import MemeTweetButton from '@/components/MemeTweetButton'
 import {
   Button,
   Card,
@@ -12,12 +13,7 @@ import {
   Skeleton,
   Spacer
 } from '@nextui-org/react'
-import {
-  DownloadSimple,
-  Pen,
-  Share,
-  XLogo
-} from '@phosphor-icons/react/dist/ssr'
+import { DownloadSimple, Pen, Share } from '@phosphor-icons/react/dist/ssr'
 import type { Meme } from '@prisma/client'
 
 const ShareMemeButton = dynamic(
@@ -95,17 +91,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
               <Pen size={20} />
             </Button>
             {meme.twitterUrl ? (
-              <Button
-                as="a"
-                href={meme.twitterUrl}
-                target="_blank"
-                size="sm"
-                isIconOnly
-                className="bg-black text-white"
-                aria-label="Visiter le status Twitter"
-              >
-                <XLogo size={20} />
-              </Button>
+              <MemeTweetButton tweetUrl={meme.twitterUrl} />
             ) : null}
           </div>
         ) : (

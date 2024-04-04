@@ -6,6 +6,7 @@ import Container from '@/components/Container'
 import DeleteMemeButton from '@/components/DeleteMemeButton'
 import FormUpdateMeme from '@/components/FormUpdateMeme'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
+import MemeTweetButton from '@/components/MemeTweetButton'
 import prisma from '@/db'
 import { DownloadSimple, Trash } from '@phosphor-icons/react/dist/ssr'
 
@@ -36,6 +37,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  {meme.twitterUrl ? (
+                    <MemeTweetButton
+                      IconProps={{ size: 18 }}
+                      tweetUrl={meme.twitterUrl}
+                    />
+                  ) : null}
                   <DownloadMemeButton
                     color="default"
                     isIconOnly

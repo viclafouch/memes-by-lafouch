@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { extractTweetIdFromUrl } from '@/utils/tweet'
 
 export const memeFilters = z.object({
   orderBy: z.enum(['most_recent', 'most_old']).catch('most_recent'),
@@ -16,7 +17,7 @@ export const TWITTER_LINK_SCHEMA = z
     url.search = ''
     url.hostname = 'x.com'
 
-    const twitterId = z.string().parse(url.pathname.split('/').at(-1))
+    const twitterId = z.string().parse(extractTweetIdFromUrl(url.toString()))
 
     return {
       url: url.toString(),
