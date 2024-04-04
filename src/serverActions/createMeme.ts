@@ -13,7 +13,7 @@ import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
   title: z.string().min(3),
-  twitterUrl: TWITTER_LINK_SCHEMA.optional(),
+  tweetUrl: TWITTER_LINK_SCHEMA.optional(),
   video: z
     // Need Node >= v20
     // See https://github.com/colinhacks/zod/issues/387#issuecomment-1774603011
@@ -58,7 +58,7 @@ export async function createMeme(
     const validatedFields = schema.safeParse({
       title: formData.get('title'),
       video: formData.get('video'),
-      twitterUrl: formData.get('twitterUrl') || null
+      tweetUrl: formData.get('tweetUrl') || null
     })
 
     if (!validatedFields.success) {
@@ -78,9 +78,14 @@ export async function createMeme(
     const meme = await prisma.meme.create({
       data: {
         title: validatedFields.data.title,
-        videoUrl: uploadFileResult.data.url,
-        videoKey: uploadFileResult.data.key,
-        twitterUrl: validatedFields.data.twitterUrl?.url
+        tweetUrl: validatedFields.data.tweetUrl?.url,
+        video: {
+          create: {
+            videoUtKey: uploadFileResult.data.key,
+            src: uploadFileResult.data.url,
+            poster: ''
+          }
+        }
       }
     })
 

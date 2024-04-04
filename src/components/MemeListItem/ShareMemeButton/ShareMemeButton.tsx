@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
+import { MemeWithVideo } from '@/constants/meme'
 import { Button, ButtonProps } from '@nextui-org/react'
-import { Meme } from '@prisma/client'
 
 export type ShareMemeButtonProps = {
-  meme: Meme
+  meme: MemeWithVideo
   children: React.ReactNode
 } & Partial<ButtonProps>
 
@@ -18,7 +18,7 @@ const ShareMemeButton = ({
     event.preventDefault()
 
     try {
-      const response = await fetch(meme.videoUrl)
+      const response = await fetch(meme.video.src)
       const blob = await response.blob()
 
       const data: ShareData = {

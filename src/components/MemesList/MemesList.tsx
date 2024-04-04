@@ -15,13 +15,12 @@ export type MemesListProps =
     }
 
 async function getMemes(filters: MemeFilters) {
-  await new Promise((resolve) => {
-    return setTimeout(resolve, 1000)
-  })
-
   return prisma.meme.findMany({
     orderBy: {
       createdAt: filters.orderBy === 'most_old' ? 'asc' : 'desc'
+    },
+    include: {
+      video: true
     }
   })
 }

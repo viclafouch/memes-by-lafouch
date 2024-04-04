@@ -78,11 +78,11 @@ const FormCreateMeme = () => {
       />
       <Input
         label="Twitter URL"
-        name="twitterUrl"
+        name="tweetUrl"
         defaultValue=""
         className="w-full"
-        isInvalid={Boolean(formErrors?.fieldErrors.twitterUrl?.[0])}
-        errorMessage={formErrors?.fieldErrors.twitterUrl?.[0]}
+        isInvalid={Boolean(formErrors?.fieldErrors.tweetUrl?.[0])}
+        errorMessage={formErrors?.fieldErrors.tweetUrl?.[0]}
         labelPlacement="inside"
       />
       <UploadDropzone

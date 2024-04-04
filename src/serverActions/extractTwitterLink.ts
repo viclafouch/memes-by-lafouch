@@ -5,31 +5,13 @@ import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
-import { UTFile } from 'uploadthing/server'
-import { z } from 'zod'
 import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
-import { withTimeout } from '@/utils/promise'
+import { wait } from '@/utils/promise'
+import { getTweetById } from '@/utils/tweet'
 import { Meme } from '@prisma/client'
-
-const tweetbinderSchema = z.object({
-  statusId: z.coerce.number(),
-  url: z.string(),
-  videos: z.array(
-    z.object({
-      bitrate: z.coerce.number(),
-      endpoint: z.string(),
-      quality: z.string().transform((value) => {
-        return value.replace('avc1/', '')
-      }),
-      size: z.coerce.number(),
-      type: z.string(),
-      url: z.string()
-    })
-  )
-})
 
 const schema = TWITTER_LINK_SCHEMA
 
@@ -55,7 +37,7 @@ export async function extractTwitterLink(
 
     const existedMeme = await prisma.meme.findFirst({
       where: {
-        twitterUrl: safeParsedResult.data.url
+        tweetUrl: safeParsedResult.data.url
       }
     })
 
@@ -63,45 +45,65 @@ export async function extractTwitterLink(
       redirect(`/library/${existedMeme.id}`, RedirectType.push)
     }
 
-    const response = await withTimeout(
-      fetch(
-        `https://pub.tweetbinder.com:51026/twitter/status/${safeParsedResult.data.twitterId}`
-      ),
-      5000
-    )
+    const tweet = await getTweetById(safeParsedResult.data.twitterId)
 
-    const json = await response.json()
-
-    const data = tweetbinderSchema.parse(json)
-    const video = data.videos.at(-1)!
-
-    const responseTwitterVideo = await fetch(video.url)
-    const blob = await responseTwitterVideo.blob()
-
-    if (blob.size > MAX_SIZE_MEME_IN_BYTES) {
+    if (!tweet) {
       return {
         status: 'error',
         formErrors: null,
-        errorMessage: `Video size is too big: ${filesize(video.size)}`
+        errorMessage: 'Tweet not exist or does not include a video'
       }
     }
 
-    const videoFile = new UTFile([blob], `${Date.now().toString()}.mp4`)
-
-    const uploadFileResult = await utapi.uploadFiles(videoFile)
-
-    if (uploadFileResult.error) {
-      return await Promise.reject(uploadFileResult.error.message)
+    if (tweet.video.blob.size > MAX_SIZE_MEME_IN_BYTES) {
+      return {
+        status: 'error',
+        formErrors: null,
+        errorMessage: `Video size is too big: ${filesize(tweet.video.blob.size)}`
+      }
     }
 
-    const meme = await prisma.meme.create({
-      data: {
-        title: 'Titre inconnu',
-        videoUrl: uploadFileResult.data.url,
-        videoKey: uploadFileResult.data.key,
-        twitterUrl: safeParsedResult.data.url
-      }
-    })
+    const [videoFileResult, posterFileResult] = await utapi.uploadFiles([
+      tweet.video.file,
+      tweet.video.poster.file
+    ])
+
+    if (videoFileResult.error || posterFileResult.error) {
+      return await Promise.reject(
+        videoFileResult.error?.message || posterFileResult.error?.message
+      )
+    }
+
+    let meme: Meme
+
+    try {
+      meme = await prisma.meme.create({
+        data: {
+          title: 'Titre inconnu',
+          tweetUrl: safeParsedResult.data.url,
+          video: {
+            create: {
+              poster: posterFileResult.data.url,
+              posterUtKey: posterFileResult.data.key,
+              src: videoFileResult.data.url,
+              videoUtKey: videoFileResult.data.key
+            }
+          }
+        },
+        include: {
+          video: true
+        }
+      })
+    } catch (error) {
+      // Looks like we have to wait a minimum of time before directly removing a file
+      await wait(1000)
+      // Remove files if something went wrong
+      await utapi.deleteFiles([
+        videoFileResult.data.key,
+        posterFileResult.data.key
+      ])
+      throw error
+    }
 
     revalidatePath('/library', 'page')
     redirect(`/library/${meme.id}`, RedirectType.push)

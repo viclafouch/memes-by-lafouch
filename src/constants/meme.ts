@@ -1,10 +1,15 @@
 import { z } from 'zod'
 import { extractTweetIdFromUrl } from '@/utils/tweet'
+import { Prisma } from '@prisma/client'
 
 export const memeFilters = z.object({
   orderBy: z.enum(['most_recent', 'most_old']).catch('most_recent'),
   query: z.string().catch('')
 })
+
+export type MemeWithVideo = Prisma.MemeGetPayload<{
+  include: { video: true }
+}>
 
 export const TWITTER_STATUS_URL_REGEX =
   /^https?:\/\/(?:twitter\.com|x\.com)\/([A-Za-z0-9_]+)\/status\/(\d+)/

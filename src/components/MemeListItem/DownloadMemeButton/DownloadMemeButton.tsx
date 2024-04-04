@@ -1,14 +1,14 @@
 'use client'
 
 import React from 'react'
+import { MemeWithVideo } from '@/constants/meme'
 import { useDownload } from '@/hooks/useDownload'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { getFilenameExtension } from '@/utils/file'
 import { Button, ButtonProps } from '@nextui-org/react'
-import { Meme } from '@prisma/client'
 
 export type DownloadMemeButtonProps = {
-  meme: Meme
+  meme: MemeWithVideo
   children: React.ReactNode
 } & Partial<ButtonProps>
 
@@ -26,12 +26,12 @@ const DownloadMemeButton = ({
       return
     }
 
-    const extension = getFilenameExtension(meme.videoUrl)
+    const extension = getFilenameExtension(meme.video.src)
 
     download(
       {
         filename: `${meme.title}.${extension}`,
-        url: meme.videoUrl
+        url: meme.video.src
       },
       {
         onSuccess: () => {

@@ -4,7 +4,7 @@ import { XLogo } from '@phosphor-icons/react/dist/ssr'
 import { Meme } from '@prisma/client'
 
 export type MemeTweetButtonProps = {
-  tweetUrl: NonNullable<Meme['twitterUrl']>
+  tweetUrl: NonNullable<Meme['tweetUrl']>
   IconProps?: React.ComponentProps<typeof XLogo>
 } & ButtonProps
 

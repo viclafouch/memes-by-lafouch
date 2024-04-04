@@ -9,3 +9,9 @@ export async function withTimeout<T extends Promise<unknown>>(
     }) as never
   ])
 }
+
+export async function wait(timeout: number) {
+  return new Promise((resolve) => {
+    return setTimeout(resolve, timeout)
+  })
+}

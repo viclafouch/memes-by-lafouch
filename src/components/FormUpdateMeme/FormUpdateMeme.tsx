@@ -3,13 +3,13 @@
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import { useSnackbar } from 'notistack'
+import { MemeWithVideo } from '@/constants/meme'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { updateMeme, UpdateMemeFormState } from '@/serverActions/updateMeme'
-import { Button, ButtonProps, Input } from '@nextui-org/react'
-import { Meme } from '@prisma/client'
+import { Button, ButtonProps, Input, Link } from '@nextui-org/react'
 
 export type FormUpdateMemeProps = {
-  meme: Meme
+  meme: MemeWithVideo
 }
 
 const SubmitButton = ({ ...restButtonProps }: ButtonProps) => {
@@ -75,25 +75,45 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
         />
         <Input
           label="Twitter URL"
-          name="twitterUrl"
+          name="tweetUrl"
           isClearable
-          defaultValue={meme.twitterUrl || ''}
-          isInvalid={Boolean(formErrors?.fieldErrors.twitterUrl?.[0])}
-          errorMessage={formErrors?.fieldErrors.twitterUrl?.[0]}
+          defaultValue={meme.tweetUrl || ''}
+          isInvalid={Boolean(formErrors?.fieldErrors.tweetUrl?.[0])}
+          errorMessage={formErrors?.fieldErrors.tweetUrl?.[0]}
           labelPlacement="outside"
         />
         <div className="w-full flex gap-6">
           <Input
             isDisabled
             label="Clef vidéo (uploadThing)"
-            defaultValue={meme.videoKey}
+            defaultValue={meme.video.videoUtKey}
             labelPlacement="outside"
+            description={
+              <Link
+                className="text-xs pointer-events-auto"
+                href={meme.video.src}
+                target="_blank"
+              >
+                Accéder au fichier
+              </Link>
+            }
           />
           <Input
             isDisabled
-            label="Identifiant"
-            defaultValue={meme.id}
+            label="Clef poster (uploadThing)"
+            defaultValue={meme.video.posterUtKey || ''}
             labelPlacement="outside"
+            description={
+              meme.video.poster ? (
+                <Link
+                  className="text-xs pointer-events-auto"
+                  href={meme.video.poster}
+                  target="_blank"
+                >
+                  Accéder au fichier
+                </Link>
+              ) : null
+            }
           />
         </div>
       </div>

@@ -14,6 +14,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const meme = await prisma.meme.findUnique({
     where: {
       id: params.id
+    },
+    include: {
+      video: true
     }
   })
 
@@ -37,10 +40,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {meme.twitterUrl ? (
+                  {meme.tweetUrl ? (
                     <MemeTweetButton
                       IconProps={{ size: 18 }}
-                      tweetUrl={meme.twitterUrl}
+                      tweetUrl={meme.tweetUrl}
                     />
                   ) : null}
                   <DownloadMemeButton
@@ -80,9 +83,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <video
               controls
               className="absolute inset-0 z-0 h-full w-full rounded-none object-cover"
-              src={meme.videoUrl}
+              src={meme.video.src}
+              poster={meme.video.poster || undefined}
               width={270}
-              preload="metadata"
+              preload="none"
               height="100%"
             />
           </div>

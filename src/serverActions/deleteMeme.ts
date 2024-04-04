@@ -23,12 +23,19 @@ export async function deleteMeme(
     const meme = await prisma.meme.delete({
       where: {
         id: memeId
+      },
+      include: {
+        video: true
       }
     })
 
-    const deleteFileResult = await utapi.deleteFiles(meme.videoKey)
+    const deleteFilesResult = await utapi.deleteFiles(
+      meme.video.posterUtKey
+        ? [meme.video.posterUtKey, meme.video.videoUtKey]
+        : meme.video.videoUtKey
+    )
 
-    if (!deleteFileResult.success) {
+    if (!deleteFilesResult.success) {
       return await Promise.reject(new Error('Failed to delete file'))
     }
 
