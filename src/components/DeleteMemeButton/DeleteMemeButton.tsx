@@ -12,16 +12,22 @@ import { Meme } from '@prisma/client'
 const SubmitButton = ({ ...restButtonProps }: ButtonProps) => {
   const status = useFormStatus()
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // eslint-disable-next-line no-alert
+    if (!confirm('Confirmer la suppression ?')) {
+      event.preventDefault()
+    }
+  }
+
   return (
     <Button
       isLoading={status.pending}
       type="submit"
       color="danger"
       size="lg"
+      onClick={handleClick}
       {...restButtonProps}
-    >
-      Supprimer le mème
-    </Button>
+    />
   )
 }
 
@@ -30,11 +36,11 @@ const initialState: DeleteMemeFormState = {
 }
 
 export type DeleteMemeButtonProps = {
-  memeId: Meme['id']
+  meme: Meme
 } & ButtonProps
 
 const DeleteMemeButton = ({
-  memeId,
+  meme,
   ...restButtonProps
 }: DeleteMemeButtonProps) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -65,7 +71,7 @@ const DeleteMemeButton = ({
 
   return (
     <form action={formAction}>
-      <input type="hidden" name="id" value={memeId} />
+      <input type="hidden" name="id" value={meme.id} />
       <SubmitButton {...restButtonProps} />
     </form>
   )

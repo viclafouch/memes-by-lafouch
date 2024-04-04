@@ -9,14 +9,10 @@ import {
   createMeme,
   type CreateMemeFormState
 } from '@/serverActions/createMeme'
-import {
-  updateMeme,
-  type UpdateMemeFormState
-} from '@/serverActions/updateMeme'
 import { Button, Input } from '@nextui-org/react'
 import { Meme } from '@prisma/client'
 
-const SubmitButton = ({ isEdit }: { isEdit: boolean }) => {
+const SubmitButton = () => {
   const status = useFormStatus()
 
   return (
@@ -27,7 +23,7 @@ const SubmitButton = ({ isEdit }: { isEdit: boolean }) => {
         color="primary"
         size="lg"
       >
-        {isEdit ? 'Modifier' : 'Ajouter'} le mème
+        Ajouter le mème
       </Button>
     </div>
   )
@@ -39,15 +35,11 @@ export type FormManageMemeProps = {
 
 const initialState = {
   status: 'idle'
-} as CreateMemeFormState | UpdateMemeFormState
+} as CreateMemeFormState
 
-const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
-  const isEditMode = Boolean(meme)
+const FormManageMeme = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const [formState, formAction] = useFormState(
-    meme ? updateMeme : createMeme,
-    initialState
-  )
+  const [formState, formAction] = useFormState(createMeme, initialState)
 
   useFormStateCallback(formState, {
     isError: (values) => {
@@ -64,9 +56,7 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
     },
     onSuccess: () => {
       enqueueSnackbar({
-        message: isEditMode
-          ? 'Mème mis à jour avec succès !'
-          : 'Mème ajouté avec succès !',
+        message: 'Mème ajouté avec succès !',
         variant: 'success'
       })
     }
@@ -76,14 +66,11 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">
-      {meme ? (
-        <input type="hidden" className="hidden" name="id" value={meme.id} />
-      ) : null}
       <Input
         label="Titre"
         isRequired
         name="title"
-        defaultValue={meme?.title || ''}
+        defaultValue=""
         className="w-full"
         isInvalid={Boolean(formErrors?.fieldErrors.title?.[0])}
         errorMessage={formErrors?.fieldErrors.title?.[0]}
@@ -92,33 +79,19 @@ const FormManageMeme = ({ meme = undefined }: FormManageMemeProps) => {
       <Input
         label="Twitter URL"
         name="twitterUrl"
-        defaultValue={meme?.twitterUrl || ''}
+        defaultValue=""
         className="w-full"
-        isReadOnly={Boolean(meme?.twitterUrl)}
-        isDisabled={Boolean(meme?.twitterUrl)}
         isInvalid={Boolean(formErrors?.fieldErrors.twitterUrl?.[0])}
         errorMessage={formErrors?.fieldErrors.twitterUrl?.[0]}
         labelPlacement="inside"
       />
-      {!meme ? (
-        <UploadDropzone
-          // @ts-expect-error
-          isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
-          // @ts-expect-error
-          errorMessage={formErrors?.fieldErrors.video?.[0]}
-          inputProps={{ name: 'video', accept: 'video/*' }}
-        />
-      ) : (
-        <video
-          controls
-          className="w-full max-h-72 object-cover rounded-lg"
-          src={meme.videoUrl}
-          width={270}
-          preload="metadata"
-          height={200}
-        />
-      )}
-      <SubmitButton isEdit={isEditMode} />
+
+      <UploadDropzone
+        isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
+        errorMessage={formErrors?.fieldErrors.video?.[0]}
+        inputProps={{ name: 'video', accept: 'video/*' }}
+      />
+      <SubmitButton />
     </form>
   )
 }
