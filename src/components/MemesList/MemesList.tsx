@@ -1,29 +1,17 @@
 import React from 'react'
 import MemeListItem from '@/components/MemeListItem'
-import { MemeFilters } from '@/constants/meme'
-import prisma from '@/db'
+import { MemeWithVideo } from '@/constants/meme'
 import { cn } from '@/utils/cn'
 
 export type MemesListProps =
   | {
-      filters: MemeFilters
+      getPromiseMemes: Promise<MemeWithVideo[]>
       isLoading?: never
     }
   | {
       isLoading: true
-      filters?: never
+      getPromiseMemes?: never
     }
-
-async function getMemes(filters: MemeFilters) {
-  return prisma.meme.findMany({
-    orderBy: {
-      createdAt: filters.orderBy === 'most_old' ? 'asc' : 'desc'
-    },
-    include: {
-      video: true
-    }
-  })
-}
 
 const WrapperList = ({
   className,
@@ -42,7 +30,7 @@ const WrapperList = ({
 
 const skeletons = [1, 2, 3, 4, 5, 6, 7, 8] as const
 
-const MemesList = async ({ filters, isLoading }: MemesListProps) => {
+const MemesList = ({ getPromiseMemes, isLoading }: MemesListProps) => {
   if (isLoading) {
     return (
       <WrapperList>
@@ -53,7 +41,7 @@ const MemesList = async ({ filters, isLoading }: MemesListProps) => {
     )
   }
 
-  const memes = await getMemes(filters)
+  const memes = React.use(getPromiseMemes)
 
   return (
     <WrapperList>
