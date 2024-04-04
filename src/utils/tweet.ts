@@ -2,7 +2,9 @@ import { getTweet } from 'react-tweet/api'
 import { UTFile } from 'uploadthing/server'
 
 export function extractTweetIdFromUrl(tweetUrl: string) {
-  return tweetUrl.split('/').at(-1) as string
+  const url = new URL(tweetUrl)
+
+  return url.searchParams.get('post_id') || url.pathname.split('/').at(-1)
 }
 
 // If too many rates limit, maybe try fallback on this one:
@@ -29,7 +31,10 @@ export async function getTweetById(tweetId: string) {
     fetchBlob(poster)
   ])
 
+  const tweetUrl = `https://x.com/${tweet.user.screen_name}/status/${tweet.id_str}`
+
   return {
+    url: tweetUrl,
     video: {
       url: video.src,
       blob: videoBlob,

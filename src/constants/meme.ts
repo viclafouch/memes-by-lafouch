@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { extractTweetIdFromUrl } from '@/utils/tweet'
+import { extractTweetIdFromUrl, getTweetById } from '@/utils/tweet'
 import { Prisma } from '@prisma/client'
 
 export const memeFilters = z.object({
@@ -11,23 +11,18 @@ export type MemeWithVideo = Prisma.MemeGetPayload<{
   include: { video: true }
 }>
 
-export const TWITTER_STATUS_URL_REGEX =
-  /^https?:\/\/(?:twitter\.com|x\.com)\/([A-Za-z0-9_]+)\/status\/(\d+)/
+export const TWITTER_REGEX_THAT_INCLUDES_ID =
+  /^https?:\/\/(?:twitter\.com|x\.com)\/(?:[A-Za-z0-9_]+\/status\/\d+|i\/bookmarks\?post_id=\d+)/
 
 export const TWITTER_LINK_SCHEMA = z
   .string()
-  .regex(TWITTER_STATUS_URL_REGEX)
-  .transform((value) => {
-    const url = new URL(value)
-    url.search = ''
-    url.hostname = 'x.com'
+  .regex(TWITTER_REGEX_THAT_INCLUDES_ID)
+  .transform(async (value) => {
+    const tweetId = z.string().parse(extractTweetIdFromUrl(value))
 
-    const twitterId = z.string().parse(extractTweetIdFromUrl(url.toString()))
+    const tweet = await getTweetById(tweetId)
 
-    return {
-      url: url.toString(),
-      twitterId
-    }
+    return tweet
   })
 
 const SIZE_IN_MB = 16

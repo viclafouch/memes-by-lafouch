@@ -13,7 +13,7 @@ import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
   title: z.string().min(3),
-  tweetUrl: TWITTER_LINK_SCHEMA.optional(),
+  tweet: TWITTER_LINK_SCHEMA.optional(),
   video: z
     // Need Node >= v20
     // See https://github.com/colinhacks/zod/issues/387#issuecomment-1774603011
@@ -55,10 +55,10 @@ export async function createMeme(
   formData: FormData
 ): Promise<CreateMemeFormState> {
   try {
-    const validatedFields = schema.safeParse({
+    const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),
       video: formData.get('video'),
-      tweetUrl: formData.get('tweetUrl') || null
+      tweet: formData.get('tweetUrl') || undefined
     })
 
     if (!validatedFields.success) {
@@ -66,6 +66,16 @@ export async function createMeme(
         formErrors: validatedFields.error.flatten(),
         errorMessage: '',
         status: 'error'
+      }
+    }
+
+    const { tweet } = validatedFields.data
+
+    if (formData.get('tweetUrl') && !tweet) {
+      return {
+        status: 'error',
+        formErrors: null,
+        errorMessage: 'Tweet not exist or does not include a video'
       }
     }
 
@@ -78,7 +88,7 @@ export async function createMeme(
     const meme = await prisma.meme.create({
       data: {
         title: validatedFields.data.title,
-        tweetUrl: validatedFields.data.tweetUrl?.url,
+        tweetUrl: tweet?.url,
         video: {
           create: {
             videoUtKey: uploadFileResult.data.key,

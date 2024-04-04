@@ -62,7 +62,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
               src={meme.video.src}
               poster={meme.video.poster || undefined}
               width={270}
-              preload="none"
+              preload={meme.video.poster ? 'none' : 'metadata'}
               height={200}
             />
           ) : (

@@ -78,8 +78,8 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
           name="tweetUrl"
           isClearable
           defaultValue={meme.tweetUrl || ''}
-          isInvalid={Boolean(formErrors?.fieldErrors.tweetUrl?.[0])}
-          errorMessage={formErrors?.fieldErrors.tweetUrl?.[0]}
+          isInvalid={Boolean(formErrors?.fieldErrors.tweet?.[0])}
+          errorMessage={formErrors?.fieldErrors.tweet?.[0]}
           labelPlacement="outside"
         />
         <div className="w-full flex gap-6">

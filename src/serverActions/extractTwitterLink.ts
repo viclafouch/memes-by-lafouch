@@ -10,7 +10,6 @@ import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { wait } from '@/utils/promise'
-import { getTweetById } from '@/utils/tweet'
 import { Meme } from '@prisma/client'
 
 const schema = TWITTER_LINK_SCHEMA
@@ -25,7 +24,7 @@ export async function extractTwitterLink(
   formData: FormData
 ): Promise<ExtractTwitterFormState> {
   try {
-    const safeParsedResult = schema.safeParse(formData.get('link'))
+    const safeParsedResult = await schema.safeParseAsync(formData.get('link'))
 
     if (!safeParsedResult.success) {
       return {
@@ -35,24 +34,24 @@ export async function extractTwitterLink(
       }
     }
 
-    const existedMeme = await prisma.meme.findFirst({
-      where: {
-        tweetUrl: safeParsedResult.data.url
-      }
-    })
-
-    if (existedMeme) {
-      redirect(`/library/${existedMeme.id}`, RedirectType.push)
-    }
-
-    const tweet = await getTweetById(safeParsedResult.data.twitterId)
-
-    if (!tweet) {
+    if (!safeParsedResult.data) {
       return {
         status: 'error',
         formErrors: null,
         errorMessage: 'Tweet not exist or does not include a video'
       }
+    }
+
+    const tweet = safeParsedResult.data
+
+    const existedMeme = await prisma.meme.findFirst({
+      where: {
+        tweetUrl: tweet.url
+      }
+    })
+
+    if (existedMeme) {
+      redirect(`/library/${existedMeme.id}`, RedirectType.push)
     }
 
     if (tweet.video.blob.size > MAX_SIZE_MEME_IN_BYTES) {
@@ -80,7 +79,7 @@ export async function extractTwitterLink(
       meme = await prisma.meme.create({
         data: {
           title: 'Titre inconnu',
-          tweetUrl: safeParsedResult.data.url,
+          tweetUrl: tweet.url,
           video: {
             create: {
               poster: posterFileResult.data.url,

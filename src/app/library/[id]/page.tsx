@@ -1,4 +1,5 @@
 import React from 'react'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { formatRelative } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -9,6 +10,25 @@ import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import prisma from '@/db'
 import { DownloadSimple, Trash } from '@phosphor-icons/react/dist/ssr'
+
+type Props = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const meme = await prisma.meme.findUniqueOrThrow({
+    where: {
+      id: params.id
+    },
+    select: {
+      title: true
+    }
+  })
+
+  return {
+    title: meme.title
+  }
+}
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const meme = await prisma.meme.findUnique({
@@ -86,7 +106,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
               src={meme.video.src}
               poster={meme.video.poster || undefined}
               width={270}
-              preload="none"
+              preload={meme.video.poster ? 'none' : 'metadata'}
               height="100%"
             />
           </div>

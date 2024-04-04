@@ -9,7 +9,7 @@ import { SimpleFormState } from '@/serverActions/types'
 const schema = z.object({
   title: z.string().min(3),
   memeId: z.string(),
-  tweetUrl: TWITTER_LINK_SCHEMA.optional()
+  tweet: TWITTER_LINK_SCHEMA.optional()
 })
 
 export type UpdateMemeFormState = SimpleFormState<unknown, typeof schema>
@@ -19,10 +19,10 @@ export async function updateMeme(
   formData: FormData
 ): Promise<UpdateMemeFormState> {
   try {
-    const validatedFields = schema.safeParse({
+    const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),
       memeId: formData.get('id'),
-      tweetUrl: formData.get('tweetUrl') || undefined
+      tweet: formData.get('tweetUrl') || undefined
     })
 
     if (!validatedFields.success) {
@@ -33,10 +33,12 @@ export async function updateMeme(
       }
     }
 
-    if (validatedFields.data.tweetUrl) {
+    const { tweet } = validatedFields.data
+
+    if (tweet) {
       const existedMeme = await prisma.meme.findFirst({
         where: {
-          tweetUrl: validatedFields.data.tweetUrl.url,
+          tweetUrl: tweet.url,
           id: {
             not: validatedFields.data.memeId
           }
@@ -58,7 +60,7 @@ export async function updateMeme(
       },
       data: {
         title: validatedFields.data.title,
-        tweetUrl: validatedFields.data.tweetUrl?.url ?? null
+        tweetUrl: tweet?.url ?? null
       }
     })
 
