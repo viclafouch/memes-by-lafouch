@@ -23,7 +23,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   return (
     <Container>
       <div className="w-full flex flex-col gap-6 mx-auto">
-        <section className="flex h-[calc(100vh_-_60px)] w-full gap-8">
+        <section className="py-10 flex h-[calc(100vh_-_60px)] w-full gap-8">
           {/* Left */}
           <div className="w-full flex-none py-4 lg:w-[44%]">
             <div className="flex flex-col justify-between px-2">

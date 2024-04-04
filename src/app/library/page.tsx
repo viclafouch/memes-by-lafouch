@@ -12,7 +12,7 @@ const Page = ({
   const filters = memeFilters.parse(searchParams)
 
   return (
-    <Container className="flex flex-col gap-6 flex-1">
+    <Container className="py-10 flex flex-col gap-6 flex-1">
       <MemesListHeader />
       <React.Suspense
         key={JSON.stringify(filters)}

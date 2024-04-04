@@ -13,7 +13,7 @@ import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
   title: z.string().min(3),
-  twitterUrl: TWITTER_LINK_SCHEMA,
+  twitterUrl: TWITTER_LINK_SCHEMA.optional(),
   video: z
     // Need Node >= v20
     // See https://github.com/colinhacks/zod/issues/387#issuecomment-1774603011
@@ -80,7 +80,7 @@ export async function createMeme(
         title: validatedFields.data.title,
         videoUrl: uploadFileResult.data.url,
         videoKey: uploadFileResult.data.key,
-        twitterUrl: validatedFields.data.twitterUrl.url
+        twitterUrl: validatedFields.data.twitterUrl?.url
       }
     })
 

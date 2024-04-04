@@ -23,6 +23,7 @@
     "notistack": "^3.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-tweet": "^3.2.0",
     "tailwind-merge": "^2.2.2",
     "uploadthing": "^6.7.0",
     "use-debounce": "^10.0.0",

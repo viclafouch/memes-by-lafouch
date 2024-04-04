@@ -9,7 +9,7 @@ import { SimpleFormState } from '@/serverActions/types'
 const schema = z.object({
   title: z.string().min(3),
   memeId: z.string(),
-  twitterUrl: TWITTER_LINK_SCHEMA
+  twitterUrl: TWITTER_LINK_SCHEMA.optional()
 })
 
 export type UpdateMemeFormState = SimpleFormState<unknown, typeof schema>
@@ -22,7 +22,7 @@ export async function updateMeme(
     const validatedFields = schema.safeParse({
       title: formData.get('title'),
       memeId: formData.get('id'),
-      twitterUrl: formData.get('twitterUrl') || null
+      twitterUrl: formData.get('twitterUrl') || undefined
     })
 
     if (!validatedFields.success) {
@@ -33,13 +33,32 @@ export async function updateMeme(
       }
     }
 
+    if (validatedFields.data.twitterUrl) {
+      const existedMeme = await prisma.meme.findFirst({
+        where: {
+          twitterUrl: validatedFields.data.twitterUrl.url,
+          id: {
+            not: validatedFields.data.memeId
+          }
+        }
+      })
+
+      if (existedMeme) {
+        return {
+          formErrors: null,
+          errorMessage: 'Un mème avec ce lien Twitter existe déjà !',
+          status: 'error'
+        }
+      }
+    }
+
     await prisma.meme.update({
       where: {
         id: validatedFields.data.memeId
       },
       data: {
         title: validatedFields.data.title,
-        twitterUrl: validatedFields.data.twitterUrl.url
+        twitterUrl: validatedFields.data.twitterUrl?.url ?? null
       }
     })
 

@@ -32,7 +32,7 @@ const RootLayout = ({
         <Providers>
           <div className="flex flex-col min-h-screen">
             <Nav />
-            <div className="py-10 grow">{children}</div>
+            <div className="grow">{children}</div>
             <Footer />
           </div>
         </Providers>

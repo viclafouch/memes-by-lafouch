@@ -29,7 +29,7 @@ const SubmitButton = () => {
   )
 }
 
-export type FormManageMemeProps = {
+export type FormCreateMemeProps = {
   meme?: Meme
 }
 
@@ -37,7 +37,7 @@ const initialState = {
   status: 'idle'
 } as CreateMemeFormState
 
-const FormManageMeme = () => {
+const FormCreateMeme = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [formState, formAction] = useFormState(createMeme, initialState)
 
@@ -85,7 +85,6 @@ const FormManageMeme = () => {
         errorMessage={formErrors?.fieldErrors.twitterUrl?.[0]}
         labelPlacement="inside"
       />
-
       <UploadDropzone
         isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
         errorMessage={formErrors?.fieldErrors.video?.[0]}
@@ -96,4 +95,4 @@ const FormManageMeme = () => {
   )
 }
 
-export default FormManageMeme
+export default FormCreateMeme

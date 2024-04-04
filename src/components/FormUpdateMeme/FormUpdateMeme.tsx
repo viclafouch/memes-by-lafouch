@@ -76,6 +76,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
         <Input
           label="Twitter URL"
           name="twitterUrl"
+          isClearable
           defaultValue={meme.twitterUrl || ''}
           isInvalid={Boolean(formErrors?.fieldErrors.twitterUrl?.[0])}
           errorMessage={formErrors?.fieldErrors.twitterUrl?.[0]}
