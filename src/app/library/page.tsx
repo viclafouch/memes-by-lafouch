@@ -6,12 +6,27 @@ import { MemeFilters, memeFilters } from '@/constants/meme'
 import prisma from '@/db'
 
 async function getFilteredMemes(filters: MemeFilters) {
+  const searchValue = filters.query.trim()
+
   return prisma.meme.findMany({
-    where: {
-      title: {
-        search: filters.query || undefined
-      }
-    },
+    where: searchValue
+      ? {
+          OR: [
+            {
+              title: {
+                contains: searchValue
+              }
+            },
+            {
+              keywords: {
+                hasSome: searchValue.split(' ').map((word) => {
+                  return word.toLowerCase()
+                })
+              }
+            }
+          ]
+        }
+      : {},
     orderBy: {
       createdAt: filters.orderBy === 'most_old' ? 'asc' : 'desc'
     },

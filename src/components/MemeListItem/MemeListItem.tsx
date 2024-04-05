@@ -10,6 +10,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Chip,
   Divider,
   Skeleton,
   Spacer
@@ -34,6 +35,15 @@ export type MemeListItemProps =
     }
 
 const MemeListItem = ({ meme }: MemeListItemProps) => {
+  const limitKeywordsToDisplay = 3
+  const keywordsSplitted = meme
+    ? meme.keywords.slice(0, limitKeywordsToDisplay)
+    : []
+  const restKeywordsCount =
+    meme && meme.keywords.length > limitKeywordsToDisplay
+      ? meme.keywords.length - limitKeywordsToDisplay
+      : 0
+
   return (
     <Card>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -53,7 +63,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
           </Skeleton>
         )}
       </CardHeader>
-      <CardBody className="overflow-visible py-2">
+      <CardBody className="grow-0 overflow-visible py-2">
         <div className="h-56 lg:h-44 aspect-video w-full">
           {meme ? (
             <video
@@ -70,6 +80,37 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
           )}
         </div>
       </CardBody>
+      {meme ? (
+        <>
+          <Spacer y={2} />
+          <Divider />
+          <Spacer y={2} />
+          {keywordsSplitted.length > 0 ? (
+            <div>
+              <div className="flex px-3 flex-wrap gap-2">
+                {keywordsSplitted.map((keyword, index) => {
+                  return (
+                    <Chip
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={`${keyword}-${index}`}
+                      variant="bordered"
+                    >
+                      {keyword}
+                    </Chip>
+                  )
+                })}
+                {restKeywordsCount > 0 ? (
+                  <Chip variant="faded">+{restKeywordsCount}</Chip>
+                ) : null}
+              </div>
+            </div>
+          ) : (
+            <div className="flex grow px-3 flex-wrap gap-2">
+              <p className="text-small text-gray-400">Aucun mot clé.</p>
+            </div>
+          )}
+        </>
+      ) : null}
       <Spacer y={2} />
       <Divider />
       <CardFooter>
@@ -78,9 +119,6 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
             <ShareMemeButton size="sm" isIconOnly meme={meme}>
               <Share size={20} />
             </ShareMemeButton>
-            <DownloadMemeButton size="sm" isIconOnly meme={meme}>
-              <DownloadSimple size={20} />
-            </DownloadMemeButton>
             <Button
               as={Link}
               href={`/library/${meme.id}`}
@@ -91,6 +129,14 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
             >
               <Pen size={20} />
             </Button>
+            <DownloadMemeButton
+              color="default"
+              size="sm"
+              isIconOnly
+              meme={meme}
+            >
+              <DownloadSimple size={20} />
+            </DownloadMemeButton>
             {meme.tweetUrl ? (
               <MemeTweetButton tweetUrl={meme.tweetUrl} />
             ) : null}

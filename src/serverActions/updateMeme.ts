@@ -8,6 +8,7 @@ import { SimpleFormState } from '@/serverActions/types'
 
 const schema = z.object({
   title: z.string().min(3),
+  keywords: z.array(z.string().toLowerCase().trim()),
   memeId: z.string(),
   tweet: TWITTER_LINK_SCHEMA.optional()
 })
@@ -22,6 +23,7 @@ export async function updateMeme(
     const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),
       memeId: formData.get('id'),
+      keywords: formData.getAll('keywords'),
       tweet: formData.get('tweetUrl') || undefined
     })
 
@@ -60,6 +62,7 @@ export async function updateMeme(
       },
       data: {
         title: validatedFields.data.title,
+        keywords: validatedFields.data.keywords,
         tweetUrl: tweet?.url ?? null
       }
     })
