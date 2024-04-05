@@ -1,7 +1,12 @@
 import React from 'react'
+import { Metadata } from 'next'
 import Container from '@/components/Container'
 import FormTwitterLink from '@/components/FormTwitterLink'
 import { XLogo } from '@phosphor-icons/react/dist/ssr'
+
+export const metadata: Metadata = {
+  title: 'Viclafouch - Ajouter un mème via X'
+}
 
 const Page = () => {
   return (

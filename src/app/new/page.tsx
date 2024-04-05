@@ -1,6 +1,11 @@
 import React from 'react'
+import { Metadata } from 'next'
 import Container from '@/components/Container'
 import FormCreateMeme from '@/components/FormCreateMeme'
+
+export const metadata: Metadata = {
+  title: 'Viclafouch - Ajouter un mème'
+}
 
 const Page = () => {
   return (

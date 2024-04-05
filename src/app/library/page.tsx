@@ -1,9 +1,14 @@
 import React from 'react'
+import { Metadata } from 'next'
 import Container from '@/components/Container'
 import MemesList from '@/components/MemesList'
 import MemesListHeader from '@/components/MemesListHeader'
 import { MemeFilters, memeFilters } from '@/constants/meme'
 import prisma from '@/db'
+
+export const metadata: Metadata = {
+  title: 'Viclafouch - Mes mèmes'
+}
 
 async function getFilteredMemes(filters: MemeFilters) {
   const searchValue = filters.query.trim()
