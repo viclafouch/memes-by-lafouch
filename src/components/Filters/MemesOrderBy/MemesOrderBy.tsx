@@ -32,7 +32,7 @@ const MemesOrderBy = () => {
   return (
     <Select
       aria-label="Trier par"
-      className="w-40"
+      className="w-full"
       radius="full"
       selectionMode="single"
       selectedKeys={[value]}

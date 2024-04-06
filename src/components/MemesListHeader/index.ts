@@ -1,5 +1,5 @@
-import MemesListHeader from './MemesListHeader'
+import MemesListHeader, { MemesListHeaderProps } from './MemesListHeader'
 
-export type {}
+export type { MemesListHeaderProps }
 
 export default MemesListHeader

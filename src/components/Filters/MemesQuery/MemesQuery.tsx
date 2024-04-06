@@ -31,7 +31,7 @@ const MemesQuery = () => {
   return (
     <Input
       fullWidth
-      aria-label="Search"
+      aria-label="Rechercher"
       className="w-full"
       labelPlacement="outside"
       placeholder="Rechercher un mème"
