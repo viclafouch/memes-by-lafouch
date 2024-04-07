@@ -30,7 +30,7 @@ const MemesListHeader = ({
 
   return (
     <header className="flex flex-col gap-4">
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex justify-between items-center gap-4 flex-wrap">
         {isLoading ? (
           <Skeleton className="w-1/6 rounded-lg">
             <div className="w-full text-large">
@@ -44,7 +44,7 @@ const MemesListHeader = ({
           {isLoading ? (
             <Skeleton className="w-full h-unit-10 rounded-full" />
           ) : (
-            <Popover placement="bottom" showArrow offset={10}>
+            <Popover backdrop="opaque" placement="bottom" showArrow offset={10}>
               <PopoverTrigger>
                 <Button
                   variant="bordered"

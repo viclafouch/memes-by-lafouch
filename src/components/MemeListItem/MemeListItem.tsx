@@ -86,7 +86,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
           <Divider />
           <Spacer y={2} />
           {keywordsSplitted.length > 0 ? (
-            <div>
+            <div className="flex-grow">
               <div className="flex px-3 flex-wrap gap-2">
                 {keywordsSplitted.map((keyword, index) => {
                   return (

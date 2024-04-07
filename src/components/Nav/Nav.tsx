@@ -1,10 +1,7 @@
-'use client'
-
 import React from 'react'
 import NextLink from 'next/link'
-import { usePathname } from 'next/navigation'
+import UserButton from '@/components/UserButton'
 import {
-  Button,
   Link,
   Navbar,
   NavbarBrand,
@@ -13,8 +10,6 @@ import {
 } from '@nextui-org/react'
 
 const Nav = () => {
-  const pathname = usePathname()
-
   return (
     <Navbar>
       <NavbarBrand>
@@ -23,12 +18,12 @@ const Nav = () => {
         </NextLink>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive={pathname === '/new'}>
+        <NavbarItem>
           <Link as={NextLink} href="/new" color="foreground">
             Uploader un fichier
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={pathname === '/library'}>
+        <NavbarItem>
           <Link as={NextLink} href="/library" color="foreground">
             Bibliothèque
           </Link>
@@ -36,9 +31,7 @@ const Nav = () => {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Login
-          </Button>
+          <UserButton />
         </NavbarItem>
       </NavbarContent>
     </Navbar>
