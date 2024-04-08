@@ -13,7 +13,7 @@ export async function getTweetById(tweetId: string) {
   const tweet = await getTweet(tweetId)
 
   if (!tweet || !tweet.video || tweet.video.variants.length === 0) {
-    return null
+    return Promise.reject(new Error('tweet invalid'))
   }
 
   const { poster } = tweet.video

@@ -29,7 +29,7 @@ const SubmitButton = ({
       </Button>
       <span
         aria-live="polite"
-        className="text-center text-tiny text-danger p-1 min-h-6 block"
+        className="text-center text-tiny text-white p-1 min-h-6 block"
       >
         {formState.status === 'error' &&
         formState.errorMessage &&
