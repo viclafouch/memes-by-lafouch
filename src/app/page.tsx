@@ -12,10 +12,10 @@ const Page = () => {
   return (
     <Container className="py-32" id="homepage">
       <div className="flex flex-col justify-center gap-8">
-        <h1 className="text-black text-4xl text-center">
+        <h1 className="text-black text-4xl text-center text-balance">
           Ajouter un mème via <span className="sr-only">x</span>
           <span className="inline-flex align-middle bg-black px-2 rounded-lg">
-            <XLogo size={54} className="inline text-white" />
+            <XLogo className="inline text-white w-[36px] h-[36px] md:w-[54px] md:h-[54px]" />
           </span>
         </h1>
         <div className="w-full max-w-screen-sm mx-auto">

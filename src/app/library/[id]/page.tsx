@@ -6,9 +6,10 @@ import { fr } from 'date-fns/locale'
 import DeleteMemeButton from '@/components/DeleteMemeButton'
 import FormUpdateMeme from '@/components/FormUpdateMeme'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
+import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import prisma from '@/db'
-import { DownloadSimple, Trash } from '@phosphor-icons/react/dist/ssr'
+import { DownloadSimple, Share, Trash } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
   params: { id: string }
@@ -44,11 +45,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="flex h-full w-full gap-8">
+    <div className="flex flex-col lg:flex-row h-full w-full gap-8">
       {/* Left */}
-      <div className="w-full flex-none py-4 lg:w-[44%]">
+      <div className="w-full lg:flex-none py-4 lg:w-[44%]">
         <div className="flex flex-col justify-between px-2">
-          <div className="flex justify-between items-start pb-3 border-b-3">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-start pb-3 border-b-3">
             <div>
               <h1 className="text-3xl">Modifier le mème</h1>
               <p className="text-tiny text-gray-500">
@@ -81,25 +82,35 @@ const Page = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-      <div className="relative hidden w-full overflow-hidden rounded-medium shadow-small lg:block">
+      <div className="order-first	lg:order-none relative lg:h-auto w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
         {/* Top Shadow */}
-        <div className="absolute top-0 z-10 h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
+        <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
 
         {/* Content */}
-        <div className="absolute top-10 z-10 flex w-full items-start justify-between px-10">
-          <h2 className="text-2xl font-medium text-white/70 [text-shadow:_0_2px_10px_rgb(0_0_0_/_20%)]">
-            {meme.title}
-          </h2>
-          <div className="flex flex-col items-end gap-1">
+        <div className="lg:absolute top-5 lg:top-10 z-10 flex w-full items-start justify-between lg:px-10 gap-4">
+          <div className="flex flex-col w-full overflow-hidden">
+            <h2 className="truncate text-2xl font-medium text-white lg:text-white/70 [text-shadow:_0_2px_10px_rgb(0_0_0_/_20%)]">
+              {meme.title}
+            </h2>
             <p className="text-white/60">
               {meme.downloadCount} téléchargement
               {meme.downloadCount > 1 ? 's' : ''}
             </p>
           </div>
+          <div className="lg:hidden">
+            <ShareMemeButton
+              variant="shadow"
+              meme={meme}
+              color="secondary"
+              endContent={<Share size={20} />}
+            >
+              Partager
+            </ShareMemeButton>
+          </div>
         </div>
         <video
           controls
-          className="absolute inset-0 z-0 h-full w-full rounded-none object-cover"
+          className="lg:absolute inset-0 z-0 h-full w-full rounded-medium lg:rounded-none object-cover"
           src={meme.video.src}
           poster={meme.video.poster || undefined}
           width={270}

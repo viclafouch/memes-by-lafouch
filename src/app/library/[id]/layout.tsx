@@ -8,7 +8,7 @@ const Layout = ({
 }>) => {
   return (
     <Container>
-      <div className="py-10 h-[calc(100vh_-_60px)]">{children}</div>
+      <div className="py-10 lg:h-[calc(100vh_-_60px)]">{children}</div>
     </Container>
   )
 }

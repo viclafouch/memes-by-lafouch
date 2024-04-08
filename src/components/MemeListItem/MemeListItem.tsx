@@ -2,6 +2,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
+import MemeVideo from '@/components/MemeListItem/MemeVideo'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import { MemeWithVideo } from '@/constants/meme'
 import {
@@ -35,7 +36,7 @@ export type MemeListItemProps =
     }
 
 const MemeListItem = ({ meme }: MemeListItemProps) => {
-  const limitKeywordsToDisplay = 3
+  const limitKeywordsToDisplay = 8
   const keywordsSplitted = meme
     ? meme.keywords.slice(0, limitKeywordsToDisplay)
     : []
@@ -66,7 +67,8 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
       <CardBody className="grow-0 overflow-visible py-2">
         <div className="h-56 lg:h-44 aspect-video w-full">
           {meme ? (
-            <video
+            <MemeVideo
+              meme={meme}
               controls
               className="w-full h-full object-cover rounded-lg"
               src={meme.video.src}

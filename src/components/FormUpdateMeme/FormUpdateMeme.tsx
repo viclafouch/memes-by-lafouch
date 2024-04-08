@@ -154,7 +154,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
         <div className="w-full flex gap-6">
           <Input
             isDisabled
-            label="Clef vidéo (uploadThing)"
+            label="Clef vidéo"
             defaultValue={meme.video.videoUtKey}
             labelPlacement="outside"
             description={
@@ -169,7 +169,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
           />
           <Input
             isDisabled
-            label="Clef poster (uploadThing)"
+            label="Clef poster"
             defaultValue={meme.video.posterUtKey || ''}
             labelPlacement="outside"
             description={

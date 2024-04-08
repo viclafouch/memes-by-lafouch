@@ -30,7 +30,7 @@ const MemesListHeader = ({
 
   return (
     <header className="flex flex-col gap-4">
-      <div className="flex justify-between items-center gap-4 flex-wrap">
+      <div className="flex justify-between flex-col md:flex-row items-center gap-4">
         {isLoading ? (
           <Skeleton className="w-1/6 rounded-lg">
             <div className="w-full text-large">
@@ -40,7 +40,7 @@ const MemesListHeader = ({
         ) : (
           <h1 className="text-large font-semibold">{memes.length} mème(s)</h1>
         )}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 w-full md:w-auto">
           {isLoading ? (
             <Skeleton className="w-full h-unit-10 rounded-full" />
           ) : (
@@ -48,7 +48,7 @@ const MemesListHeader = ({
               <PopoverTrigger>
                 <Button
                   variant="bordered"
-                  className="rounded-full"
+                  className="grow md:grow-0 rounded-full"
                   color="primary"
                 >
                   Ajouter un mème
@@ -80,7 +80,7 @@ const MemesListHeader = ({
               </PopoverContent>
             </Popover>
           )}
-          <div className="w-40">
+          <div className="grow md:grow-0 shrink-0 sm:w-40">
             {isLoading ? (
               <Skeleton className="w-full h-unit-10 rounded-full" />
             ) : (
