@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { Providers } from '@/app/providers'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
+import UserButton from '@/components/UserButton'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -25,7 +26,7 @@ const RootLayout = ({
       >
         <Providers>
           <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
-            <Nav />
+            <Nav userButton={<UserButton />} />
             <div className="grow">{children}</div>
             <Footer />
           </div>

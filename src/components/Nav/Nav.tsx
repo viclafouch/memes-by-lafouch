@@ -1,6 +1,5 @@
 import React from 'react'
 import NextLink from 'next/link'
-import UserButton from '@/components/UserButton'
 import {
   Link,
   Navbar,
@@ -9,7 +8,11 @@ import {
   NavbarItem
 } from '@nextui-org/react'
 
-const Nav = () => {
+export type NavProps = {
+  userButton: React.ReactNode
+}
+
+const Nav = ({ userButton }: NavProps) => {
   return (
     <Navbar>
       <NavbarBrand>
@@ -24,9 +27,7 @@ const Nav = () => {
             Bibliothèque
           </Link>
         </NavbarItem>
-        <NavbarItem className="flex items-center">
-          <UserButton />
-        </NavbarItem>
+        <NavbarItem className="flex items-center">{userButton}</NavbarItem>
       </NavbarContent>
     </Navbar>
   )
