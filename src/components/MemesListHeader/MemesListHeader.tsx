@@ -42,7 +42,7 @@ const MemesListHeader = ({
         )}
         <div className="flex items-center gap-4 w-full md:w-auto">
           {isLoading ? (
-            <Skeleton className="w-full h-unit-10 rounded-full" />
+            <Skeleton className="md:w-40 grow md:grow-0 h-unit-10 rounded-full" />
           ) : (
             <Popover backdrop="opaque" placement="bottom" showArrow offset={10}>
               <PopoverTrigger>
@@ -80,9 +80,9 @@ const MemesListHeader = ({
               </PopoverContent>
             </Popover>
           )}
-          <div className="grow md:grow-0 shrink-0 sm:w-40">
+          <div className="grow md:grow-0 shrink-0 md:w-40">
             {isLoading ? (
-              <Skeleton className="w-full h-unit-10 rounded-full" />
+              <Skeleton className="grow md:grow-0 h-unit-10 rounded-full" />
             ) : (
               <MemesOrderBy />
             )}
