@@ -33,12 +33,16 @@ export const config = {
     Twitter({
       id: 'twitter',
       name: 'Twitter',
-      profile({ data }) {
+      profile(props) {
+        if (props.status === 429) {
+          throw new Error('Twitter Too many Requests', { cause: props })
+        }
+
         return {
-          id: data.id,
-          name: data.username,
-          email: data.email ?? null,
-          image: data.profile_image_url
+          id: props.data.id,
+          name: props.data.username,
+          email: props.data.email ?? null,
+          image: props.data.profile_image_url
         }
       }
     })
