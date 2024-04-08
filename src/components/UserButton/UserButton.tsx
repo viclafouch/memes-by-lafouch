@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { auth } from '@/utils/auth'
 import {
   Button,
@@ -22,8 +23,11 @@ const UserButton = async () => {
       <PopoverTrigger>
         <Button variant="solid" disableRipple className="bg-transparent">
           <User
-            className="cursor-pointer p-4"
-            name={session.user.name}
+            className="cursor-pointer p-0"
+            classNames={{
+              wrapper: 'hidden md:block'
+            }}
+            name=""
             description={session.user.id}
             avatarProps={{
               src: session.user.image!
@@ -31,7 +35,10 @@ const UserButton = async () => {
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-2">
+      <PopoverContent className="p-2 gap-2">
+        <Button fullWidth href="/library" as={Link}>
+          Bibliothèque
+        </Button>
         <SignOut />
       </PopoverContent>
     </Popover>

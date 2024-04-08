@@ -17,20 +17,14 @@ const Nav = () => {
           Viclafouch memes
         </NextLink>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link as={NextLink} href="/new" color="foreground">
-            Uploader un fichier
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center" />
+      <NavbarContent justify="end">
+        <NavbarItem className="hidden sm:flex">
           <Link as={NextLink} href="/library" color="foreground">
             Bibliothèque
           </Link>
         </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
+        <NavbarItem className="flex items-center">
           <UserButton />
         </NavbarItem>
       </NavbarContent>
