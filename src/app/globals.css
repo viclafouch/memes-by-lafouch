@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+@layer components {
+  .grandient-memes {
+    @apply bg-gradient-to-br;
+    @apply from-rose-400;
+    @apply via-fuchsia-500;
+    @apply to-indigo-500;
+  }
+}

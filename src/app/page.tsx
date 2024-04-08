@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <Container className="py-32">
+    <Container className="py-32" id="homepage">
       <div className="flex flex-col justify-center gap-8">
         <h1 className="text-4xl text-center">
           Ajouter un mème via <span className="sr-only">x</span>

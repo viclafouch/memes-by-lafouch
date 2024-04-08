@@ -13,7 +13,7 @@ const RootLayout = ({
   children: React.ReactNode
 }>) => {
   return (
-    <html lang="en" className="light">
+    <html lang="fr" className="light">
       <body
         className={clsx(
           inter.className,
@@ -24,7 +24,7 @@ const RootLayout = ({
         )}
       >
         <Providers>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
             <Nav />
             <div className="grow">{children}</div>
             <Footer />
