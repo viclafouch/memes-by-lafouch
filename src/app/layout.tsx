@@ -13,7 +13,7 @@ const RootLayout = ({
   children: React.ReactNode
 }>) => {
   return (
-    <html lang="fr" className="light">
+    <html lang="fr" suppressHydrationWarning>
       <body
         className={clsx(
           inter.className,

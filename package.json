@@ -21,6 +21,7 @@
     "framer-motion": "^11.0.22",
     "next": "14.1.4",
     "next-auth": "^5.0.0-beta.16",
+    "next-themes": "^0.3.0",
     "notistack": "^3.0.1",
     "react": "^18",
     "react-dom": "^18",

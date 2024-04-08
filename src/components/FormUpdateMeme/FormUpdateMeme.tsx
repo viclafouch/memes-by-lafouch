@@ -103,7 +103,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
           errorMessage={formErrors?.fieldErrors.title?.[0]}
           labelPlacement="outside"
         />
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col has-[.chip]:gap-3">
           <Input
             label={`Mots clés (${keywords.length})`}
             isClearable
@@ -130,6 +130,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
                   // eslint-disable-next-line react/no-array-index-key
                   key={`${keyword}-${index}`}
                   variant="bordered"
+                  className="chip"
                   onClose={() => {
                     return handleRemoveKeyword(index)
                   }}
