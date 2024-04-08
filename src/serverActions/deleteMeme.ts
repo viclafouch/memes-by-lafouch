@@ -29,6 +29,12 @@ export async function deleteMeme(
       }
     })
 
+    await prisma.video.delete({
+      where: {
+        id: meme.videoId
+      }
+    })
+
     const deleteFilesResult = await utapi.deleteFiles(
       meme.video.posterUtKey
         ? [meme.video.posterUtKey, meme.video.videoUtKey]
