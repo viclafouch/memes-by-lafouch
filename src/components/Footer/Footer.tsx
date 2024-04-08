@@ -20,7 +20,8 @@ const Footer = () => {
             <div className="flex items-center">Viclafouch memes</div>
           </div>
           <p className="text-center text-tiny text-default-400 md:text-start">
-            &copy; {new Date().getFullYear()} Acme Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Victor de la Fouchardière. Tous
+            droits réservés.
           </p>
         </div>
       </div>
