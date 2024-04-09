@@ -71,13 +71,20 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
   }
 
   const handleAddKeyword = () => {
-    setKeywordValue('')
-
     if (keywordValue.trim()) {
       setKeywords((prevState) => {
-        return [...prevState, keywordValue]
+        return [
+          ...new Set(
+            ...prevState,
+            ...keywordValue.split(',').map((keyword) => {
+              return keyword.trim()
+            })
+          )
+        ]
       })
     }
+
+    setKeywordValue('')
   }
 
   const handleAction = (formData: FormData) => {
