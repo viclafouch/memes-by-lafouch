@@ -51,8 +51,15 @@ const Page = ({
 
   return (
     <Container className="py-10 flex flex-col gap-6 flex-1">
-      <MemesListHeader getPromiseMemes={promise} />
-      <React.Suspense fallback={<MemesList isLoading />}>
+      <React.Suspense
+        fallback={
+          <>
+            <MemesListHeader isLoading />
+            <MemesList isLoading />
+          </>
+        }
+      >
+        <MemesListHeader getPromiseMemes={promise} />
         <MemesList getPromiseMemes={promise} />
       </React.Suspense>
     </Container>

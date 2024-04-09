@@ -49,7 +49,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
     <Card>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         {meme ? (
-          <div className="w-3/4">
+          <div className="w-full">
             <Link href={`/library/${meme.id}`}>
               <h4 className="font-semibold text-medium truncate">
                 {meme.title}
