@@ -74,12 +74,12 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
     if (keywordValue.trim()) {
       setKeywords((prevState) => {
         return [
-          ...new Set(
+          ...new Set([
             ...prevState,
             ...keywordValue.split(',').map((keyword) => {
               return keyword.trim()
             })
-          )
+          ])
         ]
       })
     }
