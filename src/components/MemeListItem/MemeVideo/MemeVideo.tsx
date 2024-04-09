@@ -9,13 +9,16 @@ export type MemeVideoProps = {
 
 const handlePlay = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
   const target = event.target as HTMLVideoElement
+  const targetId = target.getAttribute('data-id')
 
   const allVideos = Array.from(
     document.querySelectorAll<HTMLVideoElement>('video')
   )
 
   for (const video of allVideos) {
-    if (target === video) {
+    const id = video.getAttribute('data-id')
+
+    if (targetId === id) {
       continue
     } else {
       video.pause()
@@ -25,7 +28,9 @@ const handlePlay = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
 }
 
 const MemeVideo = ({ meme, ...restVideoProps }: MemeVideoProps) => {
-  return <video onPlay={handlePlay} {...restVideoProps} />
+  const id = React.useId()
+
+  return <video data-id={id} onPlay={handlePlay} {...restVideoProps} />
 }
 
 export default MemeVideo
