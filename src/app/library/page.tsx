@@ -5,6 +5,8 @@ import MemesList from '@/components/MemesList'
 import MemesListHeader from '@/components/MemesListHeader'
 import { MemeFilters, memeFilters } from '@/constants/meme'
 import prisma from '@/db'
+import { memesIndex } from '@/utils/algolia'
+import { Meme } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: 'Viclafouch - Mes mèmes'
@@ -13,25 +15,23 @@ export const metadata: Metadata = {
 async function getFilteredMemes(filters: MemeFilters) {
   const searchValue = filters.query.trim()
 
+  const { hits } = await memesIndex.search(searchValue, {
+    query: searchValue,
+    attributesToRetrieve: ['title', 'keywords'] as (keyof Meme)[],
+    typoTolerance: true,
+    ignorePlurals: true,
+    queryLanguages: ['fr'],
+    removeStopWords: true
+  })
+
   return prisma.meme.findMany({
-    where: searchValue
-      ? {
-          OR: [
-            {
-              title: {
-                contains: searchValue
-              }
-            },
-            {
-              keywords: {
-                hasSome: searchValue.split(' ').map((word) => {
-                  return word.toLowerCase()
-                })
-              }
-            }
-          ]
-        }
-      : {},
+    where: {
+      id: {
+        in: hits.map((hit) => {
+          return hit.objectID
+        })
+      }
+    },
     orderBy: {
       createdAt: filters.orderBy === 'most_old' ? 'asc' : 'desc'
     },

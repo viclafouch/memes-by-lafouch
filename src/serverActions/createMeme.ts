@@ -9,6 +9,7 @@ import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
+import { indexMemeObject } from '@/utils/algolia'
 import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
@@ -96,8 +97,13 @@ export async function createMeme(
             poster: ''
           }
         }
+      },
+      include: {
+        video: true
       }
     })
+
+    await indexMemeObject(meme)
 
     revalidatePath('/library', 'page')
     redirect(`/library/${meme.id}`, RedirectType.push)

@@ -7,6 +7,7 @@ import { z } from 'zod'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
+import { memesIndex } from '@/utils/algolia'
 import { Meme } from '@prisma/client'
 
 const schema = z.string()
@@ -40,6 +41,8 @@ export async function deleteMeme(
         ? [meme.video.posterUtKey, meme.video.videoUtKey]
         : meme.video.videoUtKey
     )
+
+    await memesIndex.deleteObject(meme.id)
 
     if (!deleteFilesResult.success) {
       return await Promise.reject(new Error('Failed to delete file'))

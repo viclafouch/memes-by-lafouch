@@ -5,10 +5,15 @@ import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
-import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
+import {
+  MAX_SIZE_MEME_IN_BYTES,
+  MemeWithVideo,
+  TWITTER_LINK_SCHEMA
+} from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
+import { indexMemeObject } from '@/utils/algolia'
 import { wait } from '@/utils/promise'
 import { Meme } from '@prisma/client'
 
@@ -73,7 +78,7 @@ export async function extractTwitterLink(
       )
     }
 
-    let meme: Meme
+    let meme: MemeWithVideo
 
     try {
       meme = await prisma.meme.create({
@@ -93,6 +98,8 @@ export async function extractTwitterLink(
           video: true
         }
       })
+
+      await indexMemeObject(meme)
     } catch (error) {
       // Looks like we have to wait a minimum of time before directly removing a file
       await wait(1000)

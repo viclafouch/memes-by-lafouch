@@ -2,10 +2,11 @@
 
 import { revalidatePath } from 'next/cache'
 import prisma from '@/db'
+import { updateMemeObject } from '@/utils/algolia'
 import { Meme } from '@prisma/client'
 
 export async function incrementDownloadCount(memeId: Meme['id']) {
-  await prisma.meme.update({
+  const meme = await prisma.meme.update({
     where: {
       id: memeId
     },
@@ -13,8 +14,13 @@ export async function incrementDownloadCount(memeId: Meme['id']) {
       downloadCount: {
         increment: 1
       }
+    },
+    select: {
+      downloadCount: true
     }
   })
+
+  await updateMemeObject(memeId, meme)
 
   revalidatePath(`/library/${memeId}`, 'page')
 

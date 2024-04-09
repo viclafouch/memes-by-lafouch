@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
+import { updateMemeObject } from '@/utils/algolia'
 
 const schema = z.object({
   title: z.string().min(3),
@@ -56,7 +57,7 @@ export async function updateMeme(
       }
     }
 
-    await prisma.meme.update({
+    const meme = await prisma.meme.update({
       where: {
         id: validatedFields.data.memeId
       },
@@ -64,8 +65,13 @@ export async function updateMeme(
         title: validatedFields.data.title,
         keywords: validatedFields.data.keywords,
         tweetUrl: tweet?.url ?? null
+      },
+      include: {
+        video: true
       }
     })
+
+    await updateMemeObject(meme.id, meme)
 
     revalidatePath(`/library/${validatedFields.data.memeId}`, 'page')
 
