@@ -21,7 +21,8 @@ async function getFilteredMemes(filters: MemeFilters) {
     typoTolerance: true,
     ignorePlurals: true,
     queryLanguages: ['fr'],
-    removeStopWords: true
+    removeStopWords: true,
+    hitsPerPage: 1000
   })
 
   return prisma.meme.findMany({

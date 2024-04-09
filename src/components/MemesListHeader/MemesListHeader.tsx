@@ -3,6 +3,7 @@ import Link from 'next/link'
 import MemesOrderBy from '@/components/Filters/MemesOrderBy'
 import MemesQuery from '@/components/Filters/MemesQuery'
 import { MemeWithVideo } from '@/constants/meme'
+import prisma from '@/db'
 import {
   Button,
   Popover,
@@ -27,18 +28,26 @@ const MemesListHeader = ({
   isLoading
 }: MemesListHeaderProps) => {
   const memes = getPromiseMemes ? React.use(getPromiseMemes) : []
+  const totalCount = getPromiseMemes ? React.use(prisma.meme.count()) : 0
 
   return (
     <header className="flex flex-col gap-4">
       <div className="flex justify-between flex-col md:flex-row items-center gap-4">
         {isLoading ? (
-          <Skeleton className="w-1/6 rounded-lg">
+          <Skeleton className="w-2/6 rounded-lg">
             <div className="w-full text-large">
               <span className="bg-default-200">{'\u00A0'}</span>
             </div>
           </Skeleton>
         ) : (
-          <h1 className="text-large font-semibold">{memes.length} mème(s)</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-large font-semibold">{memes.length} mèmes</h1>
+            {' / '}
+            <span className="mt-1 text-tiny font-semibold">
+              {' '}
+              {totalCount} au total
+            </span>
+          </div>
         )}
         <div className="flex items-center gap-4 w-full md:w-auto">
           {isLoading ? (
