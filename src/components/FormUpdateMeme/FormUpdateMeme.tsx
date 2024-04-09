@@ -6,6 +6,7 @@ import { useSnackbar } from 'notistack'
 import { MemeWithVideo } from '@/constants/meme'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { updateMeme, UpdateMemeFormState } from '@/serverActions/updateMeme'
+import { cn } from '@/utils/cn'
 import { Button, ButtonProps, Chip, Input, Link } from '@nextui-org/react'
 
 export type FormUpdateMemeProps = {
@@ -106,10 +107,22 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
         <div className="flex flex-col has-[.chip]:gap-3">
           <Input
             label={`Mots clés (${keywords.length})`}
-            isClearable
-            onClear={() => {
-              setKeywordValue('')
-            }}
+            endContent={
+              <Button
+                size="sm"
+                className={cn({
+                  hidden: keywordValue.length === 0
+                })}
+                type="button"
+                color="primary"
+                onClick={(event) => {
+                  event.preventDefault()
+                  handleAddKeyword()
+                }}
+              >
+                Ajouter
+              </Button>
+            }
             value={keywordValue}
             placeholder=" "
             onChange={(event) => {
