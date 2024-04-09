@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import Container from '@/components/Container'
 import FormTwitterLink from '@/components/FormTwitterLink'
 import { XLogo } from '@phosphor-icons/react/dist/ssr'
@@ -20,6 +21,11 @@ const Page = () => {
         </h1>
         <div className="w-full max-w-screen-sm mx-auto">
           <FormTwitterLink />
+          <div className="text-center">
+            <Link href="/new" className="text-white underline">
+              Uploader un fichier local ?
+            </Link>
+          </div>
         </div>
       </div>
     </Container>

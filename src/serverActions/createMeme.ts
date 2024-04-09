@@ -13,7 +13,7 @@ import { indexMemeObject } from '@/utils/algolia'
 import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
-  title: z.string().min(3),
+  title: z.string().min(3).trim(),
   tweet: TWITTER_LINK_SCHEMA.optional(),
   video: z
     // Need Node >= v20
