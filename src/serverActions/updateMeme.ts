@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { TWITTER_LINK_SCHEMA } from '@/constants/meme'
+import { TWITTER_REGEX_THAT_INCLUDES_ID } from '@/constants/meme'
 import prisma from '@/db'
 import { SimpleFormState } from '@/serverActions/types'
 import { updateMemeObject } from '@/utils/algolia'
@@ -11,7 +11,7 @@ const schema = z.object({
   title: z.string().min(3),
   keywords: z.array(z.string().toLowerCase().trim()),
   memeId: z.string(),
-  tweet: TWITTER_LINK_SCHEMA.optional()
+  tweet: z.string().regex(TWITTER_REGEX_THAT_INCLUDES_ID).optional()
 })
 
 export type UpdateMemeFormState = SimpleFormState<unknown, typeof schema>
@@ -36,27 +36,6 @@ export async function updateMeme(
       }
     }
 
-    const { tweet } = validatedFields.data
-
-    if (tweet) {
-      const existedMeme = await prisma.meme.findFirst({
-        where: {
-          tweetUrl: tweet.url,
-          id: {
-            not: validatedFields.data.memeId
-          }
-        }
-      })
-
-      if (existedMeme) {
-        return {
-          formErrors: null,
-          errorMessage: 'Un mème avec ce lien Twitter existe déjà !',
-          status: 'error'
-        }
-      }
-    }
-
     const meme = await prisma.meme.update({
       where: {
         id: validatedFields.data.memeId
@@ -64,7 +43,7 @@ export async function updateMeme(
       data: {
         title: validatedFields.data.title,
         keywords: validatedFields.data.keywords,
-        tweetUrl: tweet?.url ?? null
+        tweetUrl: validatedFields.data.tweet ?? null
       },
       include: {
         video: true
