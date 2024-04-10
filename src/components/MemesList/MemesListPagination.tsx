@@ -81,7 +81,11 @@ const MemesListPagination = ({
   }
 
   return (
-    <Pagination total={nbPages} page={currentPage} renderItem={renderItem} />
+    <Pagination
+      total={nbPages}
+      page={currentPage + 1}
+      renderItem={renderItem}
+    />
   )
 }
 

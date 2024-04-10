@@ -33,13 +33,8 @@ const MemesListHeader = ({
           </Skeleton>
         ) : (
           <div className="flex items-center gap-2">
-            <h1 className="text-large font-semibold">
-              {React.use(getPromiseMemes).memes.length} mèmes
-            </h1>
-            {' / '}
-            <span className="mt-1 text-tiny font-semibold">
-              {' '}
-              {React.use(getPromiseMemes).memeTotalCount} au total
+            <span className="mt-1 text-lg font-semibold">
+              {React.use(getPromiseMemes).memeTotalCount} mèmes au total
             </span>
           </div>
         )}

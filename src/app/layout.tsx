@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { Providers } from '@/app/providers'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
+import OnlyPortrait from '@/components/OnlyPortrait'
 import UserButton from '@/components/UserButton'
 import './globals.css'
 
@@ -24,13 +25,15 @@ const RootLayout = ({
           'bg-background'
         )}
       >
-        <Providers>
-          <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
-            <Nav userButton={<UserButton />} />
-            <div className="grow">{children}</div>
-            <Footer />
-          </div>
-        </Providers>
+        <OnlyPortrait>
+          <Providers>
+            <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
+              <Nav userButton={<UserButton />} />
+              <div className="grow">{children}</div>
+              <Footer />
+            </div>
+          </Providers>
+        </OnlyPortrait>
       </body>
     </html>
   )

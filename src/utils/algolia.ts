@@ -37,7 +37,7 @@ export async function searchMemes(filters: MemeFilters) {
       typoTolerance: true,
       ignorePlurals: true,
       queryLanguages: ['fr'],
-      page: filters.page - 1,
+      page: filters.page - 1 < 0 ? 0 : filters.page - 1,
       removeStopWords: true,
       hitsPerPage: 20,
       attributesToHighlight: []
