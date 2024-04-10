@@ -10,6 +10,7 @@ import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import prisma from '@/db'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
+import { myVideoLoader } from '@/utils/cloudinary'
 import { DownloadSimple, Share, Trash } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
@@ -113,7 +114,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <video
           controls
           className="lg:absolute inset-0 z-0 h-full w-full rounded-medium lg:rounded-none object-cover"
-          src={meme.video.src}
+          src={myVideoLoader({ src: meme.video.src })}
           poster={meme.video.poster || undefined}
           width={270}
           preload={meme.video.poster ? 'none' : 'metadata'}

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { MemeWithVideo } from '@/constants/meme'
+import { myVideoLoader } from '@/utils/cloudinary'
 import useIntersectionObserver from '@react-hook/intersection-observer'
 
 export type MemeVideoProps = {
@@ -40,12 +41,18 @@ const isVideoPlaying = (videoElement: HTMLVideoElement) => {
   )
 }
 
-const MemeVideo = ({ meme, ...restVideoProps }: MemeVideoProps) => {
+const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
   const id = React.useId()
   const [ref, setRef] = React.useState<HTMLVideoElement | null>(null)
   const { isIntersecting } = useIntersectionObserver(ref, {
     rootMargin: '-64px 0px 0px 0px'
   })
+
+  const cloudinarySrc = src
+    ? myVideoLoader({
+        src
+      })
+    : undefined
 
   React.useEffect(() => {
     if (ref && isVideoPlaying(ref) && !isIntersecting) {
@@ -56,7 +63,13 @@ const MemeVideo = ({ meme, ...restVideoProps }: MemeVideoProps) => {
   }, [ref, isIntersecting])
 
   return (
-    <video ref={setRef} data-id={id} onPlay={handlePlay} {...restVideoProps} />
+    <video
+      ref={setRef}
+      src={cloudinarySrc}
+      data-id={id}
+      onPlay={handlePlay}
+      {...restVideoProps}
+    />
   )
 }
 

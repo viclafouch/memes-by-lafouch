@@ -12,3 +12,14 @@
     @apply to-indigo-500;
   }
 }
+
+
+/* Hide spinner on video (only Chrome)  */
+video::-webkit-media-controls {
+  visibility: hidden;
+}
+
+/* Hide spinner on video (only Chrome)  */
+video::-webkit-media-controls-enclosure {
+  visibility: visible;
+}
