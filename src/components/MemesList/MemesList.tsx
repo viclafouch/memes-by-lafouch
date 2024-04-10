@@ -1,5 +1,6 @@
 import React from 'react'
 import MemeListItem from '@/components/MemeListItem'
+import MemesListPagination from '@/components/MemesList/MemesListPagination'
 import { SearchMemesResponse } from '@/utils/algolia'
 import { cn } from '@/utils/cn'
 
@@ -41,14 +42,21 @@ const MemesList = ({ getPromiseMemes, isLoading }: MemesListProps) => {
     )
   }
 
-  const { memes } = React.use(getPromiseMemes)
+  const { memes, nbPages, page } = React.use(getPromiseMemes)
 
   return (
-    <WrapperList>
-      {memes.map((meme) => {
-        return <MemeListItem key={meme.id} meme={meme} />
-      })}
-    </WrapperList>
+    <div className="flex flex-col gap-5">
+      <WrapperList>
+        {memes.map((meme) => {
+          return <MemeListItem key={meme.id} meme={meme} />
+        })}
+      </WrapperList>
+      {memes.length > 0 ? (
+        <div className="w-full flex justify-center">
+          <MemesListPagination nbPages={nbPages} currentPage={page} />
+        </div>
+      ) : null}
+    </div>
   )
 }
 

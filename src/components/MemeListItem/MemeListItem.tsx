@@ -71,7 +71,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
             <MemeVideo
               meme={meme}
               controls
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-contain rounded-lg"
               src={meme.video.src}
               poster={meme.video.poster || undefined}
               width={270}

@@ -28,7 +28,7 @@ const Page = ({
           </>
         }
       >
-        <MemesListHeader getPromiseMemes={promise} />
+        <MemesListHeader filters={filters} getPromiseMemes={promise} />
         <MemesList getPromiseMemes={promise} />
       </React.Suspense>
     </Container>

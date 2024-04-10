@@ -113,7 +113,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         </div>
         <video
           controls
-          className="lg:absolute inset-0 z-0 h-full w-full rounded-medium lg:rounded-none object-cover"
+          className="lg:absolute inset-0 z-0 h-full w-full rounded-medium lg:rounded-none object-contain"
           src={myVideoLoader({ src: meme.video.src })}
           poster={meme.video.poster || undefined}
           width={270}

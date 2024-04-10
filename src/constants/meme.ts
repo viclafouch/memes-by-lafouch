@@ -4,7 +4,8 @@ import { Prisma } from '@prisma/client'
 
 export const memeFilters = z.object({
   orderBy: z.enum(['most_recent', 'most_old']).catch('most_recent'),
-  query: z.string().catch('')
+  query: z.string().catch(''),
+  page: z.coerce.number().catch(1)
 })
 
 export type MemeWithVideo = Prisma.MemeGetPayload<{

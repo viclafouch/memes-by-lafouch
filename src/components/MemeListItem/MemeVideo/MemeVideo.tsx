@@ -42,8 +42,18 @@ const isVideoPlaying = (videoElement: HTMLVideoElement) => {
   )
 }
 
+export async function lockOrientiation(orientation: string) {
+  try {
+    // @ts-expect-error
+    await screen.orientation.lock(orientation)
+  } catch (error) {
+    // see https://developer.mozilla.org/en-US/docs/Web/API/ScreenOrientation/lock#exceptions
+    // eslint-disable-next-line no-console
+    console.warn(error)
+  }
+}
+
 const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
-  const id = React.useId()
   const [ref, setRef] = React.useState<HTMLVideoElement | null>(null)
   const { isIntersecting } = useIntersectionObserver(ref, {
     rootMargin: '-64px 0px 0px 0px'
@@ -56,6 +66,12 @@ const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
         src
       })
     : undefined
+
+  React.useEffect(() => {
+    try {
+      lockOrientiation('portrait')
+    } catch (error) {}
+  }, [])
 
   React.useEffect(() => {
     if (ref && isVideoPlaying(ref) && !isIntersecting) {
@@ -73,7 +89,6 @@ const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
     <video
       ref={setRef}
       src={cloudinarySrc}
-      data-id={id}
       onPlay={handlePlay}
       {...restVideoProps}
     />
