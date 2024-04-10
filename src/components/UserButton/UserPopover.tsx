@@ -4,11 +4,13 @@ import React from 'react'
 import Link from 'next/link'
 import {
   Button,
+  Divider,
   Popover,
   PopoverContent,
   PopoverTrigger,
   User
 } from '@nextui-org/react'
+import { FileVideo, XLogo } from '@phosphor-icons/react'
 
 export type UserPopoverProps = {
   userImage: string
@@ -50,11 +52,45 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
           }}
           className="sm:hidden"
           fullWidth
+          size="sm"
+          color="primary"
           href="/library"
           as={Link}
         >
           Bibliothèque
         </Button>
+        <Divider className="sm:hidden" />
+        <div className="sm:hidden flex flex-col w-full">
+          <h4 className="text-center text-tiny pb-2">Ajouter un mème</h4>
+          <div className="flex flex-col gap-1 w-full">
+            <Button
+              as={Link}
+              href="/"
+              onClick={() => {
+                return setIsOpen(false)
+              }}
+              size="sm"
+              fullWidth
+              endContent={<XLogo size={20} />}
+            >
+              Via Twitter
+            </Button>
+            <Button
+              as={Link}
+              href="/new"
+              onClick={() => {
+                return setIsOpen(false)
+              }}
+              size="sm"
+              fullWidth
+              color="default"
+              endContent={<FileVideo size={20} />}
+            >
+              Via un fichier
+            </Button>
+          </div>
+        </div>
+        <Divider className="sm:hidden" />
         {signOutButton}
       </PopoverContent>
     </Popover>

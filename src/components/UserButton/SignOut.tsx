@@ -10,7 +10,7 @@ const SignOut = () => {
         await signOut()
       }}
     >
-      <Button color="primary" type="submit" className="bg-black text-white">
+      <Button size="sm" color="danger" type="submit">
         Se déconnecter
       </Button>
     </form>
