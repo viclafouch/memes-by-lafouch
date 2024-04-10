@@ -3,6 +3,7 @@
 import React from 'react'
 import { MemeWithVideo } from '@/constants/meme'
 import { Button, ButtonProps } from '@nextui-org/react'
+import { useMutation } from '@tanstack/react-query'
 
 export type ShareMemeButtonProps = {
   meme: MemeWithVideo
@@ -16,10 +17,8 @@ const ShareMemeButton = ({
   children,
   ...restButtonProps
 }: ShareMemeButtonProps) => {
-  const handleDownload = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-
-    try {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
       const response = await fetch(meme.video.src)
       const blob = await response.blob()
 
@@ -34,14 +33,23 @@ const ShareMemeButton = ({
 
       await navigator.share(data)
       incrementDownloadCount(meme.id)
-    } catch (error) {
-      //
     }
+  })
+
+  const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    if (isPending) {
+      return
+    }
+
+    mutate()
   }
 
   return (
     <Button
-      color="primary"
+      color="secondary"
+      isDisabled={isPending}
       onClick={handleDownload}
       aria-label="Partager"
       {...restButtonProps}

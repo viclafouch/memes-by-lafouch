@@ -70,7 +70,9 @@ const MemesQuery = ({ value }: MemesQueryProps) => {
       placeholder="Rechercher un mème"
       radius="full"
       ref={setRef}
+      autoComplete="off"
       size="lg"
+      type="search"
       value={liveValue}
       onChange={handleChange}
       startContent={<MagnifyingGlass size={16} />}

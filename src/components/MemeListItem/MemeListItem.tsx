@@ -71,7 +71,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
             <MemeVideo
               meme={meme}
               controls
-              className="w-full h-full object-contain rounded-lg"
+              className="border border-white/10 w-full h-full object-contain rounded-lg"
               src={meme.video.src}
               poster={meme.video.poster || undefined}
               width={270}
@@ -119,14 +119,6 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
       <CardFooter>
         {meme ? (
           <div className="w-full flex justify-end gap-2">
-            <ShareMemeButton
-              incrementDownloadCount={incrementDownloadCount}
-              size="sm"
-              isIconOnly
-              meme={meme}
-            >
-              <Share size={20} />
-            </ShareMemeButton>
             <Button
               as={Link}
               href={`/library/${meme.id}`}
@@ -148,6 +140,24 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
             {meme.tweetUrl ? (
               <MemeTweetButton tweetUrl={meme.tweetUrl} />
             ) : null}
+            <ShareMemeButton
+              incrementDownloadCount={incrementDownloadCount}
+              size="sm"
+              isIconOnly
+              className="hidden md:flex"
+              meme={meme}
+            >
+              <Share size={20} />
+            </ShareMemeButton>
+            <ShareMemeButton
+              incrementDownloadCount={incrementDownloadCount}
+              size="sm"
+              meme={meme}
+              className="md:hidden"
+            >
+              <span>Partager</span>
+              <Share size={20} />
+            </ShareMemeButton>
           </div>
         ) : (
           <Skeleton className="rounded-lg">
