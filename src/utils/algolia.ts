@@ -1,9 +1,13 @@
 import algoliasearch from 'algoliasearch'
 import { SERVER_ENVS } from '@/constants/env'
-import { MemeWithVideo } from '@/constants/meme'
+import { MemeFilters, MemeWithVideo } from '@/constants/meme'
 
 const client = algoliasearch('5S4LKLUDFF', SERVER_ENVS.ALGOLIA_ADMIN_SECRET)
-const memesIndex = client.initIndex('memes')
+export const memesIndex = client.initIndex('memes')
+
+const setSettings = memesIndex.setSettings({
+  searchableAttributes: ['title', 'keywords'] as (keyof MemeWithVideo)[]
+})
 
 export async function indexMemeObject(meme: MemeWithVideo) {
   await memesIndex.saveObject({
@@ -22,4 +26,25 @@ export async function updateMemeObject(
   })
 }
 
-export { memesIndex }
+export async function searchMemes(filters: MemeFilters) {
+  await setSettings
+  const searchValue = filters.query.trim()
+
+  const { hits, nbPages } = await memesIndex.search<MemeWithVideo>(
+    searchValue,
+    {
+      query: searchValue,
+      typoTolerance: true,
+      ignorePlurals: true,
+      queryLanguages: ['fr'],
+      page: 0,
+      removeStopWords: true,
+      hitsPerPage: 20,
+      attributesToHighlight: []
+    }
+  )
+
+  return { memes: hits, nbPages }
+}
+
+export type SearchMemesResponse = ReturnType<typeof searchMemes>

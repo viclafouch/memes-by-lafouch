@@ -2,8 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import MemesOrderBy from '@/components/Filters/MemesOrderBy'
 import MemesQuery from '@/components/Filters/MemesQuery'
-import { MemeWithVideo } from '@/constants/meme'
 import prisma from '@/db'
+import { SearchMemesResponse } from '@/utils/algolia'
 import {
   Button,
   Popover,
@@ -15,7 +15,7 @@ import { FileVideo, XLogo } from '@phosphor-icons/react/dist/ssr'
 
 export type MemesListHeaderProps =
   | {
-      getPromiseMemes: Promise<MemeWithVideo[]>
+      getPromiseMemes: SearchMemesResponse
       isLoading?: never
     }
   | {
@@ -27,7 +27,6 @@ const MemesListHeader = ({
   getPromiseMemes,
   isLoading
 }: MemesListHeaderProps) => {
-  const memes = getPromiseMemes ? React.use(getPromiseMemes) : []
   const totalCount = getPromiseMemes ? React.use(prisma.meme.count()) : 0
 
   return (
@@ -41,7 +40,9 @@ const MemesListHeader = ({
           </Skeleton>
         ) : (
           <div className="flex items-center gap-2">
-            <h1 className="text-large font-semibold">{memes.length} mèmes</h1>
+            <h1 className="text-large font-semibold">
+              {React.use(getPromiseMemes).memes.length} mèmes
+            </h1>
             {' / '}
             <span className="mt-1 text-tiny font-semibold">
               {' '}

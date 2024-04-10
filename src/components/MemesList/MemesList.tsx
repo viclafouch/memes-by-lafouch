@@ -1,11 +1,11 @@
 import React from 'react'
 import MemeListItem from '@/components/MemeListItem'
-import { MemeWithVideo } from '@/constants/meme'
+import { SearchMemesResponse } from '@/utils/algolia'
 import { cn } from '@/utils/cn'
 
 export type MemesListProps =
   | {
-      getPromiseMemes: Promise<MemeWithVideo[]>
+      getPromiseMemes: SearchMemesResponse
       isLoading?: never
     }
   | {
@@ -41,7 +41,7 @@ const MemesList = ({ getPromiseMemes, isLoading }: MemesListProps) => {
     )
   }
 
-  const memes = React.use(getPromiseMemes)
+  const { memes } = React.use(getPromiseMemes)
 
   return (
     <WrapperList>
