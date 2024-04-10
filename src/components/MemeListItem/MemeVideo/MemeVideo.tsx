@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useDebounce } from 'use-debounce'
 import { MemeWithVideo } from '@/constants/meme'
 import { myVideoLoader } from '@/utils/cloudinary'
 import useIntersectionObserver from '@react-hook/intersection-observer'
@@ -47,6 +48,8 @@ const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
   const { isIntersecting } = useIntersectionObserver(ref, {
     rootMargin: '-64px 0px 0px 0px'
   })
+  // Use to preload video
+  const [isIntersectingDebounced] = useDebounce(isIntersecting, 300)
 
   const cloudinarySrc = src
     ? myVideoLoader({
@@ -57,10 +60,14 @@ const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
   React.useEffect(() => {
     if (ref && isVideoPlaying(ref) && !isIntersecting) {
       stopVideo(ref)
-    } else if (isIntersecting && ref) {
-      ref.preload = 'auto'
     }
   }, [ref, isIntersecting])
+
+  React.useEffect(() => {
+    if (isIntersectingDebounced && ref && ref.preload !== 'auto') {
+      ref.preload = 'auto'
+    }
+  }, [isIntersectingDebounced, ref])
 
   return (
     <video
