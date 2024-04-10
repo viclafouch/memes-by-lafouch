@@ -9,6 +9,7 @@ import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import prisma from '@/db'
+import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { DownloadSimple, Share, Trash } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
@@ -101,6 +102,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <ShareMemeButton
               variant="shadow"
               meme={meme}
+              incrementDownloadCount={incrementDownloadCount}
               color="secondary"
               endContent={<Share size={20} />}
             >

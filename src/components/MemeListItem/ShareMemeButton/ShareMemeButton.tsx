@@ -6,11 +6,13 @@ import { Button, ButtonProps } from '@nextui-org/react'
 
 export type ShareMemeButtonProps = {
   meme: MemeWithVideo
+  incrementDownloadCount: (memeId: MemeWithVideo['id']) => void
   children: React.ReactNode
 } & Partial<ButtonProps>
 
 const ShareMemeButton = ({
   meme,
+  incrementDownloadCount,
   children,
   ...restButtonProps
 }: ShareMemeButtonProps) => {
@@ -31,6 +33,7 @@ const ShareMemeButton = ({
       }
 
       await navigator.share(data)
+      incrementDownloadCount(meme.id)
     } catch (error) {
       //
     }

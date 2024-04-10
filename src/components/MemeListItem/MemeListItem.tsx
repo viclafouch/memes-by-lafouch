@@ -5,6 +5,7 @@ import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import MemeVideo from '@/components/MemeListItem/MemeVideo'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import { MemeWithVideo } from '@/constants/meme'
+import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import {
   Button,
   Card,
@@ -118,7 +119,12 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
       <CardFooter>
         {meme ? (
           <div className="w-full flex justify-end gap-2">
-            <ShareMemeButton size="sm" isIconOnly meme={meme}>
+            <ShareMemeButton
+              incrementDownloadCount={incrementDownloadCount}
+              size="sm"
+              isIconOnly
+              meme={meme}
+            >
               <Share size={20} />
             </ShareMemeButton>
             <Button
