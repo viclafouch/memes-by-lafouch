@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { formatRelative } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { toZonedTime } from 'date-fns-tz'
 import DeleteMemeButton from '@/components/DeleteMemeButton'
 import FormUpdateMeme from '@/components/FormUpdateMeme'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
@@ -56,7 +57,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
               <h1 className="text-3xl">Modifier le mème</h1>
               <p className="text-tiny text-gray-500">
                 Dernière mise à jour :{' '}
-                {formatRelative(meme.updatedAt, new Date(), { locale: fr })}
+                {formatRelative(
+                  toZonedTime(meme.updatedAt, 'Europe/Paris'),
+                  new Date(),
+                  { locale: fr }
+                )}
               </p>
             </div>
             <div className="flex items-center gap-2">
