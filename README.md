@@ -1,4 +1,6 @@
-# My Memes in 1 place
+# My Memes in 1 place 😎
+
+[meme](https://github.com/viclafouch/memes-by-lafouch/assets/23353836/c57cfe73-af79-41ab-b462-98cbf6b6a35b)
 
 ### What I use 🚀
 
