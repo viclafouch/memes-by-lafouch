@@ -15,8 +15,6 @@ const Page = ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) => {
-  console.log(process.env.TZ)
-
   const filters = memeFilters.parse(searchParams)
   const promise = searchMemes(filters)
 

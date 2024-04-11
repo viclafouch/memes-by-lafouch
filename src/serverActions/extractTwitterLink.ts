@@ -101,6 +101,9 @@ export async function extractTwitterLink(
 
       await indexMemeObject(meme)
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+
       // Looks like we have to wait a minimum of time before directly removing a file
       await wait(1000)
       // Remove files if something went wrong
@@ -114,12 +117,12 @@ export async function extractTwitterLink(
     revalidatePath('/library', 'page')
     redirect(`/library/${meme.id}`, RedirectType.push)
   } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error)
+
     if (isRedirectError(error)) {
       throw error
     }
-
-    // eslint-disable-next-line no-console
-    console.error(error)
 
     return {
       status: 'error',
