@@ -22,7 +22,7 @@
 
 ### Run In local
 
-1. First, include all environnment variables by following the `.env.example` file.
+1. First, include all environnment variables in a `.env` file at the root by following the `.env.example` file.
 2. `npm install`
 3. `npm run dev`
 4. Be care, we use the same DB in development and production.
