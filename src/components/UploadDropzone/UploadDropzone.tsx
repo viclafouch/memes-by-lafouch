@@ -23,10 +23,6 @@ const UploadDropzone = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const [newFile] = Array.from(event.target.files ?? [])
 
-    if (!newFile) {
-      return
-    }
-
     setFile(newFile)
   }
 

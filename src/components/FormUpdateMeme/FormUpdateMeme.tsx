@@ -76,9 +76,14 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
         return [
           ...new Set([
             ...prevState,
-            ...keywordValue.split(',').map((keyword) => {
-              return keyword.trim()
-            })
+            ...keywordValue
+              .split(',')
+              .map((keyword) => {
+                return keyword.trim()
+              })
+              .filter((word) => {
+                return Boolean(word.trim())
+              })
           ])
         ]
       })

@@ -83,7 +83,11 @@ export async function createMeme(
     const uploadFileResult = await utapi.uploadFiles(validatedFields.data.video)
 
     if (uploadFileResult.error) {
-      return await Promise.reject(uploadFileResult.error.message)
+      return {
+        formErrors: null,
+        errorMessage: "Le fichier n'a pas pu être uploadé",
+        status: 'error'
+      }
     }
 
     const meme = await prisma.meme.create({
