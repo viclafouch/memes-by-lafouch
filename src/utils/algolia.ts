@@ -13,6 +13,8 @@ const setIndexPromise = memesIndex.setSettings({
 export async function indexMemeObject(meme: MemeWithVideo) {
   await memesIndex.saveObject({
     ...meme,
+    // Required for sorting
+    createdAt_timestamp: meme.createdAt.getTime(),
     objectID: meme.id
   })
 }
