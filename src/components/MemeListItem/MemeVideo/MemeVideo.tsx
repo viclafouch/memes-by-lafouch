@@ -18,6 +18,10 @@ const handlePlay = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
   const target = event.target as HTMLVideoElement
   const targetId = target.getAttribute('data-id')
 
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
+  }
+
   const allVideos = Array.from(
     document.querySelectorAll<HTMLVideoElement>('video')
   )
