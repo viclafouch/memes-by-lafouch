@@ -2,16 +2,22 @@
 
 import React from 'react'
 import { useDebounce } from 'use-debounce'
+import { useIntersectionObserver } from 'usehooks-ts'
 import { MemeWithVideo } from '@/constants/meme'
 import { myVideoLoader } from '@/utils/cloudinary'
-import useIntersectionObserver from '@react-hook/intersection-observer'
 
 export type MemeVideoProps = {
   meme: MemeWithVideo
 } & React.ComponentProps<'video'>
 
-const stopVideo = (videoElement: HTMLVideoElement) => {
-  videoElement.pause()
+function matchIsVideoElement(node: Element): node is HTMLVideoElement {
+  return node instanceof HTMLVideoElement
+}
+
+const stopVideo = (node: Element) => {
+  if (matchIsVideoElement(node)) {
+    node.pause()
+  }
 }
 
 const handlePlay = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
@@ -37,45 +43,52 @@ const handlePlay = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
   }
 }
 
-const isVideoPlaying = (videoElement: HTMLVideoElement) => {
-  return Boolean(
-    videoElement.currentTime > 0 &&
-      !videoElement.paused &&
-      !videoElement.ended &&
-      videoElement.readyState > 2
-  )
+const isVideoPlaying = (node: Element) => {
+  if (matchIsVideoElement(node)) {
+    return Boolean(
+      node.currentTime > 0 && !node.paused && !node.ended && node.readyState > 2
+    )
+  }
+
+  return false
 }
 
 const MemeVideo = ({ meme, src, ...restVideoProps }: MemeVideoProps) => {
-  const [ref, setRef] = React.useState<HTMLVideoElement | null>(null)
-  const { isIntersecting } = useIntersectionObserver(ref, {
-    rootMargin: '-64px 0px 0px 0px'
+  const id = React.useId()
+  const { ref, entry, isIntersecting } = useIntersectionObserver({
+    rootMargin: '-64px 0px 0px 0px',
+    onChange: (isInterstg: boolean, { target }) => {
+      if (!isInterstg && isVideoPlaying(target)) {
+        stopVideo(target)
+      }
+    }
   })
   // Use to preload video
   const [isIntersectingDebounced] = useDebounce(isIntersecting, 300)
-
-  const cloudinarySrc = src
-    ? myVideoLoader({
-        src
-      })
-    : undefined
+  const isVisible = isIntersectingDebounced && isIntersecting
 
   React.useEffect(() => {
-    if (ref && isVideoPlaying(ref) && !isIntersecting) {
-      stopVideo(ref)
+    if (
+      isVisible &&
+      entry &&
+      matchIsVideoElement(entry.target) &&
+      entry.target.preload !== 'auto'
+    ) {
+      entry.target.preload = 'auto'
     }
-  }, [ref, isIntersecting])
-
-  React.useEffect(() => {
-    if (isIntersectingDebounced && ref && ref.preload !== 'auto') {
-      ref.preload = 'auto'
-    }
-  }, [isIntersectingDebounced, ref])
+  }, [isVisible, entry])
 
   return (
     <video
-      ref={setRef}
-      src={cloudinarySrc}
+      ref={ref}
+      data-id={id}
+      src={
+        src
+          ? myVideoLoader({
+              src
+            })
+          : undefined
+      }
       onPlay={handlePlay}
       {...restVideoProps}
     />

@@ -1,3 +1,5 @@
+'server-only'
+
 import { z } from 'zod'
 
 const serverEnvsSchema = z.object({

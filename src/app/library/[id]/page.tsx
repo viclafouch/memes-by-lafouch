@@ -18,30 +18,31 @@ type Props = {
   params: { id: string }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const meme = await prisma.meme.findUniqueOrThrow({
-    where: {
-      id: params.id
-    },
-    select: {
-      title: true
-    }
-  })
+export const revalidate = 1800 // revalidate the data at most every half hour
 
-  return {
-    title: meme.title
-  }
-}
-
-const Page = async ({ params }: { params: { id: string } }) => {
-  const meme = await prisma.meme.findUnique({
+export const getItem = React.cache(async (id: string) => {
+  const item = await prisma.meme.findUnique({
     where: {
-      id: params.id
+      id
     },
     include: {
       video: true
     }
   })
+
+  return item
+})
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const meme = await getItem(params.id)
+
+  return {
+    title: meme!.title
+  }
+}
+
+const Page = async ({ params }: { params: { id: string } }) => {
+  const meme = await getItem(params.id)
 
   if (!meme) {
     notFound()

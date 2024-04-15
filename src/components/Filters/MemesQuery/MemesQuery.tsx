@@ -1,83 +1,74 @@
 'use client'
 
 import React from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useDebouncedCallback } from 'use-debounce'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useIntersectionObserver } from 'usehooks-ts'
 import { Input } from '@nextui-org/react'
 import { MagnifyingGlass } from '@phosphor-icons/react'
-import useIntersectionObserver from '@react-hook/intersection-observer'
 
 export type MemesQueryProps = {
   value: string
 }
 
-const MemesQuery = ({ value }: MemesQueryProps) => {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const [isPending, startTransition] = React.useTransition()
+const MemesQuery = () => {
   const router = useRouter()
-  const [liveValue, setLiveValue] = React.useState(value)
-  const [ref, setRef] = React.useState<HTMLInputElement | null>(null)
-  const { isIntersecting } = useIntersectionObserver(ref, {
-    rootMargin: '-64px 0px 0px 0px'
+
+  const searchParams = useSearchParams()
+  const [searchValue, setSearchValue] = React.useState<string>('')
+  const { ref } = useIntersectionObserver({
+    rootMargin: '-64px 0px 0px 0px',
+    onChange: (isIntersecting: boolean, entry) => {
+      const inputElement = entry.target as HTMLInputElement
+
+      if (!isIntersecting && document.activeElement === inputElement) {
+        inputElement.blur()
+      }
+    }
   })
 
   React.useEffect(() => {
-    if (ref && document.activeElement === ref && !isIntersecting) {
-      ref.blur()
+    setSearchValue(searchParams.get('query') || '')
+  }, [searchParams, setSearchValue])
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.target as HTMLFormElement)
+    const newSearchValue = formData.get('search') || ''
+    const newParams = new URLSearchParams(searchParams.toString())
+
+    if (newSearchValue) {
+      newParams.set('query', newSearchValue.toString())
+    } else {
+      newParams.delete('query')
     }
-  }, [isIntersecting, ref])
 
-  const debounced = useDebouncedCallback(
-    (queryDebounced: string) => {
-      const params = new URLSearchParams(searchParams)
-
-      if (queryDebounced) {
-        params.set('query', queryDebounced)
-      } else {
-        params.delete('query')
-      }
-
-      params.delete('page')
-      startTransition(() => {
-        router.replace(`${pathname}?${params.toString()}`)
-      })
-    },
-    500,
-    // The maximum time func is allowed to be delayed before it's invoked:
-    { maxWait: 2000 }
-  )
-
-  React.useEffect(() => {
-    setLiveValue(value)
-  }, [value])
+    router.replace(`/library/?${newParams.toString()}`)
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newLiveValue = event.target.value
-    setLiveValue(newLiveValue)
-
-    if (!isPending) {
-      debounced(newLiveValue)
-    }
+    setSearchValue(event.target.value)
   }
 
   return (
-    <Input
-      fullWidth
-      aria-label="Rechercher"
-      className="w-full"
-      labelPlacement="outside"
-      placeholder="Rechercher un mème"
-      radius="full"
-      ref={setRef}
-      autoComplete="off"
-      size="lg"
-      type="search"
-      value={liveValue}
-      onChange={handleChange}
-      startContent={<MagnifyingGlass size={16} />}
-      variant="bordered"
-    />
+    <form onSubmit={handleSubmit}>
+      <Input
+        fullWidth
+        aria-label="Rechercher"
+        className="w-full"
+        labelPlacement="outside"
+        placeholder="Rechercher un mème"
+        radius="full"
+        ref={ref}
+        autoComplete="off"
+        size="lg"
+        name="search"
+        value={searchValue}
+        onChange={handleChange}
+        endContent={<MagnifyingGlass size={16} />}
+        variant="bordered"
+      />
+    </form>
   )
 }
 

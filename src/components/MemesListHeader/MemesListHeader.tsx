@@ -1,26 +1,22 @@
 import React from 'react'
 import MemesOrderBy from '@/components/Filters/MemesOrderBy'
 import MemesQuery from '@/components/Filters/MemesQuery'
-import { MemeFilters } from '@/constants/meme'
 import { SearchMemesResponse } from '@/utils/algolia'
 import { Skeleton } from '@nextui-org/react'
 
 export type MemesListHeaderProps =
   | {
       getPromiseMemes: SearchMemesResponse
-      filters: MemeFilters
       isLoading?: never
     }
   | {
       isLoading: true
-      filters?: never
       getPromiseMemes?: never
     }
 
 const MemesListHeader = ({
   getPromiseMemes,
-  isLoading,
-  filters
+  isLoading
 }: MemesListHeaderProps) => {
   return (
     <header className="flex flex-col gap-4">
@@ -51,7 +47,7 @@ const MemesListHeader = ({
       {isLoading ? (
         <Skeleton className="w-full h-unit-12 rounded-full" />
       ) : (
-        <MemesQuery value={filters.query} />
+        <MemesQuery />
       )}
     </header>
   )
