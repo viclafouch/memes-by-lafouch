@@ -43,6 +43,8 @@ const MemesQuery = () => {
       newParams.delete('query')
     }
 
+    newParams.delete('page')
+
     router.replace(`/library/?${newParams.toString()}`)
   }
 

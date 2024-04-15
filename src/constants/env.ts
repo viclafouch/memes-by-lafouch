@@ -1,6 +1,5 @@
-'server-only'
-
 import { z } from 'zod'
+import 'server-only'
 
 const serverEnvsSchema = z.object({
   AUTH_SECRET: z.string(),
