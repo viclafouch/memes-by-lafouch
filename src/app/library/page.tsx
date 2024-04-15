@@ -20,15 +20,13 @@ const Page = ({
 
   return (
     <Container className="py-10 flex flex-col gap-6 flex-1">
-      <React.Suspense
-        fallback={
-          <>
-            <MemesListHeader isLoading />
-            <MemesList isLoading />
-          </>
-        }
-      >
+      <React.Suspense fallback={<MemesListHeader isLoading />}>
         <MemesListHeader getPromiseMemes={promise} />
+      </React.Suspense>
+      <React.Suspense
+        key={JSON.stringify(filters)}
+        fallback={<MemesList isLoading />}
+      >
         <MemesList getPromiseMemes={promise} />
       </React.Suspense>
     </Container>

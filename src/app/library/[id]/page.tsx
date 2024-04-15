@@ -20,7 +20,7 @@ type Props = {
 
 export const revalidate = 1800 // revalidate the data at most every half hour
 
-export const getItem = React.cache(async (id: string) => {
+const getItem = React.cache(async (id: string) => {
   const item = await prisma.meme.findUnique({
     where: {
       id
