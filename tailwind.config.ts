@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable global-require */
 import type { Config } from 'tailwindcss'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { nextui } = require('@nextui-org/react')
 
 const config: Config = {
@@ -12,7 +13,7 @@ const config: Config = {
     extend: {}
   },
   darkMode: 'class',
-  plugins: [nextui()]
+  plugins: [nextui(), require('tailwindcss-animate')]
 }
 
 export default config

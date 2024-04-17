@@ -26,7 +26,7 @@ const ShareMemeButton = dynamic(
   { ssr: false }
 )
 
-export type MemeListItemProps =
+export type MemeListItemProps = { className?: string } & (
   | {
       meme: MemeWithVideo
       isLoading?: never
@@ -35,8 +35,9 @@ export type MemeListItemProps =
       meme?: never
       isLoading: true
     }
+)
 
-const MemeListItem = ({ meme }: MemeListItemProps) => {
+const MemeListItem = ({ meme, className = '' }: MemeListItemProps) => {
   const limitKeywordsToDisplay = 8
   const keywordsSplitted = meme
     ? meme.keywords.slice(0, limitKeywordsToDisplay)
@@ -47,7 +48,7 @@ const MemeListItem = ({ meme }: MemeListItemProps) => {
       : 0
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         {meme ? (
           <div className="w-full">
