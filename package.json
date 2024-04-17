@@ -48,10 +48,6 @@
     "prisma": "^5.12.1",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   }
 }
