@@ -5,6 +5,7 @@ import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 import OnlyPortrait from '@/components/OnlyPortrait'
 import { ProgressBar } from '@/components/ProgressBar'
+import TailwindIndicator from '@/components/TailwindIndicator/TailwindIndicator'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -36,6 +37,7 @@ const RootLayout = ({
             </ProgressBar>
           </Providers>
         </OnlyPortrait>
+        <TailwindIndicator />
       </body>
     </html>
   )
