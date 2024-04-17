@@ -4,7 +4,6 @@ import { Providers } from '@/app/providers'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 import OnlyPortrait from '@/components/OnlyPortrait'
-import UserButton from '@/components/UserButton'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -28,7 +27,7 @@ const RootLayout = ({
         <OnlyPortrait>
           <Providers>
             <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
-              <Nav userButton={<UserButton />} />
+              <Nav />
               <div className="grow">{children}</div>
               <Footer />
             </div>

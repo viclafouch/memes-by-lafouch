@@ -1,5 +1,6 @@
 import React from 'react'
 import NextLink from 'next/link'
+import UserButton from '@/components/UserButton'
 import {
   Button,
   Link,
@@ -13,11 +14,7 @@ import {
 } from '@nextui-org/react'
 import { FileVideo, XLogo } from '@phosphor-icons/react/dist/ssr'
 
-export type NavProps = {
-  userButton: React.ReactNode
-}
-
-const Nav = ({ userButton }: NavProps) => {
+const Nav = () => {
   return (
     <Navbar>
       <NavbarBrand>
@@ -65,7 +62,9 @@ const Nav = ({ userButton }: NavProps) => {
             </PopoverContent>
           </Popover>
         </NavbarItem>
-        <NavbarItem className="flex items-center">{userButton}</NavbarItem>
+        <NavbarItem className="flex items-center">
+          <UserButton />
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   )
