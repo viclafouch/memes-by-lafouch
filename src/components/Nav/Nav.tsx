@@ -1,5 +1,6 @@
 import React from 'react'
 import NextLink from 'next/link'
+import { ProgressBarLink } from '@/components/ProgressBar'
 import UserButton from '@/components/UserButton'
 import {
   Button,
@@ -25,9 +26,7 @@ const Nav = () => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center" />
       <NavbarContent justify="end">
         <NavbarItem className="hidden sm:flex">
-          <Link as={NextLink} href="/library" color="foreground">
-            Bibliothèque
-          </Link>
+          <ProgressBarLink href="/library">Bibliothèque</ProgressBarLink>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
           <Popover backdrop="opaque" placement="bottom" showArrow offset={10}>
