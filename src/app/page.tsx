@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const Page = () => {
   return (
     <Container className="py-32" id="homepage">
-      <div className="flex flex-col justify-center gap-8 animate-in fade-in duration-700 delay-150">
+      <div className="flex flex-col justify-center gap-8">
         <h1 className="text-black text-4xl text-center text-balance">
           Ajouter un mème via <span className="sr-only">x</span>
           <span className="inline-flex align-middle bg-black px-2 rounded-lg">
