@@ -9,9 +9,9 @@ import FormUpdateMeme from '@/components/FormUpdateMeme'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
-import prisma from '@/db'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { myVideoLoader } from '@/utils/cloudinary'
+import { getMeme } from '@/utils/meme'
 import { DownloadSimple, Share, Trash } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
@@ -20,21 +20,8 @@ type Props = {
 
 export const revalidate = 1800 // revalidate the data at most every half hour
 
-const getItem = React.cache(async (id: string) => {
-  const item = await prisma.meme.findUnique({
-    where: {
-      id
-    },
-    include: {
-      video: true
-    }
-  })
-
-  return item
-})
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const meme = await getItem(params.id)
+  const meme = await getMeme(params.id)
 
   return {
     title: meme!.title
@@ -42,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  const meme = await getItem(params.id)
+  const meme = await getMeme(params.id)
 
   if (!meme) {
     notFound()

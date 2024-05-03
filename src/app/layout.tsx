@@ -31,7 +31,7 @@ const RootLayout = ({
             <ProgressBar className="fixed top-0 h-1 shadow-lg shadow-sky-500/20 bg-sky-500 z-50">
               <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
                 <Nav />
-                <div className="grow">{children}</div>
+                <div className="flex flex-col grow">{children}</div>
                 <Footer />
               </div>
             </ProgressBar>

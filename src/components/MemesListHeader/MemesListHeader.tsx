@@ -2,7 +2,8 @@ import React from 'react'
 import MemesOrderBy from '@/components/Filters/MemesOrderBy'
 import MemesQuery from '@/components/Filters/MemesQuery'
 import { SearchMemesResponse } from '@/utils/algolia'
-import { Skeleton } from '@nextui-org/react'
+import { Button, Skeleton } from '@nextui-org/react'
+import { ShuffleSimple } from '@phosphor-icons/react/dist/ssr'
 
 export type MemesListHeaderProps =
   | {
@@ -34,7 +35,20 @@ const MemesListHeader = ({
             </span>
           </div>
         )}
-        <div className="flex items-center gap-4 w-full md:w-auto">
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          {isLoading ? (
+            <Skeleton className="grow md:grow-0 h-unit-10 rounded-full" />
+          ) : (
+            <Button
+              color="secondary"
+              href="/random"
+              as="a"
+              className="rounded-full"
+              endContent={<ShuffleSimple size={20} />}
+            >
+              Aléatoire
+            </Button>
+          )}
           <div className="grow md:grow-0 shrink-0 md:w-40">
             {isLoading ? (
               <Skeleton className="grow md:grow-0 h-unit-10 rounded-full" />
