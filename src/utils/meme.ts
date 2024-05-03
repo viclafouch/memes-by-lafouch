@@ -14,7 +14,11 @@ export const getMeme = React.cache(async (id: string) => {
   })
 })
 
-export const getRandomMeme = async ({ exceptId }: { exceptId: Meme['id'] }) => {
+export const getRandomMeme = async ({
+  exceptId
+}: {
+  exceptId?: Meme['id']
+} = {}) => {
   const memesCount = await prisma.meme.count()
   const randomIndex = Math.floor(Math.random() * memesCount)
 
