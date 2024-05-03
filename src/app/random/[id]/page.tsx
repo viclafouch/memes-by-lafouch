@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Container from '@/components/Container'
+import prisma from '@/db'
 import { myVideoLoader } from '@/utils/cloudinary'
 import { getMeme, getRandomMeme } from '@/utils/meme'
 import { Button } from '@nextui-org/react'
@@ -9,6 +10,21 @@ import { Pen, ShuffleSimple } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
   params: { id: string }
+}
+
+// Return a list of `params` to populate the [slug] dynamic segment
+export async function generateStaticParams() {
+  const memes = await prisma.meme.findMany({
+    select: {
+      id: true
+    }
+  })
+
+  return memes.map((meme) => {
+    return {
+      id: meme.id
+    }
+  })
 }
 
 const Page = async ({ params }: Props) => {
