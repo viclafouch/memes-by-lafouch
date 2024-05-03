@@ -30,7 +30,7 @@ export async function generateStaticParams() {
 const Page = async ({ params }: Props) => {
   const [meme, randomMeme] = await Promise.all([
     getMeme(params.id),
-    getRandomMeme()
+    getRandomMeme({ exceptId: params.id })
   ])
 
   if (!meme) {
