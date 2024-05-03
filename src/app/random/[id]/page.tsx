@@ -28,13 +28,14 @@ export async function generateStaticParams() {
 }
 
 const Page = async ({ params }: Props) => {
-  const meme = await getMeme(params.id)
+  const [meme, randomMeme] = await Promise.all([
+    getMeme(params.id),
+    getRandomMeme()
+  ])
 
   if (!meme) {
     notFound()
   }
-
-  const randomMeme = await getRandomMeme()
 
   return (
     <Container className="py-10 h-full flex grow">
@@ -58,6 +59,7 @@ const Page = async ({ params }: Props) => {
             color="secondary"
             href={`/library/${meme.id}`}
             as={Link}
+            prefetch
             endContent={<Pen size={20} />}
           >
             Modifier
@@ -66,6 +68,7 @@ const Page = async ({ params }: Props) => {
             color="primary"
             href={`/random/${randomMeme.id}`}
             as={Link}
+            prefetch
             endContent={<ShuffleSimple size={20} />}
           >
             Aléatoire
