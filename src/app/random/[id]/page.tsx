@@ -2,11 +2,14 @@ import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Container from '@/components/Container'
+import FormRandomMeme from '@/components/FormRandomMeme'
+import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import prisma from '@/db'
+import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { myVideoLoader } from '@/utils/cloudinary'
-import { getMeme, getRandomMeme } from '@/utils/meme'
+import { getMeme } from '@/utils/meme'
 import { Button } from '@nextui-org/react'
-import { Pen, ShuffleSimple } from '@phosphor-icons/react/dist/ssr'
+import { Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
   params: { id: string }
@@ -28,10 +31,7 @@ export async function generateStaticParams() {
 }
 
 const Page = async ({ params }: Props) => {
-  const [meme, randomMeme] = await Promise.all([
-    getMeme(params.id),
-    getRandomMeme({ exceptId: params.id })
-  ])
+  const meme = await getMeme(params.id)
 
   if (!meme) {
     notFound()
@@ -54,25 +54,30 @@ const Page = async ({ params }: Props) => {
             />
           </div>
         </div>
-        <div className="flex gap-6">
-          <Button
-            color="secondary"
-            href={`/library/${meme.id}`}
-            as={Link}
-            prefetch
-            endContent={<Pen size={20} />}
-          >
-            Modifier
-          </Button>
-          <Button
-            color="primary"
-            href={`/random/${randomMeme.id}`}
-            as={Link}
-            prefetch
-            endContent={<ShuffleSimple size={20} />}
-          >
-            Aléatoire
-          </Button>
+        <div className="flex gap-4 flex-col w-full max-w-96">
+          <FormRandomMeme exceptMeme={meme} />
+          <div className="flex gap-4">
+            <Button
+              color="default"
+              href={`/library/${meme.id}`}
+              as={Link}
+              size="sm"
+              prefetch
+              fullWidth
+              endContent={<Pen size={20} />}
+            >
+              Modifier
+            </Button>
+            <ShareMemeButton
+              incrementDownloadCount={incrementDownloadCount}
+              meme={meme}
+              size="sm"
+              fullWidth
+              endContent={<Share size={20} />}
+            >
+              Partager
+            </ShareMemeButton>
+          </div>
         </div>
       </div>
     </Container>
