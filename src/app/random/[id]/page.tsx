@@ -38,8 +38,8 @@ const Page = async ({ params }: Props) => {
   }
 
   return (
-    <Container className="py-10 h-full flex grow">
-      <div className="flex flex-col items-center gap-3 grow">
+    <Container className="pb-5 pt-10 h-full flex grow">
+      <div className="flex flex-col items-center gap-6 grow">
         <h1 className="text-xl text-center lg:text-3xl">{meme.title}</h1>
         <div className="grow flex w-full max-w-[720px]">
           <div className="grow flex relative w-full">
