@@ -5,7 +5,7 @@ import { getRandomMeme } from '@/utils/meme'
 import { Meme } from '@prisma/client'
 
 export async function redirectRandomMeme(memeId: Meme['id']) {
-  const meme = await getRandomMeme({ exceptId: memeId })
+  const randomMeme = await getRandomMeme({ exceptId: memeId })
 
-  redirect(`/random/${meme.id}`)
+  redirect(`/random/${randomMeme.id}`)
 }

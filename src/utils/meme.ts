@@ -1,4 +1,5 @@
 import React from 'react'
+import { unstable_cache } from 'next/cache'
 import prisma from '@/db'
 import { Meme } from '@prisma/client'
 import 'server-only'
@@ -14,21 +15,23 @@ export const getMeme = React.cache(async (id: string) => {
   })
 })
 
+const getAllMemes = unstable_cache(async () => {
+  const memes = prisma.meme.findMany()
+
+  return memes
+})
+
 export const getRandomMeme = async ({
   exceptId
 }: {
   exceptId?: Meme['id']
 } = {}) => {
-  const memesCount = await prisma.meme.count()
-  const randomIndex = Math.floor(Math.random() * memesCount)
-
-  return prisma.meme.findFirstOrThrow({
-    take: 1,
-    skip: randomIndex,
-    where: {
-      NOT: {
-        id: exceptId
-      }
-    }
+  const memes = await getAllMemes()
+  const withoutCurrentMeme = memes.filter((meme) => {
+    return meme.id !== exceptId
   })
+
+  const randomIndex = Math.floor(Math.random() * withoutCurrentMeme.length)
+
+  return withoutCurrentMeme[randomIndex]
 }

@@ -15,7 +15,6 @@ type Props = {
   params: { id: string }
 }
 
-// Return a list of `params` to populate the [slug] dynamic segment
 export async function generateStaticParams() {
   const memes = await prisma.meme.findMany({
     select: {
