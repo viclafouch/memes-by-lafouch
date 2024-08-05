@@ -27,14 +27,14 @@ const MemesQuery = () => {
   })
 
   React.useEffect(() => {
-    setSearchValue(searchParams.get('query') || '')
+    setSearchValue(searchParams.get('query') ?? '')
   }, [searchParams, setSearchValue])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const formData = new FormData(event.target as HTMLFormElement)
-    const newSearchValue = formData.get('search') || ''
+    const newSearchValue = formData.get('search') ?? ''
     const newParams = new URLSearchParams(searchParams.toString())
 
     if (newSearchValue) {

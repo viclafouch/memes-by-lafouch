@@ -47,7 +47,7 @@ const Page = async ({ params }: Props) => {
               src={myVideoLoader({
                 src: meme.video.src
               })}
-              poster={meme.video.poster || undefined}
+              poster={meme.video.poster ?? undefined}
               autoPlay
               controls
             />

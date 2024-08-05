@@ -4,7 +4,7 @@ import { UTFile } from 'uploadthing/server'
 export function extractTweetIdFromUrl(tweetUrl: string) {
   const url = new URL(tweetUrl)
 
-  return url.searchParams.get('post_id') || url.pathname.split('/').at(-1)
+  return url.searchParams.get('post_id') ?? url.pathname.split('/').at(-1)
 }
 
 // If too many rates limit, maybe try fallback on this one:

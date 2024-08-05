@@ -72,9 +72,9 @@ export async function extractTwitterLink(
       tweet.video.poster.file
     ])
 
-    if (videoFileResult.error || posterFileResult.error) {
+    if (videoFileResult.error ?? posterFileResult.error) {
       return await Promise.reject(
-        videoFileResult.error?.message || posterFileResult.error?.message
+        videoFileResult.error?.message ?? posterFileResult.error?.message
       )
     }
 

@@ -74,7 +74,7 @@ const MemeListItem = ({ meme, className = '' }: MemeListItemProps) => {
               controls
               className="border border-white/10 w-full h-full object-contain rounded-lg"
               src={meme.video.src}
-              poster={meme.video.poster || undefined}
+              poster={meme.video.poster ?? undefined}
               width={270}
               preload={meme.video.poster ? 'none' : 'metadata'}
               height={200}

@@ -171,7 +171,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
           name="tweetUrl"
           isClearable
           placeholder=" "
-          defaultValue={meme.tweetUrl || ''}
+          defaultValue={meme.tweetUrl ?? ''}
           isInvalid={Boolean(formErrors?.fieldErrors.tweet?.[0])}
           errorMessage={formErrors?.fieldErrors.tweet?.[0]}
           labelPlacement="outside"
@@ -195,7 +195,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
           <Input
             isDisabled
             label="Clef poster"
-            defaultValue={meme.video.posterUtKey || ''}
+            defaultValue={meme.video.posterUtKey ?? ''}
             labelPlacement="outside"
             description={
               meme.video.poster ? (
