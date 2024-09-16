@@ -6,9 +6,9 @@
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && npx only-allow pnpm",
     "lint": "npx tsc && eslint .",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "pnpm lint -- --fix"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
