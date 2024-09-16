@@ -59,7 +59,7 @@ export async function createMeme(
     const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),
       video: formData.get('video'),
-      tweet: formData.get('tweetUrl') ?? undefined
+      tweet: formData.get('tweetUrl') || undefined
     })
 
     if (!validatedFields.success) {
