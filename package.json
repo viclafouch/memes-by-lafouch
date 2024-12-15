@@ -42,7 +42,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@viclafouch/eslint-config-viclafouch": "4.17.1-beta.7",
+    "@viclafouch/eslint-config-viclafouch": "4.17.1-beta.8",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "postcss": "^8",

@@ -1,11 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import RandomVideo from '@/app/random/[id]/RandomVideo'
 import Container from '@/components/Container'
 import FormRandomMeme from '@/components/FormRandomMeme'
 import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import prisma from '@/db'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
+import { redirectRandomMeme } from '@/serverActions/redirectRandomMeme'
 import { myVideoLoader } from '@/utils/cloudinary'
 import { getMeme } from '@/utils/meme'
 import { Button } from '@nextui-org/react'
@@ -42,14 +44,17 @@ const Page = async ({ params }: Props) => {
         <h1 className="text-xl text-center lg:text-3xl">{meme.title}</h1>
         <div className="grow flex w-full max-w-[720px]">
           <div className="grow flex relative w-full">
-            <video
-              className="absolute h-full w-full object-contains inset-0"
+            <RandomVideo
               src={myVideoLoader({
                 src: meme.video.src
               })}
-              poster={meme.video.poster ?? undefined}
-              autoPlay
-              controls
+              // eslint-disable-next-line require-await
+              onEnded={async () => {
+                'use server'
+
+                return redirectRandomMeme(meme.id)
+              }}
+              poster={meme.video.poster || undefined}
             />
           </div>
         </div>
