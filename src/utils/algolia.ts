@@ -1,21 +1,29 @@
-import algoliasearch from 'algoliasearch'
+import { algoliasearch } from 'algoliasearch'
 import { SERVER_ENVS } from '@/constants/env'
 import { MemeFilters, MemeWithVideo } from '@/constants/meme'
 
-const client = algoliasearch('5S4LKLUDFF', SERVER_ENVS.ALGOLIA_ADMIN_SECRET)
-export const memesIndex = client.initIndex('memes')
+export const client = algoliasearch(
+  '5S4LKLUDFF',
+  SERVER_ENVS.ALGOLIA_ADMIN_SECRET
+)
 
-const setIndexPromise = memesIndex.setSettings({
-  ranking: ['desc(createdAt_timestamp)'],
-  searchableAttributes: ['title', 'keywords'] as (keyof MemeWithVideo)[]
+const setIndexPromise = client.setSettings({
+  indexName: 'memes',
+  indexSettings: {
+    ranking: ['desc(createdAt_timestamp)'],
+    searchableAttributes: ['title', 'keywords'] as (keyof MemeWithVideo)[]
+  }
 })
 
 export async function indexMemeObject(meme: MemeWithVideo) {
-  await memesIndex.saveObject({
-    ...meme,
-    // Required for sorting
-    createdAt_timestamp: meme.createdAt.getTime(),
-    objectID: meme.id
+  await client.saveObject({
+    indexName: 'memes',
+    body: {
+      ...meme,
+      // Required for sorting
+      createdAt_timestamp: meme.createdAt.getTime(),
+      objectID: meme.id
+    }
   })
 }
 
@@ -23,9 +31,10 @@ export async function updateMemeObject(
   memeId: MemeWithVideo['id'],
   values: Partial<MemeWithVideo>
 ) {
-  await memesIndex.partialUpdateObject({
-    ...values,
-    objectID: memeId
+  await client.partialUpdateObject({
+    indexName: 'memes',
+    objectID: memeId,
+    attributesToUpdate: values
   })
 }
 
@@ -33,8 +42,14 @@ export async function searchMemes(filters: MemeFilters) {
   const searchValue = filters.query.trim()
 
   await setIndexPromise
-  const { hits, nbPages, page, nbHits } =
-    await memesIndex.search<MemeWithVideo>(searchValue, {
+  const {
+    hits,
+    nbPages = 1,
+    page = 1,
+    nbHits
+  } = await client.searchSingleIndex<MemeWithVideo>({
+    indexName: 'memes',
+    searchParams: {
       query: searchValue,
       typoTolerance: true,
       ignorePlurals: true,
@@ -43,7 +58,8 @@ export async function searchMemes(filters: MemeFilters) {
       removeStopWords: true,
       hitsPerPage: 20,
       attributesToHighlight: []
-    })
+    }
+  })
 
   return { memes: hits, nbPages, page, memeTotalCount: nbHits }
 }
