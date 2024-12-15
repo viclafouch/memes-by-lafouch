@@ -4,7 +4,7 @@ export async function wait(
   { throwInstead }: { throwInstead: boolean } = { throwInstead: false }
 ) {
   await new Promise((resolve, reject) => {
-    return setTimeout(throwInstead ? reject : resolve, timeout)
+    setTimeout(throwInstead ? reject : resolve, timeout)
   })
 }
 

@@ -8,7 +8,7 @@ export async function lockOrientiation(orientation: string) {
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.name !== 'NotSupportedError' && error.name !== 'AbortError') {
-        // see https://developer.mozilla.org/en-US/docs/Web/API/ScreenOrientation/lock#exceptions
+        // See https://developer.mozilla.org/en-US/docs/Web/API/ScreenOrientation/lock#exceptions
         // eslint-disable-next-line no-console
         console.warn(error)
       }

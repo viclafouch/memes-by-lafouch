@@ -8,6 +8,7 @@ const TWITTER_PROFILE_ID = SERVER_ENVS.AUTH_TWITTER_ACCOUNT_ID_AUTHORIZED
 
 const profileSchema = z.object({
   data: z.object({
+    // eslint-disable-next-line camelcase
     profile_image_url: z.string(),
     id: z.enum([TWITTER_PROFILE_ID]),
     name: z.string(),

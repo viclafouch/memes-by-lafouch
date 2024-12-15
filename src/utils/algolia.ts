@@ -21,6 +21,7 @@ export async function indexMemeObject(meme: MemeWithVideo) {
     body: {
       ...meme,
       // Required for sorting
+      // eslint-disable-next-line camelcase
       createdAt_timestamp: meme.createdAt.getTime(),
       objectID: meme.id
     }

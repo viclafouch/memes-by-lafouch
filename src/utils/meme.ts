@@ -1,10 +1,10 @@
 import React from 'react'
-import { unstable_cache } from 'next/cache'
+import { unstable_cache as unstableCache } from 'next/cache'
 import prisma from '@/db'
 import { Meme } from '@prisma/client'
 import 'server-only'
 
-export const getMeme = React.cache(async (id: string) => {
+export const getMeme = React.cache((id: string) => {
   return prisma.meme.findUnique({
     where: {
       id
@@ -15,7 +15,7 @@ export const getMeme = React.cache(async (id: string) => {
   })
 })
 
-const getAllMemes = unstable_cache(async () => {
+const getAllMemes = unstableCache(() => {
   const memes = prisma.meme.findMany()
 
   return memes

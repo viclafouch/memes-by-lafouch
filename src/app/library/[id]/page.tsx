@@ -18,7 +18,8 @@ type Props = {
   params: { id: string }
 }
 
-export const revalidate = 1800 // revalidate the data at most every half hour
+// Revalidate the data at most every half hour
+export const revalidate = 1800
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const meme = await getMeme(params.id)
