@@ -15,7 +15,7 @@
     "@date-fns/tz": "^1.2.0",
     "@nextui-org/react": "^2.2.10",
     "@phosphor-icons/react": "^2.1.7",
-    "@prisma/client": "^5.12.1",
+    "@prisma/client": "^6.0.1",
     "@tanstack/react-query": "^5.62.7",
     "algoliasearch": "^5.17.1",
     "cloudinary-build-url": "^0.2.4",
@@ -46,7 +46,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "postcss": "^8",
-    "prisma": "^5.12.1",
+    "prisma": "^6.0.1",
     "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5"
