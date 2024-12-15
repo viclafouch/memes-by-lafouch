@@ -13,7 +13,7 @@
   "dependencies": {
     "@cld-apis/utils": "^0.2.0",
     "@date-fns/tz": "^1.2.0",
-    "@nextui-org/react": "^2.2.10",
+    "@nextui-org/react": "^2.6.8",
     "@phosphor-icons/react": "^2.1.7",
     "@prisma/client": "^6.0.1",
     "@tanstack/react-query": "^5.62.7",
