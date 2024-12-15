@@ -26,9 +26,8 @@ export const config = {
 
       return twitterData.success
     },
-    authorized() {
-      return true
-      // return Boolean(auth)
+    authorized({ auth }) {
+      return Boolean(auth)
     }
   },
   providers: [
