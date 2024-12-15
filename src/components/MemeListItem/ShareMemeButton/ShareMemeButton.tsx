@@ -50,6 +50,7 @@ const ShareMemeButton = ({
     <Button
       color="secondary"
       isDisabled={isPending}
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       onClick={handleDownload}
       aria-label="Partager"
       {...restButtonProps}

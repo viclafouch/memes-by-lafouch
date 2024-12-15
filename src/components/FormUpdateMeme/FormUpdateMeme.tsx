@@ -127,6 +127,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
                 })}
                 type="button"
                 color="primary"
+                // eslint-disable-next-line @typescript-eslint/no-deprecated
                 onClick={(event) => {
                   event.preventDefault()
                   handleAddKeyword()

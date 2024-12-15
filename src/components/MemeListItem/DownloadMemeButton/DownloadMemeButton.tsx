@@ -45,6 +45,7 @@ const DownloadMemeButton = ({
     <Button
       isLoading={isPending}
       color="primary"
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       onClick={handleDownload}
       aria-label="Télécharger"
       {...restButtonProps}

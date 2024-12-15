@@ -47,6 +47,7 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
       </PopoverTrigger>
       <PopoverContent className="p-2 gap-2">
         <Button
+          // eslint-disable-next-line @typescript-eslint/no-deprecated
           onClick={() => {
             return setIsOpen(false)
           }}
@@ -66,6 +67,7 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
             <Button
               as={Link}
               href="/"
+              // eslint-disable-next-line @typescript-eslint/no-deprecated
               onClick={() => {
                 return setIsOpen(false)
               }}
@@ -78,6 +80,7 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
             <Button
               as={Link}
               href="/new"
+              // eslint-disable-next-line @typescript-eslint/no-deprecated
               onClick={() => {
                 return setIsOpen(false)
               }}

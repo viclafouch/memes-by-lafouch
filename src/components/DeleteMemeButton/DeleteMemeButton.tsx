@@ -25,6 +25,7 @@ const SubmitButton = ({ ...restButtonProps }: ButtonProps) => {
       type="submit"
       color="danger"
       size="lg"
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       onClick={handleClick}
       {...restButtonProps}
     />

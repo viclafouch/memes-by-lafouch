@@ -60,6 +60,7 @@ const UploadDropzone = ({
                 {getFileExtension(file).toUpperCase()}
               </p>
               <div className="flex mt-4 justify-center">
+                {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
                 <Button size="sm" onClick={handleRemove}>
                   Supprimer
                 </Button>
