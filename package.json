@@ -6,7 +6,7 @@
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "postinstall": "prisma generate && npx only-allow pnpm",
+    "postinstall": "prisma generate",
     "lint": "npx tsc && eslint",
     "lint:fix": "pnpm lint -- --fix"
   },
