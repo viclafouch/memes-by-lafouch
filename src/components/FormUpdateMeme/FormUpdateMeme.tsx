@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
-import { useSnackbar } from 'notistack'
 import { MemeWithVideo } from '@/constants/meme'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
+import { useNotifications } from '@/hooks/useNotifications'
 import { updateMeme, UpdateMemeFormState } from '@/serverActions/updateMeme'
 import { cn } from '@/utils/cn'
 import { Button, ButtonProps, Chip, Input, Link } from '@nextui-org/react'
@@ -35,7 +35,7 @@ const initialState: UpdateMemeFormState = {
 }
 
 const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
-  const { enqueueSnackbar } = useSnackbar()
+  const { notifySuccess, notifyError } = useNotifications()
   const [keywordValue, setKeywordValue] = React.useState<string>('')
   const [keywords, setKeywords] = React.useState(meme.keywords)
 
@@ -49,16 +49,10 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
       return values.status === 'success' ? values : false
     },
     onError: (values) => {
-      enqueueSnackbar({
-        message: values.errorMessage,
-        variant: 'error'
-      })
+      notifyError(values.errorMessage)
     },
     onSuccess: () => {
-      enqueueSnackbar({
-        message: 'Mème mis à jour avec succès !',
-        variant: 'success'
-      })
+      notifySuccess('Mème mis à jour avec succès !')
     }
   })
 

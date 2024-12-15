@@ -2,9 +2,9 @@
 
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
-import { useSnackbar } from 'notistack'
 import UploadDropzone from '@/components/UploadDropzone'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
+import { useNotifications } from '@/hooks/useNotifications'
 import {
   createMeme,
   type CreateMemeFormState
@@ -38,7 +38,7 @@ const initialState = {
 } as CreateMemeFormState
 
 const FormCreateMeme = () => {
-  const { enqueueSnackbar } = useSnackbar()
+  const { notifySuccess, notifyError } = useNotifications()
   const [formState, formAction] = useFormState(createMeme, initialState)
 
   useFormStateCallback(formState, {
@@ -49,16 +49,10 @@ const FormCreateMeme = () => {
       return values.status === 'success' ? values : false
     },
     onError: (values) => {
-      enqueueSnackbar({
-        message: values.errorMessage,
-        variant: 'error'
-      })
+      notifyError(values.errorMessage)
     },
     onSuccess: () => {
-      enqueueSnackbar({
-        message: 'Mème ajouté avec succès !',
-        variant: 'success'
-      })
+      notifySuccess('Mème ajouté avec succès !')
     }
   })
 

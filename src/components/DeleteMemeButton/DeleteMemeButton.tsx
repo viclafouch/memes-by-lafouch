@@ -3,8 +3,8 @@
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
-import { useSnackbar } from 'notistack'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
+import { useNotifications } from '@/hooks/useNotifications'
 import { deleteMeme, DeleteMemeFormState } from '@/serverActions/deleteMeme'
 import { Button, ButtonProps } from '@nextui-org/react'
 import { Meme } from '@prisma/client'
@@ -44,8 +44,8 @@ const DeleteMemeButton = ({
   meme,
   ...restButtonProps
 }: DeleteMemeButtonProps) => {
-  const { enqueueSnackbar } = useSnackbar()
   const router = useRouter()
+  const { notifySuccess, notifyError } = useNotifications()
   const [formState, formAction] = useFormState(deleteMeme, initialState)
 
   useFormStateCallback(formState, {
@@ -56,16 +56,10 @@ const DeleteMemeButton = ({
       return values.status === 'success' ? values : false
     },
     onError: (values) => {
-      enqueueSnackbar({
-        message: values.errorMessage,
-        variant: 'error'
-      })
+      notifyError(values.errorMessage)
     },
     onSuccess: () => {
-      enqueueSnackbar({
-        message: 'Mème supprimé avec succès !',
-        variant: 'success'
-      })
+      notifySuccess('Mème supprimé avec succès !')
       router.replace('/library')
     }
   })
