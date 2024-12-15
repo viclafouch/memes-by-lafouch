@@ -3,7 +3,6 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { formatRelative } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { toZonedTime } from 'date-fns-tz'
 import DeleteMemeButton from '@/components/DeleteMemeButton'
 import FormUpdateMeme from '@/components/FormUpdateMeme'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
@@ -12,6 +11,7 @@ import MemeTweetButton from '@/components/MemeTweetButton'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { myVideoLoader } from '@/utils/cloudinary'
 import { getMeme } from '@/utils/meme'
+import { TZDate } from '@date-fns/tz'
 import { DownloadSimple, Share, Trash } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
@@ -46,7 +46,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
               <p className="text-tiny text-gray-500">
                 Dernière mise à jour :{' '}
                 {formatRelative(
-                  toZonedTime(meme.updatedAt, 'Europe/Paris'),
+                  new TZDate(meme.updatedAt, 'Europe/Paris'),
                   new Date(),
                   { locale: fr }
                 )}

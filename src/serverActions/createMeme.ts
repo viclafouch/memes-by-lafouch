@@ -59,6 +59,7 @@ export async function createMeme(
     const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),
       video: formData.get('video'),
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       tweet: formData.get('tweetUrl') || undefined
     })
 
