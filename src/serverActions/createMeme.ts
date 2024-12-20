@@ -83,6 +83,9 @@ export async function createMeme(
     const uploadFileResult = await utapi.uploadFiles(validatedFields.data.video)
 
     if (uploadFileResult.error) {
+      // eslint-disable-next-line no-console
+      console.error(uploadFileResult.error)
+
       return {
         formErrors: null,
         errorMessage: "Le fichier n'a pas pu être uploadé",
