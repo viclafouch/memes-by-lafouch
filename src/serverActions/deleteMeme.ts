@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
@@ -51,6 +52,7 @@ export async function deleteMeme(
       return await Promise.reject(new Error('Failed to delete file'))
     }
 
+    revalidatePath('/library', 'page')
     redirect('/library', RedirectType.replace)
   } catch (error) {
     if (isRedirectError(error)) {
