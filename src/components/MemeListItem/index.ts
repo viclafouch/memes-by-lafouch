@@ -1,4 +1,4 @@
-import MemeListItem, { MemeListItemProps } from './MemeListItem'
+import MemeListItem, { type MemeListItemProps } from './MemeListItem'
 
 export type { MemeListItemProps }
 

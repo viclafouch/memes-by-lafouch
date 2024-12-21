@@ -1,5 +1,5 @@
 import React from 'react'
-import { toast, ToastOptions } from 'react-toastify'
+import { toast, type ToastOptions } from 'react-toastify'
 
 export const useNotifications = () => {
   const notifySuccess = React.useCallback(

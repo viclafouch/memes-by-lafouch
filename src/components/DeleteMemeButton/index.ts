@@ -1,4 +1,6 @@
-import DeleteMemeButton, { DeleteMemeButtonProps } from './DeleteMemeButton'
+import DeleteMemeButton, {
+  type DeleteMemeButtonProps
+} from './DeleteMemeButton'
 
 export type { DeleteMemeButtonProps }
 

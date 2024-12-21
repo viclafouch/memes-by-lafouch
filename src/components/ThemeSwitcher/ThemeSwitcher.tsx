@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { cn } from '@/utils/cn'
 import {
   RadioGroup,
-  RadioProps,
+  type RadioProps,
   useRadio,
   VisuallyHidden
 } from '@nextui-org/react'
@@ -46,7 +46,16 @@ const ThemeRadioItem = ({ icon, ...restRadioProps }: ThemeRadioItemProps) => {
 }
 
 const ThemeSwitcher = () => {
+  const [isMounted, setIsMounted] = React.useState(false)
   const { theme, setTheme } = useTheme()
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <RadioGroup

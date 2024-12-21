@@ -1,12 +1,5 @@
 import React from 'react'
-import dynamic from 'next/dynamic'
-
-const ThemeSwitcher = dynamic(
-  () => {
-    return import('@/components/ThemeSwitcher')
-  },
-  { ssr: false }
-)
+import ThemeSwitcher from '@/components/ThemeSwitcher'
 
 const Footer = () => {
   return (

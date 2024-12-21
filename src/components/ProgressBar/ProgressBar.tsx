@@ -118,7 +118,7 @@ export const ProgressBarLink = React.forwardRef(
       children = null,
       ...restLinkProps
     }: React.ComponentProps<typeof Link>,
-    ref: React.LegacyRef<HTMLAnchorElement> | undefined
+    ref: React.Ref<HTMLAnchorElement> | undefined
   ) => {
     const progress = useProgressBar()
     const router = useRouter()

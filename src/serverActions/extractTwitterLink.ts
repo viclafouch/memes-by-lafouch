@@ -2,20 +2,19 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
 import {
   MAX_SIZE_MEME_IN_BYTES,
-  MemeWithVideo,
+  type MemeWithVideo,
   TWITTER_LINK_SCHEMA
 } from '@/constants/meme'
 import prisma from '@/db'
-import { SimpleFormState } from '@/serverActions/types'
+import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { indexMemeObject } from '@/utils/algolia'
 import { wait } from '@/utils/promise'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 const schema = TWITTER_LINK_SCHEMA
 
@@ -28,6 +27,8 @@ export async function extractTwitterLink(
   prevState: ExtractTwitterFormState,
   formData: FormData
 ): Promise<ExtractTwitterFormState> {
+  let meme: MemeWithVideo
+
   try {
     const safeParsedResult = await schema.safeParseAsync(formData.get('link'))
 
@@ -78,8 +79,6 @@ export async function extractTwitterLink(
       )
     }
 
-    let meme: MemeWithVideo
-
     try {
       meme = await prisma.meme.create({
         data: {
@@ -113,16 +112,9 @@ export async function extractTwitterLink(
       ])
       throw error
     }
-
-    revalidatePath('/library', 'page')
-    redirect(`/library/${meme.id}`, RedirectType.push)
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error)
-
-    if (isRedirectError(error)) {
-      throw error
-    }
 
     return {
       status: 'error',
@@ -130,4 +122,7 @@ export async function extractTwitterLink(
       errorMessage: 'An unknown error occurred'
     }
   }
+
+  revalidatePath('/library', 'page')
+  redirect(`/library/${meme.id}`, RedirectType.push)
 }

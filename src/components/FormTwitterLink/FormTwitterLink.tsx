@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom'
 import {
-  ExtractTwitterFormState,
+  type ExtractTwitterFormState,
   extractTwitterLink
 } from '@/serverActions/extractTwitterLink'
 import { Button, Input } from '@nextui-org/react'
@@ -46,7 +46,10 @@ const initialState: ExtractTwitterFormState = {
 }
 
 const FormTwitterLink = () => {
-  const [formState, formAction] = useFormState(extractTwitterLink, initialState)
+  const [formState, formAction] = React.useActionState(
+    extractTwitterLink,
+    initialState
+  )
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">

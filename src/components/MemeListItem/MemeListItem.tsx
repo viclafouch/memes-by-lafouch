@@ -1,10 +1,10 @@
 import React from 'react'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import MemeVideo from '@/components/MemeListItem/MemeVideo'
+import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
-import { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import {
   Button,
@@ -18,13 +18,6 @@ import {
   Spacer
 } from '@nextui-org/react'
 import { DownloadSimple, Pen, Share } from '@phosphor-icons/react/dist/ssr'
-
-const ShareMemeButton = dynamic(
-  () => {
-    return import('@/components/MemeListItem/ShareMemeButton')
-  },
-  { ssr: false }
-)
 
 export type MemeListItemProps = { className?: string } & (
   | {

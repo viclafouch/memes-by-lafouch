@@ -2,14 +2,13 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
 import prisma from '@/db'
-import { SimpleFormState } from '@/serverActions/types'
+import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { client } from '@/utils/algolia'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 const schema = z.string()
 
@@ -51,14 +50,7 @@ export async function deleteMeme(
     if (!deleteFilesResult.success) {
       return await Promise.reject(new Error('Failed to delete file'))
     }
-
-    revalidatePath('/library', 'page')
-    redirect('/library', RedirectType.replace)
   } catch (error) {
-    if (isRedirectError(error)) {
-      throw error
-    }
-
     // eslint-disable-next-line no-console
     console.error(error)
 
@@ -69,4 +61,7 @@ export async function deleteMeme(
       formErrors: null
     }
   }
+
+  revalidatePath('/library', 'page')
+  redirect('/library', RedirectType.replace)
 }

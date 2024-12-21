@@ -1,4 +1,4 @@
-import MemesOrderBy, { MemesOrderByProps } from './MemesOrderBy'
+import MemesOrderBy, { type MemesOrderByProps } from './MemesOrderBy'
 
 export type { MemesOrderByProps }
 

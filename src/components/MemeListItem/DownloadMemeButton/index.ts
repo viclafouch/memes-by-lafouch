@@ -1,5 +1,5 @@
 import DownloadMemeButton, {
-  DownloadMemeButtonProps
+  type DownloadMemeButtonProps
 } from './DownloadMemeButton'
 
 export type { DownloadMemeButtonProps }

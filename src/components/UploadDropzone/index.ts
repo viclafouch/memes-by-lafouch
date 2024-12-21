@@ -1,4 +1,4 @@
-import UploadDropzone, { UploadDropzoneProps } from './UploadDropzone'
+import UploadDropzone, { type UploadDropzoneProps } from './UploadDropzone'
 
 export type { UploadDropzoneProps }
 

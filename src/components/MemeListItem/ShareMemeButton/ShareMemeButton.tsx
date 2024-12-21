@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { MemeWithVideo } from '@/constants/meme'
-import { Button, ButtonProps } from '@nextui-org/react'
+import type { MemeWithVideo } from '@/constants/meme'
+import { Button, type ButtonProps } from '@nextui-org/react'
 import { useMutation } from '@tanstack/react-query'
 
 export type ShareMemeButtonProps = {
@@ -17,7 +17,7 @@ const ShareMemeButton = ({
   children,
   ...restButtonProps
 }: ShareMemeButtonProps) => {
-  const { mutate, isPending } = useMutation({
+  const shareMutation = useMutation({
     mutationFn: async () => {
       const response = await fetch(meme.video.src)
       const blob = await response.blob()
@@ -39,17 +39,17 @@ const ShareMemeButton = ({
   const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (isPending) {
+    if (shareMutation.isPending) {
       return
     }
 
-    mutate()
+    shareMutation.mutate()
   }
 
   return (
     <Button
       color="secondary"
-      isDisabled={isPending}
+      isDisabled={shareMutation.isPending}
       // eslint-disable-next-line @typescript-eslint/no-deprecated
       onClick={handleDownload}
       aria-label="Partager"

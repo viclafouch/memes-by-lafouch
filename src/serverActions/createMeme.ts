@@ -2,12 +2,15 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
-import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
+import {
+  MAX_SIZE_MEME_IN_BYTES,
+  type MemeWithVideo,
+  TWITTER_LINK_SCHEMA
+} from '@/constants/meme'
 import prisma from '@/db'
-import { SimpleFormState } from '@/serverActions/types'
+import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { indexMemeObject } from '@/utils/algolia'
 import { getFileExtension } from '@/utils/file'
@@ -55,6 +58,8 @@ export async function createMeme(
   prevState: CreateMemeFormState,
   formData: FormData
 ): Promise<CreateMemeFormState> {
+  let meme: MemeWithVideo
+
   try {
     const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),
@@ -93,7 +98,7 @@ export async function createMeme(
       }
     }
 
-    const meme = await prisma.meme.create({
+    meme = await prisma.meme.create({
       data: {
         title: validatedFields.data.title,
         tweetUrl: tweet?.url,
@@ -111,14 +116,7 @@ export async function createMeme(
     })
 
     await indexMemeObject(meme)
-
-    revalidatePath('/library', 'page')
-    redirect(`/library/${meme.id}`, RedirectType.push)
   } catch (error) {
-    if (isRedirectError(error)) {
-      throw error
-    }
-
     // eslint-disable-next-line no-console
     console.error(error)
 
@@ -128,4 +126,7 @@ export async function createMeme(
       formErrors: null
     }
   }
+
+  revalidatePath('/library', 'page')
+  redirect(`/library/${meme.id}`, RedirectType.push)
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Container from '@/components/Container'
 import MemesList from '@/components/MemesList'
 import MemesListHeader from '@/components/MemesListHeader'
@@ -10,12 +10,10 @@ export const metadata: Metadata = {
   title: 'Viclafouch - Mes mèmes'
 }
 
-const Page = ({
-  searchParams
-}: {
-  searchParams: { [key: string]: string | string[] | undefined }
-}) => {
-  const filters = memeFilters.parse(searchParams)
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
+  const filters = memeFilters.parse(await searchParams)
   const promise = searchMemes(filters)
 
   return (

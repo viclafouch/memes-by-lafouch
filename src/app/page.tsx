@@ -1,5 +1,5 @@
 import React from 'react'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Container from '@/components/Container'
 import FormTwitterLink from '@/components/FormTwitterLink'

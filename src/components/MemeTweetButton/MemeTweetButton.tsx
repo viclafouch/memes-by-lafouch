@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, ButtonProps } from '@nextui-org/react'
+import { Button, type ButtonProps } from '@nextui-org/react'
 import { XLogo } from '@phosphor-icons/react/dist/ssr'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 export type MemeTweetButtonProps = {
   tweetUrl: NonNullable<Meme['tweetUrl']>

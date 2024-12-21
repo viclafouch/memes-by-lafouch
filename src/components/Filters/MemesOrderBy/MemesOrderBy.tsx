@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { MemeFiltersOrderBy } from '@/constants/meme'
+import type { MemeFiltersOrderBy } from '@/constants/meme'
 import { Select, SelectItem } from '@nextui-org/react'
 
 export type MemesOrderByProps = {

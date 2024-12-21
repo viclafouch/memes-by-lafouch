@@ -1,33 +1,18 @@
 'use client'
 
 import React from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
-import { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { useNotifications } from '@/hooks/useNotifications'
-import { updateMeme, UpdateMemeFormState } from '@/serverActions/updateMeme'
+import {
+  updateMeme,
+  type UpdateMemeFormState
+} from '@/serverActions/updateMeme'
 import { cn } from '@/utils/cn'
-import { Button, ButtonProps, Chip, Input, Link } from '@nextui-org/react'
+import { Button, Chip, Input, Link } from '@nextui-org/react'
 
 export type FormUpdateMemeProps = {
   meme: MemeWithVideo
-}
-
-const SubmitButton = ({ ...restButtonProps }: ButtonProps) => {
-  const status = useFormStatus()
-
-  return (
-    <Button
-      isLoading={status.pending}
-      type="submit"
-      size="lg"
-      color="primary"
-      className="w-full"
-      {...restButtonProps}
-    >
-      Enregistrer
-    </Button>
-  )
 }
 
 const initialState: UpdateMemeFormState = {
@@ -38,8 +23,10 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
   const { notifySuccess, notifyError } = useNotifications()
   const [keywordValue, setKeywordValue] = React.useState<string>('')
   const [keywords, setKeywords] = React.useState(meme.keywords)
-
-  const [formState, formAction] = useFormState(updateMeme, initialState)
+  const [formState, formAction, isFormPending] = React.useActionState(
+    updateMeme,
+    initialState
+  )
 
   useFormStateCallback(formState, {
     isError: (values) => {
@@ -207,7 +194,15 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
         </div>
       </div>
       <div className="w-full">
-        <SubmitButton />
+        <Button
+          isLoading={isFormPending}
+          type="submit"
+          size="lg"
+          color="primary"
+          className="w-full"
+        >
+          Enregistrer
+        </Button>
       </div>
     </form>
   )

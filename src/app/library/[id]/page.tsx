@@ -1,5 +1,5 @@
 import React from 'react'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { formatRelative } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -15,22 +15,24 @@ import { TZDate } from '@date-fns/tz'
 import { DownloadSimple, Share, Trash } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 // Revalidate the data at most every half hour
 export const revalidate = 1800
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const meme = await getMeme(params.id)
+  const { id } = await params
+  const meme = await getMeme(id)
 
   return {
     title: meme!.title
   }
 }
 
-const Page = async ({ params }: { params: { id: string } }) => {
-  const meme = await getMeme(params.id)
+const Page = async ({ params }: Props) => {
+  const { id } = await params
+  const meme = await getMeme(id)
 
   if (!meme) {
     notFound()

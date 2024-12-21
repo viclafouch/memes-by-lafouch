@@ -1,4 +1,4 @@
-import ShareMemeButton, { ShareMemeButtonProps } from './ShareMemeButton'
+import ShareMemeButton, { type ShareMemeButtonProps } from './ShareMemeButton'
 
 export type { ShareMemeButtonProps }
 

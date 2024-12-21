@@ -1,4 +1,4 @@
-import FormCreateMeme, { FormCreateMemeProps } from './FormCreateMeme'
+import FormCreateMeme, { type FormCreateMemeProps } from './FormCreateMeme'
 
 export type { FormCreateMemeProps }
 

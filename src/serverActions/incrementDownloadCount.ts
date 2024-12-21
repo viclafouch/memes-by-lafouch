@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import prisma from '@/db'
 import { updateMemeObject } from '@/utils/algolia'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 export async function incrementDownloadCount(memeId: Meme['id']) {
   const meme = await prisma.meme.update({

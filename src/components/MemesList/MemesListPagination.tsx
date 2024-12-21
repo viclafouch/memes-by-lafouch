@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { cn } from '@/utils/cn'
 import {
   Pagination,
-  PaginationItemRenderProps,
+  type PaginationItemRenderProps,
   PaginationItemType
 } from '@nextui-org/react'
 

@@ -1,7 +1,7 @@
 import ProgressBar, {
   ProgressBarContext,
   ProgressBarLink,
-  ProgressBarProps
+  type ProgressBarProps
 } from './ProgressBar'
 
 export { ProgressBar, ProgressBarContext, ProgressBarLink }
