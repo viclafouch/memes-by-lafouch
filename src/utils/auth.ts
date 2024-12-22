@@ -2,7 +2,7 @@ import type { NextAuthConfig } from 'next-auth'
 import NextAuth from 'next-auth'
 import Twitter from 'next-auth/providers/twitter'
 import { z } from 'zod'
-import { SERVER_ENVS } from '@/constants/env'
+import { SERVER_ENVS } from '@/constants/server-env'
 
 const TWITTER_PROFILE_ID = SERVER_ENVS.AUTH_TWITTER_ACCOUNT_ID_AUTHORIZED
 

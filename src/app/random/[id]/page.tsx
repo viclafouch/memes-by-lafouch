@@ -7,6 +7,7 @@ import FormRandomMeme from '@/components/FormRandomMeme'
 import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import prisma from '@/db'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
+import { incrementViewCount } from '@/serverActions/incrementViewCount'
 import { redirectRandomMeme } from '@/serverActions/redirectRandomMeme'
 import { matchIsLoggedIn } from '@/utils/auth'
 import { myVideoLoader } from '@/utils/cloudinary'
@@ -40,6 +41,8 @@ const Page = async ({ params }: Props) => {
   if (!meme) {
     notFound()
   }
+
+  incrementViewCount(id)
 
   return (
     <Container className="pb-5 pt-10 h-full flex grow">

@@ -9,6 +9,7 @@ import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
 import MemeTweetButton from '@/components/MemeTweetButton'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
+import { incrementViewCount } from '@/serverActions/incrementViewCount'
 import { myVideoLoader } from '@/utils/cloudinary'
 import { getMeme } from '@/utils/meme'
 import { TZDate } from '@date-fns/tz'
@@ -37,6 +38,8 @@ const Page = async ({ params }: Props) => {
   if (!meme) {
     notFound()
   }
+
+  incrementViewCount(id)
 
   return (
     <div className="flex flex-col lg:flex-row h-full w-full gap-8">

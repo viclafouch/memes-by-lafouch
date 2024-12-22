@@ -1,6 +1,6 @@
 import { algoliasearch } from 'algoliasearch'
-import { SERVER_ENVS } from '@/constants/env'
 import type { MemeFilters, MemeWithVideo } from '@/constants/meme'
+import { SERVER_ENVS } from '@/constants/server-env'
 
 export const client = algoliasearch(
   '5S4LKLUDFF',
