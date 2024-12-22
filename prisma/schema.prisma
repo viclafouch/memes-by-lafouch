@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
 }
 
 model Video {
@@ -20,11 +20,11 @@ model Video {
 model Meme {
   id            String   @id @default(cuid())
   title         String
-  video         Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
   videoId       Int      @unique
   downloadCount Int      @default(0)
   tweetUrl      String?  @unique
   keywords      String[] @default([])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  video         Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
 }
