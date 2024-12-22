@@ -4,11 +4,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
-import {
-  MAX_SIZE_MEME_IN_BYTES,
-  type MemeWithVideo,
-  TWITTER_LINK_SCHEMA
-} from '@/constants/meme'
+import { MAX_SIZE_MEME_IN_BYTES, type MemeWithVideo } from '@/constants/meme'
 import prisma from '@/db'
 import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
@@ -18,7 +14,6 @@ import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
   title: z.string().min(3).trim(),
-  tweet: TWITTER_LINK_SCHEMA.optional(),
   video: z
     // Need Node >= v20
     // See https://github.com/colinhacks/zod/issues/387#issuecomment-1774603011
@@ -86,16 +81,6 @@ export async function createMeme(
       }
     }
 
-    const { tweet } = validatedFields.data
-
-    if (formData.get('tweetUrl') && !tweet) {
-      return {
-        status: 'error',
-        formErrors: null,
-        errorMessage: 'Tweet not exist or does not include a video'
-      }
-    }
-
     const uploadFileResult = await utapi.uploadFiles(validatedFields.data.video)
 
     if (uploadFileResult.error) {
@@ -112,7 +97,6 @@ export async function createMeme(
     meme = await prisma.meme.create({
       data: {
         title: validatedFields.data.title,
-        tweetUrl: tweet?.url,
         video: {
           create: {
             videoUtKey: uploadFileResult.data.key,
@@ -138,6 +122,6 @@ export async function createMeme(
     }
   }
 
-  revalidatePath('/library', 'page')
+  revalidatePath('/library', 'layout')
   redirect(`/library/${meme.id}`, RedirectType.push)
 }

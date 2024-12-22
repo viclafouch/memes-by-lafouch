@@ -3,16 +3,14 @@
 import React from 'react'
 import { filesize } from 'filesize'
 import { getFileExtension } from '@/utils/file'
-import { Button } from '@nextui-org/react'
+import { Button, Input } from '@nextui-org/react'
 
 export type UploadDropzoneProps = {
-  inputProps?: React.ComponentProps<'input'>
   isInvalid?: boolean
   errorMessage?: string
 }
 
 const UploadDropzone = ({
-  inputProps = undefined,
   errorMessage = '',
   isInvalid = false
 }: UploadDropzoneProps) => {
@@ -37,48 +35,36 @@ const UploadDropzone = ({
   }
 
   return (
-    <div>
-      <label className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 text-center cursor-pointer has-[input[aria-invalid=true]]:border-red-600 has-[input[aria-invalid=true]]:bg-danger-50">
-        <input
-          onChange={handleChange}
-          type="file"
-          ref={inputRef}
-          className="hidden"
-          aria-invalid={isInvalid}
-          {...inputProps}
-        />
-        {file ? (
-          <div>
-            <video
-              className="mx-auto max-w-full max-h-96"
-              src={URL.createObjectURL(file)}
-              controls
-            />
-            <div>
-              <p className="text-center mt-2 font-mono text-gray-600">
-                {filesize(file.size, { standard: 'jedec' })} -{' '}
-                {getFileExtension(file).toUpperCase()}
-              </p>
-              <div className="flex mt-4 justify-center">
-                {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
-                <Button size="sm" onClick={handleRemove}>
-                  Supprimer
-                </Button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <Button isDisabled color="primary" className="opacity-1">
-              Ajouter 1 fichier vidéo
+    <div className="w-full flex flex-col gap-y-2">
+      <Input
+        onChange={handleChange}
+        type="file"
+        isRequired
+        ref={inputRef}
+        aria-invalid={isInvalid}
+        errorMessage={errorMessage}
+        name="video"
+        accept="video/*"
+        className="w-full"
+        variant="bordered"
+      />
+      {file ? (
+        <div className="w-full h-auto flex flex-col border-medium rounded-medium border-default-200">
+          <video
+            className="w-full max-w-full max-h-96 aspect-video"
+            src={URL.createObjectURL(file)}
+            controls
+          />
+          <div className="p-3 flex justify-end items-center gap-x-4">
+            <p className="text-center text-small text-gray-600">
+              {filesize(file.size, { standard: 'jedec' })} -{' '}
+              {getFileExtension(file).toUpperCase()}
+            </p>
+            {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
+            <Button size="sm" onClick={handleRemove}>
+              Supprimer
             </Button>
-            <span className="text-small text-gray-400 mt-3">16MB Max</span>
-          </>
-        )}
-      </label>
-      {errorMessage ? (
-        <div className="text-tiny text-danger p-1 relative flex-col gap-1.5">
-          {errorMessage}
+          </div>
         </div>
       ) : null}
     </div>

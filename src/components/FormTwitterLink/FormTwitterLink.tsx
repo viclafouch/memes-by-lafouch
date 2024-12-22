@@ -53,6 +53,9 @@ const FormTwitterLink = () => {
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">
+      <legend className="text-small text-gray-300">
+        Ajouter un mème directement via un tweet.
+      </legend>
       <Input
         fullWidth
         type="text"

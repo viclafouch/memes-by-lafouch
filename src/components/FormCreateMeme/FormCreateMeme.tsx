@@ -45,29 +45,23 @@ const FormCreateMeme = () => {
 
   return (
     <form action={formAction} className="w-full flex flex-col gap-4">
+      <legend className="text-small text-gray-300">
+        Ajouter un mème via un fichier local depuis votre appareil.
+      </legend>
       <Input
         label="Titre"
         isRequired
         name="title"
         defaultValue=""
+        variant="bordered"
         className="w-full"
         isInvalid={Boolean(formErrors?.fieldErrors.title?.[0])}
         errorMessage={formErrors?.fieldErrors.title?.[0]}
         labelPlacement="inside"
       />
-      <Input
-        label="Twitter URL"
-        name="tweetUrl"
-        defaultValue=""
-        className="w-full"
-        isInvalid={Boolean(formErrors?.fieldErrors.tweet?.[0])}
-        errorMessage={formErrors?.fieldErrors.tweet?.[0]}
-        labelPlacement="inside"
-      />
       <UploadDropzone
         isInvalid={Boolean(formErrors?.fieldErrors.video?.[0])}
         errorMessage={formErrors?.fieldErrors.video?.[0]}
-        inputProps={{ name: 'video', accept: 'video/*' }}
       />
       <div className="w-full flex flex-col">
         <Button

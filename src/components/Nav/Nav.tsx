@@ -4,17 +4,11 @@ import { ProgressBarLink } from '@/components/ProgressBar'
 import UserButton from '@/components/UserButton'
 import { auth } from '@/utils/auth'
 import {
-  Button,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  Popover,
-  PopoverContent,
-  PopoverTrigger
+  NavbarItem
 } from '@nextui-org/react'
-import { FileVideo, XLogo } from '@phosphor-icons/react/dist/ssr'
 
 const Nav = () => {
   const session = React.use(auth())
@@ -33,37 +27,7 @@ const Nav = () => {
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
           {session ? (
-            <Popover backdrop="opaque" placement="bottom" showArrow offset={10}>
-              <PopoverTrigger className="cursor-pointer">
-                <Link as="span" color="foreground">
-                  Ajouter un mème
-                </Link>
-              </PopoverTrigger>
-              <PopoverContent className="p-2">
-                <div className="flex flex-col gap-2">
-                  <Button
-                    as={Link}
-                    href="/"
-                    fullWidth
-                    size="sm"
-                    className="bg-black text-white"
-                    endContent={<XLogo size={20} />}
-                  >
-                    Via Twitter
-                  </Button>
-                  <Button
-                    as={Link}
-                    href="/new"
-                    fullWidth
-                    size="sm"
-                    color="default"
-                    endContent={<FileVideo size={20} />}
-                  >
-                    Via un fichier
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <ProgressBarLink href="/new">Ajouter un mème</ProgressBarLink>
           ) : null}
         </NavbarItem>
         <NavbarItem className="flex items-center">
