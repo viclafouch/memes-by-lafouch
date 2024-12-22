@@ -19,7 +19,7 @@ import {
 } from '@nextui-org/react'
 import { DownloadSimple, Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
-export type MemeListItemProps = { className?: string } & (
+export type MemeListItemProps = { className?: string; isLoggedIn: boolean } & (
   | {
       meme: MemeWithVideo
       isLoading?: never
@@ -30,7 +30,11 @@ export type MemeListItemProps = { className?: string } & (
     }
 )
 
-const MemeListItem = ({ meme, className = '' }: MemeListItemProps) => {
+const MemeListItem = ({
+  meme,
+  isLoggedIn,
+  className = ''
+}: MemeListItemProps) => {
   const limitKeywordsToDisplay = 8
   const keywordsSplitted = meme
     ? meme.keywords.slice(0, limitKeywordsToDisplay)
@@ -45,11 +49,17 @@ const MemeListItem = ({ meme, className = '' }: MemeListItemProps) => {
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         {meme ? (
           <div className="w-full">
-            <Link href={`/library/${meme.id}`}>
+            {isLoggedIn ? (
+              <Link href={`/library/${meme.id}`}>
+                <h4 className="font-semibold text-medium truncate">
+                  {meme.title}
+                </h4>
+              </Link>
+            ) : (
               <h4 className="font-semibold text-medium truncate">
                 {meme.title}
               </h4>
-            </Link>
+            )}
           </div>
         ) : (
           <Skeleton className="w-4/5 rounded-lg">
@@ -113,16 +123,18 @@ const MemeListItem = ({ meme, className = '' }: MemeListItemProps) => {
       <CardFooter>
         {meme ? (
           <div className="w-full flex justify-end gap-2">
-            <Button
-              as={Link}
-              href={`/library/${meme.id}`}
-              size="sm"
-              isIconOnly
-              color="primary"
-              aria-label="Editer"
-            >
-              <Pen size={20} />
-            </Button>
+            {isLoggedIn ? (
+              <Button
+                as={Link}
+                href={`/library/${meme.id}`}
+                size="sm"
+                isIconOnly
+                color="primary"
+                aria-label="Editer"
+              >
+                <Pen size={20} />
+              </Button>
+            ) : null}
             <DownloadMemeButton
               color="default"
               size="sm"

@@ -6,6 +6,7 @@ import { TWITTER_REGEX_THAT_INCLUDES_ID } from '@/constants/meme'
 import prisma from '@/db'
 import type { SimpleFormState } from '@/serverActions/types'
 import { updateMemeObject } from '@/utils/algolia'
+import { matchIsLoggedIn } from '@/utils/auth'
 
 const schema = z.object({
   title: z.string().min(3),
@@ -20,6 +21,16 @@ export async function updateMeme(
   prevState: UpdateMemeFormState,
   formData: FormData
 ): Promise<UpdateMemeFormState> {
+  const isLoggedIn = await matchIsLoggedIn()
+
+  if (!isLoggedIn) {
+    return {
+      status: 'error',
+      errorMessage: 'You must be logged in to update a meme',
+      formErrors: null
+    }
+  }
+
   try {
     const validatedFields = await schema.safeParseAsync({
       title: formData.get('title'),

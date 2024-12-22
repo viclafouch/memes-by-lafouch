@@ -2,6 +2,7 @@ import React from 'react'
 import MemeListItem from '@/components/MemeListItem'
 import MemesListPagination from '@/components/MemesList/MemesListPagination'
 import type { SearchMemesResponse } from '@/utils/algolia'
+import { auth } from '@/utils/auth'
 import { cn } from '@/utils/cn'
 
 export type MemesListProps =
@@ -36,19 +37,26 @@ const MemesList = ({ getPromiseMemes, isLoading }: MemesListProps) => {
     return (
       <WrapperList>
         {skeletons.map((skeletonId) => {
-          return <MemeListItem key={skeletonId} isLoading />
+          return <MemeListItem isLoggedIn={false} key={skeletonId} isLoading />
         })}
       </WrapperList>
     )
   }
 
   const { memes, nbPages, page } = React.use(getPromiseMemes)
+  const session = React.use(auth())
 
   return (
     <div className="flex flex-col gap-5">
       <WrapperList>
         {memes.map((meme) => {
-          return <MemeListItem key={meme.id} meme={meme} />
+          return (
+            <MemeListItem
+              isLoggedIn={Boolean(session)}
+              key={meme.id}
+              meme={meme}
+            />
+          )
         })}
       </WrapperList>
       {memes.length > 0 ? (

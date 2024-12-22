@@ -8,6 +8,7 @@ import prisma from '@/db'
 import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { client } from '@/utils/algolia'
+import { matchIsLoggedIn } from '@/utils/auth'
 import type { Meme } from '@prisma/client'
 
 const schema = z.string()
@@ -18,7 +19,13 @@ export async function deleteMeme(
   prevState: DeleteMemeFormState,
   formData: FormData
 ): Promise<DeleteMemeFormState> {
+  const isLoggedIn = await matchIsLoggedIn()
+
   try {
+    if (!isLoggedIn) {
+      throw new Error('You must be logged in to delete a meme')
+    }
+
     const memeId = schema.parse(formData.get('id'))
 
     const meme = await prisma.meme.delete({

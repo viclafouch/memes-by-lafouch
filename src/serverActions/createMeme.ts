@@ -13,6 +13,7 @@ import prisma from '@/db'
 import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { indexMemeObject } from '@/utils/algolia'
+import { matchIsLoggedIn } from '@/utils/auth'
 import { getFileExtension } from '@/utils/file'
 
 const schema = z.object({
@@ -59,6 +60,16 @@ export async function createMeme(
   formData: FormData
 ): Promise<CreateMemeFormState> {
   let meme: MemeWithVideo
+
+  const isLoggedIn = await matchIsLoggedIn()
+
+  if (!isLoggedIn) {
+    return {
+      status: 'error',
+      errorMessage: 'You must be logged in to create a meme',
+      formErrors: null
+    }
+  }
 
   try {
     const validatedFields = await schema.safeParseAsync({

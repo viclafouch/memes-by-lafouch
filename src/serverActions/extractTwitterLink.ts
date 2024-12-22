@@ -13,6 +13,7 @@ import prisma from '@/db'
 import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { indexMemeObject } from '@/utils/algolia'
+import { matchIsLoggedIn } from '@/utils/auth'
 import { wait } from '@/utils/promise'
 import type { Meme } from '@prisma/client'
 
@@ -28,6 +29,16 @@ export async function extractTwitterLink(
   formData: FormData
 ): Promise<ExtractTwitterFormState> {
   let meme: MemeWithVideo
+
+  const isLoggedIn = await matchIsLoggedIn()
+
+  if (!isLoggedIn) {
+    return {
+      status: 'error',
+      errorMessage: 'You must be logged in to create a meme',
+      formErrors: null
+    }
+  }
 
   try {
     const safeParsedResult = await schema.safeParseAsync(formData.get('link'))

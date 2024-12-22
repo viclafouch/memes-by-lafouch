@@ -52,3 +52,9 @@ export const config = {
 } satisfies NextAuthConfig
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config)
+
+export const matchIsLoggedIn = async () => {
+  const session = await auth()
+
+  return Boolean(session)
+}
