@@ -15,5 +15,11 @@ export default [
   ...prettierConfig,
   {
     ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**']
+  },
+  {
+    rules: {
+      '@typescript-eslint/return-await': 'off',
+      '@typescript-eslint/no-use-before-define': 'off'
+    }
   }
 ]
