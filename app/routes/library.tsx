@@ -1,5 +1,5 @@
 import prisma from 'src/db'
-import MemeCard from '~/components/MemeCard/MemeCard'
+import MemeCard from '~/components/MemeCard'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 

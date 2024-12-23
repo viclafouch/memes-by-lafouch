@@ -13,6 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LibraryImport } from './routes/library'
 import { Route as IndexImport } from './routes/index'
+import { Route as RandomIndexImport } from './routes/random.index'
+import { Route as RandomMemeIdImport } from './routes/random.$memeId'
 
 // Create/Update Routes
 
@@ -25,6 +27,18 @@ const LibraryRoute = LibraryImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RandomIndexRoute = RandomIndexImport.update({
+  id: '/random/',
+  path: '/random/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RandomMemeIdRoute = RandomMemeIdImport.update({
+  id: '/random/$memeId',
+  path: '/random/$memeId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +60,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryImport
       parentRoute: typeof rootRoute
     }
+    '/random/$memeId': {
+      id: '/random/$memeId'
+      path: '/random/$memeId'
+      fullPath: '/random/$memeId'
+      preLoaderRoute: typeof RandomMemeIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/random/': {
+      id: '/random/'
+      path: '/random'
+      fullPath: '/random'
+      preLoaderRoute: typeof RandomIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +82,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/library': typeof LibraryRoute
+  '/random/$memeId': typeof RandomMemeIdRoute
+  '/random': typeof RandomIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/library': typeof LibraryRoute
+  '/random/$memeId': typeof RandomMemeIdRoute
+  '/random': typeof RandomIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/library': typeof LibraryRoute
+  '/random/$memeId': typeof RandomMemeIdRoute
+  '/random/': typeof RandomIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/library'
+  fullPaths: '/' | '/library' | '/random/$memeId' | '/random'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/library'
-  id: '__root__' | '/' | '/library'
+  to: '/' | '/library' | '/random/$memeId' | '/random'
+  id: '__root__' | '/' | '/library' | '/random/$memeId' | '/random/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LibraryRoute: typeof LibraryRoute
+  RandomMemeIdRoute: typeof RandomMemeIdRoute
+  RandomIndexRoute: typeof RandomIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LibraryRoute: LibraryRoute,
+  RandomMemeIdRoute: RandomMemeIdRoute,
+  RandomIndexRoute: RandomIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +135,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/library"
+        "/library",
+        "/random/$memeId",
+        "/random/"
       ]
     },
     "/": {
@@ -105,6 +145,12 @@ export const routeTree = rootRoute
     },
     "/library": {
       "filePath": "library.tsx"
+    },
+    "/random/$memeId": {
+      "filePath": "random.$memeId.tsx"
+    },
+    "/random/": {
+      "filePath": "random.index.tsx"
     }
   }
 }
