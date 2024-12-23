@@ -11,117 +11,212 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LibraryImport } from './routes/library'
-import { Route as IndexImport } from './routes/index'
-import { Route as RandomIndexImport } from './routes/random.index'
-import { Route as RandomMemeIdImport } from './routes/random.$memeId'
+import { Route as DashboardImport } from './routes/dashboard'
+import { Route as PublicImport } from './routes/_public'
+import { Route as PublicIndexImport } from './routes/_public.index'
+import { Route as DashboardLibraryImport } from './routes/dashboard.library'
+import { Route as PublicPricingImport } from './routes/_public.pricing'
+import { Route as DashboardRandomIndexImport } from './routes/dashboard.random.index'
+import { Route as DashboardRandomMemeIdImport } from './routes/dashboard.random.$memeId'
 
 // Create/Update Routes
 
-const LibraryRoute = LibraryImport.update({
-  id: '/library',
-  path: '/library',
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const PublicRoute = PublicImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PublicIndexRoute = PublicIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
 
-const RandomIndexRoute = RandomIndexImport.update({
+const DashboardLibraryRoute = DashboardLibraryImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
+const PublicPricingRoute = PublicPricingImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const DashboardRandomIndexRoute = DashboardRandomIndexImport.update({
   id: '/random/',
   path: '/random/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => DashboardRoute,
 } as any)
 
-const RandomMemeIdRoute = RandomMemeIdImport.update({
+const DashboardRandomMemeIdRoute = DashboardRandomMemeIdImport.update({
   id: '/random/$memeId',
   path: '/random/$memeId',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/_public/pricing': {
+      id: '/_public/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PublicPricingImport
+      parentRoute: typeof PublicImport
+    }
+    '/dashboard/library': {
+      id: '/dashboard/library'
+      path: '/library'
+      fullPath: '/dashboard/library'
+      preLoaderRoute: typeof DashboardLibraryImport
+      parentRoute: typeof DashboardImport
+    }
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof PublicIndexImport
+      parentRoute: typeof PublicImport
     }
-    '/library': {
-      id: '/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof LibraryImport
-      parentRoute: typeof rootRoute
-    }
-    '/random/$memeId': {
-      id: '/random/$memeId'
+    '/dashboard/random/$memeId': {
+      id: '/dashboard/random/$memeId'
       path: '/random/$memeId'
-      fullPath: '/random/$memeId'
-      preLoaderRoute: typeof RandomMemeIdImport
-      parentRoute: typeof rootRoute
+      fullPath: '/dashboard/random/$memeId'
+      preLoaderRoute: typeof DashboardRandomMemeIdImport
+      parentRoute: typeof DashboardImport
     }
-    '/random/': {
-      id: '/random/'
+    '/dashboard/random/': {
+      id: '/dashboard/random/'
       path: '/random'
-      fullPath: '/random'
-      preLoaderRoute: typeof RandomIndexImport
-      parentRoute: typeof rootRoute
+      fullPath: '/dashboard/random'
+      preLoaderRoute: typeof DashboardRandomIndexImport
+      parentRoute: typeof DashboardImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface PublicRouteChildren {
+  PublicPricingRoute: typeof PublicPricingRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicPricingRoute: PublicPricingRoute,
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardLibraryRoute: typeof DashboardLibraryRoute
+  DashboardRandomMemeIdRoute: typeof DashboardRandomMemeIdRoute
+  DashboardRandomIndexRoute: typeof DashboardRandomIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLibraryRoute: DashboardLibraryRoute,
+  DashboardRandomMemeIdRoute: DashboardRandomMemeIdRoute,
+  DashboardRandomIndexRoute: DashboardRandomIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/library': typeof LibraryRoute
-  '/random/$memeId': typeof RandomMemeIdRoute
-  '/random': typeof RandomIndexRoute
+  '': typeof PublicRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/pricing': typeof PublicPricingRoute
+  '/dashboard/library': typeof DashboardLibraryRoute
+  '/': typeof PublicIndexRoute
+  '/dashboard/random/$memeId': typeof DashboardRandomMemeIdRoute
+  '/dashboard/random': typeof DashboardRandomIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/library': typeof LibraryRoute
-  '/random/$memeId': typeof RandomMemeIdRoute
-  '/random': typeof RandomIndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/pricing': typeof PublicPricingRoute
+  '/dashboard/library': typeof DashboardLibraryRoute
+  '/': typeof PublicIndexRoute
+  '/dashboard/random/$memeId': typeof DashboardRandomMemeIdRoute
+  '/dashboard/random': typeof DashboardRandomIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/library': typeof LibraryRoute
-  '/random/$memeId': typeof RandomMemeIdRoute
-  '/random/': typeof RandomIndexRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/_public/pricing': typeof PublicPricingRoute
+  '/dashboard/library': typeof DashboardLibraryRoute
+  '/_public/': typeof PublicIndexRoute
+  '/dashboard/random/$memeId': typeof DashboardRandomMemeIdRoute
+  '/dashboard/random/': typeof DashboardRandomIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/library' | '/random/$memeId' | '/random'
+  fullPaths:
+    | ''
+    | '/dashboard'
+    | '/pricing'
+    | '/dashboard/library'
+    | '/'
+    | '/dashboard/random/$memeId'
+    | '/dashboard/random'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/library' | '/random/$memeId' | '/random'
-  id: '__root__' | '/' | '/library' | '/random/$memeId' | '/random/'
+  to:
+    | '/dashboard'
+    | '/pricing'
+    | '/dashboard/library'
+    | '/'
+    | '/dashboard/random/$memeId'
+    | '/dashboard/random'
+  id:
+    | '__root__'
+    | '/_public'
+    | '/dashboard'
+    | '/_public/pricing'
+    | '/dashboard/library'
+    | '/_public/'
+    | '/dashboard/random/$memeId'
+    | '/dashboard/random/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LibraryRoute: typeof LibraryRoute
-  RandomMemeIdRoute: typeof RandomMemeIdRoute
-  RandomIndexRoute: typeof RandomIndexRoute
+  PublicRoute: typeof PublicRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  LibraryRoute: LibraryRoute,
-  RandomMemeIdRoute: RandomMemeIdRoute,
-  RandomIndexRoute: RandomIndexRoute,
+  PublicRoute: PublicRouteWithChildren,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -134,23 +229,44 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/library",
-        "/random/$memeId",
-        "/random/"
+        "/_public",
+        "/dashboard"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_public": {
+      "filePath": "_public.tsx",
+      "children": [
+        "/_public/pricing",
+        "/_public/"
+      ]
     },
-    "/library": {
-      "filePath": "library.tsx"
+    "/dashboard": {
+      "filePath": "dashboard.tsx",
+      "children": [
+        "/dashboard/library",
+        "/dashboard/random/$memeId",
+        "/dashboard/random/"
+      ]
     },
-    "/random/$memeId": {
-      "filePath": "random.$memeId.tsx"
+    "/_public/pricing": {
+      "filePath": "_public.pricing.tsx",
+      "parent": "/_public"
     },
-    "/random/": {
-      "filePath": "random.index.tsx"
+    "/dashboard/library": {
+      "filePath": "dashboard.library.tsx",
+      "parent": "/dashboard"
+    },
+    "/_public/": {
+      "filePath": "_public.index.tsx",
+      "parent": "/_public"
+    },
+    "/dashboard/random/$memeId": {
+      "filePath": "dashboard.random.$memeId.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/random/": {
+      "filePath": "dashboard.random.index.tsx",
+      "parent": "/dashboard"
     }
   }
 }

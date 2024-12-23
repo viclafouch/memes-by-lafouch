@@ -12,12 +12,12 @@ const getRandomMeme = createServerFn({
   return meme
 })
 
-export const Route = createFileRoute('/random/')({
+export const Route = createFileRoute('/dashboard/random/')({
   beforeLoad: async () => {
     const randomMeme = await getRandomMeme()
 
     throw redirect({
-      to: '/random/$memeId',
+      to: '/dashboard/random/$memeId',
       params: {
         memeId: randomMeme.id
       }

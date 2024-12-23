@@ -23,7 +23,7 @@ const WithDrawer = ({ children }: WithDrawerProps) => {
         />
         <ul className="menu pt-2 w-80 bg-base-100 min-h-full">
           <li>
-            <Link to="/library" className="group">
+            <Link to="/dashboard/library">
               <Video className="w-6 h-6" />
               <span>Vidéos</span>
               {location.pathname === '/library' ? (
@@ -35,10 +35,10 @@ const WithDrawer = ({ children }: WithDrawerProps) => {
             </Link>
           </li>
           <li>
-            <Link to="/random">
+            <Link to="/dashboard/random">
               <Shuffle className="w-6 h-6" />
               <span>Aléatoire</span>
-              {location.pathname === '/random' ? (
+              {location.pathname.startsWith('/random') ? (
                 <span
                   className="absolute inset-y-0 left-0 w-1 rounded-tr-md rounded-br-md bg-primary "
                   aria-hidden="true"

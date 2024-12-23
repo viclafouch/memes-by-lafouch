@@ -1,7 +1,6 @@
 import * as React from 'react'
 import clsx from 'clsx'
 import OnlyPortrait from 'src/components/OnlyPortrait'
-import WithDrawer from '~/components/WithDrawer'
 import appCss from '~/styles/globals.css?url'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
@@ -55,7 +54,7 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
       >
         <OnlyPortrait>
           <QueryClientProvider client={queryClient}>
-            <WithDrawer>{children}</WithDrawer>
+            {children}
           </QueryClientProvider>
         </OnlyPortrait>
         <ScrollRestoration />

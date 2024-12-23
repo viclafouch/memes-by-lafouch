@@ -9,6 +9,14 @@
     @apply via-fuchsia-500;
     @apply to-indigo-500;
   }
+
+  .mask-hero {
+    mask-image: linear-gradient(90deg, #000, #000, transparent);
+  }
+}
+
+* {
+  @apply min-w-0;
 }
 
 /* Hide spinner on video (only Chrome)  */

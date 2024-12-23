@@ -59,7 +59,7 @@ const RouteComponent = () => {
     },
     onSuccess: (randomMeme) => {
       navigate({
-        to: '/random/$memeId',
+        to: '/dashboard/random/$memeId',
         params: {
           memeId: randomMeme.id
         }
@@ -114,7 +114,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/random/$memeId')({
+export const Route = createFileRoute('/dashboard/random/$memeId')({
   loader: async ({ params: { memeId } }) => {
     const meme = await getMeme({ data: memeId })
 

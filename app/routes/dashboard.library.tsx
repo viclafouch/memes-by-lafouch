@@ -29,7 +29,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/library')({
+export const Route = createFileRoute('/dashboard/library')({
   component: RouteComponent,
   loader: () => getMemes()
 })
