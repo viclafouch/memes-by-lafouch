@@ -9,7 +9,7 @@ export type MemeCardProps = {
 
 const MemeCard = ({ meme }: MemeCardProps) => {
   return (
-    <div className="card card-compact bg-base-100 shadow-xl">
+    <div className="card card-compact bg-base-100 border border-base-300 shadow-xl">
       <div className="flex p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit rounded-t-large pb-0 pt-2 px-4 flex-col items-start">
         <div className="w-full">
           <h3 className="font-semibold text-medium truncate">{meme.title}</h3>

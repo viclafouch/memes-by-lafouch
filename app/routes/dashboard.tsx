@@ -1,11 +1,11 @@
-import WithDrawer from '~/components/WithDrawer'
+import AuthLayout from '~/components/Layout/AuthLayout'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   return (
-    <WithDrawer>
+    <AuthLayout>
       <Outlet />
-    </WithDrawer>
+    </AuthLayout>
   )
 }
 

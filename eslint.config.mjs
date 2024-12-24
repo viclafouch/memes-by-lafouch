@@ -1,7 +1,8 @@
+import hooksConfig from '@viclafouch/eslint-config-viclafouch/hooks.mjs'
 import importsConfig from '@viclafouch/eslint-config-viclafouch/imports.mjs'
 import baseConfig from '@viclafouch/eslint-config-viclafouch/index.mjs'
-import nextConfig from '@viclafouch/eslint-config-viclafouch/next.mjs'
 import prettierConfig from '@viclafouch/eslint-config-viclafouch/prettier.mjs'
+import reactConfig from '@viclafouch/eslint-config-viclafouch/react.mjs'
 import typescriptConfig from '@viclafouch/eslint-config-viclafouch/typescript.mjs'
 
 /**
@@ -9,7 +10,8 @@ import typescriptConfig from '@viclafouch/eslint-config-viclafouch/typescript.mj
  */
 export default [
   ...baseConfig,
-  ...nextConfig,
+  ...reactConfig,
+  ...hooksConfig,
   ...importsConfig,
   ...typescriptConfig,
   ...prettierConfig,
