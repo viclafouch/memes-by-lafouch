@@ -1,16 +1,16 @@
 import React from 'react'
 import { cn } from '~/utils/cn'
 import { MagnifyingGlass, X } from '@phosphor-icons/react'
-import { getRouteApi, Link } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 
 export type NavbarProps = never
 
-const routeApi = getRouteApi('/dashboard/library')
-
 const Navbar = () => {
-  const routeSearch = routeApi.useSearch()
-  const navigate = routeApi.useNavigate()
-  const [currentQuery, setCurrentQuery] = React.useState(routeSearch.query)
+  const routeSearch = useSearch({ strict: false })
+  const navigate = useNavigate()
+  const [currentQuery, setCurrentQuery] = React.useState(
+    routeSearch.query ?? ''
+  )
   const inputRef = React.useRef<HTMLInputElement>(null!)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +31,7 @@ const Navbar = () => {
     }
 
     navigate({
+      to: '/dashboard/library',
       replace: true,
       resetScroll: true,
       search: {

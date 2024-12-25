@@ -7,9 +7,8 @@ const getRandomMeme = createServerFn({
 }).handler(async () => {
   const memes = await prisma.meme.findMany()
   const randomIndex = Math.floor(Math.random() * memes.length)
-  const meme = memes[randomIndex]
 
-  return meme
+  return memes[randomIndex]
 })
 
 export const Route = createFileRoute('/dashboard/random/')({

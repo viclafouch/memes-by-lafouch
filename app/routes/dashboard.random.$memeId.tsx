@@ -3,12 +3,7 @@ import { myVideoLoader } from '~/utils/cloudinary'
 import { Shuffle } from '@phosphor-icons/react'
 import type { Meme } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
-import {
-  createFileRoute,
-  defer,
-  notFound,
-  useNavigate
-} from '@tanstack/react-router'
+import { createFileRoute, defer, notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 
 const getMeme = createServerFn({
@@ -51,7 +46,7 @@ const getRandomMeme = createServerFn({
 
 const RouteComponent = () => {
   const { meme, deferredRandomMeme } = Route.useLoaderData()
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
 
   const redirectRandomMemeMutation = useMutation({
     mutationFn: () => {
