@@ -1,15 +1,50 @@
 import React from 'react'
-import { MagnifyingGlass } from '@phosphor-icons/react'
-import { Link } from '@tanstack/react-router'
+import { cn } from '~/utils/cn'
+import { MagnifyingGlass, X } from '@phosphor-icons/react'
+import { getRouteApi, Link } from '@tanstack/react-router'
 
 export type NavbarProps = never
 
+const routeApi = getRouteApi('/dashboard/library')
+
 const Navbar = () => {
+  const routeSearch = routeApi.useSearch()
+  const navigate = routeApi.useNavigate()
+  const [currentQuery, setCurrentQuery] = React.useState(routeSearch.query)
+  const inputRef = React.useRef<HTMLInputElement>(null!)
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentQuery(event.target.value)
+  }
+
+  const clearQuery = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setCurrentQuery('')
+    inputRef.current.focus()
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (currentQuery === routeSearch.query) {
+      return
+    }
+
+    navigate({
+      replace: true,
+      resetScroll: true,
+      search: {
+        query: currentQuery,
+        page: 1
+      }
+    })
+  }
+
   return (
     <div className="navbar flex items-center justify-between px-6 py-5">
       <div />
       <div className="flex items-center gap-2">
-        <div>
+        <form onSubmit={handleSubmit} noValidate>
           <label
             htmlFor="search-memes"
             aria-label="Search"
@@ -18,12 +53,29 @@ const Navbar = () => {
             <input
               type="text"
               id="search-memes"
-              className="grow"
-              placeholder="Search"
+              className="grow peer"
+              name="search-query"
+              ref={inputRef}
+              onChange={handleChange}
+              value={currentQuery}
+              placeholder="Rechercher un mème"
             />
-            <MagnifyingGlass />
+            <div className="flex items-center">
+              <button
+                onClick={clearQuery}
+                type="button"
+                className={cn('btn btn-ghost btn-circle btn-sm', {
+                  invisible: currentQuery === ''
+                })}
+              >
+                <X />
+              </button>
+              <button type="submit" className="btn btn-ghost btn-circle btn-sm">
+                <MagnifyingGlass />
+              </button>
+            </div>
           </label>
-        </div>
+        </form>
       </div>
       <div className="flex items-center gap-2">
         <Link to="/" className="btn btn-ghost btn-circle">

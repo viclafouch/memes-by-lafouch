@@ -1,48 +1,20 @@
 import { algoliasearch } from 'algoliasearch'
-import type { MemeFilters, MemeWithVideo } from '@/constants/meme'
-import { SERVER_ENVS } from '@/constants/server-env'
+import type { MemeWithVideo } from '~/constants/meme'
+import { SERVER_ENVS } from '~/constants/server-env'
 
-export const client = algoliasearch(
-  '5S4LKLUDFF',
-  SERVER_ENVS.ALGOLIA_ADMIN_SECRET
-)
+const client = algoliasearch('5S4LKLUDFF', SERVER_ENVS.ALGOLIA_ADMIN_SECRET)
 
-const setIndexPromise = client.setSettings({
-  indexName: 'memes',
-  indexSettings: {
-    ranking: ['desc(createdAt_timestamp)'],
-    searchableAttributes: ['title', 'keywords'] as (keyof MemeWithVideo)[]
-  }
-})
-
-export async function indexMemeObject(meme: MemeWithVideo) {
-  await client.saveObject({
-    indexName: 'memes',
-    body: {
-      ...meme,
-      // Required for sorting
-      // eslint-disable-next-line camelcase
-      createdAt_timestamp: meme.createdAt.getTime(),
-      objectID: meme.id
-    }
-  })
-}
-
-export async function updateMemeObject(
-  memeId: MemeWithVideo['id'],
-  values: Partial<MemeWithVideo>
-) {
-  await client.partialUpdateObject({
-    indexName: 'memes',
-    objectID: memeId,
-    attributesToUpdate: values
-  })
-}
-
-export async function searchMemes(filters: MemeFilters) {
+export async function searchMemes(filters: { query: string; page: number }) {
   const searchValue = filters.query.trim()
 
-  await setIndexPromise
+  await client.setSettings({
+    indexName: 'memes',
+    indexSettings: {
+      ranking: ['desc(createdAt_timestamp)'],
+      searchableAttributes: ['title', 'keywords'] as (keyof MemeWithVideo)[]
+    }
+  })
+
   const {
     hits,
     nbPages = 1,
@@ -62,7 +34,10 @@ export async function searchMemes(filters: MemeFilters) {
     }
   })
 
-  return { memes: hits, nbPages, page, memeTotalCount: nbHits }
+  return {
+    memes: hits as MemeWithVideo[],
+    nbPages,
+    page,
+    memeTotalCount: nbHits
+  }
 }
-
-export type SearchMemesResponse = ReturnType<typeof searchMemes>

@@ -20,6 +20,7 @@
     "@tanstack/react-router": "^1.92.3",
     "@tanstack/router-devtools": "^1.92.3",
     "@tanstack/start": "^1.92.3",
+    "@tanstack/zod-adapter": "^1.92.3",
     "algoliasearch": "^5.18.0",
     "cloudinary-build-url": "^0.2.4",
     "clsx": "^2.1.1",

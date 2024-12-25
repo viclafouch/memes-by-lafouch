@@ -1,22 +1,22 @@
-import prisma from 'src/db'
+import { z } from 'zod'
 import MemeCard from '~/components/MemeCard'
+import { searchMemes } from '~/utils/algolia'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
+import { fallback, zodValidator } from '@tanstack/zod-adapter'
 
 const getMemes = createServerFn({
   method: 'GET'
-}).handler(async () => {
-  return await prisma.meme.findMany({
-    include: {
-      video: true
-    }
-  })
 })
+  .validator((filters: unknown) => {
+    return MEME_FILTERS_SCHEMA.parse(filters)
+  })
+  .handler(async ({ data }) => {
+    return await searchMemes(data)
+  })
 
 const RouteComponent = () => {
-  const memes = Route.useLoaderData()
-
-  memes.length = 10
+  const { memes } = Route.useLoaderData()
 
   return (
     <div>
@@ -29,7 +29,17 @@ const RouteComponent = () => {
   )
 }
 
+const MEME_FILTERS_SCHEMA = z.object({
+  page: fallback(z.number(), 1).default(1),
+  query: fallback(z.string(), '').default('')
+})
+
 export const Route = createFileRoute('/dashboard/library')({
   component: RouteComponent,
-  loader: () => getMemes()
+  loaderDeps: ({ search: { page, query } }) => ({ page, query }),
+  loader: ({ deps: { page, query } }) => {
+    return getMemes({ data: { page, query } })
+  },
+  staleTime: 60_000,
+  validateSearch: zodValidator(MEME_FILTERS_SCHEMA)
 })
