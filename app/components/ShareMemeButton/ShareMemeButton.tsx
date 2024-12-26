@@ -6,12 +6,10 @@ import { useMutation } from '@tanstack/react-query'
 
 export type ShareMemeButtonProps = {
   meme: MemeWithVideo
-  children: React.ReactNode
 } & React.ComponentProps<'button'>
 
 const ShareMemeButton = ({
   meme,
-  children,
   className,
   ...restButtonProps
 }: ShareMemeButtonProps) => {
@@ -47,16 +45,12 @@ const ShareMemeButton = ({
     <button
       color="primary"
       type="button"
-      className={cn('btn btn-sm btn-secondary', className)}
+      className={cn('btn btn-sm btn-accent', className)}
       onClick={handleDownload}
       aria-label="Télécharger"
       {...restButtonProps}
     >
-      {shareMutation.isPending ? (
-        <span className="loading loading-spinner" />
-      ) : (
-        <Share className="w-5 h-5" />
-      )}
+      <Share className="w-5 h-5" />
     </button>
   )
 }

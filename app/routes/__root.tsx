@@ -20,19 +20,23 @@ const RootComponent = () => {
 }
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        charSet: 'utf-8'
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
-      }
-    ],
-    links: [{ rel: 'stylesheet', href: appCss }]
-  }),
-  notFoundComponent: () => <h1>404 - Page Not Found</h1>,
+  head: () => {
+    return {
+      meta: [
+        {
+          charSet: 'utf-8'
+        },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1'
+        }
+      ],
+      links: [{ rel: 'stylesheet', href: appCss }]
+    }
+  },
+  notFoundComponent: () => {
+    return <h1>404 - Page Not Found</h1>
+  },
   component: RootComponent
 })
 

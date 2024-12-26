@@ -8,7 +8,7 @@
     "start": "vinxi start",
     "postinstall": "prisma generate",
     "lint": "npx tsc && eslint",
-    "lint:fix": "pnpm lint -- --fix"
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "@cld-apis/utils": "^0.2.0",
@@ -49,7 +49,7 @@
     "@types/node": "^22.5.4",
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.21",
-    "@viclafouch/eslint-config-viclafouch": "4.17.1-beta.8",
+    "@viclafouch/eslint-config-viclafouch": "4.17.1-beta.9",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.22",
     "eslint": "^9",

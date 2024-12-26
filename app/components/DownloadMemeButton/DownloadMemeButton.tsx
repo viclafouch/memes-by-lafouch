@@ -11,7 +11,9 @@ import { createServerFn } from '@tanstack/start'
 const incrementDownloadCount = createServerFn({
   method: 'POST'
 })
-  .validator((data: Pick<Meme, 'id'>) => data)
+  .validator((data: Pick<Meme, 'id'>) => {
+    return data
+  })
   .handler(async ({ data }: { data: Pick<Meme, 'id'> }) => {
     return await prisma.meme.update({
       where: {
@@ -30,13 +32,11 @@ const incrementDownloadCount = createServerFn({
 
 export type DownloadMemeButtonProps = {
   meme: MemeWithVideo
-  children: React.ReactNode
 } & React.ComponentProps<'button'>
 
 const DownloadMemeButton = ({
   meme,
   className,
-  children,
   ...restButtonProps
 }: DownloadMemeButtonProps) => {
   const downloadMutation = useDownload()
@@ -74,13 +74,10 @@ const DownloadMemeButton = ({
       className={cn('btn btn-sm btn-primary', className)}
       onClick={handleDownload}
       aria-label="Télécharger"
+      disabled={downloadMutation.isPending}
       {...restButtonProps}
     >
-      {downloadMutation.isPending ? (
-        <span className="loading loading-spinner" />
-      ) : (
-        <Download className="w-5 h-5" />
-      )}
+      <Download className="w-5 h-5" />
     </button>
   )
 }

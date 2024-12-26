@@ -16,7 +16,13 @@ export default [
   ...typescriptConfig,
   ...prettierConfig,
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**']
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.next/**',
+      '**/.vinxi/**',
+      '**/.vercel/**'
+    ]
   },
   {
     rules: {

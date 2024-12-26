@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import MemeCard from '~/components/MemeCard'
+import Pagination from '~/components/Pagination'
 import { searchMemes } from '~/utils/algolia'
 import { SmileyXEyes } from '@phosphor-icons/react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 import { fallback, zodValidator } from '@tanstack/zod-adapter'
 
@@ -17,16 +18,67 @@ const getMemes = createServerFn({
   })
 
 const RouteComponent = () => {
-  const { memes } = Route.useLoaderData()
+  const { memes, nbPages, page } = Route.useLoaderData()
   const { query } = Route.useSearch()
 
   return (
     <div className="min-h-full flex flex-col">
       {memes.length > 0 ? (
-        <div className="py-4 grid w-full gap-5 grid-cols-4">
-          {memes.map((meme) => {
-            return <MemeCard key={meme.id} meme={meme} />
-          })}
+        <div className="flex flex-col gap-y-4">
+          <div className="py-4 grid w-full gap-5 grid-cols-4">
+            {memes.map((meme) => {
+              return <MemeCard key={meme.id} meme={meme} />
+            })}
+          </div>
+          <div className="w-full flex justify-center">
+            <Pagination
+              renderItems={(type, pageValue) => {
+                if (type === 'page') {
+                  return (
+                    <Link
+                      to="/dashboard/library"
+                      search={{ query, page: pageValue }}
+                      className="join-item btn [&.active]:bg-primary"
+                    >
+                      {pageValue}
+                    </Link>
+                  )
+                }
+
+                if (type === 'next') {
+                  return (
+                    <Link
+                      to="/dashboard/library"
+                      search={{ query, page: pageValue }}
+                      className="join-item btn"
+                    >
+                      Next
+                    </Link>
+                  )
+                }
+
+                if (type === 'previous') {
+                  return (
+                    <Link
+                      to="/dashboard/library"
+                      search={{ query, page: pageValue }}
+                      className="join-item btn"
+                    >
+                      Previous
+                    </Link>
+                  )
+                }
+
+                return (
+                  <button type="button" disabled className="join-item btn">
+                    ...
+                  </button>
+                )
+              }}
+              totalPages={nbPages}
+              currentPage={page + 1}
+            />
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center grow">
@@ -50,7 +102,9 @@ const MEME_FILTERS_SCHEMA = z.object({
 
 export const Route = createFileRoute('/dashboard/library')({
   component: RouteComponent,
-  loaderDeps: ({ search: { page, query } }) => ({ page, query }),
+  loaderDeps: ({ search: { page, query } }) => {
+    return { page, query }
+  },
   loader: ({ deps: { page, query } }) => {
     return getMemes({ data: { page, query } })
   },

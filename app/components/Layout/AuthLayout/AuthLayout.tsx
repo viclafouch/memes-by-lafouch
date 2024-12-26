@@ -14,7 +14,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         <div className="sticky top-0 z-50 bg-base-100/80 backdrop-blur shadow-sm">
           <Navbar />
         </div>
-        <div className="flex-1 px-4 bg-base-100 isolate">{children}</div>
+        <div className="flex-1 px-4 bg-base-100 isolate pb-10">{children}</div>
       </div>
       <Sidebar />
     </div>

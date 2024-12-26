@@ -18,7 +18,7 @@ const MemeCard = ({ meme }: MemeCardProps) => {
       <div className="relative flex w-full p-3 flex-auto flex-col h-auto break-words text-left grow-0 overflow-visible py-2">
         <div className="h-56 lg:h-44 aspect-video w-full">
           <video
-            className="border border-white/10 w-full h-full object-contain rounded-lg"
+            className="border border-white/10 w-full h-full object-cover rounded-lg"
             poster={meme.video.poster || undefined}
             controls
             preload="auto"
@@ -39,10 +39,14 @@ const MemeCard = ({ meme }: MemeCardProps) => {
         </div>
       </div>
       <div className="divider my-0" />
-      <div className="p-3 h-auto flex w-full items-center overflow-hidden">
+      <div className="p-3 h-auto flex w-full items-center">
         <div className="w-full flex justify-end gap-2">
-          <ShareMemeButton meme={meme}>Partager</ShareMemeButton>
-          <DownloadMemeButton meme={meme}>Telecharger</DownloadMemeButton>
+          <div className="tooltip" data-tip="Partager">
+            <ShareMemeButton meme={meme} />
+          </div>
+          <div className="tooltip" data-tip="Télécharger">
+            <DownloadMemeButton meme={meme} />
+          </div>
         </div>
       </div>
     </div>
