@@ -19,12 +19,9 @@ import {
 } from '@nextui-org/react'
 import { DownloadSimple, Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
-const ShareMemeButton = dynamic(
-  () => {
-    return import('@/components/MemeListItem/ShareMemeButton')
-  },
-  { ssr: false }
-)
+const ShareMemeButton = dynamic(() => {
+  return import('@/components/MemeListItem/ShareMemeButton')
+})
 
 export type MemeListItemProps = { className?: string } & (
   | {

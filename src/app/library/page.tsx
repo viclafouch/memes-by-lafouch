@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   title: 'Viclafouch - Mes mèmes'
 }
 
-const Page = ({
+const Page = async ({
   searchParams
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) => {
-  const filters = memeFilters.parse(searchParams)
+  const filters = await memeFilters.parseAsync(await searchParams)
   const promise = searchMemes(filters)
 
   return (

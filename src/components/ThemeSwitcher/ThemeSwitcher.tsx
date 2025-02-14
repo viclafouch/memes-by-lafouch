@@ -46,7 +46,16 @@ const ThemeRadioItem = ({ icon, ...restRadioProps }: ThemeRadioItemProps) => {
 }
 
 const ThemeSwitcher = () => {
+  const [isMount, setIsMount] = React.useState(false)
   const { theme, setTheme } = useTheme()
+
+  React.useEffect(() => {
+    setIsMount(true)
+  }, [])
+
+  if (!isMount) {
+    return null
+  }
 
   return (
     <RadioGroup

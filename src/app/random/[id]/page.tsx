@@ -14,7 +14,7 @@ import { Button } from '@nextui-org/react'
 import { Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export async function generateStaticParams() {
@@ -32,7 +32,8 @@ export async function generateStaticParams() {
 }
 
 const Page = async ({ params }: Props) => {
-  const meme = await getMeme(params.id)
+  const { id } = await params
+  const meme = await getMeme(id)
 
   if (!meme) {
     notFound()
