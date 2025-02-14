@@ -100,7 +100,7 @@ export async function createMeme(
         video: {
           create: {
             videoUtKey: uploadFileResult.data.key,
-            src: uploadFileResult.data.url,
+            src: uploadFileResult.data.ufsUrl,
             poster: ''
           }
         }

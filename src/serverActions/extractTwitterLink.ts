@@ -87,9 +87,9 @@ export async function extractTwitterLink(
           tweetUrl: tweet.url,
           video: {
             create: {
-              poster: posterFileResult.data.url,
+              poster: posterFileResult.data.ufsUrl,
               posterUtKey: posterFileResult.data.key,
-              src: videoFileResult.data.url,
+              src: videoFileResult.data.ufsUrl,
               videoUtKey: videoFileResult.data.key
             }
           }
