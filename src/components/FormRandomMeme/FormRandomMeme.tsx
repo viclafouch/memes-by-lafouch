@@ -3,7 +3,7 @@
 import React from 'react'
 import { useFormStatus } from 'react-dom'
 import { redirectRandomMeme } from '@/serverActions/redirectRandomMeme'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { ShuffleSimple } from '@phosphor-icons/react'
 import { Meme } from '@prisma/client'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { signIn } from '@/utils/auth'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { UserCircle } from '@phosphor-icons/react/dist/ssr'
 
 const SignIn = () => {

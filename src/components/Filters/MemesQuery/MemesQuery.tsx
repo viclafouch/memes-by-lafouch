@@ -3,7 +3,7 @@
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useIntersectionObserver } from 'usehooks-ts'
-import { Input } from '@nextui-org/react'
+import { Input } from '@heroui/react'
 import { MagnifyingGlass } from '@phosphor-icons/react'
 
 export type MemesQueryProps = {

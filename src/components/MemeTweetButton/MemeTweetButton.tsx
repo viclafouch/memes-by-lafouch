@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ButtonProps } from '@nextui-org/react'
+import { Button, ButtonProps } from '@heroui/react'
 import { XLogo } from '@phosphor-icons/react/dist/ssr'
 import { Meme } from '@prisma/client'
 

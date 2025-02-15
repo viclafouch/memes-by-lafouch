@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   User
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { FileVideo, XLogo } from '@phosphor-icons/react'
 
 export type UserPopoverProps = {
@@ -47,8 +47,7 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
       </PopoverTrigger>
       <PopoverContent className="p-2 gap-2">
         <Button
-          // eslint-disable-next-line @typescript-eslint/no-deprecated
-          onClick={() => {
+          onPress={() => {
             return setIsOpen(false)
           }}
           className="sm:hidden"
@@ -67,8 +66,7 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
             <Button
               as={Link}
               href="/"
-              // eslint-disable-next-line @typescript-eslint/no-deprecated
-              onClick={() => {
+              onPress={() => {
                 return setIsOpen(false)
               }}
               size="sm"
@@ -80,8 +78,7 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
             <Button
               as={Link}
               href="/new"
-              // eslint-disable-next-line @typescript-eslint/no-deprecated
-              onClick={() => {
+              onPress={() => {
                 return setIsOpen(false)
               }}
               size="sm"

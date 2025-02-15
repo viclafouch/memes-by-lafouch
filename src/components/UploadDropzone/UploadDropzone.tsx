@@ -3,7 +3,7 @@
 import React from 'react'
 import { filesize } from 'filesize'
 import { getFileExtension } from '@/utils/file'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 
 export type UploadDropzoneProps = {
   inputProps?: React.ComponentProps<'input'>
@@ -26,9 +26,7 @@ const UploadDropzone = ({
     setFile(newFile)
   }
 
-  const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-
+  const handleRemove = () => {
     if (inputRef.current) {
       inputRef.current.value = ''
     }
@@ -60,8 +58,7 @@ const UploadDropzone = ({
                 {getFileExtension(file).toUpperCase()}
               </p>
               <div className="flex mt-4 justify-center">
-                {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
-                <Button size="sm" onClick={handleRemove}>
+                <Button size="sm" type="button" onPress={handleRemove}>
                   Supprimer
                 </Button>
               </div>

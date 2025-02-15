@@ -10,7 +10,7 @@ import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { redirectRandomMeme } from '@/serverActions/redirectRandomMeme'
 import { myVideoLoader } from '@/utils/cloudinary'
 import { getMeme } from '@/utils/meme'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 import { Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {

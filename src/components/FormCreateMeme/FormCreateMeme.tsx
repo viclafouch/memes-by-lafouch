@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
 import UploadDropzone from '@/components/UploadDropzone'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { useNotifications } from '@/hooks/useNotifications'
@@ -9,25 +8,8 @@ import {
   createMeme,
   type CreateMemeFormState
 } from '@/serverActions/createMeme'
-import { Button, Input } from '@nextui-org/react'
+import { Button, Input } from '@heroui/react'
 import { Meme } from '@prisma/client'
-
-const SubmitButton = () => {
-  const status = useFormStatus()
-
-  return (
-    <div className="w-full flex flex-col">
-      <Button
-        isLoading={status.pending}
-        type="submit"
-        color="primary"
-        size="lg"
-      >
-        Ajouter le mème
-      </Button>
-    </div>
-  )
-}
 
 export type FormCreateMemeProps = {
   meme?: Meme
@@ -39,7 +21,10 @@ const initialState = {
 
 const FormCreateMeme = () => {
   const { notifySuccess, notifyError } = useNotifications()
-  const [formState, formAction] = useFormState(createMeme, initialState)
+  const [formState, formAction, isPending] = React.useActionState(
+    createMeme,
+    initialState
+  )
 
   useFormStateCallback(formState, {
     isError: (values) => {
@@ -84,7 +69,11 @@ const FormCreateMeme = () => {
         errorMessage={formErrors?.fieldErrors.video?.[0]}
         inputProps={{ name: 'video', accept: 'video/*' }}
       />
-      <SubmitButton />
+      <div className="w-full flex flex-col">
+        <Button isLoading={isPending} type="submit" color="primary" size="lg">
+          Ajouter le mème
+        </Button>
+      </div>
     </form>
   )
 }

@@ -6,7 +6,7 @@ import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { useNotifications } from '@/hooks/useNotifications'
 import { updateMeme, UpdateMemeFormState } from '@/serverActions/updateMeme'
 import { cn } from '@/utils/cn'
-import { Button, Chip, Input, Link } from '@nextui-org/react'
+import { Button, Chip, Input, Link } from '@heroui/react'
 
 export type FormUpdateMemeProps = {
   meme: MemeWithVideo
@@ -106,9 +106,7 @@ const FormUpdateMeme = ({ meme }: FormUpdateMemeProps) => {
                 })}
                 type="button"
                 color="primary"
-                // eslint-disable-next-line @typescript-eslint/no-deprecated
-                onClick={(event) => {
-                  event.preventDefault()
+                onPress={() => {
                   handleAddKeyword()
                 }}
               >

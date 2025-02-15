@@ -8,7 +8,7 @@ import {
   Pagination,
   PaginationItemRenderProps,
   PaginationItemType
-} from '@nextui-org/react'
+} from '@heroui/react'
 
 export type MemesListPaginationProps = {
   currentPage: number

@@ -16,7 +16,7 @@ import {
   Divider,
   Skeleton,
   Spacer
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { DownloadSimple, Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
 const ShareMemeButton = dynamic(() => {

@@ -5,7 +5,7 @@ import { MemeWithVideo } from '@/constants/meme'
 import { useDownload } from '@/hooks/useDownload'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { getFilenameExtension } from '@/utils/file'
-import { Button, ButtonProps } from '@nextui-org/react'
+import { Button, ButtonProps } from '@heroui/react'
 
 export type DownloadMemeButtonProps = {
   meme: MemeWithVideo
@@ -19,9 +19,7 @@ const DownloadMemeButton = ({
 }: DownloadMemeButtonProps) => {
   const { mutate: download, isPending } = useDownload()
 
-  const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-
+  const handleDownload = () => {
     if (isPending) {
       return
     }
@@ -45,8 +43,8 @@ const DownloadMemeButton = ({
     <Button
       isLoading={isPending}
       color="primary"
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      onClick={handleDownload}
+      onPress={handleDownload}
+      type="button"
       aria-label="Télécharger"
       {...restButtonProps}
     >

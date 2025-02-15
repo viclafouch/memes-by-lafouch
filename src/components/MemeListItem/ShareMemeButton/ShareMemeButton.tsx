@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { MemeWithVideo } from '@/constants/meme'
-import { Button, ButtonProps } from '@nextui-org/react'
+import { Button, ButtonProps } from '@heroui/react'
 import { useMutation } from '@tanstack/react-query'
 
 export type ShareMemeButtonProps = {
@@ -36,9 +36,7 @@ const ShareMemeButton = ({
     }
   })
 
-  const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-
+  const handleDownload = () => {
     if (isPending) {
       return
     }
@@ -50,8 +48,8 @@ const ShareMemeButton = ({
     <Button
       color="secondary"
       isDisabled={isPending}
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      onClick={handleDownload}
+      onPress={handleDownload}
+      type="button"
       aria-label="Partager"
       {...restButtonProps}
     >

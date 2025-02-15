@@ -12,7 +12,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { FileVideo, XLogo } from '@phosphor-icons/react/dist/ssr'
 
 const Nav = () => {

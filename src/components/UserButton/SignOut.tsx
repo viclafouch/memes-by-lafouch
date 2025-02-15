@@ -1,6 +1,6 @@
 import React from 'react'
 import { signOut } from '@/utils/auth'
-import { Button } from '@nextui-org/react'
+import { Button } from '@heroui/react'
 
 const SignOut = () => {
   return (

@@ -2,14 +2,14 @@
 
 import { ToastContainer } from 'react-toastify'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient()
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <NextUIProvider>
+    <HeroUIProvider>
       <NextThemesProvider attribute="class" defaultTheme="dark">
         <ToastContainer
           closeOnClick
@@ -22,6 +22,6 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
           {children}
         </QueryClientProvider>
       </NextThemesProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   )
 }

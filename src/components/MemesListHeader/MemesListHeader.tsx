@@ -2,7 +2,7 @@ import React from 'react'
 import MemesOrderBy from '@/components/Filters/MemesOrderBy'
 import MemesQuery from '@/components/Filters/MemesQuery'
 import { SearchMemesResponse } from '@/utils/algolia'
-import { Button, Skeleton } from '@nextui-org/react'
+import { Button, Skeleton } from '@heroui/react'
 import { ShuffleSimple } from '@phosphor-icons/react/dist/ssr'
 
 export type MemesListHeaderProps =
