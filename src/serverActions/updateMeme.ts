@@ -25,7 +25,7 @@ export async function updateMeme(
       title: formData.get('title'),
       memeId: formData.get('id'),
       keywords: formData.getAll('keywords'),
-      tweet: formData.get('tweetUrl') ?? undefined
+      tweet: formData.get('tweetUrl') || undefined
     })
 
     if (!validatedFields.success) {
