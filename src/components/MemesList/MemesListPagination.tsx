@@ -4,11 +4,8 @@ import React from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { cn } from '@/utils/cn'
-import {
-  Pagination,
-  PaginationItemRenderProps,
-  PaginationItemType
-} from '@heroui/react'
+import type { PaginationItemRenderProps } from '@heroui/react'
+import { Pagination, PaginationItemType } from '@heroui/react'
 
 export type MemesListPaginationProps = {
   currentPage: number

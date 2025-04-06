@@ -1,4 +1,5 @@
-import MemesList, { MemesListProps } from './MemesList'
+import type { MemesListProps } from './MemesList'
+import MemesList from './MemesList'
 
 export type { MemesListProps }
 

@@ -1,6 +1,6 @@
-import { z } from 'zod'
+import type { z } from 'zod'
 
-export type SimpleFormState<S, T extends z.Schema> =
+export type SimpleFormState<TSuccess, T extends z.Schema> =
   | {
       errorMessage: string
       status: 'error'
@@ -8,7 +8,7 @@ export type SimpleFormState<S, T extends z.Schema> =
     }
   | ({
       status: 'success'
-    } & S)
+    } & TSuccess)
   | {
       status: 'idle'
     }

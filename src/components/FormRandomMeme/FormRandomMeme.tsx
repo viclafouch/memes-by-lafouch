@@ -5,7 +5,7 @@ import { useFormStatus } from 'react-dom'
 import { redirectRandomMeme } from '@/serverActions/redirectRandomMeme'
 import { Button } from '@heroui/react'
 import { ShuffleSimple } from '@phosphor-icons/react'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 const SubmitButton = () => {
   const { pending } = useFormStatus()

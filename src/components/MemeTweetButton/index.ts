@@ -1,4 +1,5 @@
-import MemeTweetButton, { MemeTweetButtonProps } from './MemeTweetButton'
+import type { MemeTweetButtonProps } from './MemeTweetButton'
+import MemeTweetButton from './MemeTweetButton'
 
 export type { MemeTweetButtonProps }
 

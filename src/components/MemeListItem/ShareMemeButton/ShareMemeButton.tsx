@@ -1,8 +1,9 @@
 'use client'
 
 import React from 'react'
-import { MemeWithVideo } from '@/constants/meme'
-import { Button, ButtonProps } from '@heroui/react'
+import type { MemeWithVideo } from '@/constants/meme'
+import type { ButtonProps } from '@heroui/react'
+import { Button } from '@heroui/react'
 import { useMutation } from '@tanstack/react-query'
 
 export type ShareMemeButtonProps = {

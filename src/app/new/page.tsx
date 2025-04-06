@@ -1,5 +1,5 @@
 import React from 'react'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Container from '@/components/Container'
 import FormCreateMeme from '@/components/FormCreateMeme'
 

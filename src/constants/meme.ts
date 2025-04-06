@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { extractTweetIdFromUrl, getTweetById } from '@/utils/tweet'
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 
 export const memeFilters = z.object({
   orderBy: z.enum(['most_recent', 'most_old']).catch('most_recent'),

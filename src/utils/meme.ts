@@ -1,7 +1,7 @@
 import React from 'react'
 import { unstable_cache as unstableCache } from 'next/cache'
 import prisma from '@/db'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 import 'server-only'
 
 export const getMeme = React.cache((id: string) => {

@@ -1,10 +1,11 @@
 'use client'
 
 import React from 'react'
-import { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
 import { useFormStateCallback } from '@/hooks/useFormStateCallback'
 import { useNotifications } from '@/hooks/useNotifications'
-import { updateMeme, UpdateMemeFormState } from '@/serverActions/updateMeme'
+import type { UpdateMemeFormState } from '@/serverActions/updateMeme'
+import { updateMeme } from '@/serverActions/updateMeme'
 import { cn } from '@/utils/cn'
 import { Button, Chip, Input, Link } from '@heroui/react'
 

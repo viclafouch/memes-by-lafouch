@@ -1,8 +1,5 @@
-import ProgressBar, {
-  ProgressBarContext,
-  ProgressBarLink,
-  ProgressBarProps
-} from './ProgressBar'
+import type { ProgressBarProps } from './ProgressBar'
+import ProgressBar, { ProgressBarContext, ProgressBarLink } from './ProgressBar'
 
 export { ProgressBar, ProgressBarContext, ProgressBarLink }
 

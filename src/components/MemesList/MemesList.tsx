@@ -1,7 +1,7 @@
 import React from 'react'
 import MemeListItem from '@/components/MemeListItem'
 import MemesListPagination from '@/components/MemesList/MemesListPagination'
-import { SearchMemesResponse } from '@/utils/algolia'
+import type { SearchMemesResponse } from '@/utils/algolia'
 import { cn } from '@/utils/cn'
 
 export type MemesListProps =

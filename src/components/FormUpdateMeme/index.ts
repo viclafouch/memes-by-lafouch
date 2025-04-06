@@ -1,4 +1,5 @@
-import FormUpdateMeme, { FormUpdateMemeProps } from './FormUpdateMeme'
+import type { FormUpdateMemeProps } from './FormUpdateMeme'
+import FormUpdateMeme from './FormUpdateMeme'
 
 export type { FormUpdateMemeProps }
 

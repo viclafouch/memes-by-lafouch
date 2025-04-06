@@ -6,10 +6,10 @@ import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { redirect, RedirectType } from 'next/navigation'
 import { z } from 'zod'
 import prisma from '@/db'
-import { SimpleFormState } from '@/serverActions/types'
+import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { client } from '@/utils/algolia'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 const schema = z.string()
 

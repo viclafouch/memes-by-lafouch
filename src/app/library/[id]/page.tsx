@@ -1,5 +1,5 @@
 import React from 'react'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { formatRelative } from 'date-fns'
 import { fr } from 'date-fns/locale'

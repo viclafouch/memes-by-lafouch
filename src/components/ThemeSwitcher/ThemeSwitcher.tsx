@@ -3,7 +3,8 @@
 import React from 'react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/utils/cn'
-import { RadioGroup, RadioProps, useRadio, VisuallyHidden } from '@heroui/react'
+import type { RadioProps } from '@heroui/react'
+import { RadioGroup, useRadio, VisuallyHidden } from '@heroui/react'
 import { Monitor, Moon, SunDim } from '@phosphor-icons/react'
 
 type ThemeRadioItemProps = RadioProps & { icon: React.ReactNode }

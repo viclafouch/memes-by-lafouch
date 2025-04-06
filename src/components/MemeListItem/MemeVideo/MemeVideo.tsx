@@ -3,7 +3,7 @@
 import React from 'react'
 import { useDebounce } from 'use-debounce'
 import { useIntersectionObserver } from 'usehooks-ts'
-import { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
 import { myVideoLoader } from '@/utils/cloudinary'
 
 export type MemeVideoProps = {

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import DownloadMemeButton from '@/components/MemeListItem/DownloadMemeButton'
 import MemeVideo from '@/components/MemeListItem/MemeVideo'
 import MemeTweetButton from '@/components/MemeTweetButton'
-import { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import {
   Button,

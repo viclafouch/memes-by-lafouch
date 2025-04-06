@@ -3,20 +3,20 @@ import { useEvent } from '@/hooks/useEvent'
 
 type ResultCallbackArgs<T> = Exclude<T, false>
 
-type Options<T, E, S> = {
-  isError: (formState: T) => E
-  isSuccess: (formState: T) => S
-  onError: (formState: ResultCallbackArgs<E>) => void
-  onSuccess: (formState: ResultCallbackArgs<S>) => void
+type Options<T, TError, TSuccess> = {
+  isError: (formState: T) => TError
+  isSuccess: (formState: T) => TSuccess
+  onError: (formState: ResultCallbackArgs<TError>) => void
+  onSuccess: (formState: ResultCallbackArgs<TSuccess>) => void
 }
 
 function matchIsCallbackEnabled<T>(values: T): values is ResultCallbackArgs<T> {
   return values !== false
 }
 
-export function useFormStateCallback<T, E, S>(
+export function useFormStateCallback<T, TError, TSuccess>(
   formState: T,
-  { isError, isSuccess, onError, onSuccess }: Options<T, E, S>
+  { isError, isSuccess, onError, onSuccess }: Options<T, TError, TSuccess>
 ) {
   const onErrorEvent = useEvent(onError)
   const onSuccessEvent = useEvent(onSuccess)

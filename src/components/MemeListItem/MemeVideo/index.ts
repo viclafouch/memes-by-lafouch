@@ -1,4 +1,5 @@
-import MemeVideo, { MemeVideoProps } from './MemeVideo'
+import type { MemeVideoProps } from './MemeVideo'
+import MemeVideo from './MemeVideo'
 
 export type { MemeVideoProps }
 

@@ -1,4 +1,5 @@
-import Container, { ContainerProps } from './Container'
+import type { ContainerProps } from './Container'
+import Container from './Container'
 
 export type { ContainerProps }
 

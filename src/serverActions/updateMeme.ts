@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { TWITTER_REGEX_THAT_INCLUDES_ID } from '@/constants/meme'
 import prisma from '@/db'
-import { SimpleFormState } from '@/serverActions/types'
+import type { SimpleFormState } from '@/serverActions/types'
 import { updateMemeObject } from '@/utils/algolia'
 
 const schema = z.object({

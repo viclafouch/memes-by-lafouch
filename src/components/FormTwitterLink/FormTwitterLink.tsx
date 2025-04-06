@@ -1,10 +1,8 @@
 'use client'
 
 import React from 'react'
-import {
-  ExtractTwitterFormState,
-  extractTwitterLink
-} from '@/serverActions/extractTwitterLink'
+import type { ExtractTwitterFormState } from '@/serverActions/extractTwitterLink'
+import { extractTwitterLink } from '@/serverActions/extractTwitterLink'
 import { Button, Input } from '@heroui/react'
 import { CloudArrowDown, Link as LinkIcon } from '@phosphor-icons/react'
 

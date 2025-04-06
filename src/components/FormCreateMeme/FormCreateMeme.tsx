@@ -9,7 +9,7 @@ import {
   type CreateMemeFormState
 } from '@/serverActions/createMeme'
 import { Button, Input } from '@heroui/react'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 export type FormCreateMemeProps = {
   meme?: Meme

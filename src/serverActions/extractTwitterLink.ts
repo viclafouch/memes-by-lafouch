@@ -5,17 +5,14 @@ import { revalidatePath } from 'next/cache'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { redirect, RedirectType } from 'next/navigation'
 import { filesize } from 'filesize'
-import {
-  MAX_SIZE_MEME_IN_BYTES,
-  MemeWithVideo,
-  TWITTER_LINK_SCHEMA
-} from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
+import { MAX_SIZE_MEME_IN_BYTES, TWITTER_LINK_SCHEMA } from '@/constants/meme'
 import prisma from '@/db'
-import { SimpleFormState } from '@/serverActions/types'
+import type { SimpleFormState } from '@/serverActions/types'
 import { utapi } from '@/uploadthing'
 import { indexMemeObject } from '@/utils/algolia'
 import { wait } from '@/utils/promise'
-import { Meme } from '@prisma/client'
+import type { Meme } from '@prisma/client'
 
 const schema = TWITTER_LINK_SCHEMA
 

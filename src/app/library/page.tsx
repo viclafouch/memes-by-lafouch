@@ -1,5 +1,5 @@
 import React from 'react'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Container from '@/components/Container'
 import MemesList from '@/components/MemesList'
 import MemesListHeader from '@/components/MemesListHeader'

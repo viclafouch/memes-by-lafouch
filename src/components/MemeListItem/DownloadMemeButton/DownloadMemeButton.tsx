@@ -1,11 +1,12 @@
 'use client'
 
 import React from 'react'
-import { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
 import { useDownload } from '@/hooks/useDownload'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { getFilenameExtension } from '@/utils/file'
-import { Button, ButtonProps } from '@heroui/react'
+import type { ButtonProps } from '@heroui/react'
+import { Button } from '@heroui/react'
 
 export type DownloadMemeButtonProps = {
   meme: MemeWithVideo
