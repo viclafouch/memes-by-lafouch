@@ -4,7 +4,6 @@ import { Providers } from '@/app/providers'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 import OnlyPortrait from '@/components/OnlyPortrait'
-import { ProgressBar } from '@/components/ProgressBar'
 import TailwindIndicator from '@/components/TailwindIndicator/TailwindIndicator'
 import './globals.css'
 
@@ -28,13 +27,11 @@ const RootLayout = ({
       >
         <OnlyPortrait>
           <Providers>
-            <ProgressBar className="fixed top-0 h-1 shadow-lg shadow-sky-500/20 bg-sky-500 z-50">
-              <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
-                <Nav />
-                <div className="flex flex-col grow">{children}</div>
-                <Footer />
-              </div>
-            </ProgressBar>
+            <div className="flex flex-col min-h-screen has-[#homepage]:grandient-memes">
+              <Nav />
+              <div className="flex flex-col grow">{children}</div>
+              <Footer />
+            </div>
           </Providers>
         </OnlyPortrait>
         <TailwindIndicator />
