@@ -13,7 +13,7 @@
   "dependencies": {
     "@cld-apis/utils": "^0.2.0",
     "@date-fns/tz": "^1.2.0",
-    "@heroui/react": "2.6.14",
+    "@heroui/react": "2.7.6",
     "@phosphor-icons/react": "^2.1.7",
     "@prisma/client": "^6.3.1",
     "@tanstack/react-query": "^5.66.0",

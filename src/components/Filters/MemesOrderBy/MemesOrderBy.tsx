@@ -9,6 +9,11 @@ export type MemesOrderByProps = {
   value: MemeFiltersOrderBy
 }
 
+export const options = [
+  { key: 'most_recent', label: ' Plus récents' },
+  { key: 'most_old', label: 'Plus anciens' }
+]
+
 const MemesOrderBy = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -34,17 +39,15 @@ const MemesOrderBy = () => {
       aria-label="Trier par"
       className="w-full"
       radius="full"
+      items={options}
       selectionMode="single"
       selectedKeys={[value]}
       onChange={handleChange}
       variant="bordered"
     >
-      <SelectItem key="most_recent" value="most_recent">
-        Plus récents
-      </SelectItem>
-      <SelectItem key="most_old" value="most_old">
-        Plus anciens
-      </SelectItem>
+      {(option) => {
+        return <SelectItem>{option.label}</SelectItem>
+      }}
     </Select>
   )
 }
