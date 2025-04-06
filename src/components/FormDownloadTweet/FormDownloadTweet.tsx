@@ -1,41 +1,34 @@
 'use client'
 
 import React from 'react'
-import { useFormStateCallback } from '@/hooks/useFormStateCallback'
+import { useAction } from 'next-safe-action/hooks'
 import { useNotifications } from '@/hooks/useNotifications'
-import type { GetTweetFormLinkState } from '@/serverActions/download-tweet'
 import { getTweetFromLink } from '@/serverActions/download-tweet'
 import { downloadBlob } from '@/utils/download'
-import { Button, Input } from '@heroui/react'
-
-const initialState = {
-  status: 'idle'
-} as GetTweetFormLinkState
+import { Button, Form, Input } from '@heroui/react'
 
 const FormDownloadTweet = () => {
   const { notifyError } = useNotifications()
-  const [formState, formAction, isPending] = React.useActionState(
-    getTweetFromLink,
-    initialState
-  )
 
-  useFormStateCallback(formState, {
-    isError: (values) => {
-      return values.status === 'error' && values.errorMessage ? values : false
+  const { execute, result, isPending } = useAction(getTweetFromLink, {
+    onError: ({ error }) => {
+      if (error.serverError) {
+        notifyError(error.serverError)
+      }
     },
-    isSuccess: (values) => {
-      return values.status === 'success' ? values : false
-    },
-    onError: (values) => {
-      notifyError(values.errorMessage)
-    },
-    onSuccess: (values) => {
-      downloadBlob(values.tweet.video.blob, `${values.tweet.id}.mp4`)
+    onSuccess: ({ data }) => {
+      if (data) {
+        downloadBlob(data.video.blob, `${data.id}.mp4`)
+      }
     }
   })
 
   return (
-    <form action={formAction} className="w-full flex flex-col gap-4">
+    <Form
+      action={execute}
+      validationErrors={result.validationErrors}
+      className="w-full flex flex-col gap-4"
+    >
       <Input
         label="Twitter URL"
         name="tweetUrl"
@@ -50,7 +43,7 @@ const FormDownloadTweet = () => {
           Extraire et télécharger
         </Button>
       </div>
-    </form>
+    </Form>
   )
 }
 
