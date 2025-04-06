@@ -46,10 +46,7 @@ const Page = async ({ params }: Props) => {
         <div className="grow flex w-full max-w-[720px]">
           <div className="grow flex relative w-full">
             <RandomVideo
-              src={myVideoLoader({
-                src: meme.video.src
-              })}
-              // eslint-disable-next-line require-await
+              src={myVideoLoader({ src: meme.video.src })}
               onEnded={async () => {
                 'use server'
 
