@@ -39,13 +39,24 @@ const UserPopover = ({ userImage, signOutButton }: UserPopoverProps) => {
             }}
             name=""
             description=""
-            avatarProps={{
-              src: userImage
-            }}
+            avatarProps={{ src: userImage }}
           />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-2 gap-2">
+        <Button
+          as={Link}
+          href="/download-tweet"
+          onPress={() => {
+            return setIsOpen(false)
+          }}
+          className="sm:hidden"
+          size="sm"
+          color="primary"
+          fullWidth
+        >
+          Téléchargeur
+        </Button>
         <Button
           onPress={() => {
             return setIsOpen(false)

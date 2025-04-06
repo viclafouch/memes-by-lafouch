@@ -35,6 +35,7 @@ export async function getTweetById(tweetId: string) {
 
   return {
     url: tweetUrl,
+    id: tweet.id_str,
     video: {
       url: video.src,
       blob: videoBlob,

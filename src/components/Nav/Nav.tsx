@@ -26,6 +26,9 @@ const Nav = () => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center" />
       <NavbarContent justify="end">
         <NavbarItem className="hidden sm:flex">
+          <ProgressBarLink href="/download-tweet">Téléchargeur</ProgressBarLink>
+        </NavbarItem>
+        <NavbarItem className="hidden sm:flex">
           <ProgressBarLink href="/library">Bibliothèque</ProgressBarLink>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
