@@ -5,7 +5,6 @@ import RandomVideo from '@/app/random/[id]/RandomVideo'
 import Container from '@/components/Container'
 import FormRandomMeme from '@/components/FormRandomMeme'
 import ShareMemeButton from '@/components/MemeListItem/ShareMemeButton'
-import prisma from '@/db'
 import { incrementDownloadCount } from '@/serverActions/incrementDownloadCount'
 import { redirectRandomMeme } from '@/serverActions/redirectRandomMeme'
 import { myVideoLoader } from '@/utils/cloudinary'
@@ -15,20 +14,6 @@ import { Pen, Share } from '@phosphor-icons/react/dist/ssr'
 
 type Props = {
   params: Promise<{ id: string }>
-}
-
-export async function generateStaticParams() {
-  const memes = await prisma.meme.findMany({
-    select: {
-      id: true
-    }
-  })
-
-  return memes.map((meme) => {
-    return {
-      id: meme.id
-    }
-  })
 }
 
 const Page = async ({ params }: Props) => {
