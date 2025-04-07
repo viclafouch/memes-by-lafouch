@@ -25,10 +25,14 @@ const Nav = () => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center" />
       <NavbarContent justify="end">
         <NavbarItem className="hidden sm:flex">
-          <Link href="/download-tweet">Téléchargeur</Link>
+          <Link href="/download-tweet" color="foreground">
+            Téléchargeur
+          </Link>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
-          <Link href="/library">Bibliothèque</Link>
+          <Link href="/library" color="foreground">
+            Bibliothèque
+          </Link>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
           <Popover backdrop="opaque" placement="bottom" showArrow offset={10}>
