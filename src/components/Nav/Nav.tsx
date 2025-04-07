@@ -25,12 +25,17 @@ const Nav = () => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center" />
       <NavbarContent justify="end">
         <NavbarItem className="hidden sm:flex">
-          <Link href="/download-tweet" color="foreground">
+          <Link
+            href="/download-tweet"
+            as={NextLink}
+            prefetch
+            color="foreground"
+          >
             Téléchargeur
           </Link>
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
-          <Link href="/library" color="foreground">
+          <Link href="/library" as={NextLink} prefetch color="foreground">
             Bibliothèque
           </Link>
         </NavbarItem>
