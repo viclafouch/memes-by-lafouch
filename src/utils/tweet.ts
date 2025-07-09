@@ -7,6 +7,32 @@ export function extractTweetIdFromUrl(tweetUrl: string) {
   return url.searchParams.get('post_id') ?? url.pathname.split('/').at(-1)
 }
 
+export async function getTweetMedia(videoUrl: string, poster: string) {
+  const [videoBlob, posterBlob] = await Promise.all([
+    fetch(videoUrl).then((response) => {
+      return response.blob()
+    }),
+    fetch(poster).then((response) => {
+      return response.blob()
+    })
+  ])
+
+  return {
+    video: {
+      url: videoUrl,
+      blob: videoBlob,
+      extension: 'mp4' as const,
+      file: new UTFile([videoBlob], `${videoUrl.split('/').at(-1)}.mp4`)
+    },
+    poster: {
+      url: poster,
+      blob: posterBlob,
+      extension: 'jpeg' as const,
+      file: new UTFile([posterBlob], `${poster.split('/').at(-1)}.jpeg`)
+    }
+  }
+}
+
 // If too many rates limit, maybe try fallback on this one:
 // https://pub.tweetbinder.com:51026/twitter/status/:tweetId
 export async function getTweetById(tweetId: string) {
@@ -20,31 +46,16 @@ export async function getTweetById(tweetId: string) {
   const video = tweet.video.variants.at(-1)!
   const videoUrl = video.src
 
-  async function fetchBlob(...args: Parameters<typeof fetch>) {
-    const response = await fetch(...args)
-
-    return response.blob()
-  }
-
-  const [videoBlob, posterBlob] = await Promise.all([
-    fetchBlob(videoUrl),
-    fetchBlob(poster)
-  ])
-
   const tweetUrl = `https://x.com/${tweet.user.screen_name}/status/${tweet.id_str}`
 
   return {
     url: tweetUrl,
     id: tweet.id_str,
+    poster: {
+      url: poster
+    },
     video: {
-      url: video.src,
-      blob: videoBlob,
-      file: new UTFile([videoBlob], `${tweetId}.mp4`),
-      poster: {
-        url: poster,
-        blob: posterBlob,
-        file: new UTFile([posterBlob], `${tweetId}.jpeg`)
-      }
+      url: videoUrl
     }
   }
 }

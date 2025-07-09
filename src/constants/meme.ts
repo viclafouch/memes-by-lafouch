@@ -1,11 +1,12 @@
-import { z } from 'zod'
-import { extractTweetIdFromUrl, getTweetById } from '@/utils/tweet'
+import { z } from 'zod/v4'
 import type { Prisma } from '@prisma/client'
 
-export const memeFilters = z.object({
-  orderBy: z.enum(['most_recent', 'most_old']).catch('most_recent'),
-  query: z.string().catch(''),
-  page: z.coerce.number().catch(0)
+export const MEMES_ORDER_BY_OPTIONS = ['most_recent', 'most_old'] as const
+
+export const MEMES_FILTERS_SCHEMA = z.object({
+  query: z.string().optional().catch(undefined),
+  orderBy: z.enum(MEMES_ORDER_BY_OPTIONS).optional().catch('most_recent'),
+  page: z.coerce.number().optional().catch(0)
 })
 
 export type MemeWithVideo = Prisma.MemeGetPayload<{
@@ -15,21 +16,11 @@ export type MemeWithVideo = Prisma.MemeGetPayload<{
 export const TWITTER_REGEX_THAT_INCLUDES_ID =
   /^https?:\/\/(?:twitter\.com|x\.com)\/(?:[A-Za-z0-9_]+\/status\/\d+|i\/bookmarks\?post_id=\d+)/
 
-export const TWITTER_LINK_SCHEMA = z
-  .string()
-  .regex(TWITTER_REGEX_THAT_INCLUDES_ID)
-  .transform(async (value) => {
-    const tweetId = z.string().parse(extractTweetIdFromUrl(value))
-
-    const tweet = await getTweetById(tweetId)
-
-    return tweet
-  })
+export const TWEET_LINK_SCHEMA = z
+  .url({ protocol: /^https$/, hostname: /^(twitter|x)\.com$/ })
+  .regex(TWITTER_REGEX_THAT_INCLUDES_ID, 'Invalid tweet URL')
 
 const SIZE_IN_MB = 16
 export const MAX_SIZE_MEME_IN_BYTES = SIZE_IN_MB * 1024 * 1024
 
-export type MemeFilters = z.infer<typeof memeFilters>
-
-export type MemeFiltersOrderBy = MemeFilters['orderBy']
-export type MemeFiltersQuery = MemeFilters['query']
+export type MemesFilters = z.infer<typeof MEMES_FILTERS_SCHEMA>
