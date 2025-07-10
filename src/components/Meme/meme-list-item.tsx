@@ -2,7 +2,7 @@ import React from 'react'
 import { Download, Pen, Share, Twitter } from 'lucide-react'
 import { DownloadMemeButton } from '@/components/Meme/download-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
-import { MemeVideo } from '@/components/Meme/meme-video'
+import { MemeVideo, playVideo, stopVideo } from '@/components/Meme/meme-video'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -22,6 +22,9 @@ type MemeListItemProps = {
 }
 
 export const MemeListItem = ({ meme }: MemeListItemProps) => {
+  const contentRef = React.useRef<HTMLDivElement>(null!)
+  const videoRef = React.useRef<HTMLVideoElement>(null!)
+
   const limitKeywordsToDisplay = 8
   const keywordsSplitted = meme
     ? meme.keywords.slice(0, limitKeywordsToDisplay)
@@ -42,15 +45,32 @@ export const MemeListItem = ({ meme }: MemeListItemProps) => {
           </Link>
         </div>
       </CardHeader>
-      <CardContent className="relative aspect-video h-56 lg:h-44 w-full py-2 px-4">
+      <CardContent
+        className="group relative aspect-video h-56 lg:h-44 w-full py-2 px-4 border-y border-white/10 overflow-hidden"
+        ref={contentRef}
+      >
+        {meme.video.poster ? (
+          <img
+            src={meme.video.poster || ''}
+            className="w-full h-full object-cover bg-muted absolute inset-0 z-10 group-hover:blur-md transition-all duration-300 group-hover:scale-125 origin-center"
+            width="100%"
+            height="100%"
+            alt={meme.title}
+          />
+        ) : null}
         <MemeVideo
-          poster={meme.video.poster ?? undefined}
+          className="
+            absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10
+          "
           meme={meme}
+          onMouseLeave={(event) => {
+            stopVideo(event.currentTarget)
+          }}
+          onMouseEnter={(event) => {
+            playVideo(event.currentTarget)
+          }}
+          ref={videoRef}
           controls
-          className="border border-white/10 w-full h-full object-contain rounded-lg bg-muted"
-          width={270}
-          preload={meme.video.poster ? 'none' : 'metadata'}
-          height={200}
         />
       </CardContent>
       <Divider />

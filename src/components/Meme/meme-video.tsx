@@ -2,24 +2,32 @@ import React from 'react'
 import { useDebounceValue, useIntersectionObserver } from 'usehooks-ts'
 import type { MemeWithVideo } from '@/constants/meme'
 import { myVideoLoader } from '@/utils/cloudinary'
+import { mergeRefs } from '@/utils/ref'
 
 type MemeVideoProps = {
   meme: MemeWithVideo
 } & React.ComponentProps<'video'>
 
-function matchIsVideoElement(node: Element): node is HTMLVideoElement {
+export function matchIsVideoElement(node: Element): node is HTMLVideoElement {
   return node instanceof HTMLVideoElement
 }
 
-const stopVideo = (node: Element) => {
+export function stopVideo(node: Element) {
   if (matchIsVideoElement(node)) {
     node.pause()
   }
 }
 
-const handlePlay = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
-  const target = event.target as HTMLVideoElement
-  const targetId = target.getAttribute('data-id')
+export function playVideo(node: Element) {
+  if (matchIsVideoElement(node)) {
+    node.currentTime = 0
+    // eslint-disable-next-line promise/prefer-await-to-then
+    node.play().catch(() => {})
+  }
+}
+
+export const stopOtherVideos = (node: HTMLVideoElement) => {
+  const targetId = node.getAttribute('data-id')
 
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur()
@@ -50,7 +58,11 @@ const isVideoPlaying = (node: Element) => {
   return false
 }
 
-export const MemeVideo = ({ meme, ...restVideoProps }: MemeVideoProps) => {
+export const MemeVideo = ({
+  meme,
+  ref: refProps,
+  ...restVideoProps
+}: MemeVideoProps) => {
   const id = React.useId()
   const { ref, entry, isIntersecting } = useIntersectionObserver({
     rootMargin: '-64px 0px 0px 0px',
@@ -78,12 +90,14 @@ export const MemeVideo = ({ meme, ...restVideoProps }: MemeVideoProps) => {
 
   return (
     <video
-      ref={ref}
+      ref={mergeRefs([refProps, ref])}
       data-id={id}
       disablePictureInPicture
-      controlsList="noremoteplayback, nofullscreen"
+      controlsList="noremoteplayback"
       src={myVideoLoader({ src: meme.video.src })}
-      onPlay={handlePlay}
+      onPlay={(event) => {
+        stopOtherVideos(event.currentTarget)
+      }}
       {...restVideoProps}
     />
   )
