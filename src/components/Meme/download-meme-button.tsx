@@ -3,8 +3,10 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useDownload } from '@/hooks/useDownload'
+import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { incrementDownloadCount } from '@/server/meme'
-import { getFilenameExtension } from '@/utils/file'
+import { stringToFilename } from '@/utils/string'
+import { useQueryClient } from '@tanstack/react-query'
 
 type DownloadMemeButtonProps = {
   meme: MemeWithVideo
@@ -15,22 +17,22 @@ export const DownloadMemeButton = ({
   ...restButtonProps
 }: DownloadMemeButtonProps) => {
   const downloadMutation = useDownload()
+  const queryClient = useQueryClient()
 
-  const handleDownload = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDownload = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
     if (downloadMutation.isPending) {
       return
     }
 
-    const extension = getFilenameExtension(meme.video.src)
-
     try {
       downloadMutation.mutateAsync({
-        filename: `${meme.title}.${extension}`,
+        filename: `${stringToFilename(meme.title)}.mp4`,
         url: meme.video.src
       })
-      incrementDownloadCount({ data: meme.id })
+      await incrementDownloadCount({ data: meme.id })
+      queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
     } catch (error) {
       toast.error('Une erreur est survenue')
     }

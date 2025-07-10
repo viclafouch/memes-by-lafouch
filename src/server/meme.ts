@@ -8,7 +8,6 @@ import {
 import { prismaClient } from '@/db'
 import { authUserRequiredMiddleware } from '@/server/auth'
 import { utapi } from '@/uploadthing'
-import { getFileExtension } from '@/utils/file'
 import { wait } from '@/utils/promise'
 import {
   extractTweetIdFromUrl,
@@ -260,43 +259,21 @@ export const incrementDownloadCount = createServerFn({ method: 'POST' })
     return meme
   })
 
-export const CREATE_MEME_FROM_FILE_SCHEMA = z
-  .instanceof(File)
-  .refine(
-    (file) => {
-      return file.size > 0
-    },
-    {
-      message: 'Video file is required'
-    }
-  )
-  .refine(
-    (file) => {
-      const sizeInBytes = Math.round(file.size / 1024)
-
-      return sizeInBytes < MAX_SIZE_MEME_IN_BYTES
-    },
-    {
-      message: 'Video file size must not exceed 16 MB'
-    }
-  )
-  .refine(
-    (file) => {
-      const extension = getFileExtension(file)
-
-      return extension === 'mp4'
-    },
-    {
-      message: 'Video format must be .mp4'
-    }
-  )
+export const CREATE_MEME_FROM_FILE_SCHEMA = z.object({
+  video: z.file().min(1).max(MAX_SIZE_MEME_IN_BYTES).mime('video/mp4')
+})
 
 export const createMemeFromFile = createServerFn({ method: 'POST' })
-  .validator(z.instanceof(FormData))
+  .validator((data) => {
+    const formData = z.instanceof(FormData).parse(data)
+
+    return CREATE_MEME_FROM_FILE_SCHEMA.parse({
+      video: formData.get('video')
+    })
+  })
   .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: formData }) => {
-    const file = CREATE_MEME_FROM_FILE_SCHEMA.parse(formData.get('file'))
-    const uploadFileResult = await utapi.uploadFiles(file)
+  .handler(async ({ data: values }) => {
+    const uploadFileResult = await utapi.uploadFiles(values.video)
 
     if (uploadFileResult.error) {
       throw new Error(uploadFileResult.error.message)

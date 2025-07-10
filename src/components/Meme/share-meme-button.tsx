@@ -18,15 +18,11 @@ export const ShareMemeButton = ({
       const blob = await response.blob()
 
       const data: ShareData = {
-        files: [
-          new File([blob], `${meme.title}.mp4`, {
-            type: blob.type
-          })
-        ],
+        files: [new File([blob], `${meme.title}.mp4`, { type: blob.type })],
         title: meme.title
       }
 
-      await navigator.share(data)
+      await navigator.share(data).catch(() => {})
     },
     onSuccess: () => {
       incrementDownloadCount({ data: meme.id })

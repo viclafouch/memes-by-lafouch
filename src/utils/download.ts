@@ -6,4 +6,5 @@ export function downloadBlob(blob: Blob, filename: string) {
   document.body.appendChild(element)
   element.click()
   window.URL.revokeObjectURL(url)
+  element.remove()
 }

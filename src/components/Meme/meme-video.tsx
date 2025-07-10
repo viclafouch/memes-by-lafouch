@@ -80,6 +80,8 @@ export const MemeVideo = ({ meme, ...restVideoProps }: MemeVideoProps) => {
     <video
       ref={ref}
       data-id={id}
+      disablePictureInPicture
+      controlsList="noremoteplayback, nofullscreen"
       src={myVideoLoader({ src: meme.video.src })}
       onPlay={handlePlay}
       {...restVideoProps}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Upload, X } from 'lucide-react'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import type { z } from 'zod/v4'
 import { Button } from '@/components/ui/button'
 import {
   FileUpload,
@@ -15,15 +15,9 @@ import {
 } from '@/components/ui/file-upload'
 import { FormItem, FormMessage } from '@/components/ui/form'
 import { getFieldErrorMessage } from '@/lib/utils'
-import { createMemeFromFile } from '@/server/meme'
+import { CREATE_MEME_FROM_FILE_SCHEMA, createMemeFromFile } from '@/server/meme'
 import { formOptions, useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
-
-const formSchema = z.object({
-  file: z.instanceof(File, {
-    message: "Le fichier vidéo n'est pas valide"
-  })
-})
 
 type FileFormProps = {
   onSuccess?: () => void
@@ -33,10 +27,10 @@ type FileFormProps = {
 const formOpts = formOptions({
   defaultValues: {
     // See https://github.com/TanStack/form/issues/1583#issuecomment-2980179941
-    file: undefined as unknown as File
+    video: undefined as unknown as File
   },
   validators: {
-    onChange: formSchema
+    onChange: CREATE_MEME_FROM_FILE_SCHEMA
   }
 })
 
@@ -48,15 +42,15 @@ export const FileForm = ({ onSuccess, closeDialog }: FileFormProps) => {
         return
       }
 
-      await createMemeFromFileMutation.mutateAsync({ file: value.file })
+      await createMemeFromFileMutation.mutateAsync({ video: value.video })
     }
   })
 
   const createMemeFromFileMutation = useMutation({
     mutationKey: ['createMemeFromFile'],
-    mutationFn: (body: { file: File }) => {
+    mutationFn: (body: z.infer<typeof CREATE_MEME_FROM_FILE_SCHEMA>) => {
       const formData = new FormData()
-      formData.append('file', body.file)
+      formData.append('video', body.video)
 
       const promise = createMemeFromFile({ data: formData })
       toast.promise(promise, {
@@ -91,7 +85,7 @@ export const FileForm = ({ onSuccess, closeDialog }: FileFormProps) => {
       className="flex flex-col gap-4"
     >
       <form.Field
-        name="file"
+        name="video"
         children={(field) => {
           const errorMessage = getFieldErrorMessage({ field })
 
