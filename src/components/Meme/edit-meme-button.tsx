@@ -182,9 +182,11 @@ export const EditMemeButton = ({
                         onChange={(event) => {
                           setKeywordValue(event.target.value)
                         }}
+                        enterKeyHint="done"
                         onKeyDown={(event) => {
                           if (event.key === 'Enter') {
                             event.preventDefault()
+                            event.stopPropagation()
                             handleAddKeyword()
                           }
                         }}
