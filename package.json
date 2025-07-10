@@ -9,7 +9,8 @@
     "start": "node .output/server/index.mjs",
     "postinstall": "prisma generate",
     "lint": "npx tsc && eslint",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@cld-apis/utils": "^0.2.0",
@@ -62,6 +63,7 @@
     "@types/react-dom": "^19",
     "@viclafouch/eslint-config-viclafouch": "4.22.0",
     "eslint": "^9",
+    "husky": "^9.1.7",
     "prisma": "^6.11.1",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4"
