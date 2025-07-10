@@ -1,6 +1,6 @@
 // src/entry-client.tsx
 import { hydrateRoot } from 'react-dom/client'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { RouterClient } from '@tanstack/react-router/ssr/client'
 import { createRouter } from './router'
 

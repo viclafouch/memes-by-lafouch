@@ -1,5 +1,5 @@
 import { filesize } from 'filesize'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import {
   MAX_SIZE_MEME_IN_BYTES,
   MEMES_FILTERS_SCHEMA,

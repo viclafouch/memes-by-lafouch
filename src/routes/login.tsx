@@ -1,5 +1,5 @@
 import { GalleryVerticalEnd } from 'lucide-react'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { LoginForm } from '@/components/User/login-form'
 import { createFileRoute } from '@tanstack/react-router'
 

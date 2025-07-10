@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 const serverEnvsSchema = z.object({
   AUTH_TWITTER_ID: z.string(),

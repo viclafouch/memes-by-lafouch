@@ -1,7 +1,7 @@
 import React from 'react'
 import { Upload, X } from 'lucide-react'
 import { toast } from 'sonner'
-import type { z } from 'zod/v4'
+import type { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import {
   FileUpload,

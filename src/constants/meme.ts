@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import type { Prisma } from '@prisma/client'
 
 export const MEMES_ORDER_BY_OPTIONS = ['most_recent', 'most_old'] as const

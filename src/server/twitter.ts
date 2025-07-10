@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { TWEET_LINK_SCHEMA } from '@/constants/meme'
 import { authUserRequiredMiddleware } from '@/server/auth'
 import { extractTweetIdFromUrl, getTweetById } from '@/utils/tweet'

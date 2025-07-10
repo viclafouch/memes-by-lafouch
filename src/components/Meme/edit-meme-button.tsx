@@ -1,7 +1,7 @@
 import React from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
-import type { z } from 'zod/v4'
+import type { z } from 'zod'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
