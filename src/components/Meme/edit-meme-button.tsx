@@ -131,6 +131,7 @@ export const EditMemeButton = ({
           noValidate
           onSubmit={(event) => {
             event.preventDefault()
+            handleAddKeyword()
             form.handleSubmit()
           }}
         >
