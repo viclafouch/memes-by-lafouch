@@ -1,16 +1,28 @@
 import React from 'react'
+import * as R from 'remeda'
 import { Input } from '@/components/ui/input'
-import type { MemesFilters } from '@/constants/meme'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 
-type MemesQueryProps = {
-  query: MemesFilters['query']
-  onChange: (query: MemesFilters['query']) => void
-}
+export const MemesQuery = React.memo(() => {
+  const navigate = useNavigate()
+  const query = useSearch({
+    from: '/_auth/library/',
+    select: R.prop('query')
+  })
 
-export const MemesQuery = ({ query = '', onChange }: MemesQueryProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    onChange(event.target.value)
+    navigate({
+      to: '/library',
+      search: (prevState) => {
+        return {
+          page: 1,
+          query: event.target.value,
+          orderBy: prevState.orderBy
+        }
+      },
+      viewTransition: false,
+      replace: true
+    })
   }
 
   return (
@@ -23,4 +35,4 @@ export const MemesQuery = ({ query = '', onChange }: MemesQueryProps) => {
       />
     </div>
   )
-}
+})

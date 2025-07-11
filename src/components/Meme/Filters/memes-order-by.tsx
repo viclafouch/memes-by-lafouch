@@ -1,4 +1,5 @@
 import React from 'react'
+import * as R from 'remeda'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -8,11 +9,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import type { MEMES_ORDER_BY_OPTIONS, MemesFilters } from '@/constants/meme'
-
-export type MemesOrderByProps = {
-  orderBy: MemesFilters['orderBy']
-  onChange: (orderBy: MemesFilters['orderBy']) => void
-}
+import { useNavigate, useSearch } from '@tanstack/react-router'
 
 const options = [
   { value: 'most_recent', label: ' Plus récents' },
@@ -22,9 +19,26 @@ const options = [
   label: string
 }[]
 
-export const MemesOrderBy = ({ orderBy, onChange }: MemesOrderByProps) => {
+export const MemesOrderBy = React.memo(() => {
+  const navigate = useNavigate()
+  const orderBy = useSearch({
+    from: '/_auth/library/',
+    select: R.prop('orderBy')
+  })
+
   const handleChange = (value: string) => {
-    onChange(value as MemesFilters['orderBy'])
+    navigate({
+      to: '/library',
+      search: (prevState) => {
+        return {
+          page: prevState.page,
+          query: prevState.query,
+          orderBy: value as MemesFilters['orderBy']
+        }
+      },
+      viewTransition: false,
+      replace: true
+    })
   }
 
   return (
@@ -45,4 +59,4 @@ export const MemesOrderBy = ({ orderBy, onChange }: MemesOrderByProps) => {
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
+})

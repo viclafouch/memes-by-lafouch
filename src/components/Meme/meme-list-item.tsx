@@ -21,7 +21,7 @@ type MemeListItemProps = {
   meme: MemeWithVideo
 }
 
-export const MemeListItem = ({ meme }: MemeListItemProps) => {
+export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
   const contentRef = React.useRef<HTMLDivElement>(null!)
   const videoRef = React.useRef<HTMLVideoElement>(null!)
 
@@ -52,16 +52,16 @@ export const MemeListItem = ({ meme }: MemeListItemProps) => {
         {meme.video.poster ? (
           <img
             src={meme.video.poster || ''}
-            className="w-full h-full object-cover bg-muted absolute inset-0 z-10 group-hover:blur-md transition-all duration-300 group-hover:scale-125 origin-center"
+            className="w-full h-full object-cover bg-muted absolute inset-0 z-10  blur-md lg:blur-none group-hover:blur-md transition-all duration-300 scale-125 lg:scale-100 lg:group-hover:scale-125 origin-center delay-100"
             width="100%"
+            loading="lazy"
             height="100%"
             alt={meme.title}
           />
         ) : null}
         <MemeVideo
           className="
-            absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10
-          "
+            absolute inset-0 w-full h-full object-contain lg:opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100 z-10 delay-100"
           meme={meme}
           onMouseLeave={(event) => {
             stopVideo(event.currentTarget)
@@ -112,4 +112,4 @@ export const MemeListItem = ({ meme }: MemeListItemProps) => {
       </CardFooter>
     </Card>
   )
-}
+})

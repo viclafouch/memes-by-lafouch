@@ -21,7 +21,8 @@ export default [
       '@typescript-eslint/require-await': 'off',
       'require-await': 'off',
       'react/no-children-prop': 'off',
-      '@typescript-eslint/no-use-before-define': 'off'
+      '@typescript-eslint/no-use-before-define': 'off',
+      'id-length': ['error', { exceptions: ['R', '_'] }]
     }
   }
 ]

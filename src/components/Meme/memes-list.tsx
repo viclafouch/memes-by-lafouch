@@ -1,23 +1,38 @@
 import React from 'react'
+import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
-import { Paginator } from '@/components/paginator'
 import type { MemesFilters } from '@/constants/meme'
 import { getMemesListQueryOpts } from '@/lib/queries'
+import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 export type MemesListProps = {
-  filters: MemesFilters
-  onPageChange: (page: MemesFilters['page']) => void
+  query: MemesFilters['query']
+  page: MemesFilters['page']
+  orderBy: MemesFilters['orderBy']
 }
 
-export const MemesList = ({ onPageChange, filters }: MemesListProps) => {
+export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
+  const [debouncedValue] = useDebouncedValue(query, {
+    wait: 300,
+    leading: false
+  })
+
+  const filters = React.useMemo(() => {
+    return {
+      query: debouncedValue,
+      page,
+      orderBy
+    }
+  }, [debouncedValue, page, orderBy])
+
   const { data } = useSuspenseQuery(getMemesListQueryOpts(filters))
-  const { memes, totalPages, currentPage, query } = data
+  const { memes, totalPages, currentPage, query: queryFromData } = data
 
   if (memes.length === 0) {
     return (
       <p className="text-muted-foreground">
-        Aucun résultat pour `<i>{query}</i>`
+        Aucun résultat pour `<i>{queryFromData}</i>`
       </p>
     )
   }
@@ -30,12 +45,7 @@ export const MemesList = ({ onPageChange, filters }: MemesListProps) => {
         })}
       </div>
       <div className="flex justify-end">
-        <Paginator
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-          showPreviousNext
-        />
+        <MemesPagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   )
