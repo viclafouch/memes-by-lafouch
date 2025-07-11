@@ -4,7 +4,6 @@ import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { getMemeById, getRandomMeme } from '@/server/meme'
-import { myVideoLoader } from '@/utils/cloudinary'
 import {
   createFileRoute,
   notFound,
@@ -56,7 +55,7 @@ const RouteComponent = () => {
             <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
             <video
               className="w-full aspect-video"
-              src={myVideoLoader({ src: meme.video.src })}
+              src={meme.video.src}
               autoPlay
               onEnded={goToNextRandomMeme}
               controls

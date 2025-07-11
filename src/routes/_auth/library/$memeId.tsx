@@ -5,7 +5,6 @@ import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
-import { myVideoLoader } from '@/utils/cloudinary'
 import { createFileRoute, notFound, rootRouteId } from '@tanstack/react-router'
 
 const RouteComponent = () => {
@@ -43,7 +42,7 @@ const RouteComponent = () => {
           <video
             controls
             className="w-full aspect-video"
-            src={myVideoLoader({ src: meme.video.src })}
+            src={meme.video.src}
             poster={meme.video.poster ?? undefined}
             preload={meme.video.poster ? 'none' : 'metadata'}
             height="100%"

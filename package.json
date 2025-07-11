@@ -13,7 +13,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@cld-apis/utils": "^0.2.0",
     "@date-fns/tz": "^1.2.0",
     "@prisma/client": "^6.11.1",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -36,7 +35,6 @@
     "@vercel/speed-insights": "^1.2.0",
     "better-auth": "^1.2.12",
     "class-variance-authority": "^0.7.1",
-    "cloudinary-build-url": "^0.2.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "filesize": "^10.1.6",

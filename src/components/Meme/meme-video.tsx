@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDebounceValue, useIntersectionObserver } from 'usehooks-ts'
 import type { MemeWithVideo } from '@/constants/meme'
-import { myVideoLoader } from '@/utils/cloudinary'
 import { mergeRefs } from '@/utils/ref'
 
 type MemeVideoProps = {
@@ -94,7 +93,7 @@ export const MemeVideo = ({
       data-id={id}
       disablePictureInPicture
       controlsList="noremoteplayback"
-      src={myVideoLoader({ src: meme.video.src })}
+      src={meme.video.src}
       onPlay={(event) => {
         stopOtherVideos(event.currentTarget)
       }}
