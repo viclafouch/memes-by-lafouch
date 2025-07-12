@@ -1,4 +1,5 @@
 import { filesize } from 'filesize'
+import { UTFile } from 'uploadthing/server'
 import { z } from 'zod'
 import {
   MAX_SIZE_MEME_IN_BYTES,
@@ -103,6 +104,14 @@ export const getRandomMeme = createServerFn({ method: 'GET' })
 export const EDIT_MEME_SCHEMA = z.object({
   title: z.string().min(3),
   keywords: z.array(z.string()),
+  poster: z
+    .string()
+    .startsWith('data:image/jpeg;base64,')
+    .refine((value) => {
+      return z.base64(value.split(',')[1])
+    })
+    .or(z.url())
+    .nullable(),
   tweetUrl: TWEET_LINK_SCHEMA.nullable().or(
     z
       .string()
@@ -119,7 +128,45 @@ export const editMeme = createServerFn({ method: 'POST' })
   })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ data: values }) => {
-    const meme = await prismaClient.meme.update({
+    const meme = await prismaClient.meme.findUnique({
+      where: {
+        id: values.memeId
+      },
+      include: {
+        video: true
+      }
+    })
+
+    if (!meme) {
+      throw new Error('Meme not found')
+    }
+
+    let newPoster
+
+    if (values.poster && meme.video.poster !== values.poster) {
+      const base64Data = values.poster.split(',')[1]
+      const posterFile = new UTFile(
+        [Buffer.from(base64Data, 'base64')],
+        `${meme.id}.jpeg`
+      )
+
+      const [posterFileResult] = await utapi.uploadFiles([posterFile])
+
+      if (posterFileResult.error) {
+        throw new Error(posterFileResult.error.message)
+      }
+
+      newPoster = {
+        src: posterFileResult.data.ufsUrl,
+        utKey: posterFileResult.data.key
+      } as const
+
+      if (meme.video.posterUtKey) {
+        await utapi.deleteFiles([meme.video.posterUtKey])
+      }
+    }
+
+    await prismaClient.meme.update({
       where: {
         id: values.memeId
       },
@@ -128,6 +175,14 @@ export const editMeme = createServerFn({ method: 'POST' })
         keywords: values.keywords.map((keyword) => {
           return keyword.toLowerCase().trim()
         }),
+        video: newPoster
+          ? {
+              update: {
+                poster: newPoster.src,
+                posterUtKey: newPoster.utKey
+              }
+            }
+          : undefined,
         tweetUrl: values.tweetUrl || null
       },
       include: {
