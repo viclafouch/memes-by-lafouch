@@ -36,7 +36,7 @@ export function createRouter() {
       defaultErrorComponent: ({ error }) => {
         return <ErrorComponent error={error} />
       },
-      defaultPreload: 'viewport'
+      defaultPreload: 'intent'
     }),
     queryClient
   )
