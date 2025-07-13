@@ -283,7 +283,7 @@ export const EditMemeButton = ({
                               alt="Miniature"
                               loading="lazy"
                             />
-                            <div className="flex items-center justify-center scale-0 group-hover:scale-100 transition-transform absolute top-1/2 left-1/2 -translate-1/2">
+                            <div className="flex items-center justify-center lg:scale-0 lg:group-hover:scale-100 transition-transform absolute top-1/2 left-1/2 -translate-1/2">
                               <Button
                                 size="icon"
                                 variant="secondary"
