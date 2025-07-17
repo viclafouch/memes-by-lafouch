@@ -6,27 +6,33 @@ import { queryOptions } from '@tanstack/react-query'
 
 export const getMemesListQueryOpts = (filters: MemesFilters) => {
   return queryOptions({
-    queryKey: ['memes-list', filters],
+    queryKey: [...getMemesListQueryOpts.all, filters],
     queryFn: async () => {
       return getMemes({ data: filters })
     }
   })
 }
 
+getMemesListQueryOpts.all = ['memes-list'] as const
+
 export const getMemeByIdQueryOpts = (memeId: Meme['id']) => {
   return queryOptions({
-    queryKey: ['meme', memeId],
+    queryKey: [...getMemeByIdQueryOpts.all, memeId],
     queryFn: async () => {
       return getMemeById({ data: memeId })
     }
   })
 }
 
+getMemeByIdQueryOpts.all = ['meme'] as const
+
 export const getAuthUserQueryOpts = () => {
   return queryOptions({
-    queryKey: ['auth-user'],
+    queryKey: [...getAuthUserQueryOpts.all],
     queryFn: async () => {
       return getAuthUser()
     }
   })
 }
+
+getAuthUserQueryOpts.all = ['auth-user'] as const

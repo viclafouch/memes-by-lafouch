@@ -5,7 +5,7 @@
 ### What I use 🚀
 
 - [TanStack Start](https://tanstack.com/start/) - Framework JS.
-- [UploadThing](https://uploadthing.com/) - File management.
+- [Cloundinary](https://cloudinary.com/) - Image CDN.
 - [Shadcn](https://ui.shadcn.com/) - UI Components.
 - [Tailwind](https://tailwindcss.com/) - Utility first CSS framework.
 - [Prisma](https://www.prisma.io/) - Database ORM.

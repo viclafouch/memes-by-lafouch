@@ -3,7 +3,14 @@ import { Share, Shuffle } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
+import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeById, getRandomMeme } from '@/server/meme'
+import {
+  accessibility,
+  AdvancedVideo,
+  placeholder,
+  responsive
+} from '@cloudinary/react'
 import {
   createFileRoute,
   notFound,
@@ -46,6 +53,8 @@ const RouteComponent = () => {
     }
   }
 
+  const video = cloudinaryClient.video(meme.video.cloudinaryId)
+
   return (
     <Container>
       <div className="flex flex-col items-center gap-6">
@@ -53,15 +62,13 @@ const RouteComponent = () => {
           <div className="relative w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
             {/* Top Shadow */}
             <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
-            <video
+            <AdvancedVideo
               className="w-full aspect-video"
-              src={meme.video.src}
               autoPlay
               onEnded={goToNextRandomMeme}
               controls
-              poster={meme.video.poster ?? undefined}
-              preload={meme.video.poster ? 'none' : 'metadata'}
-              height="100%"
+              plugins={[responsive(), accessibility(), placeholder()]}
+              cldVid={video}
             />
           </div>
         </div>

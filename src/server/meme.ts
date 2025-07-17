@@ -1,5 +1,5 @@
+import type { UploadApiResponse } from 'cloudinary'
 import { filesize } from 'filesize'
-import { UTFile } from 'uploadthing/server'
 import { z } from 'zod'
 import {
   MAX_SIZE_MEME_IN_BYTES,
@@ -7,14 +7,14 @@ import {
   TWEET_LINK_SCHEMA
 } from '@/constants/meme'
 import { prismaClient } from '@/db'
+import { deleteVideo, uploadVideo } from '@/lib/cloudinary'
 import { authUserRequiredMiddleware } from '@/server/auth'
-import { utapi } from '@/uploadthing'
-import { wait } from '@/utils/promise'
 import {
   extractTweetIdFromUrl,
   getTweetById,
   getTweetMedia
 } from '@/utils/tweet'
+import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 
 export const getMemeById = createServerFn({ method: 'GET' })
@@ -23,7 +23,7 @@ export const getMemeById = createServerFn({ method: 'GET' })
   })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ data: memeId }) => {
-    return prismaClient.meme.findUnique({
+    const meme = await prismaClient.meme.findUnique({
       where: {
         id: memeId
       },
@@ -31,6 +31,12 @@ export const getMemeById = createServerFn({ method: 'GET' })
         video: true
       }
     })
+
+    if (!meme) {
+      throw notFound()
+    }
+
+    return meme
   })
 
 export const getMemes = createServerFn({ method: 'GET' })
@@ -104,14 +110,6 @@ export const getRandomMeme = createServerFn({ method: 'GET' })
 export const EDIT_MEME_SCHEMA = z.object({
   title: z.string().min(3),
   keywords: z.array(z.string()),
-  poster: z
-    .string()
-    .startsWith('data:image/jpeg;base64,')
-    .refine((value) => {
-      return z.base64(value.split(',')[1])
-    })
-    .or(z.url())
-    .nullable(),
   tweetUrl: TWEET_LINK_SCHEMA.nullable().or(
     z
       .string()
@@ -141,31 +139,6 @@ export const editMeme = createServerFn({ method: 'POST' })
       throw new Error('Meme not found')
     }
 
-    let newPoster
-
-    if (values.poster && meme.video.poster !== values.poster) {
-      const base64Data = values.poster.split(',')[1]
-      const posterFile = new UTFile(
-        [Buffer.from(base64Data, 'base64')],
-        `${meme.id}.jpeg`
-      )
-
-      const [posterFileResult] = await utapi.uploadFiles([posterFile])
-
-      if (posterFileResult.error) {
-        throw new Error(posterFileResult.error.message)
-      }
-
-      newPoster = {
-        src: posterFileResult.data.ufsUrl,
-        utKey: posterFileResult.data.key
-      } as const
-
-      if (meme.video.posterUtKey) {
-        await utapi.deleteFiles([meme.video.posterUtKey])
-      }
-    }
-
     await prismaClient.meme.update({
       where: {
         id: values.memeId
@@ -175,14 +148,6 @@ export const editMeme = createServerFn({ method: 'POST' })
         keywords: values.keywords.map((keyword) => {
           return keyword.toLowerCase().trim()
         }),
-        video: newPoster
-          ? {
-              update: {
-                poster: newPoster.src,
-                posterUtKey: newPoster.utKey
-              }
-            }
-          : undefined,
         tweetUrl: values.tweetUrl || null
       },
       include: {
@@ -214,15 +179,7 @@ export const deleteMemeById = createServerFn({ method: 'POST' })
       }
     })
 
-    const deleteFilesResult = await utapi.deleteFiles(
-      meme.video.posterUtKey
-        ? [meme.video.posterUtKey, meme.video.videoUtKey]
-        : meme.video.videoUtKey
-    )
-
-    if (!deleteFilesResult.success) {
-      throw new Error('Failed to delete file')
-    }
+    await deleteVideo(meme.video.cloudinaryId)
 
     return { id: meme.id }
   })
@@ -244,16 +201,9 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
       )
     }
 
-    const [videoFileResult, posterFileResult] = await utapi.uploadFiles([
-      media.video.file,
-      media.poster.file
-    ])
-
-    if (videoFileResult.error ?? posterFileResult.error) {
-      throw new Error(
-        videoFileResult.error?.message ?? posterFileResult.error?.message
-      )
-    }
+    const arrayBuffer = await media.video.blob.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    const video: UploadApiResponse = await uploadVideo(buffer)
 
     try {
       const meme = await prismaClient.meme.create({
@@ -262,10 +212,7 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
           tweetUrl: tweet.url,
           video: {
             create: {
-              poster: posterFileResult.data.ufsUrl,
-              posterUtKey: posterFileResult.data.key,
-              src: videoFileResult.data.ufsUrl,
-              videoUtKey: videoFileResult.data.key
+              cloudinaryId: video.public_id
             }
           }
         }
@@ -278,15 +225,7 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
       // eslint-disable-next-line no-console
       console.error(error)
 
-      // Looks like we have to wait a minimum of time before directly removing a file
-      await wait(1000)
-      // Remove files if something went wrong
-      await utapi.deleteFiles([
-        videoFileResult.data.key,
-        posterFileResult.data.key
-      ])
-
-      throw new Error('An unknown error occurred')
+      throw error
     }
   })
 
@@ -328,11 +267,9 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
   })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ data: values }) => {
-    const uploadFileResult = await utapi.uploadFiles(values.video)
-
-    if (uploadFileResult.error) {
-      throw new Error(uploadFileResult.error.message)
-    }
+    const arrayBuffer = await values.video.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    const uploadFileResult = await uploadVideo(buffer)
 
     try {
       const meme = await prismaClient.meme.create({
@@ -341,9 +278,7 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
           tweetUrl: '',
           video: {
             create: {
-              videoUtKey: uploadFileResult.data.key,
-              src: uploadFileResult.data.ufsUrl,
-              poster: ''
+              cloudinaryId: uploadFileResult.public_id
             }
           }
         }
@@ -356,11 +291,8 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
       // eslint-disable-next-line no-console
       console.error(error)
 
-      // Looks like we have to wait a minimum of time before directly removing a file
-      await wait(1000)
-      // Remove files if something went wrong
-      await utapi.deleteFiles([uploadFileResult.data.key])
+      await deleteVideo(uploadFileResult.public_id)
 
-      throw new Error('An unknown error occurred')
+      throw error
     }
   })

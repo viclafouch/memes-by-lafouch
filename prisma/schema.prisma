@@ -1,4 +1,3 @@
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres"]
@@ -11,44 +10,40 @@ datasource db {
 
 model Video {
   id          Int     @id @default(autoincrement())
-  videoUtKey  String  @unique
-  posterUtKey String? @unique
-  src         String  @unique
-  poster      String?
   meme        Meme?
+  cloudinaryId    String @unique
 }
 
 model Meme {
   id            String   @id @default(cuid())
   title         String
-  video         Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
   videoId       Int      @unique
   downloadCount Int      @default(0)
   tweetUrl      String?  @unique
   keywords      String[] @default([])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  video         Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
 }
 
 model User {
   id            String    @id
   name          String
-  email         String
+  email         String    @unique
   emailVerified Boolean
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  sessions      Session[]
   accounts      Account[]
+  sessions      Session[]
 
-  @@unique([email])
   @@map("user")
 }
 
 model Session {
   id        String   @id
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime
   updatedAt DateTime
   ipAddress String?
@@ -56,7 +51,6 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
   @@map("session")
 }
 
@@ -65,7 +59,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -75,6 +68,7 @@ model Account {
   password              String?
   createdAt             DateTime
   updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }

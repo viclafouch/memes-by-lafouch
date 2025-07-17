@@ -10,7 +10,6 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import type { MemeWithVideo } from '@/constants/meme'
 
 const extractCurrentFrame = (video: HTMLVideoElement) => {
   const canvas = document.createElement('canvas')
@@ -29,7 +28,7 @@ const extractCurrentFrame = (video: HTMLVideoElement) => {
 type VideoFrameExtractorDialogProps = {
   onOpenChange: (isOpen: boolean) => void
   isOpen: boolean
-  videoSrc: MemeWithVideo['video']['src']
+  videoSrc: string
   onExtractFrame: (frame: string) => void
 }
 

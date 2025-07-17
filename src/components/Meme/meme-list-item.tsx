@@ -2,7 +2,6 @@ import React from 'react'
 import { Download, Pen, Share, Twitter } from 'lucide-react'
 import { DownloadMemeButton } from '@/components/Meme/download-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
-import { MemeVideo, playVideo, stopVideo } from '@/components/Meme/meme-video'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -15,6 +14,17 @@ import {
 } from '@/components/ui/card'
 import { Divider } from '@/components/ui/divider'
 import type { MemeWithVideo } from '@/constants/meme'
+import { cloudinaryClient } from '@/lib/cloudinary-client'
+import { playVideo, stopOtherVideos, stopVideo } from '@/lib/dom'
+import {
+  accessibility,
+  AdvancedVideo,
+  lazyload,
+  responsive
+} from '@cloudinary/react'
+import { Delivery } from '@cloudinary/url-gen/actions'
+import { scale } from '@cloudinary/url-gen/actions/resize'
+import { Format } from '@cloudinary/url-gen/qualifiers'
 import { Link } from '@tanstack/react-router'
 
 type MemeListItemProps = {
@@ -22,9 +32,6 @@ type MemeListItemProps = {
 }
 
 export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
-  const contentRef = React.useRef<HTMLDivElement>(null!)
-  const videoRef = React.useRef<HTMLVideoElement>(null!)
-
   const limitKeywordsToDisplay = 8
   const keywordsSplitted = meme
     ? meme.keywords.slice(0, limitKeywordsToDisplay)
@@ -33,6 +40,17 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
     meme && meme.keywords.length > limitKeywordsToDisplay
       ? meme.keywords.length - limitKeywordsToDisplay
       : 0
+
+  const thumbnailUrl = cloudinaryClient
+    .video(meme.video.cloudinaryId)
+    .addTransformation(`so_1s`)
+    .resize(scale().width(300))
+    .delivery(Delivery.format(Format.avif()))
+    .toURL()
+
+  const video = cloudinaryClient
+    .video(meme.video.cloudinaryId)
+    .resize(scale().width(300))
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow py-2 gap-0">
@@ -45,32 +63,29 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
           </Link>
         </div>
       </CardHeader>
-      <CardContent
-        className="group relative aspect-video h-56 lg:h-44 w-full py-2 px-4 border-y border-white/10 overflow-hidden"
-        ref={contentRef}
-      >
-        {meme.video.poster ? (
-          <img
-            src={meme.video.poster || ''}
-            className="w-full h-full object-cover bg-muted absolute inset-0 z-10  blur-md lg:blur-none group-hover:blur-md transition-all duration-300 scale-125 lg:scale-100 lg:group-hover:scale-125 origin-center delay-100"
-            width="100%"
-            loading="lazy"
-            height="100%"
-            alt={meme.title}
-          />
-        ) : null}
-        <MemeVideo
-          className="
-            absolute inset-0 w-full h-full object-contain lg:opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100 z-10 delay-100"
-          meme={meme}
+      <CardContent className="group relative aspect-video h-56 lg:h-44 w-full py-2 px-4 border-y border-white/10 overflow-hidden">
+        <img
+          src={thumbnailUrl}
+          className="w-full h-full object-cover bg-muted absolute inset-0 z-10 blur-md lg:blur-none group-hover:blur-md transition-all duration-300 scale-125 lg:scale-100 lg:group-hover:scale-125 origin-center delay-100"
+          width="100%"
+          loading="lazy"
+          height="100%"
+          alt={meme.title}
+        />
+        <AdvancedVideo
+          cldVid={video}
+          className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 z-10 delay-100"
+          controls
+          plugins={[lazyload(), responsive(), accessibility()]}
           onMouseLeave={(event) => {
             stopVideo(event.currentTarget)
           }}
           onMouseEnter={(event) => {
             playVideo(event.currentTarget)
           }}
-          ref={videoRef}
-          controls
+          onPlay={(event) => {
+            stopOtherVideos(event.currentTarget)
+          }}
         />
       </CardContent>
       <Divider />

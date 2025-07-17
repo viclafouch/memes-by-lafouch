@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useDownload } from '@/hooks/useDownload'
+import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { incrementDownloadCount } from '@/server/meme'
 import { stringToFilename } from '@/utils/string'
@@ -26,10 +27,12 @@ export const DownloadMemeButton = ({
       return
     }
 
+    const videoURL = cloudinaryClient.video(meme.video.cloudinaryId).toURL()
+
     try {
       downloadMutation.mutateAsync({
         filename: `${stringToFilename(meme.title)}.mp4`,
-        url: meme.video.src
+        url: videoURL
       })
       await incrementDownloadCount({ data: meme.id })
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))

@@ -4,17 +4,29 @@ import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
+import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
-import { createFileRoute, notFound, rootRouteId } from '@tanstack/react-router'
+import {
+  accessibility,
+  AdvancedVideo,
+  lazyload,
+  placeholder,
+  responsive
+} from '@cloudinary/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {
-  const loaderData = Route.useLoaderData()
-  const { meme } = loaderData
+  const { memeId } = Route.useParams()
+  const memeQuery = useSuspenseQuery(getMemeByIdQueryOpts(memeId))
+  const meme = memeQuery.data
+
+  const video = cloudinaryClient.video(meme.video.cloudinaryId)
 
   return (
     <Container>
       <PageHeader
-        title={loaderData.meme.title}
+        title={meme.title}
         description={
           <>
             {meme.downloadCount} téléchargement
@@ -39,13 +51,11 @@ const RouteComponent = () => {
         <div className="relative w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
           {/* Top Shadow */}
           <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
-          <video
+          <AdvancedVideo
+            cldVid={video}
             controls
+            plugins={[lazyload(), responsive(), accessibility(), placeholder()]}
             className="w-full aspect-video"
-            src={meme.video.src}
-            poster={meme.video.poster ?? undefined}
-            preload={meme.video.poster ? 'none' : 'metadata'}
-            height="100%"
           />
         </div>
       </div>
@@ -59,10 +69,6 @@ export const Route = createFileRoute('/_auth/library/$memeId')({
     const meme = await context.queryClient.ensureQueryData(
       getMemeByIdQueryOpts(params.memeId)
     )
-
-    if (!meme) {
-      throw notFound({ routeId: rootRouteId })
-    }
 
     return {
       meme,

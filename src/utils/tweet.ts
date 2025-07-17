@@ -1,5 +1,4 @@
 import { getTweet } from 'react-tweet/api'
-import { UTFile } from 'uploadthing/server'
 
 export function extractTweetIdFromUrl(tweetUrl: string) {
   const url = new URL(tweetUrl)
@@ -21,14 +20,12 @@ export async function getTweetMedia(videoUrl: string, poster: string) {
     video: {
       url: videoUrl,
       blob: videoBlob,
-      extension: 'mp4' as const,
-      file: new UTFile([videoBlob], `${videoUrl.split('/').at(-1)}.mp4`)
+      extension: 'mp4' as const
     },
     poster: {
       url: poster,
       blob: posterBlob,
-      extension: 'jpeg' as const,
-      file: new UTFile([posterBlob], `${poster.split('/').at(-1)}.jpeg`)
+      extension: 'jpeg' as const
     }
   }
 }
