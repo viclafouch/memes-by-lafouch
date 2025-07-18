@@ -76,6 +76,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
           cldVid={video}
           className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 z-10 delay-100"
           controls
+          poster={thumbnailUrl}
           plugins={[lazyload(), responsive(), accessibility()]}
           onMouseLeave={(event) => {
             stopVideo(event.currentTarget)
