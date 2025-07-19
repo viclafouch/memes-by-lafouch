@@ -1,5 +1,5 @@
 import React from 'react'
-import { Download, Pen, Share, Twitter } from 'lucide-react'
+import { Download, Pen, Share2, Twitter } from 'lucide-react'
 import { useIntersectionObserver } from 'usehooks-ts'
 import { DownloadMemeButton } from '@/components/Meme/download-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
@@ -126,7 +126,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             <Download />
           </DownloadMemeButton>
           <ShareMemeButton meme={meme} size="icon" variant="outline">
-            <Share />
+            <Share2 />
           </ShareMemeButton>
         </div>
       </CardFooter>
