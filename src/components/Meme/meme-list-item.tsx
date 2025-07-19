@@ -1,5 +1,6 @@
 import React from 'react'
 import { Download, Pen, Share, Twitter } from 'lucide-react'
+import { useIntersectionObserver } from 'usehooks-ts'
 import { DownloadMemeButton } from '@/components/Meme/download-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
@@ -34,6 +35,14 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
     meme && meme.keywords.length > limitKeywordsToDisplay
       ? meme.keywords.length - limitKeywordsToDisplay
       : 0
+  const { ref } = useIntersectionObserver({
+    threshold: 1,
+    onChange: (isIntersecting, entry) => {
+      if (!isIntersecting) {
+        stopVideo(entry.target)
+      }
+    }
+  })
 
   const thumbnailUrl = cloudinaryClient
     .video(meme.video.cloudinaryId)
@@ -75,6 +84,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
           onMouseLeave={(event) => {
             stopVideo(event.currentTarget)
           }}
+          ref={ref}
           onMouseEnter={(event) => {
             playVideo(event.currentTarget)
           }}
