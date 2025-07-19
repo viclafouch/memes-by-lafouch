@@ -17,16 +17,12 @@ export function playVideo(node: Element) {
 }
 
 export const stopOtherVideos = (node: HTMLVideoElement) => {
-  const targetId = node.getAttribute('data-id')
-
   const allVideos = Array.from(
     document.querySelectorAll<HTMLVideoElement>('video')
   )
 
   for (const video of allVideos) {
-    const id = video.getAttribute('data-id')
-
-    if (targetId === id) {
+    if (video === node) {
       continue
     } else {
       stopVideo(video)
