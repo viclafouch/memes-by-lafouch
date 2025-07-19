@@ -16,12 +16,6 @@ import { Divider } from '@/components/ui/divider'
 import type { MemeWithVideo } from '@/constants/meme'
 import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { playVideo, stopOtherVideos, stopVideo } from '@/lib/dom'
-import {
-  accessibility,
-  AdvancedVideo,
-  lazyload,
-  responsive
-} from '@cloudinary/react'
 import { Delivery } from '@cloudinary/url-gen/actions'
 import { scale } from '@cloudinary/url-gen/actions/resize'
 import { Format } from '@cloudinary/url-gen/qualifiers'
@@ -72,12 +66,12 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
           height="100%"
           alt={meme.title}
         />
-        <AdvancedVideo
-          cldVid={video}
+        <video
+          src={video.toURL()}
           className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 z-10 delay-100"
           controls
           poster={thumbnailUrl}
-          plugins={[lazyload(), responsive(), accessibility()]}
+          preload="metadata"
           onMouseLeave={(event) => {
             stopVideo(event.currentTarget)
           }}
