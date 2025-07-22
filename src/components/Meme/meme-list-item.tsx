@@ -47,13 +47,13 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
   const thumbnailUrl = cloudinaryClient
     .video(meme.video.cloudinaryId)
     .addTransformation(`so_1s`)
-    .resize(scale().width(300))
+    .resize(scale().width(500))
     .delivery(Delivery.format(Format.avif()))
     .toURL()
 
   const video = cloudinaryClient
     .video(meme.video.cloudinaryId)
-    .resize(scale().width(300))
+    .resize(scale().width(500))
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow py-2 gap-0">

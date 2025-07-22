@@ -5,12 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeById, getRandomMeme } from '@/server/meme'
-import {
-  accessibility,
-  AdvancedVideo,
-  placeholder,
-  responsive
-} from '@cloudinary/react'
+import { Delivery } from '@cloudinary/url-gen/actions'
+import { Format } from '@cloudinary/url-gen/qualifiers'
 import {
   createFileRoute,
   notFound,
@@ -55,6 +51,12 @@ const RouteComponent = () => {
 
   const video = cloudinaryClient.video(meme.video.cloudinaryId)
 
+  const thumbnailUrl = cloudinaryClient
+    .video(meme.video.cloudinaryId)
+    .addTransformation(`so_1s`)
+    .delivery(Delivery.format(Format.avif()))
+    .toURL()
+
   return (
     <Container>
       <div className="flex flex-col items-center gap-6">
@@ -62,13 +64,11 @@ const RouteComponent = () => {
           <div className="relative w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
             {/* Top Shadow */}
             <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
-            <AdvancedVideo
-              className="w-full aspect-video"
-              autoPlay
-              onEnded={goToNextRandomMeme}
+            <video
+              src={video.toURL()}
               controls
-              plugins={[responsive(), accessibility(), placeholder()]}
-              cldVid={video}
+              poster={thumbnailUrl}
+              className="w-full aspect-video"
             />
           </div>
         </div>

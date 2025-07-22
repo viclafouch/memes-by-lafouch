@@ -6,13 +6,8 @@ import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
 import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
-import {
-  accessibility,
-  AdvancedVideo,
-  lazyload,
-  placeholder,
-  responsive
-} from '@cloudinary/react'
+import { Delivery } from '@cloudinary/url-gen/actions'
+import { Format } from '@cloudinary/url-gen/qualifiers'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -22,6 +17,12 @@ const RouteComponent = () => {
   const meme = memeQuery.data
 
   const video = cloudinaryClient.video(meme.video.cloudinaryId)
+
+  const thumbnailUrl = cloudinaryClient
+    .video(meme.video.cloudinaryId)
+    .addTransformation(`so_1s`)
+    .delivery(Delivery.format(Format.avif()))
+    .toURL()
 
   return (
     <Container>
@@ -51,10 +52,10 @@ const RouteComponent = () => {
         <div className="relative w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
           {/* Top Shadow */}
           <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
-          <AdvancedVideo
-            cldVid={video}
+          <video
+            src={video.toURL()}
             controls
-            plugins={[lazyload(), responsive(), accessibility(), placeholder()]}
+            poster={thumbnailUrl}
             className="w-full aspect-video"
           />
         </div>

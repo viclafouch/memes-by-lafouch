@@ -29,6 +29,7 @@ import { EDIT_MEME_SCHEMA, editMeme } from '@/server/meme'
 import type { Meme } from '@prisma/client'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
 
 type EditMemeButtonProps = {
   meme: MemeWithVideo
@@ -39,6 +40,7 @@ export const EditMemeButton = ({
   ...restButtonProps
 }: EditMemeButtonProps) => {
   const queryClient = useQueryClient()
+  const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false)
   const [keywordValue, setKeywordValue] = React.useState<string>('')
 
@@ -65,6 +67,7 @@ export const EditMemeButton = ({
         exact: false
       })
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
+      router.invalidate()
     }
   })
 

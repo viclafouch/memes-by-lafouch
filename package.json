@@ -13,7 +13,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@cloudinary/react": "^1.14.3",
     "@cloudinary/url-gen": "^1.21.0",
     "@date-fns/tz": "^1.2.0",
     "@prisma/client": "^6.11.1",
