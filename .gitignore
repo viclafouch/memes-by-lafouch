@@ -35,3 +35,5 @@ yarn-error.log*
 .env
 certificates
 .tanstack
+
+memes.json
