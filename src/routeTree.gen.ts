@@ -12,6 +12,7 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AskMeRouteImport } from './routes/ask-me'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthDownloaderRouteImport } from './routes/_auth/downloader'
@@ -26,6 +27,11 @@ const rootServerRouteImport = createServerRootRoute()
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AskMeRoute = AskMeRouteImport.update({
+  id: '/ask-me',
+  path: '/ask-me',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -70,6 +76,7 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ask-me': typeof AskMeRoute
   '/login': typeof LoginRoute
   '/downloader': typeof AuthDownloaderRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ask-me': typeof AskMeRoute
   '/login': typeof LoginRoute
   '/downloader': typeof AuthDownloaderRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/ask-me': typeof AskMeRoute
   '/login': typeof LoginRoute
   '/_auth/downloader': typeof AuthDownloaderRoute
   '/_auth/library/$memeId': typeof AuthLibraryMemeIdRoute
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ask-me'
     | '/login'
     | '/downloader'
     | '/library/$memeId'
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ask-me'
     | '/login'
     | '/downloader'
     | '/library/$memeId'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_auth'
+    | '/ask-me'
     | '/login'
     | '/_auth/downloader'
     | '/_auth/library/$memeId'
@@ -131,6 +143,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  AskMeRoute: typeof AskMeRoute
   LoginRoute: typeof LoginRoute
 }
 export interface FileServerRoutesByFullPath {
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ask-me': {
+      id: '/ask-me'
+      path: '/ask-me'
+      fullPath: '/ask-me'
+      preLoaderRoute: typeof AskMeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -250,6 +270,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  AskMeRoute: AskMeRoute,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport

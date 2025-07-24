@@ -9,21 +9,22 @@ datasource db {
 }
 
 model Video {
-  id          Int     @id @default(autoincrement())
-  meme        Meme?
-  cloudinaryId    String @unique
+  id           Int    @id @default(autoincrement())
+  meme         Meme?
+  cloudinaryId String @unique
 }
 
 model Meme {
-  id            String   @id @default(cuid())
+  id            String      @id @default(cuid())
   title         String
-  videoId       Int      @unique
-  downloadCount Int      @default(0)
-  tweetUrl      String?  @unique
-  keywords      String[] @default([])
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  video         Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  videoId       Int         @unique
+  downloadCount Int         @default(0)
+  tweetUrl      String?     @unique
+  keywords      String[]    @default([])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  video         Video       @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  embedding     Embedding[]
 }
 
 model User {
@@ -82,4 +83,17 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Embedding {
+  id     String                       @id @default(cuid())
+  meme   Meme                         @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  memeId String
+  type   String // Ex: 'keyword', 'description', etc.
+  vector Float[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memeId, type])
 }

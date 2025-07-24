@@ -1,40 +1,20 @@
 import React from 'react'
-import { Download, Pen, Share2, Twitter } from 'lucide-react'
+import { Download, Share2 } from 'lucide-react'
 import { useIntersectionObserver } from 'usehooks-ts'
 import { DownloadMemeButton } from '@/components/Meme/download-meme-button'
-import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import { Divider } from '@/components/ui/divider'
 import type { MemeWithVideo } from '@/constants/meme'
 import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { playVideo, stopOtherVideos, stopVideo } from '@/lib/dom'
 import { Delivery } from '@cloudinary/url-gen/actions'
 import { scale } from '@cloudinary/url-gen/actions/resize'
 import { Format } from '@cloudinary/url-gen/qualifiers'
-import { Link } from '@tanstack/react-router'
 
 type MemeListItemProps = {
   meme: MemeWithVideo
 }
 
 export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
-  const limitKeywordsToDisplay = 8
-  const keywordsSplitted = meme
-    ? meme.keywords.slice(0, limitKeywordsToDisplay)
-    : []
-  const restKeywordsCount =
-    meme && meme.keywords.length > limitKeywordsToDisplay
-      ? meme.keywords.length - limitKeywordsToDisplay
-      : 0
   const { ref } = useIntersectionObserver({
     threshold: 1,
     onChange: (isIntersecting, entry) => {
@@ -56,17 +36,8 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
     .resize(scale().width(500))
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow py-2 gap-0">
-      <CardHeader className="pb-0 px-4">
-        <div className="overflow-hidden">
-          <Link to="/library/$memeId" params={{ memeId: meme.id }}>
-            <CardTitle className="text-md line-clamp-2 truncate">
-              {meme.title}
-            </CardTitle>
-          </Link>
-        </div>
-      </CardHeader>
-      <CardContent className="group relative aspect-video h-56 lg:h-44 w-full py-2 px-4 border-y border-white/10 overflow-hidden">
+    <div className="has-focus-visible:ring-offset-background relative flex w-full flex-col gap-2 text-sm sm:min-w-0 group">
+      <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm has-focus-visible:outline-hidden has-focus-visible:ring-2 has-focus-visible:ring-blue-600 has-focus-visible:ring-offset-1 border border-white/10">
         <img
           src={thumbnailUrl}
           className="w-full h-full object-cover bg-muted absolute inset-0 z-10 blur-md lg:blur-none group-hover:blur-md transition-all duration-300 scale-125 lg:scale-100 lg:group-hover:scale-125 origin-center delay-100"
@@ -92,36 +63,20 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             stopOtherVideos(event.currentTarget)
           }}
         />
-      </CardContent>
-      <Divider />
-      <div className="flex-grow py-2">
-        <div className="flex px-3 flex-wrap gap-2">
-          {keywordsSplitted.map((keyword) => {
-            return (
-              <Badge variant="secondary" key={keyword}>
-                {keyword}
-              </Badge>
-            )
-          })}
-          {restKeywordsCount > 0 ? (
-            <Badge variant="secondary">+{restKeywordsCount}</Badge>
-          ) : null}
-        </div>
       </div>
-      <Divider />
-      <CardFooter className="pt-2 px-4">
-        <div className="w-full flex justify-end gap-x-2">
-          <EditMemeButton meme={meme} variant="outline" size="icon">
-            <Pen />
-          </EditMemeButton>
-          {meme.tweetUrl ? (
-            <Button asChild variant="outline" size="icon">
-              <Link to={meme.tweetUrl} target="_blank" rel="noreferrer">
-                {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
-                <Twitter />
-              </Link>
-            </Button>
-          ) : null}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col gap-1.5">
+          <div className="line-clamp-1 font-medium leading-none text-gray-100">
+            {meme.title}
+          </div>
+          <div className="flex flex-row items-center gap-1.5 text-gray-500">
+            <span className="text-[13px] leading-none">
+              {meme.downloadCount} téléchargement
+              {meme.downloadCount > 1 ? 's' : null}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
           <DownloadMemeButton variant="outline" size="icon" meme={meme}>
             <Download />
           </DownloadMemeButton>
@@ -129,7 +84,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             <Share2 />
           </ShareMemeButton>
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 })
