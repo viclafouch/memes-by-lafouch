@@ -230,30 +230,6 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
     }
   })
 
-export const incrementDownloadCount = createServerFn({ method: 'POST' })
-  .validator((value) => {
-    return z.string().parse(value)
-  })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: memeId }) => {
-    const meme = await prismaClient.meme.update({
-      where: {
-        id: memeId
-      },
-      data: {
-        downloadCount: {
-          increment: 1
-        }
-      },
-      select: {
-        id: true,
-        downloadCount: true
-      }
-    })
-
-    return meme
-  })
-
 export const CREATE_MEME_FROM_FILE_SCHEMA = z.object({
   video: z.file().min(1).max(MAX_SIZE_MEME_IN_BYTES).mime('video/mp4')
 })

@@ -17,12 +17,7 @@ const RouteComponent = () => {
     <Container>
       <PageHeader
         title={meme.title}
-        description={
-          <>
-            {meme.downloadCount} téléchargement
-            {meme.downloadCount > 1 ? 's' : ''}{' '}
-          </>
-        }
+        description="1 vue"
         action={
           <div className="flex gap-2 flex-wrap justify-end">
             <ShareMemeButton size="sm" variant="secondary" meme={meme}>

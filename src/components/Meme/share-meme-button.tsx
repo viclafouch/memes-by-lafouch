@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
-import { incrementDownloadCount } from '@/server/meme'
 import { useMutation } from '@tanstack/react-query'
 
 type ShareMemeButtonProps = {
@@ -25,9 +24,6 @@ export const ShareMemeButton = ({
       }
 
       await navigator.share(data).catch(() => {})
-    },
-    onSuccess: () => {
-      incrementDownloadCount({ data: meme.id })
     }
   })
 
