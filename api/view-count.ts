@@ -1,12 +1,43 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 import { setTimeout } from 'node:timers/promises'
+import type { ZodType } from 'zod'
 import { z } from 'zod'
 import { PrismaClient } from '@prisma/client'
-import { BUNNY_CONFIG } from '../src/constants/bunny.ts'
-import { fetchWithZod } from '../src/lib/utils.ts'
 
-const { libraryId: LIBRARY_ID } = BUNNY_CONFIG
+const BUNNY_CONFIG = {
+  collectionId: '3d12803f-7837-4586-87c7-7e8cb2789761',
+  libraryId: 471900
+} as const
+
+async function fetchWithZod<T>(
+  schema: ZodType<T>,
+  ...args: Parameters<typeof fetch>
+): Promise<T> {
+  const response = await fetch(...args)
+
+  if (!response.ok) {
+    try {
+      const error = await response.json()
+
+      throw new Error(
+        `Fetch failed with status ${response.status}: ${error.message}`
+      )
+    } catch (error) {
+      throw new Error(`Fetch failed with status ${response.status}`)
+    }
+  }
+
+  const result = await response.json()
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`Response for url : ${response.url}`, result)
+  }
+
+  return schema.parse(result, {
+    reportInput: process.env.NODE_ENV === 'development'
+  })
+}
 
 const getHeaders = () => {
   const headers = new Headers()
@@ -20,7 +51,7 @@ const getHeaders = () => {
 const getVideo = async (videoId: string) => {
   return fetchWithZod(
     z.object({ views: z.number() }),
-    `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}`,
+    `https://video.bunnycdn.com/library/${BUNNY_CONFIG.libraryId}/videos/${videoId}`,
     {
       method: 'GET',
       headers: getHeaders()
