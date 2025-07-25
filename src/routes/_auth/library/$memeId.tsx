@@ -17,7 +17,7 @@ const RouteComponent = () => {
     <Container>
       <PageHeader
         title={meme.title}
-        description="1 vue"
+        description={`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`}
         action={
           <div className="flex gap-2 flex-wrap justify-end">
             <ShareMemeButton size="sm" variant="secondary" meme={meme}>
@@ -35,7 +35,7 @@ const RouteComponent = () => {
       <div className="py-10">
         <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
           <iframe
-            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"`}
+            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&loop=false&muted=true&preload=true&responsive=true"`}
             loading="lazy"
             title={meme.title}
             className="w-full h-full"

@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { fetchWithZod } from '@/lib/utils'
 import { SERVER_ENVS } from '@/server/env'
+import { BUNNY_CONFIG } from '../constants/bunny'
+import { fetchWithZod } from './utils'
 
-const COLLECTION_ID = '3d12803f-7837-4586-87c7-7e8cb2789761'
-const LIBRARY_ID = 471900
+const { collectionId: COLLECTION_ID, libraryId: LIBRARY_ID } = BUNNY_CONFIG
 
 const getHeaders = () => {
   const headers = new Headers()

@@ -34,7 +34,9 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             {meme.title}
           </Link>
           <div className="flex flex-row items-center gap-1.5 text-gray-500">
-            <span className="text-[13px] leading-none">1 vue</span>
+            <span className="text-[13px] leading-none">
+              {meme.viewCount} vue{meme.viewCount > 1 ? 's' : ''}
+            </span>
           </div>
         </div>
         <div className="flex items-center gap-1">
