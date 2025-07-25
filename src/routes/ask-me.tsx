@@ -95,7 +95,13 @@ const RouteComponent = () => {
             <div className="grid grid-cols-1 justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {bestMemesQuery.isLoading ? <LoadingSpinner /> : null}
               {bestMemesQuery.data?.map((meme) => {
-                return <MemeListItem key={meme.id} meme={meme} />
+                return (
+                  <MemeListItem
+                    key={meme.id}
+                    meme={meme}
+                    onPlayClick={console.log}
+                  />
+                )
               })}
             </div>
           </div>
