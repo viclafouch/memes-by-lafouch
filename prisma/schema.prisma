@@ -19,6 +19,7 @@ model Meme {
   id            String      @id @default(cuid())
   title         String
   videoId       Int         @unique
+  viewCount Int         @default(0)
   tweetUrl      String?     @unique
   keywords      String[]    @default([])
   createdAt     DateTime    @default(now())
