@@ -12,6 +12,7 @@ model Video {
   id           Int    @id @default(autoincrement())
   meme         Meme?
   cloudinaryId String @unique
+  bunnyId      String @unique
 }
 
 model Meme {

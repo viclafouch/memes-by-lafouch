@@ -4,10 +4,7 @@ import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
-import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
-import { Delivery } from '@cloudinary/url-gen/actions'
-import { Format } from '@cloudinary/url-gen/qualifiers'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -15,14 +12,6 @@ const RouteComponent = () => {
   const { memeId } = Route.useParams()
   const memeQuery = useSuspenseQuery(getMemeByIdQueryOpts(memeId))
   const meme = memeQuery.data
-
-  const video = cloudinaryClient.video(meme.video.cloudinaryId)
-
-  const thumbnailUrl = cloudinaryClient
-    .video(meme.video.cloudinaryId)
-    .addTransformation(`so_1s`)
-    .delivery(Delivery.format(Format.avif()))
-    .toURL()
 
   return (
     <Container>
@@ -49,14 +38,13 @@ const RouteComponent = () => {
         }
       />
       <div className="py-10">
-        <div className="relative w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
-          {/* Top Shadow */}
-          <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
-          <video
-            src={video.toURL()}
-            controls
-            poster={thumbnailUrl}
-            className="w-full aspect-video"
+        <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
+          <iframe
+            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"`}
+            loading="lazy"
+            title={meme.title}
+            className="w-full h-full"
+            sandbox="allow-scripts"
           />
         </div>
       </div>

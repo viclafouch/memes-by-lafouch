@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
-import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { incrementDownloadCount } from '@/server/meme'
 import { useMutation } from '@tanstack/react-query'
 
@@ -15,7 +14,8 @@ export const ShareMemeButton = ({
 }: ShareMemeButtonProps) => {
   const shareMutation = useMutation({
     mutationFn: async () => {
-      const videoURL = cloudinaryClient.video(meme.video.cloudinaryId).toURL()
+      // TODO: backend side
+      const videoURL = `https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`
       const response = await fetch(videoURL)
       const blob = await response.blob()
 

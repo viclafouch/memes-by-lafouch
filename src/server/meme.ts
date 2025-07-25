@@ -1,4 +1,3 @@
-import type { UploadApiResponse } from 'cloudinary'
 import { filesize } from 'filesize'
 import { z } from 'zod'
 import {
@@ -7,7 +6,7 @@ import {
   TWEET_LINK_SCHEMA
 } from '@/constants/meme'
 import { prismaClient } from '@/db'
-import { deleteVideo, uploadVideo } from '@/lib/cloudinary'
+import { deleteVideo, uploadVideo } from '@/lib/bunny'
 import { authUserRequiredMiddleware } from '@/server/auth'
 import {
   extractTweetIdFromUrl,
@@ -179,7 +178,7 @@ export const deleteMemeById = createServerFn({ method: 'POST' })
       }
     })
 
-    await deleteVideo(meme.video.cloudinaryId)
+    await deleteVideo(meme.video.bunnyId)
 
     return { id: meme.id }
   })
@@ -201,18 +200,20 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
       )
     }
 
+    const title = 'Titre inconnu'
     const arrayBuffer = await media.video.blob.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    const video: UploadApiResponse = await uploadVideo(buffer)
+    const uploadResult = await uploadVideo(buffer, title)
 
     try {
       const meme = await prismaClient.meme.create({
         data: {
-          title: 'Titre inconnu',
+          title,
           tweetUrl: tweet.url,
           video: {
             create: {
-              cloudinaryId: video.public_id
+              cloudinaryId: '',
+              bunnyId: uploadResult.videoId
             }
           }
         }
@@ -267,18 +268,20 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
   })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ data: values }) => {
+    const title = 'Titre inconnu'
     const arrayBuffer = await values.video.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    const uploadFileResult = await uploadVideo(buffer)
+    const uploadResult = await uploadVideo(buffer, title)
 
     try {
       const meme = await prismaClient.meme.create({
         data: {
-          title: 'Titre inconnu',
+          title,
           tweetUrl: '',
           video: {
             create: {
-              cloudinaryId: uploadFileResult.public_id
+              cloudinaryId: '',
+              bunnyId: uploadResult.videoId
             }
           }
         }
@@ -291,7 +294,7 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
       // eslint-disable-next-line no-console
       console.error(error)
 
-      await deleteVideo(uploadFileResult.public_id)
+      await deleteVideo(uploadResult.videoId)
 
       throw error
     }

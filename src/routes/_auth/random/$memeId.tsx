@@ -3,10 +3,7 @@ import { Share, Shuffle } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
-import { cloudinaryClient } from '@/lib/cloudinary-client'
 import { getMemeById, getRandomMeme } from '@/server/meme'
-import { Delivery } from '@cloudinary/url-gen/actions'
-import { Format } from '@cloudinary/url-gen/qualifiers'
 import {
   createFileRoute,
   notFound,
@@ -49,26 +46,17 @@ const RouteComponent = () => {
     }
   }
 
-  const video = cloudinaryClient.video(meme.video.cloudinaryId)
-
-  const thumbnailUrl = cloudinaryClient
-    .video(meme.video.cloudinaryId)
-    .addTransformation(`so_1s`)
-    .delivery(Delivery.format(Format.avif()))
-    .toURL()
-
   return (
     <Container>
       <div className="flex flex-col items-center gap-6">
         <div className="py-10 w-full max-w-4xl">
-          <div className="relative w-full overflow-hidden lg:rounded-medium shadow-small flex flex-col gap-6">
-            {/* Top Shadow */}
-            <div className="hidden lg:block lg:absolute top-0 z-10 lg:h-32 w-full rounded-medium bg-gradient-to-b from-black/80 to-transparent" />
-            <video
-              src={video.toURL()}
-              controls
-              poster={thumbnailUrl}
-              className="w-full aspect-video"
+          <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
+            <iframe
+              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&loop=false&muted=true&preload=true&responsive=true"`}
+              loading="lazy"
+              title={meme.title}
+              className="w-full h-full"
+              sandbox="allow-scripts"
             />
           </div>
         </div>
