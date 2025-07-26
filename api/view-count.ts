@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import { setTimeout } from 'node:timers/promises'
 import type { ZodType } from 'zod'
 import { z } from 'zod'
 import { PrismaClient } from '@prisma/client'
@@ -83,8 +82,6 @@ export async function GET() {
     })
 
     console.log(`Updated meme (${meme.id}) viewCount column to `, views)
-
-    await setTimeout(300)
   }
 
   return Response.json({ success: true })
