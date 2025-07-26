@@ -23,7 +23,11 @@ export const ShareMemeButton = ({
         title: meme.title
       }
 
-      await navigator.share(data).catch(() => {})
+      await navigator.share(data).catch((error) => {
+        if (error.name !== 'AbortError') {
+          throw error
+        }
+      })
     }
   })
 

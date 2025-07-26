@@ -48,7 +48,7 @@ export const uploadVideo = async (videoBuffer: Buffer, title: string) => {
   )
 
   const headers = getHeaders()
-  headers.set('Content-Type', 'application/octet-stream')
+  headers.set('Content-Type', 'video/mp4')
 
   await fetchWithZod(
     DEFAULT_RESPONSE_SCHEMA,

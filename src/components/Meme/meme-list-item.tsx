@@ -30,7 +30,7 @@ export const MemeListItem = React.memo(
             className="absolute w-full h-full inset-0 hidden duration-600 group-hover:block transition-discrete z-10 object-cover opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus-within:block"
           />
           <button
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all z-20 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 group-focus-within:scale-100 outline-none"
+            className="absolute inset-0 md:opacity-0 group-hover:opacity-100 transition-all z-20 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 outline-none"
             type="button"
             onClick={(event) => {
               event.preventDefault()
