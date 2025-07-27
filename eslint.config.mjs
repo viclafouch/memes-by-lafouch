@@ -14,7 +14,12 @@ export default [
   ...typescriptConfig,
   ...prettierConfig,
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**']
+    ignores: [
+      '**/node_modules/**',
+      '**/.output/**',
+      '**/.nitro/**',
+      '**/.tanstack/**'
+    ]
   },
   {
     rules: {
