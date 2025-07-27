@@ -6,7 +6,7 @@ import {
   TWEET_LINK_SCHEMA
 } from '@/constants/meme'
 import { prismaClient } from '@/db'
-import { deleteVideo, uploadVideo } from '@/lib/bunny'
+import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
 import { authUserRequiredMiddleware } from '@/server/auth'
 import {
   extractTweetIdFromUrl,
@@ -36,6 +36,27 @@ export const getMemeById = createServerFn({ method: 'GET' })
     }
 
     return meme
+  })
+
+export const getVideoStatusById = createServerFn({ method: 'GET' })
+  .validator((data) => {
+    return z.number().parse(data)
+  })
+  .middleware([authUserRequiredMiddleware])
+  .handler(async ({ data: videoId }) => {
+    const video = await prismaClient.video.findUnique({
+      where: {
+        id: videoId
+      }
+    })
+
+    if (!video) {
+      throw notFound()
+    }
+
+    return {
+      status: video.bunnyStatus
+    }
   })
 
 export const getMemes = createServerFn({ method: 'GET' })
@@ -203,30 +224,26 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
     const title = 'Titre inconnu'
     const arrayBuffer = await media.video.blob.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    const uploadResult = await uploadVideo(buffer, title)
 
-    try {
-      const meme = await prismaClient.meme.create({
-        data: {
-          title,
-          tweetUrl: tweet.url,
-          video: {
-            create: {
-              cloudinaryId: '',
-              bunnyId: uploadResult.videoId
-            }
+    const { videoId } = await createVideo(title)
+
+    const meme = await prismaClient.meme.create({
+      data: {
+        title,
+        tweetUrl: tweet.url,
+        video: {
+          create: {
+            cloudinaryId: '',
+            bunnyId: videoId
           }
         }
-      })
-
-      return {
-        id: meme.id
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error)
+    })
 
-      throw error
+    await uploadVideo(videoId, buffer)
+
+    return {
+      id: meme.id
     }
   })
 
@@ -247,31 +264,25 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
     const title = 'Titre inconnu'
     const arrayBuffer = await values.video.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    const uploadResult = await uploadVideo(buffer, title)
 
-    try {
-      const meme = await prismaClient.meme.create({
-        data: {
-          title,
-          tweetUrl: '',
-          video: {
-            create: {
-              cloudinaryId: '',
-              bunnyId: uploadResult.videoId
-            }
+    const { videoId } = await createVideo(title)
+
+    const meme = await prismaClient.meme.create({
+      data: {
+        title,
+        tweetUrl: '',
+        video: {
+          create: {
+            cloudinaryId: '',
+            bunnyId: videoId
           }
         }
-      })
-
-      return {
-        id: meme.id
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error)
+    })
 
-      await deleteVideo(uploadResult.videoId)
+    await uploadVideo(videoId, buffer)
 
-      throw error
+    return {
+      id: meme.id
     }
   })

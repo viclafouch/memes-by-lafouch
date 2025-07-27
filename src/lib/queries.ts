@@ -1,8 +1,8 @@
 import type { MemesFilters } from '@/constants/meme'
 import { getBestMemes } from '@/server/ai'
 import { getAuthUser } from '@/server/auth'
-import { getMemeById, getMemes } from '@/server/meme'
-import type { Meme } from '@prisma/client'
+import { getMemeById, getMemes, getVideoStatusById } from '@/server/meme'
+import type { Meme, Video } from '@prisma/client'
 import { queryOptions } from '@tanstack/react-query'
 
 export const getMemesListQueryOpts = (filters: MemesFilters) => {
@@ -26,6 +26,17 @@ export const getMemeByIdQueryOpts = (memeId: Meme['id']) => {
 }
 
 getMemeByIdQueryOpts.all = ['meme'] as const
+
+export const getVideoStatusByIdQueryOpts = (videoId: Video['id']) => {
+  return queryOptions({
+    queryKey: [...getVideoStatusByIdQueryOpts.all, videoId],
+    queryFn: async () => {
+      return getVideoStatusById({ data: videoId })
+    }
+  })
+}
+
+getVideoStatusByIdQueryOpts.all = ['video-status'] as const
 
 export const getBestMemesQueryOpts = (query: string) => {
   return queryOptions({

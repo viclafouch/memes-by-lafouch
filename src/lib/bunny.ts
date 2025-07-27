@@ -33,7 +33,7 @@ const UPLOAD_RESPONSE_SCHEMA = z.object({
   guid: z.string()
 })
 
-export const uploadVideo = async (videoBuffer: Buffer, title: string) => {
+export const createVideo = async (title: string) => {
   const { guid: videoId } = await fetchWithZod(
     UPLOAD_RESPONSE_SCHEMA,
     `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos`,
@@ -47,6 +47,10 @@ export const uploadVideo = async (videoBuffer: Buffer, title: string) => {
     }
   )
 
+  return { videoId }
+}
+
+export const uploadVideo = async (videoId: string, videoBuffer: Buffer) => {
   const headers = getHeaders()
   headers.set('Content-Type', 'video/mp4')
 

@@ -20,6 +20,7 @@ import { Route as AuthRandomIndexRouteImport } from './routes/_auth/random/index
 import { Route as AuthLibraryIndexRouteImport } from './routes/_auth/library/index'
 import { Route as AuthRandomMemeIdRouteImport } from './routes/_auth/random/$memeId'
 import { Route as AuthLibraryMemeIdRouteImport } from './routes/_auth/library/$memeId'
+import { ServerRoute as ApiBunnyServerRouteImport } from './routes/api/bunny'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -67,6 +68,11 @@ const AuthLibraryMemeIdRoute = AuthLibraryMemeIdRouteImport.update({
   id: '/library/$memeId',
   path: '/library/$memeId',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const ApiBunnyServerRoute = ApiBunnyServerRouteImport.update({
+  id: '/api/bunny',
+  path: '/api/bunny',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   id: '/api/auth/$',
@@ -147,24 +153,28 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
 }
 export interface FileServerRoutesByFullPath {
+  '/api/bunny': typeof ApiBunnyServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRoutesByTo {
+  '/api/bunny': typeof ApiBunnyServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
+  '/api/bunny': typeof ApiBunnyServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/$'
+  fullPaths: '/api/bunny' | '/api/auth/$'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/$'
-  id: '__root__' | '/api/auth/$'
+  to: '/api/bunny' | '/api/auth/$'
+  id: '__root__' | '/api/bunny' | '/api/auth/$'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
+  ApiBunnyServerRoute: typeof ApiBunnyServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
 }
 
@@ -237,6 +247,13 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/bunny': {
+      id: '/api/bunny'
+      path: '/api/bunny'
+      fullPath: '/api/bunny'
+      preLoaderRoute: typeof ApiBunnyServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -277,6 +294,7 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiBunnyServerRoute: ApiBunnyServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport

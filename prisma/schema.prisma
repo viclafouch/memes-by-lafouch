@@ -13,6 +13,7 @@ model Video {
   meme         Meme?
   cloudinaryId String @unique
   bunnyId      String @unique
+  bunnyStatus  Int    @default(0)
 }
 
 model Meme {
