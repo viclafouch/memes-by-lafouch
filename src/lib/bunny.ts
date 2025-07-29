@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { SERVER_ENVS } from '@/server/env'
+import { serverOnly } from '@tanstack/react-start'
 import { BUNNY_CONFIG } from '../constants/bunny'
 import { fetchWithZod } from './utils'
 
@@ -18,7 +19,7 @@ const DEFAULT_RESPONSE_SCHEMA = z.object({
   success: z.literal(true)
 })
 
-export const deleteVideo = async (videoId: string) => {
+export const deleteVideo = serverOnly(async (videoId: string) => {
   return fetchWithZod(
     DEFAULT_RESPONSE_SCHEMA,
     `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}`,
@@ -27,13 +28,13 @@ export const deleteVideo = async (videoId: string) => {
       headers: getHeaders()
     }
   )
-}
+})
 
 const UPLOAD_RESPONSE_SCHEMA = z.object({
   guid: z.string()
 })
 
-export const createVideo = async (title: string) => {
+export const createVideo = serverOnly(async (title: string) => {
   const { guid: videoId } = await fetchWithZod(
     UPLOAD_RESPONSE_SCHEMA,
     `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos`,
@@ -48,23 +49,25 @@ export const createVideo = async (title: string) => {
   )
 
   return { videoId }
-}
+})
 
-export const uploadVideo = async (videoId: string, videoBuffer: Buffer) => {
-  const headers = getHeaders()
-  headers.set('Content-Type', 'video/mp4')
+export const uploadVideo = serverOnly(
+  async (videoId: string, videoBuffer: Buffer) => {
+    const headers = getHeaders()
+    headers.set('Content-Type', 'video/mp4')
 
-  await fetchWithZod(
-    DEFAULT_RESPONSE_SCHEMA,
-    `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}`,
-    {
-      method: 'PUT',
-      headers,
-      body: videoBuffer
+    await fetchWithZod(
+      DEFAULT_RESPONSE_SCHEMA,
+      `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}`,
+      {
+        method: 'PUT',
+        headers,
+        body: videoBuffer
+      }
+    )
+
+    return {
+      videoId
     }
-  )
-
-  return {
-    videoId
   }
-}
+)
