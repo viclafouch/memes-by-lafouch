@@ -11,7 +11,6 @@ datasource db {
 model Video {
   id           Int    @id @default(autoincrement())
   meme         Meme?
-  cloudinaryId String @unique
   bunnyId      String @unique
   bunnyStatus  Int    @default(0)
 }
