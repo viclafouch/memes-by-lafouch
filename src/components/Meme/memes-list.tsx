@@ -15,6 +15,7 @@ export type MemesListProps = {
 
 export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
+  const iframeRef = React.useRef<HTMLIFrameElement>(null)
 
   const [debouncedValue] = useDebouncedValue(query, {
     wait: 300,
@@ -44,9 +45,21 @@ export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
     setSelectedId(meme.id)
   }
 
+  const handleUnSelect = () => {
+    setSelectedId(null)
+  }
+
   const selectedMeme = memes.find((meme) => {
     return meme.id === selectedId
   })
+
+  const handleLayoutAnimationComplete = async () => {
+    if (iframeRef.current) {
+      const player = new window.playerjs.Player(iframeRef.current)
+
+      player.on('ready', player.play)
+    }
+  }
 
   return (
     <div className="w-full flex flex-col gap-y-12">
@@ -66,33 +79,32 @@ export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
       </div>
       <AnimatePresence>
         {selectedMeme ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-hidden"
-            onClick={() => {
-              return setSelectedId(null)
-            }}
-          >
+          <div className="fixed inset-0 flex items-center justify-center z-50 overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleUnSelect}
+              role="presentation"
+              className="bg-black/50 absolute inset-0"
+            />
             <motion.div
               layoutId={`item-${selectedId}`}
+              onLayoutAnimationComplete={handleLayoutAnimationComplete}
               className="relative w-[800px] max-w-[90vw] aspect-video"
-              onClick={(event) => {
-                return event.stopPropagation()
-              }}
             >
               <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
                 <iframe
-                  src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}`}
+                  src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}?autoplay=false`}
                   loading="lazy"
+                  ref={iframeRef}
                   title={selectedMeme.title}
                   className="w-full h-full"
-                  sandbox="allow-scripts"
+                  allow="autoplay"
                 />
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         ) : null}
       </AnimatePresence>
     </div>

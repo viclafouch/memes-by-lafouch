@@ -55,6 +55,10 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
     <html lang="fr">
       <head>
         <HeadContent />
+        <script
+          type="text/javascript"
+          src="//cdn.embed.ly/player-0.1.0.min.js"
+        />
       </head>
       <body className="dark">
         <OnlyPortrait>{children}</OnlyPortrait>

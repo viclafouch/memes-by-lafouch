@@ -1,3 +1,4 @@
+import React from 'react'
 import { Pen, Share, Trash } from 'lucide-react'
 import { DeleteMemeButton } from '@/components/Meme/delete-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
@@ -35,11 +36,10 @@ const RouteComponent = () => {
       <div className="py-10">
         <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
           <iframe
-            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&loop=false&muted=true&preload=true&responsive=true"`}
-            loading="lazy"
+            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&loop=false&muted=true&preload=true&responsive=true`}
             title={meme.title}
             className="w-full h-full"
-            sandbox="allow-scripts"
+            allow="autoplay; fullscreen"
           />
         </div>
       </div>

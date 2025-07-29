@@ -36,6 +36,27 @@ const RouteComponent = () => {
     preload()
   }, [router, nextRandomMeme])
 
+  const handleRef = (node: HTMLIFrameElement | null) => {
+    if (node) {
+      const player = new window.playerjs.Player(node)
+
+      player.on('ready', () => {
+        player.on('timeupdate', (data) => {
+          if (data.duration === data.seconds) {
+            goToNextRandomMeme()
+          }
+        })
+      })
+
+      return () => {
+        player.off('timeupdate')
+        player.off('ready')
+      }
+    }
+
+    return () => {}
+  }
+
   const goToNextRandomMeme = async () => {
     try {
       const newMeme = await nextRandomMeme
@@ -52,11 +73,11 @@ const RouteComponent = () => {
         <div className="py-10 w-full max-w-4xl">
           <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&loop=false&muted=true&preload=true&responsive=true"`}
-              loading="lazy"
+              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?responsive=true&preload=false&autoplay=false`}
+              ref={handleRef}
               title={meme.title}
               className="w-full h-full"
-              sandbox="allow-scripts"
+              allow="autoplay; fullscreen"
             />
           </div>
         </div>
