@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Download, PlaySquare, Share2 } from 'lucide-react'
-import { DownloadMemeButton } from '@/components/Meme/download-meme-button'
+import { PlaySquare, Share2 } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -95,9 +94,6 @@ export const MemeListItem = React.memo(
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <DownloadMemeButton variant="outline" size="icon" meme={meme}>
-              <Download />
-            </DownloadMemeButton>
             <ShareMemeButton meme={meme} size="icon" variant="outline">
               <Share2 />
             </ShareMemeButton>
