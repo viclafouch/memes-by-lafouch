@@ -1,7 +1,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { PlaySquare, Share2 } from 'lucide-react'
+import type { MemeWithBoomarked } from '@/@types/meme'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
+import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { MemeWithVideo } from '@/constants/meme'
@@ -11,12 +13,13 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 type MemeListItemProps = {
-  meme: MemeWithVideo
+  meme: MemeWithBoomarked
+  layoutContext: string
   onPlayClick: (meme: MemeWithVideo) => void
 }
 
 export const MemeListItem = React.memo(
-  ({ meme, onPlayClick }: MemeListItemProps) => {
+  ({ meme, onPlayClick, layoutContext }: MemeListItemProps) => {
     const isVideoInitialPlayable = matchIsVideoPlayable(meme.video.bunnyStatus)
 
     const videoStatusQuery = useQuery({
@@ -38,7 +41,7 @@ export const MemeListItem = React.memo(
       <motion.div className="relative flex w-full flex-col gap-2 text-sm sm:min-w-0 group">
         <motion.div
           className="group bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10"
-          layoutId={`item-${meme.id}`}
+          layoutId={`${layoutContext}-item-${meme.id}`}
         >
           {isStatusPlayable ? (
             <motion.div
@@ -94,6 +97,7 @@ export const MemeListItem = React.memo(
             </div>
           </div>
           <div className="flex items-center gap-1">
+            <ToggleLikeButton meme={meme} />
             <ShareMemeButton meme={meme} size="icon" variant="outline">
               <Share2 />
             </ShareMemeButton>

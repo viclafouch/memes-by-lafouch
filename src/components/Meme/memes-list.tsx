@@ -1,44 +1,20 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import MemesPagination from '@/components/Meme/Filters/memes-pagination'
+import type { MemeWithBoomarked } from '@/@types/meme'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
-import type { MemesFilters, MemeWithVideo } from '@/constants/meme'
-import { getMemesListQueryOpts } from '@/lib/queries'
-import { useDebouncedValue } from '@tanstack/react-pacer'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import type { MemeWithVideo } from '@/constants/meme'
 
 export type MemesListProps = {
-  query: MemesFilters['query']
-  page: MemesFilters['page']
-  orderBy: MemesFilters['orderBy']
+  memes: MemeWithBoomarked[]
+  layoutContext: string
 }
 
-export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
+export const MemesList = ({ memes, layoutContext }: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
 
-  const [debouncedValue] = useDebouncedValue(query, {
-    wait: 300,
-    leading: false
-  })
-
-  const filters = React.useMemo(() => {
-    return {
-      query: debouncedValue,
-      page,
-      orderBy
-    }
-  }, [debouncedValue, page, orderBy])
-
-  const { data } = useSuspenseQuery(getMemesListQueryOpts(filters))
-  const { memes, totalPages, currentPage, query: queryFromData } = data
-
   if (memes.length === 0) {
-    return (
-      <p className="text-muted-foreground">
-        Aucun résultat pour `<i>{queryFromData}</i>`
-      </p>
-    )
+    return <p className="text-muted-foreground">Aucun résultat</p>
   }
 
   const handleSelect = (meme: MemeWithVideo) => {
@@ -62,20 +38,18 @@ export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-y-12">
+    <div className="w-full">
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {memes.map((meme) => {
           return (
             <MemeListItem
               onPlayClick={handleSelect}
               key={meme.id}
+              layoutContext={layoutContext}
               meme={meme}
             />
           )
         })}
-      </div>
-      <div className="flex justify-end z-0">
-        <MemesPagination currentPage={currentPage} totalPages={totalPages} />
       </div>
       <AnimatePresence>
         {selectedMeme ? (
@@ -89,7 +63,7 @@ export const MemesList = ({ query, page, orderBy }: MemesListProps) => {
               className="bg-black/50 absolute inset-0"
             />
             <motion.div
-              layoutId={`item-${selectedId}`}
+              layoutId={`${layoutContext}-item-${selectedId}`}
               onLayoutAnimationComplete={handleLayoutAnimationComplete}
               className="relative w-[800px] max-w-[90vw] aspect-video"
             >

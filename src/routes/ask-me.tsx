@@ -1,6 +1,5 @@
 import React from 'react'
 import { Search } from 'lucide-react'
-import { MemeListItem } from '@/components/Meme/meme-list-item'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/ui/spinner'
@@ -94,15 +93,6 @@ const RouteComponent = () => {
             </div>
             <div className="grid grid-cols-1 justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {bestMemesQuery.isLoading ? <LoadingSpinner /> : null}
-              {bestMemesQuery.data?.map((meme) => {
-                return (
-                  <MemeListItem
-                    key={meme.id}
-                    meme={meme}
-                    onPlayClick={console.log}
-                  />
-                )
-              })}
             </div>
           </div>
         </div>

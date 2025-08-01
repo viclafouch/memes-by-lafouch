@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { filesize } from 'filesize'
 import { z } from 'zod'
 import {
@@ -13,8 +14,9 @@ import {
   getTweetById,
   getTweetMedia
 } from '@/utils/tweet'
+import type { Meme, User } from '@prisma/client'
 import { notFound } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
+import { createServerFn, serverOnly } from '@tanstack/react-start'
 
 export const getMemeById = createServerFn({ method: 'GET' })
   .validator((data) => {
@@ -36,6 +38,49 @@ export const getMemeById = createServerFn({ method: 'GET' })
     }
 
     return meme
+  })
+
+const toggleBookmark = serverOnly(
+  async (userId: User['id'], memeId: Meme['id']) => {
+    const bookmark = await prismaClient.userBookmark.findUnique({
+      where: { userId_memeId: { userId, memeId } }
+    })
+
+    if (bookmark) {
+      await prismaClient.userBookmark.delete({
+        where: { userId_memeId: { userId, memeId } }
+      })
+
+      return { bookmarked: false }
+    }
+
+    await prismaClient.userBookmark.create({
+      data: { userId, memeId }
+    })
+
+    return { bookmarked: true }
+  }
+)
+
+export const toggleBookmarkByMemeId = createServerFn({ method: 'POST' })
+  .validator((data) => {
+    return z.string().parse(data)
+  })
+  .middleware([authUserRequiredMiddleware])
+  .handler(async ({ data: memeId, context }) => {
+    const meme = await prismaClient.meme.findUnique({
+      where: {
+        id: memeId
+      }
+    })
+
+    if (!meme) {
+      throw notFound()
+    }
+
+    const { bookmarked } = await toggleBookmark(context.user.id, memeId)
+
+    return { bookmarked }
   })
 
 export const getVideoStatusById = createServerFn({ method: 'GET' })
@@ -62,7 +107,7 @@ export const getVideoStatusById = createServerFn({ method: 'GET' })
 export const getMemes = createServerFn({ method: 'GET' })
   .validator(MEMES_FILTERS_SCHEMA)
   .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     // page starts at 1 in UI, 0 in API
     const page = (data.page ?? 1) - 1
     const skip = page * 30
@@ -91,7 +136,11 @@ export const getMemes = createServerFn({ method: 'GET' })
       take: 30,
       skip,
       include: {
-        video: true
+        video: true,
+        bookmarkedBy: {
+          where: { userId: context.user.id },
+          select: { id: true }
+        }
       },
       orderBy: {
         createdAt: data.orderBy === 'most_old' ? 'asc' : 'desc'
@@ -99,8 +148,15 @@ export const getMemes = createServerFn({ method: 'GET' })
       where: filters
     })
 
+    const memesWithIsBookmarked = memes.map(({ bookmarkedBy, ...meme }) => {
+      return {
+        ...meme,
+        isBookmarked: bookmarkedBy.length > 0
+      }
+    })
+
     return {
-      memes,
+      memes: memesWithIsBookmarked,
       query: data.query,
       currentPage: page + 1,
       totalPages: Math.ceil(totalMemes / 30)

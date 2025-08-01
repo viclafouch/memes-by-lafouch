@@ -1,4 +1,4 @@
-import { Download, Home, Shuffle, User2 } from 'lucide-react'
+import { Download, Home, Shuffle, Stars, User2 } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -7,37 +7,19 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/ui/sidebar'
-import type { LinkProps } from '@tanstack/react-router'
+import { getFavoritesMemesCountQueryOpts } from '@/lib/queries'
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-
-const items = [
-  {
-    title: 'Librairie',
-    to: '/library',
-    icon: Home
-  },
-  {
-    title: 'Téléchargeur',
-    to: '/downloader',
-    icon: Download
-  },
-  {
-    title: 'Aléatoire',
-    to: '/random',
-    icon: Shuffle
-  }
-] satisfies ({
-  title: string
-} & LinkProps & {
-    icon: React.ComponentType<React.ComponentProps<'svg'>>
-  })[]
 
 export const AppSidebar = ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
+  const favoritesCountQuery = useQuery(getFavoritesMemesCountQueryOpts())
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -64,18 +46,43 @@ export const AppSidebar = ({
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map(({ title, icon: Icon, ...linkProps }) => {
-                return (
-                  <SidebarMenuItem key={title}>
-                    <SidebarMenuButton asChild>
-                      <Link {...linkProps}>
-                        <Icon />
-                        <span>{title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/library">
+                    <Home />
+                    <span>Librairie</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/downloader">
+                    <Download />
+                    <span>Téléchargeur</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/favorites">
+                    <Stars />
+                    <span>Mes favoris</span>
+                    {favoritesCountQuery.data ? (
+                      <SidebarMenuBadge>
+                        {favoritesCountQuery.data.count}
+                      </SidebarMenuBadge>
+                    ) : null}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/random">
+                    <Shuffle />
+                    <span>Aléatoire</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
