@@ -34,7 +34,7 @@ const RouteComponent = () => {
       <div className="py-10">
         <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
           <iframe
-            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&loop=false&muted=true&preload=true&responsive=true`}
+            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=true&preload=true&responsive=true`}
             title={meme.title}
             className="w-full h-full"
             allow="autoplay; fullscreen"
