@@ -29,6 +29,7 @@ export function createRouter() {
       context: { queryClient, user: null },
       defaultPreloadStaleTime: 0,
       defaultStaleTime: 0,
+      defaultPendingMs: 0,
       defaultViewTransition: false,
       notFoundMode: 'root',
       defaultPendingComponent: DefaultLoading,

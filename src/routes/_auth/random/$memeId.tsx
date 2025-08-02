@@ -1,5 +1,5 @@
 import React from 'react'
-import { Share, Shuffle } from 'lucide-react'
+import { Shuffle } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
@@ -82,11 +82,8 @@ const RouteComponent = () => {
           </div>
         </div>
         <div className="flex gap-4 flex-col w-full items-center max-w-96">
-          <div className="flex gap-4">
-            <ShareMemeButton meme={meme} size="lg" variant="secondary">
-              <Share />
-              Partager
-            </ShareMemeButton>
+          <div className="flex items-center gap-4">
+            <ShareMemeButton meme={meme} />
             <Button size="lg" onClick={goToNextRandomMeme}>
               <Shuffle />
               Aléatoire

@@ -1,16 +1,14 @@
 import React from 'react'
-import { Button } from '@/components/ui/button'
+import { Share2 } from 'lucide-react'
+import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useMutation } from '@tanstack/react-query'
 
 type ShareMemeButtonProps = {
   meme: MemeWithVideo
-} & Partial<React.ComponentProps<typeof Button>>
+}
 
-export const ShareMemeButton = ({
-  meme,
-  ...restButtonProps
-}: ShareMemeButtonProps) => {
+export const ShareMemeButton = ({ meme }: ShareMemeButtonProps) => {
   const shareMutation = useMutation({
     mutationFn: async () => {
       // TODO: backend side
@@ -23,15 +21,11 @@ export const ShareMemeButton = ({
         title: meme.title
       }
 
-      await navigator.share(data).catch((error) => {
-        if (error.name !== 'AbortError') {
-          throw error
-        }
-      })
+      await navigator.share(data).catch(() => {})
     }
   })
 
-  const handleDownload = () => {
+  const handleShare = () => {
     if (shareMutation.isPending) {
       return
     }
@@ -40,13 +34,10 @@ export const ShareMemeButton = ({
   }
 
   return (
-    <Button
-      color="secondary"
-      disabled={shareMutation.isPending}
-      onClick={handleDownload}
-      type="button"
-      aria-label="Partager"
-      {...restButtonProps}
+    <IconButton
+      icon={Share2}
+      active={shareMutation.isPending}
+      onClick={handleShare}
     />
   )
 }

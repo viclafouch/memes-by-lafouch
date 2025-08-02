@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { PlaySquare, Share2 } from 'lucide-react'
+import { PlaySquare } from 'lucide-react'
 import type { MemeWithBoomarked } from '@/@types/meme'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
@@ -98,9 +98,7 @@ export const MemeListItem = React.memo(
           </div>
           <div className="flex items-center gap-1">
             <ToggleLikeButton meme={meme} />
-            <ShareMemeButton meme={meme} size="icon" variant="outline">
-              <Share2 />
-            </ShareMemeButton>
+            <ShareMemeButton meme={meme} />
           </div>
         </div>
       </motion.div>

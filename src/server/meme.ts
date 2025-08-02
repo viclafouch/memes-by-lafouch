@@ -277,7 +277,7 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
       )
     }
 
-    const title = 'Titre inconnu'
+    const title = 'Sans titre'
     const arrayBuffer = await media.video.blob.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
@@ -316,7 +316,7 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
   })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ data: values }) => {
-    const title = 'Titre inconnu'
+    const title = 'Sans titre'
     const arrayBuffer = await values.video.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 

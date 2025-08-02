@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pen, Share, Trash } from 'lucide-react'
+import { Pen, Trash } from 'lucide-react'
 import { DeleteMemeButton } from '@/components/Meme/delete-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
@@ -21,9 +21,7 @@ const RouteComponent = () => {
         description={`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`}
         action={
           <div className="flex gap-2 flex-wrap justify-end">
-            <ShareMemeButton size="sm" variant="secondary" meme={meme}>
-              <Share /> Partager
-            </ShareMemeButton>
+            <ShareMemeButton meme={meme} />
             <EditMemeButton size="sm" variant="secondary" meme={meme}>
               <Pen /> Modifier
             </EditMemeButton>
