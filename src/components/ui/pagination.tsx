@@ -78,7 +78,7 @@ const PaginationPrevious = ({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <span className="hidden sm:block">Précédent</span>
     </PaginationLink>
   )
 }
@@ -94,7 +94,7 @@ const PaginationNext = ({
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <span className="hidden sm:block">Suivant</span>
       <ChevronRightIcon />
     </PaginationLink>
   )
