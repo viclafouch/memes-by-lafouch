@@ -23,26 +23,26 @@ export const getFavoritesMemes = createServerFn({ method: 'GET' })
   .handler(async ({ context }) => {
     const userId = context.user.id
 
-    const memes = await prismaClient.meme.findMany({
+    const userBookmarks = await prismaClient.userBookmark.findMany({
       where: {
-        bookmarkedBy: {
-          some: {
-            userId
-          }
-        }
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
       },
       include: {
-        bookmarkedBy: true,
-        video: true
+        meme: {
+          include: {
+            video: true
+          }
+        }
       }
     })
 
-    const memesWithIsBookmarked = memes.map(({ bookmarkedBy, ...meme }) => {
+    return userBookmarks.map(({ meme }) => {
       return {
         ...meme,
-        isBookmarked: bookmarkedBy.length > 0
+        isBookmarked: true
       }
     })
-
-    return memesWithIsBookmarked
   })
