@@ -5,13 +5,9 @@ import { createServerFn } from '@tanstack/react-start'
 export const getFavoritesMemesCount = createServerFn({ method: 'GET' })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ context }) => {
-    const count = await prismaClient.meme.count({
+    const count = await prismaClient.userBookmark.count({
       where: {
-        bookmarkedBy: {
-          some: {
-            userId: context.user.id
-          }
-        }
+        userId: context.user.id
       }
     })
 
@@ -21,11 +17,9 @@ export const getFavoritesMemesCount = createServerFn({ method: 'GET' })
 export const getFavoritesMemes = createServerFn({ method: 'GET' })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ context }) => {
-    const userId = context.user.id
-
     const userBookmarks = await prismaClient.userBookmark.findMany({
       where: {
-        userId
+        userId: context.user.id
       },
       orderBy: {
         createdAt: 'desc'
