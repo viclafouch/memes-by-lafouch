@@ -1,5 +1,7 @@
 import React from 'react'
+import { ClipboardPaste } from 'lucide-react'
 import { z } from 'zod'
+import { IconButton } from '@/components/animate-ui/buttons/icon'
 import {
   Card,
   CardContent,
@@ -49,6 +51,24 @@ export const DownloadFromTwitterForm = () => {
     }
   })
 
+  const clipboardMutation = useMutation({
+    mutationFn: () => {
+      return navigator.clipboard.readText()
+    },
+    onSuccess: (text) => {
+      form.setFieldValue('url', text.trim())
+    }
+  })
+
+  const handlePasteFromClipboard = async () => {
+    // eslint-disable-next-line promise/prefer-await-to-then
+    clipboardMutation.mutateAsync().finally(() => {
+      setTimeout(() => {
+        clipboardMutation.reset()
+      }, 3000)
+    })
+  }
+
   const downloadFileFromTweet = useMutation({
     mutationKey: ['download-file-from-tweet'],
     mutationFn: (body: { url: string }) => {
@@ -85,19 +105,32 @@ export const DownloadFromTwitterForm = () => {
                 return (
                   <FormItem error={errorMessage}>
                     <FormLabel>Tweet URL</FormLabel>
-                    <FormControl>
-                      <Input
-                        required
-                        type="text"
-                        id="twitter-link"
-                        name="twitter-link"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(event) => {
-                          return field.handleChange(event.target.value)
-                        }}
+                    <div className="relative w-full">
+                      <FormControl>
+                        <Input
+                          required
+                          type="text"
+                          id="twitter-link"
+                          name="twitter-link"
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(event) => {
+                            return field.handleChange(event.target.value)
+                          }}
+                        />
+                      </FormControl>
+                      <IconButton
+                        icon={ClipboardPaste}
+                        active={
+                          clipboardMutation.isPending ||
+                          clipboardMutation.isSuccess
+                        }
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 size-6"
+                        onClick={handlePasteFromClipboard}
+                        type="button"
+                        onlyStars
                       />
-                    </FormControl>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )

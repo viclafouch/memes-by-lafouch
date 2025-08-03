@@ -52,7 +52,7 @@ export const TwitterForm = ({ onSuccess, closeDialog }: TwitterFormProps) => {
       return navigator.clipboard.readText()
     },
     onSuccess: (text) => {
-      form.setFieldValue('url', text)
+      form.setFieldValue('url', text.trim())
     }
   })
 
