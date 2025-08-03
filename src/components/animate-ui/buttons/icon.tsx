@@ -26,6 +26,7 @@ type IconButtonProps = Omit<HTMLMotionProps<'button'>, 'color'> & {
   size?: keyof typeof sizes
   color?: readonly [number, number, number]
   transition?: Transition
+  onlyStars?: boolean
 }
 
 const defaultColor = [255, 255, 255] as const
@@ -40,6 +41,7 @@ const IconButton = ({
   className,
   active = false,
   animate = true,
+  onlyStars = false,
   size = 'default',
   color = defaultColor,
   transition = defaultTransition,
@@ -68,7 +70,9 @@ const IconButton = ({
       >
         <Icon
           className={
-            active ? 'fill-[var(--icon-button-color)]' : 'fill-transparent'
+            active && !onlyStars
+              ? 'fill-[var(--icon-button-color)]'
+              : 'fill-transparent'
           }
         />
       </motion.div>
