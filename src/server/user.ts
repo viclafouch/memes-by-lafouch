@@ -40,3 +40,18 @@ export const getFavoritesMemes = createServerFn({ method: 'GET' })
       }
     })
   })
+
+export const getUsers = createServerFn({ method: 'GET' })
+  .middleware([authUserRequiredMiddleware])
+  .handler(async () => {
+    const users = await prismaClient.user.findMany({
+      include: {
+        bookmarks: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return users
+  })

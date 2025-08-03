@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AskMeRouteImport } from './routes/ask-me'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthUsersRouteImport } from './routes/_auth/users'
 import { Route as AuthFavoritesRouteImport } from './routes/_auth/favorites'
 import { Route as AuthDownloaderRouteImport } from './routes/_auth/downloader'
 import { Route as AuthRandomIndexRouteImport } from './routes/_auth/random/index'
@@ -44,6 +45,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthUsersRoute = AuthUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const AuthFavoritesRoute = AuthFavoritesRouteImport.update({
   id: '/favorites',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
+  '/users': typeof AuthUsersRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
   '/library': typeof AuthLibraryIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
+  '/users': typeof AuthUsersRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
   '/library': typeof AuthLibraryIndexRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_auth/downloader': typeof AuthDownloaderRoute
   '/_auth/favorites': typeof AuthFavoritesRoute
+  '/_auth/users': typeof AuthUsersRoute
   '/_auth/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/_auth/random/$memeId': typeof AuthRandomMemeIdRoute
   '/_auth/library/': typeof AuthLibraryIndexRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/downloader'
     | '/favorites'
+    | '/users'
     | '/library/$memeId'
     | '/random/$memeId'
     | '/library'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/downloader'
     | '/favorites'
+    | '/users'
     | '/library/$memeId'
     | '/random/$memeId'
     | '/library'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_auth/downloader'
     | '/_auth/favorites'
+    | '/_auth/users'
     | '/_auth/library/$memeId'
     | '/_auth/random/$memeId'
     | '/_auth/library/'
@@ -220,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/users': {
+      id: '/_auth/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthUsersRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/favorites': {
       id: '/_auth/favorites'
       path: '/favorites'
@@ -286,6 +305,7 @@ declare module '@tanstack/react-start/server' {
 interface AuthRouteRouteChildren {
   AuthDownloaderRoute: typeof AuthDownloaderRoute
   AuthFavoritesRoute: typeof AuthFavoritesRoute
+  AuthUsersRoute: typeof AuthUsersRoute
   AuthLibraryMemeIdRoute: typeof AuthLibraryMemeIdRoute
   AuthRandomMemeIdRoute: typeof AuthRandomMemeIdRoute
   AuthLibraryIndexRoute: typeof AuthLibraryIndexRoute
@@ -295,6 +315,7 @@ interface AuthRouteRouteChildren {
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthDownloaderRoute: AuthDownloaderRoute,
   AuthFavoritesRoute: AuthFavoritesRoute,
+  AuthUsersRoute: AuthUsersRoute,
   AuthLibraryMemeIdRoute: AuthLibraryMemeIdRoute,
   AuthRandomMemeIdRoute: AuthRandomMemeIdRoute,
   AuthLibraryIndexRoute: AuthLibraryIndexRoute,
