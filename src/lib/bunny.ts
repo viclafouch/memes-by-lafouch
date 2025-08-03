@@ -30,6 +30,21 @@ export const deleteVideo = serverOnly(async (videoId: string) => {
   )
 })
 
+const VIDEO_PLAY_DATA_SCHEMA = z.object({
+  originalUrl: z.url()
+})
+
+export const getVideoPlayData = serverOnly(async (videoId: string) => {
+  return fetchWithZod(
+    VIDEO_PLAY_DATA_SCHEMA,
+    `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}/play`,
+    {
+      method: 'GET',
+      headers: getHeaders()
+    }
+  )
+})
+
 const UPLOAD_RESPONSE_SCHEMA = z.object({
   guid: z.string()
 })

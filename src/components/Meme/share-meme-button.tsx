@@ -2,6 +2,7 @@ import React from 'react'
 import { Share2 } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
+import { shareMeme } from '@/server/meme'
 import { useMutation } from '@tanstack/react-query'
 
 type ShareMemeButtonProps = {
@@ -11,9 +12,7 @@ type ShareMemeButtonProps = {
 export const ShareMemeButton = ({ meme }: ShareMemeButtonProps) => {
   const shareMutation = useMutation({
     mutationFn: async () => {
-      // TODO: backend side
-      const videoURL = `https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`
-      const response = await fetch(videoURL)
+      const response = await shareMeme({ data: meme.id })
       const blob = await response.blob()
 
       const data: ShareData = {

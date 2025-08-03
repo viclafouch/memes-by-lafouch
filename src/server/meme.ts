@@ -7,7 +7,12 @@ import {
   TWEET_LINK_SCHEMA
 } from '@/constants/meme'
 import { prismaClient } from '@/db'
-import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
+import {
+  createVideo,
+  deleteVideo,
+  getVideoPlayData,
+  uploadVideo
+} from '@/lib/bunny'
 import { authUserRequiredMiddleware } from '@/server/auth'
 import {
   extractTweetIdFromUrl,
@@ -339,4 +344,37 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
     return {
       id: meme.id
     }
+  })
+
+export const shareMeme = createServerFn({ method: 'GET', response: 'raw' })
+  .validator((data) => {
+    return z.string().parse(data)
+  })
+  .middleware([authUserRequiredMiddleware])
+  .handler(async ({ data: memeId }) => {
+    const meme = await prismaClient.meme.findUnique({
+      where: {
+        id: memeId
+      },
+      include: {
+        video: true
+      }
+    })
+
+    if (!meme) {
+      throw notFound()
+    }
+
+    const { originalUrl } = await getVideoPlayData(meme.video.bunnyId)
+
+    const response = await fetch(originalUrl)
+    const blob = await response.blob()
+
+    return new Response(blob, {
+      headers: {
+        'Content-Type': blob.type,
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive'
+      }
+    })
   })
