@@ -1,5 +1,5 @@
 import { prismaClient } from '@/db'
-import { authUserRequiredMiddleware } from '@/server/auth'
+import { authUserRequiredMiddleware } from '@/server/user-auth'
 import { createServerFn } from '@tanstack/react-start'
 
 export const getFavoritesMemesCount = createServerFn({ method: 'GET' })
@@ -39,19 +39,4 @@ export const getFavoritesMemes = createServerFn({ method: 'GET' })
         isBookmarked: true
       }
     })
-  })
-
-export const getUsers = createServerFn({ method: 'GET' })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async () => {
-    const users = await prismaClient.user.findMany({
-      include: {
-        bookmarks: true
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
-
-    return users
   })

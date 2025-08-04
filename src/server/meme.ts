@@ -13,7 +13,7 @@ import {
   getVideoPlayData,
   uploadVideo
 } from '@/lib/bunny'
-import { authUserRequiredMiddleware } from '@/server/auth'
+import { authUserRequiredMiddleware } from '@/server/user-auth'
 import {
   extractTweetIdFromUrl,
   getTweetById,

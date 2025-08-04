@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { APIError } from 'better-auth/api'
+import { admin } from 'better-auth/plugins'
 import { prismaClient } from '@/db'
 import { SERVER_ENVS } from '@/server/env'
 
@@ -17,6 +18,7 @@ export const auth = betterAuth({
       clientSecret: SERVER_ENVS.AUTH_TWITTER_SECRET
     }
   },
+  plugins: [admin()],
   databaseHooks: {
     user: {
       create: {

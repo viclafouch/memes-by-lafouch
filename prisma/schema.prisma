@@ -1,3 +1,4 @@
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres"]
@@ -55,6 +56,11 @@ model User {
   sessions      Session[]
   bookmarks     UserBookmark[]
 
+  role       String?
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
+
   @@map("user")
 }
 
@@ -68,6 +74,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@map("session")
 }

@@ -1,4 +1,4 @@
-import { Download, Home, Shuffle, Stars, User2, Users2 } from 'lucide-react'
+import { Download, Home, Shuffle, Stars, User2 } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -59,12 +59,6 @@ export const AppSidebar = ({
                   <Link to="/downloader">
                     <Download />
                     <span>Téléchargeur</span>
-                  </Link>
-                </SidebarMenuButton>
-                <SidebarMenuButton asChild>
-                  <Link to="/users">
-                    <Users2 />
-                    <span>Utilisateurs</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

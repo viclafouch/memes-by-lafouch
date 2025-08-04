@@ -1,8 +1,8 @@
 import type { MemesFilters } from '@/constants/meme'
 import { getBestMemes } from '@/server/ai'
-import { getAuthUser } from '@/server/auth'
 import { getMemeById, getMemes, getVideoStatusById } from '@/server/meme'
 import { getFavoritesMemesCount } from '@/server/user'
+import { getAuthUser } from '@/server/user-auth'
 import type { Meme, Video } from '@prisma/client'
 import { queryOptions } from '@tanstack/react-query'
 

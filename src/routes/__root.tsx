@@ -5,7 +5,7 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
 import { getAuthUserQueryOpts } from '@/lib/queries'
 import { seo } from '@/lib/seo'
-import type { getAuthUser } from '@/server/auth'
+import type { getAuthUser } from '@/server/user-auth'
 import type { QueryClient } from '@tanstack/react-query'
 import {
   createRootRouteWithContext,
