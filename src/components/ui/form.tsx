@@ -45,7 +45,7 @@ const FormItem = ({
     <FormItemContext.Provider value={value}>
       <div
         data-slot="form-item"
-        className={cn('grid gap-2', className)}
+        className={cn('grid gap-2 w-full', className)}
         {...props}
       />
     </FormItemContext.Provider>

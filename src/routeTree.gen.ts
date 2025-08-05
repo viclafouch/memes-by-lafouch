@@ -11,6 +11,7 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AskMeRouteImport } from './routes/ask-me'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
@@ -28,6 +29,11 @@ import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.
 
 const rootServerRouteImport = createServerRootRoute()
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/ask-me': typeof AskMeRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
   '/admin/users': typeof AdminUsersRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/ask-me': typeof AskMeRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
   '/admin/users': typeof AdminUsersRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/ask-me': typeof AskMeRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/_auth/downloader': typeof AuthDownloaderRoute
   '/_auth/favorites': typeof AuthFavoritesRoute
   '/admin/users': typeof AdminUsersRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ask-me'
     | '/login'
+    | '/signup'
     | '/downloader'
     | '/favorites'
     | '/admin/users'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ask-me'
     | '/login'
+    | '/signup'
     | '/downloader'
     | '/favorites'
     | '/admin/users'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/ask-me'
     | '/login'
+    | '/signup'
     | '/_auth/downloader'
     | '/_auth/favorites'
     | '/admin/users'
@@ -188,6 +200,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AskMeRoute: typeof AskMeRoute
   LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/bunny': typeof ApiBunnyServerRoute
@@ -217,6 +230,13 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AskMeRoute: AskMeRoute,
   LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

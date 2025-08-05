@@ -8,15 +8,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { authClient } from '@/lib/auth-client'
+import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import { getAuthUserQueryOpts } from '@/lib/queries'
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 export const UserNavButton = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { data } = authClient.useSession()
+  const session = authClient.useSession()
+  const isAdmin = session.data ? matchIsUserAdmin(session.data.user) : false
 
   const handleLogout = async () => {
     await authClient.signOut()
@@ -50,6 +52,11 @@ export const UserNavButton = () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {isAdmin ? (
+          <DropdownMenuItem asChild>
+            <Link to="/admin">Administration</Link>
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuItem onClick={handleLogout}>
           Se déconnecter
         </DropdownMenuItem>
