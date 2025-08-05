@@ -93,6 +93,7 @@ const RouteComponent = () => {
                         required
                         type="text"
                         id="name"
+                        autoComplete="username"
                         placeholder="Pseudo"
                         name="name"
                         value={field.state.value}
@@ -119,6 +120,7 @@ const RouteComponent = () => {
                         required
                         type="email"
                         id="email"
+                        autoComplete="email"
                         placeholder="Email"
                         name="email"
                         value={field.state.value}
@@ -145,6 +147,7 @@ const RouteComponent = () => {
                         required
                         type="password"
                         id="password"
+                        autoComplete="new-password"
                         placeholder="Mot de passe"
                         name="password"
                         value={field.state.value}
@@ -171,6 +174,7 @@ const RouteComponent = () => {
                         required
                         type="password"
                         id="confirmPassword"
+                        autoComplete="new-password"
                         placeholder="Confirmer le mot de passe"
                         name="confirmPassword"
                         value={field.state.value}
