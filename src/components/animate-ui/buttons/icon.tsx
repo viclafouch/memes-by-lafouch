@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable id-length */
-'use client'
 
 import * as React from 'react'
 import {

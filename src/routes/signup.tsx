@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { GradientBackground } from '@/components/animate-ui/backgrounds/gradient'
 import { FormControl, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
@@ -62,8 +63,9 @@ const RouteComponent = () => {
   })
 
   return (
-    <section className="bg-muted h-screen">
-      <div className="flex h-full items-center justify-center">
+    <section className="relative w-full h-screen">
+      <GradientBackground className="absolute inset-0 z-0" />
+      <div className="relative flex h-full items-center justify-center z-10">
         <div className="flex flex-col items-center gap-6 lg:justify-start">
           <Link to="/">
             <img
@@ -206,11 +208,11 @@ const RouteComponent = () => {
               }}
             />
           </form>
-          <div className="text-muted-foreground flex justify-center gap-1 text-sm">
+          <div className="text-gray-300 flex justify-center gap-1 text-sm">
             <p>Déjà un utilisateur ?</p>
             <Link
               to="/login"
-              className="text-primary font-medium hover:underline"
+              className="text-secondary font-medium hover:underline"
             >
               Se connecter
             </Link>

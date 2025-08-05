@@ -20,7 +20,13 @@ const mutationCache = new MutationCache({
 
 export function createRouter() {
   const queryClient = new QueryClient({
-    mutationCache
+    mutationCache,
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 2
+      }
+    }
   })
 
   return routerWithQueryClient(

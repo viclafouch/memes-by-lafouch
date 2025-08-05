@@ -11,10 +11,10 @@ import {
 import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import { getAuthUserQueryOpts } from '@/lib/queries'
 import { useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 
 export const UserNavButton = () => {
-  const navigate = useNavigate()
+  const router = useRouter()
   const queryClient = useQueryClient()
   const { data } = authClient.useSession()
   const session = authClient.useSession()
@@ -23,7 +23,7 @@ export const UserNavButton = () => {
   const handleLogout = async () => {
     await authClient.signOut()
     queryClient.removeQueries(getAuthUserQueryOpts())
-    navigate({ to: '/login' })
+    await router.invalidate()
   }
 
   return (
