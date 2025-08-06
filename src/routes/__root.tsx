@@ -62,7 +62,7 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body className="dark">
         <OnlyPortrait>{children}</OnlyPortrait>
-        <Toaster />
+        <Toaster richColors />
         <React.Suspense>
           <TanStackRouterDevtools position="bottom-left" />
           <TanStackQueryDevtools buttonPosition="bottom-right" />

@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth'
-import { createMiddleware, createServerFn, json } from '@tanstack/react-start'
-import { getWebRequest } from '@tanstack/react-start/server'
+import { createMiddleware, createServerFn } from '@tanstack/react-start'
+import { getWebRequest, setResponseStatus } from '@tanstack/react-start/server'
 
 export const getAuthUser = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -11,23 +11,24 @@ export const getAuthUser = createServerFn({ method: 'GET' }).handler(
   }
 )
 
-export const authUserMiddleware = createMiddleware({ type: 'function' }).server(
-  async ({ next }) => {
-    const user = await getAuthUser()
+export const authUserRequiredMiddleware = createMiddleware({
+  type: 'function'
+}).server(async ({ next }) => {
+  const { headers } = getWebRequest()
 
-    return next({ context: { user } })
-  }
-)
-
-export const authUserRequiredMiddleware = createMiddleware({ type: 'function' })
-  .middleware([authUserMiddleware])
-  .server(async ({ next, context }) => {
-    if (!context.user) {
-      throw json(
-        { message: 'You must be logged in to do that!' },
-        { status: 401 }
-      )
+  const session = await auth.api.getSession({
+    headers,
+    query: {
+      // ensure session is fresh
+      // https://www.better-auth.com/docs/concepts/session-management#session-caching
+      disableCookieCache: true
     }
-
-    return next({ context: { user: context.user } })
   })
+
+  if (!session) {
+    setResponseStatus(401)
+    throw new Error('Unauthorized')
+  }
+
+  return next({ context: { user: session.user } })
+})

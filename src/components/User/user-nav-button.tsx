@@ -36,7 +36,7 @@ export const UserNavButton = () => {
               alt={data?.user?.name}
               referrerPolicy="no-referrer"
             />
-            <AvatarFallback />
+            <AvatarFallback>ER</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
