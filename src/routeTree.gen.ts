@@ -11,13 +11,14 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as AskMeRouteImport } from './routes/ask-me'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as Public_authRouteRouteImport } from './routes/_public_auth/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as Public_authSignupRouteImport } from './routes/_public_auth/signup'
+import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
 import { Route as AuthFavoritesRouteImport } from './routes/_auth/favorites'
 import { Route as AuthDownloaderRouteImport } from './routes/_auth/downloader'
 import { Route as AuthRandomIndexRouteImport } from './routes/_auth/random/index'
@@ -29,16 +30,6 @@ import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.
 
 const rootServerRouteImport = createServerRootRoute()
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AskMeRoute = AskMeRouteImport.update({
   id: '/ask-me',
   path: '/ask-me',
@@ -47,6 +38,10 @@ const AskMeRoute = AskMeRouteImport.update({
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Public_authRouteRoute = Public_authRouteRouteImport.update({
+  id: '/_public_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -62,6 +57,16 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const Public_authSignupRoute = Public_authSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => Public_authRouteRoute,
+} as any)
+const Public_authLoginRoute = Public_authLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => Public_authRouteRoute,
 } as any)
 const AuthFavoritesRoute = AuthFavoritesRouteImport.update({
   id: '/favorites',
@@ -108,10 +113,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/ask-me': typeof AskMeRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
+  '/login': typeof Public_authLoginRoute
+  '/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
@@ -122,10 +127,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/ask-me': typeof AskMeRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
+  '/login': typeof Public_authLoginRoute
+  '/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
@@ -136,12 +141,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/_public_auth': typeof Public_authRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/ask-me': typeof AskMeRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
   '/_auth/downloader': typeof AuthDownloaderRoute
   '/_auth/favorites': typeof AuthFavoritesRoute
+  '/_public_auth/login': typeof Public_authLoginRoute
+  '/_public_auth/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/_auth/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/_auth/random/$memeId': typeof AuthRandomMemeIdRoute
@@ -154,10 +160,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ask-me'
-    | '/login'
-    | '/signup'
     | '/downloader'
     | '/favorites'
+    | '/login'
+    | '/signup'
     | '/admin/users'
     | '/library/$memeId'
     | '/random/$memeId'
@@ -168,10 +174,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ask-me'
-    | '/login'
-    | '/signup'
     | '/downloader'
     | '/favorites'
+    | '/login'
+    | '/signup'
     | '/admin/users'
     | '/library/$memeId'
     | '/random/$memeId'
@@ -181,12 +187,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_auth'
+    | '/_public_auth'
     | '/admin'
     | '/ask-me'
-    | '/login'
-    | '/signup'
     | '/_auth/downloader'
     | '/_auth/favorites'
+    | '/_public_auth/login'
+    | '/_public_auth/signup'
     | '/admin/users'
     | '/_auth/library/$memeId'
     | '/_auth/random/$memeId'
@@ -197,10 +204,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  Public_authRouteRoute: typeof Public_authRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AskMeRoute: typeof AskMeRoute
-  LoginRoute: typeof LoginRoute
-  SignupRoute: typeof SignupRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/bunny': typeof ApiBunnyServerRoute
@@ -230,20 +236,6 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/ask-me': {
       id: '/ask-me'
       path: '/ask-me'
@@ -256,6 +248,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public_auth': {
+      id: '/_public_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof Public_authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -278,6 +277,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/_public_auth/signup': {
+      id: '/_public_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof Public_authSignupRouteImport
+      parentRoute: typeof Public_authRouteRoute
+    }
+    '/_public_auth/login': {
+      id: '/_public_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof Public_authLoginRouteImport
+      parentRoute: typeof Public_authRouteRoute
     }
     '/_auth/favorites': {
       id: '/_auth/favorites'
@@ -364,6 +377,19 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface Public_authRouteRouteChildren {
+  Public_authLoginRoute: typeof Public_authLoginRoute
+  Public_authSignupRoute: typeof Public_authSignupRoute
+}
+
+const Public_authRouteRouteChildren: Public_authRouteRouteChildren = {
+  Public_authLoginRoute: Public_authLoginRoute,
+  Public_authSignupRoute: Public_authSignupRoute,
+}
+
+const Public_authRouteRouteWithChildren =
+  Public_authRouteRoute._addFileChildren(Public_authRouteRouteChildren)
+
 interface AdminRouteRouteChildren {
   AdminUsersRoute: typeof AdminUsersRoute
 }
@@ -379,10 +405,9 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  Public_authRouteRoute: Public_authRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AskMeRoute: AskMeRoute,
-  LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
