@@ -38,11 +38,11 @@ export const MemeListItem = React.memo(
     const isStatusPlayable = matchIsVideoPlayable(status)
 
     return (
-      <motion.div className="relative flex w-full flex-col gap-2 text-sm sm:min-w-0 group">
-        <motion.div
-          className="group bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10"
-          layoutId={`${layoutContext}-item-${meme.id}`}
-        >
+      <motion.div
+        className="relative flex w-full flex-col gap-2 text-sm sm:min-w-0 group"
+        layoutId={`${layoutContext}-item-${meme.id}`}
+      >
+        <motion.div className="group bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
           {isStatusPlayable ? (
             <motion.div
               initial={{ opacity: isVideoInitialPlayable ? 1 : 0 }}

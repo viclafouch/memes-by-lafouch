@@ -7,9 +7,14 @@ import type { MemeWithVideo } from '@/constants/meme'
 export type MemesListProps = {
   memes: MemeWithBoomarked[]
   layoutContext: string
+  columnGridCount?: number
 }
 
-export const MemesList = ({ memes, layoutContext }: MemesListProps) => {
+export const MemesList = ({
+  memes,
+  layoutContext,
+  columnGridCount = 4
+}: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
 
@@ -39,7 +44,14 @@ export const MemesList = ({ memes, layoutContext }: MemesListProps) => {
 
   return (
     <div className="w-full">
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div
+        style={
+          {
+            '--cols': `repeat(${columnGridCount}, 1fr)`
+          } as React.CSSProperties
+        }
+        className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:[grid-template-columns:var(--cols)]"
+      >
         {memes.map((meme) => {
           return (
             <MemeListItem

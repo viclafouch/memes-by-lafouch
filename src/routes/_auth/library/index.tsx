@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react'
 import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
 import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
+import MemesToggleGrid from '@/components/Meme/Filters/memes-toggle-grid'
 import { MemesList } from '@/components/Meme/memes-list'
 import { NewMemeButton } from '@/components/Meme/new-meme-button'
 import { PageHeader } from '@/components/page-header'
@@ -15,7 +16,13 @@ import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
-const MemesListWrapper = () => {
+type ColumnGridCount = 3 | 5 | 6
+
+const MemesListWrapper = ({
+  columnGridCount
+}: {
+  columnGridCount: ColumnGridCount
+}) => {
   const search = Route.useSearch()
 
   const [debouncedValue] = useDebouncedValue(search.query, {
@@ -35,7 +42,11 @@ const MemesListWrapper = () => {
 
   return (
     <div className="w-full flex flex-col gap-12">
-      <MemesList layoutContext="library" memes={memesListQuery.data.memes} />
+      <MemesList
+        columnGridCount={columnGridCount}
+        layoutContext="library"
+        memes={memesListQuery.data.memes}
+      />
       <div className="flex justify-end z-0">
         <MemesPagination
           currentPage={memesListQuery.data.currentPage}
@@ -48,6 +59,7 @@ const MemesListWrapper = () => {
 
 const RouteComponent = () => {
   const { user } = Route.useRouteContext()
+  const [columnGridCount, setColumnGridCount] = React.useState<3 | 5 | 6>(3)
 
   return (
     <Container>
@@ -65,10 +77,16 @@ const RouteComponent = () => {
         <div className="flex flex-col gap-y-4">
           <div className="border-b border-muted pb-4 flex justify-between gap-x-3">
             <MemesQuery />
-            <MemesOrderBy />
+            <div className="flex gap-x-3">
+              <MemesToggleGrid
+                columnValue={columnGridCount}
+                onColumnValueChange={setColumnGridCount}
+              />
+              <MemesOrderBy />
+            </div>
           </div>
           <React.Suspense fallback={<LoadingSpinner />}>
-            <MemesListWrapper />
+            <MemesListWrapper columnGridCount={columnGridCount} />
           </React.Suspense>
         </div>
       </div>
