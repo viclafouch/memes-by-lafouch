@@ -1,3 +1,4 @@
+import { AdminNavButton } from '@/components/admin/admin-nav-button'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { PathBreadcrumbs } from '@/components/path-breadcrumbs'
 import { Container } from '@/components/ui/container'
@@ -6,11 +7,12 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar'
-import { UserNavButton } from '@/components/User/user-nav-button'
 import { Separator } from '@radix-ui/react-separator'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 const RouteComponent = () => {
+  const { user } = Route.useRouteContext()
+
   return (
     <SidebarProvider
       style={
@@ -31,7 +33,7 @@ const RouteComponent = () => {
               />
               <PathBreadcrumbs />
             </div>
-            <UserNavButton />
+            <AdminNavButton user={user} />
           </header>
           <Outlet />
         </Container>
@@ -50,5 +52,11 @@ export const Route = createFileRoute('/admin')({
     if (context.user.role !== 'admin') {
       throw redirect({ to: '/library' })
     }
+
+    if (location.pathname === '/admin') {
+      throw redirect({ to: '/admin/users' })
+    }
+
+    return { user: context.user }
   }
 })
