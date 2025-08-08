@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
 import { LoadingSpinner } from '@/components/ui/spinner'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
+import { matchIsUserAdmin } from '@/lib/auth-client'
 import { getMemesListQueryOpts } from '@/lib/queries'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -46,14 +47,18 @@ const MemesListWrapper = () => {
 }
 
 const RouteComponent = () => {
+  const { user } = Route.useRouteContext()
+
   return (
     <Container>
       <PageHeader
         title="Memes"
         action={
-          <NewMemeButton>
-            <Plus /> Ajouter un mème
-          </NewMemeButton>
+          matchIsUserAdmin(user) ? (
+            <NewMemeButton>
+              <Plus /> Ajouter un mème
+            </NewMemeButton>
+          ) : null
         }
       />
       <div className="w-full mx-auto py-10">
@@ -75,6 +80,9 @@ export const Route = createFileRoute('/_auth/library/')({
   component: RouteComponent,
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)
+  },
+  pendingComponent: () => {
+    return <div>Loading...</div>
   },
   loader: () => {
     return {

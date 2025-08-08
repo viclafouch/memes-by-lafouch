@@ -1,12 +1,12 @@
 import type { User } from 'better-auth'
 import { formatDate } from 'date-fns'
 import { EllipsisVertical } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import {
@@ -17,8 +17,10 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { authClient } from '@/lib/auth-client'
 import { getListUsers } from '@/server/admin'
-import { createFileRoute } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
   createColumnHelper,
   flexRender,
@@ -26,7 +28,105 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 
-type UserWithRole = User & { role?: string | undefined }
+type UserWithRole = User & {
+  role?: string
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | null
+}
+
+const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
+  const router = useRouter()
+
+  const banUserMutation = useMutation({
+    mutationFn: async () => {
+      await authClient.admin.banUser({
+        userId: user.id,
+        banReason: 'Spamming',
+        banExpiresIn: 60 * 60 * 24 * 7
+      })
+    },
+    onSuccess: () => {
+      router.invalidate()
+    }
+  })
+
+  const unbanUserMutation = useMutation({
+    mutationFn: async () => {
+      await authClient.admin.unbanUser({
+        userId: user.id
+      })
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    onSuccess: () => {
+      router.invalidate()
+    }
+  })
+
+  const deleteUserMutation = useMutation({
+    mutationFn: async () => {
+      await authClient.admin.removeUser({
+        userId: user.id
+      })
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    onSuccess: () => {
+      router.invalidate()
+    }
+  })
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          className="data-[state=open]:bg-muted text-muted-foreground flex size-8 float-right"
+          size="icon"
+        >
+          <EllipsisVertical />
+          <span className="sr-only">Open menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-32">
+        {user.role !== 'admin' ? (
+          <>
+            {user.banned ? (
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => {
+                  unbanUserMutation.mutate()
+                }}
+              >
+                Débannir
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => {
+                  banUserMutation.mutate()
+                }}
+              >
+                Bannir
+              </DropdownMenuItem>
+            )}
+          </>
+        ) : null}
+        <DropdownMenuItem
+          variant="destructive"
+          onClick={() => {
+            deleteUserMutation.mutate()
+          }}
+        >
+          Supprimer
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 const columnHelper = createColumnHelper<UserWithRole>()
 
@@ -63,28 +163,10 @@ const columns = [
   }),
   columnHelper.display({
     id: 'Actions',
-    cell: () => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="data-[state=open]:bg-muted text-muted-foreground flex size-8 float-right"
-              size="icon"
-            >
-              <EllipsisVertical />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Make a copy</DropdownMenuItem>
-            <DropdownMenuItem>Favorite</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+    cell: (cell) => {
+      const user = cell.row.original
+
+      return <DropdownMenuUser user={user} />
     }
   })
 ]
