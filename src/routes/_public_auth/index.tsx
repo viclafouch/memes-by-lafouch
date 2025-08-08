@@ -1,57 +1,28 @@
 import React from 'react'
-import { Search } from 'lucide-react'
+import { ChevronRight, Search } from 'lucide-react'
+import { MemesList } from '@/components/Meme/memes-list'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { LoadingSpinner } from '@/components/ui/spinner'
-import { getBestMemesQueryOpts } from '@/lib/queries'
-import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { getBestMemes } from '@/server/ai'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 const RouteComponent = () => {
-  const [searchSubmitted, setSearchSubmitted] = React.useState('')
-
-  const bestMemesQuery = useQuery({
-    ...getBestMemesQueryOpts(searchSubmitted),
-    enabled: searchSubmitted.trim().length > 0
-  })
+  const { memes } = Route.useLoaderData()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const form = new FormData(event.currentTarget)
-
-    setSearchSubmitted(form.get('query')?.toString() || '')
+    console.log('submitted')
   }
 
   return (
-    <div className="relative">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="800"
-        height="400"
-        className="absolute w-screen h-screen inset-0 -z-10"
-      >
-        <defs>
-          <linearGradient
-            id="gradient"
-            x1="0.854"
-            y1="0.854"
-            x2="0.146"
-            y2="0.146"
-          >
-            <stop offset="0.000" stopColor="rgb(7, 10, 11)" />
-            <stop offset="0.500" stopColor="rgb(0, 0, 0)" />
-            <stop offset="1.000" stopColor="rgb(3, 27, 53)" />
-          </linearGradient>
-        </defs>
-        <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" />
-      </svg>
+    <div className="relative min-h-screen pb-20">
       <div className="mx-auto flex w-full flex-col gap-4 pt-32 lg:pt-48 px-6">
         <div>
           <h1 className="font-heading text-pretty text-center font-semibold tracking-tighter text-gray-100 sm:text-[32px] md:text-[46px] text-[29px] mb-4">
             Quel mème voulez-vous ?
           </h1>
-          <div className="max-w-6xl mx-auto flex flex-col gap-y-16 w-full">
+          <div className="max-w-6xl mx-auto flex flex-col gap-y-40 w-full">
             <div className="content-center relative mx-auto w-full max-w-196">
               <div className="relative z-10 flex w-full flex-col">
                 <form
@@ -91,8 +62,30 @@ const RouteComponent = () => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {bestMemesQuery.isLoading ? <LoadingSpinner /> : null}
+            <div className="flex flex-col gap-y-4">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <div className="text-left text-base font-medium">
+                    Uploadé par les utilisateurs
+                  </div>
+                  <Link
+                    className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-100 focus:text-gray-100"
+                    to="/library"
+                  >
+                    <span>Tout parcourir</span>
+                    <ChevronRight size={16} />
+                  </Link>
+                </div>
+                <p className="text-sm text-gray-500">
+                  Explore what the community is building with v0.
+                </p>
+              </div>
+              <section className="flex flex-col items-center gap-y-12">
+                <MemesList layoutContext="index" memes={memes} />
+                <Button asChild variant="outline" size="lg">
+                  <Link to="/library">Voir tous les mèmes</Link>
+                </Button>
+              </section>
             </div>
           </div>
         </div>
@@ -101,6 +94,18 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/ask-me')({
-  component: RouteComponent
+export const Route = createFileRoute('/_public_auth/')({
+  component: RouteComponent,
+  loader: async () => {
+    const memes = await getBestMemes()
+
+    return {
+      memes: memes.map((meme) => {
+        return {
+          ...meme,
+          isBookmarked: false
+        }
+      })
+    }
+  }
 })

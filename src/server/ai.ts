@@ -1,5 +1,5 @@
 // import * as R from 'remeda'
-import { z } from 'zod'
+
 import { prismaClient } from '@/db'
 // import { prismaClient } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
@@ -17,15 +17,12 @@ import { createServerFn } from '@tanstack/react-start'
 //   return data[0].embedding
 // }
 
-export const getBestMemes = createServerFn({ method: 'GET' })
-  .validator((data) => {
-    return z.string().parse(data)
-  })
-  .handler(async () => {
+export const getBestMemes = createServerFn({ method: 'GET' }).handler(
+  async () => {
     // const dataQueryNormalized = query.toLowerCase().trim() ?? ''
 
     const memes = await prismaClient.meme.findMany({
-      take: 5,
+      take: 12,
       include: {
         video: true,
         embedding: true
@@ -56,4 +53,5 @@ export const getBestMemes = createServerFn({ method: 'GET' })
     //   }),
     //   R.take(5)
     // )
-  })
+  }
+)

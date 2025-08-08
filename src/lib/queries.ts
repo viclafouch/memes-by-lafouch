@@ -1,5 +1,4 @@
 import type { MemesFilters } from '@/constants/meme'
-import { getBestMemes } from '@/server/ai'
 import { getMemeById, getMemes, getVideoStatusById } from '@/server/meme'
 import { getFavoritesMemesCount } from '@/server/user'
 import { getAuthUser } from '@/server/user-auth'
@@ -38,17 +37,6 @@ export const getVideoStatusByIdQueryOpts = (videoId: Video['id']) => {
 }
 
 getVideoStatusByIdQueryOpts.all = ['video-status'] as const
-
-export const getBestMemesQueryOpts = (query: string) => {
-  return queryOptions({
-    queryKey: [...getBestMemesQueryOpts.all, query],
-    queryFn: async () => {
-      return getBestMemes({ data: query })
-    }
-  })
-}
-
-getBestMemesQueryOpts.all = ['best-memes'] as const
 
 export const getAuthUserQueryOpts = () => {
   return queryOptions({

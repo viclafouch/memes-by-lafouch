@@ -11,11 +11,10 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AskMeRouteImport } from './routes/ask-me'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as Public_authRouteRouteImport } from './routes/_public_auth/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as Public_authIndexRouteImport } from './routes/_public_auth/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as Public_authSignupRouteImport } from './routes/_public_auth/signup'
 import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
@@ -30,11 +29,6 @@ import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.
 
 const rootServerRouteImport = createServerRootRoute()
 
-const AskMeRoute = AskMeRouteImport.update({
-  id: '/ask-me',
-  path: '/ask-me',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -48,10 +42,10 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const Public_authIndexRoute = Public_authIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => Public_authRouteRoute,
 } as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
@@ -110,28 +104,26 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/ask-me': typeof AskMeRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
+  '/': typeof Public_authIndexRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
   '/library': typeof AuthLibraryIndexRoute
   '/random': typeof AuthRandomIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/ask-me': typeof AskMeRoute
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
+  '/': typeof Public_authIndexRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
   '/library': typeof AuthLibraryIndexRoute
@@ -139,16 +131,15 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_public_auth': typeof Public_authRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
-  '/ask-me': typeof AskMeRoute
   '/_auth/downloader': typeof AuthDownloaderRoute
   '/_auth/favorites': typeof AuthFavoritesRoute
   '/_public_auth/login': typeof Public_authLoginRoute
   '/_public_auth/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
+  '/_public_auth/': typeof Public_authIndexRoute
   '/_auth/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/_auth/random/$memeId': typeof AuthRandomMemeIdRoute
   '/_auth/library/': typeof AuthLibraryIndexRoute
@@ -157,44 +148,41 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/admin'
-    | '/ask-me'
     | '/downloader'
     | '/favorites'
     | '/login'
     | '/signup'
     | '/admin/users'
+    | '/'
     | '/library/$memeId'
     | '/random/$memeId'
     | '/library'
     | '/random'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/admin'
-    | '/ask-me'
     | '/downloader'
     | '/favorites'
     | '/login'
     | '/signup'
     | '/admin/users'
+    | '/'
     | '/library/$memeId'
     | '/random/$memeId'
     | '/library'
     | '/random'
   id:
     | '__root__'
-    | '/'
     | '/_auth'
     | '/_public_auth'
     | '/admin'
-    | '/ask-me'
     | '/_auth/downloader'
     | '/_auth/favorites'
     | '/_public_auth/login'
     | '/_public_auth/signup'
     | '/admin/users'
+    | '/_public_auth/'
     | '/_auth/library/$memeId'
     | '/_auth/random/$memeId'
     | '/_auth/library/'
@@ -202,11 +190,9 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   Public_authRouteRoute: typeof Public_authRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  AskMeRoute: typeof AskMeRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/bunny': typeof ApiBunnyServerRoute
@@ -236,13 +222,6 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/ask-me': {
-      id: '/ask-me'
-      path: '/ask-me'
-      fullPath: '/ask-me'
-      preLoaderRoute: typeof AskMeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -264,12 +243,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_public_auth/': {
+      id: '/_public_auth/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof Public_authIndexRouteImport
+      parentRoute: typeof Public_authRouteRoute
     }
     '/admin/users': {
       id: '/admin/users'
@@ -380,11 +359,13 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 interface Public_authRouteRouteChildren {
   Public_authLoginRoute: typeof Public_authLoginRoute
   Public_authSignupRoute: typeof Public_authSignupRoute
+  Public_authIndexRoute: typeof Public_authIndexRoute
 }
 
 const Public_authRouteRouteChildren: Public_authRouteRouteChildren = {
   Public_authLoginRoute: Public_authLoginRoute,
   Public_authSignupRoute: Public_authSignupRoute,
+  Public_authIndexRoute: Public_authIndexRoute,
 }
 
 const Public_authRouteRouteWithChildren =
@@ -403,11 +384,9 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   Public_authRouteRoute: Public_authRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  AskMeRoute: AskMeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
