@@ -62,7 +62,7 @@ const RouteComponent = () => {
   const [columnGridCount, setColumnGridCount] = React.useState<3 | 5 | 6>(3)
 
   return (
-    <Container>
+    <Container className="overflow-scroll">
       <PageHeader
         title="Memes"
         action={

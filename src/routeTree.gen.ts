@@ -20,8 +20,11 @@ import { Route as Public_authSignupRouteImport } from './routes/_public_auth/sig
 import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
 import { Route as AuthFavoritesRouteImport } from './routes/_auth/favorites'
 import { Route as AuthDownloaderRouteImport } from './routes/_auth/downloader'
+import { Route as AuthStudioRouteRouteImport } from './routes/_auth/studio/route'
+import { Route as AuthStudioIndexRouteImport } from './routes/_auth/studio/index'
 import { Route as AuthRandomIndexRouteImport } from './routes/_auth/random/index'
 import { Route as AuthLibraryIndexRouteImport } from './routes/_auth/library/index'
+import { Route as AuthStudioMemeIdRouteImport } from './routes/_auth/studio/$memeId'
 import { Route as AuthRandomMemeIdRouteImport } from './routes/_auth/random/$memeId'
 import { Route as AuthLibraryMemeIdRouteImport } from './routes/_auth/library/$memeId'
 import { ServerRoute as ApiBunnyServerRouteImport } from './routes/api/bunny'
@@ -72,6 +75,16 @@ const AuthDownloaderRoute = AuthDownloaderRouteImport.update({
   path: '/downloader',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthStudioRouteRoute = AuthStudioRouteRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthStudioIndexRoute = AuthStudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthStudioRouteRoute,
+} as any)
 const AuthRandomIndexRoute = AuthRandomIndexRouteImport.update({
   id: '/random/',
   path: '/random/',
@@ -81,6 +94,11 @@ const AuthLibraryIndexRoute = AuthLibraryIndexRouteImport.update({
   id: '/library/',
   path: '/library/',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthStudioMemeIdRoute = AuthStudioMemeIdRouteImport.update({
+  id: '/$memeId',
+  path: '/$memeId',
+  getParentRoute: () => AuthStudioRouteRoute,
 } as any)
 const AuthRandomMemeIdRoute = AuthRandomMemeIdRouteImport.update({
   id: '/random/$memeId',
@@ -105,6 +123,7 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
+  '/studio': typeof AuthStudioRouteRouteWithChildren
   '/downloader': typeof AuthDownloaderRoute
   '/favorites': typeof AuthFavoritesRoute
   '/login': typeof Public_authLoginRoute
@@ -113,8 +132,10 @@ export interface FileRoutesByFullPath {
   '/': typeof Public_authIndexRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
+  '/studio/$memeId': typeof AuthStudioMemeIdRoute
   '/library': typeof AuthLibraryIndexRoute
   '/random': typeof AuthRandomIndexRoute
+  '/studio/': typeof AuthStudioIndexRoute
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
@@ -126,14 +147,17 @@ export interface FileRoutesByTo {
   '/': typeof Public_authIndexRoute
   '/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/random/$memeId': typeof AuthRandomMemeIdRoute
+  '/studio/$memeId': typeof AuthStudioMemeIdRoute
   '/library': typeof AuthLibraryIndexRoute
   '/random': typeof AuthRandomIndexRoute
+  '/studio': typeof AuthStudioIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_public_auth': typeof Public_authRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
+  '/_auth/studio': typeof AuthStudioRouteRouteWithChildren
   '/_auth/downloader': typeof AuthDownloaderRoute
   '/_auth/favorites': typeof AuthFavoritesRoute
   '/_public_auth/login': typeof Public_authLoginRoute
@@ -142,13 +166,16 @@ export interface FileRoutesById {
   '/_public_auth/': typeof Public_authIndexRoute
   '/_auth/library/$memeId': typeof AuthLibraryMemeIdRoute
   '/_auth/random/$memeId': typeof AuthRandomMemeIdRoute
+  '/_auth/studio/$memeId': typeof AuthStudioMemeIdRoute
   '/_auth/library/': typeof AuthLibraryIndexRoute
   '/_auth/random/': typeof AuthRandomIndexRoute
+  '/_auth/studio/': typeof AuthStudioIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/admin'
+    | '/studio'
     | '/downloader'
     | '/favorites'
     | '/login'
@@ -157,8 +184,10 @@ export interface FileRouteTypes {
     | '/'
     | '/library/$memeId'
     | '/random/$memeId'
+    | '/studio/$memeId'
     | '/library'
     | '/random'
+    | '/studio/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
@@ -170,13 +199,16 @@ export interface FileRouteTypes {
     | '/'
     | '/library/$memeId'
     | '/random/$memeId'
+    | '/studio/$memeId'
     | '/library'
     | '/random'
+    | '/studio'
   id:
     | '__root__'
     | '/_auth'
     | '/_public_auth'
     | '/admin'
+    | '/_auth/studio'
     | '/_auth/downloader'
     | '/_auth/favorites'
     | '/_public_auth/login'
@@ -185,8 +217,10 @@ export interface FileRouteTypes {
     | '/_public_auth/'
     | '/_auth/library/$memeId'
     | '/_auth/random/$memeId'
+    | '/_auth/studio/$memeId'
     | '/_auth/library/'
     | '/_auth/random/'
+    | '/_auth/studio/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -285,6 +319,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDownloaderRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/studio': {
+      id: '/_auth/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof AuthStudioRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/studio/': {
+      id: '/_auth/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof AuthStudioIndexRouteImport
+      parentRoute: typeof AuthStudioRouteRoute
+    }
     '/_auth/random/': {
       id: '/_auth/random/'
       path: '/random'
@@ -298,6 +346,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/library'
       preLoaderRoute: typeof AuthLibraryIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/studio/$memeId': {
+      id: '/_auth/studio/$memeId'
+      path: '/$memeId'
+      fullPath: '/studio/$memeId'
+      preLoaderRoute: typeof AuthStudioMemeIdRouteImport
+      parentRoute: typeof AuthStudioRouteRoute
     }
     '/_auth/random/$memeId': {
       id: '/_auth/random/$memeId'
@@ -334,7 +389,22 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
+interface AuthStudioRouteRouteChildren {
+  AuthStudioMemeIdRoute: typeof AuthStudioMemeIdRoute
+  AuthStudioIndexRoute: typeof AuthStudioIndexRoute
+}
+
+const AuthStudioRouteRouteChildren: AuthStudioRouteRouteChildren = {
+  AuthStudioMemeIdRoute: AuthStudioMemeIdRoute,
+  AuthStudioIndexRoute: AuthStudioIndexRoute,
+}
+
+const AuthStudioRouteRouteWithChildren = AuthStudioRouteRoute._addFileChildren(
+  AuthStudioRouteRouteChildren,
+)
+
 interface AuthRouteRouteChildren {
+  AuthStudioRouteRoute: typeof AuthStudioRouteRouteWithChildren
   AuthDownloaderRoute: typeof AuthDownloaderRoute
   AuthFavoritesRoute: typeof AuthFavoritesRoute
   AuthLibraryMemeIdRoute: typeof AuthLibraryMemeIdRoute
@@ -344,6 +414,7 @@ interface AuthRouteRouteChildren {
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthStudioRouteRoute: AuthStudioRouteRouteWithChildren,
   AuthDownloaderRoute: AuthDownloaderRoute,
   AuthFavoritesRoute: AuthFavoritesRoute,
   AuthLibraryMemeIdRoute: AuthLibraryMemeIdRoute,

@@ -113,9 +113,7 @@ export const getMemes = createServerFn({ method: 'GET' })
   .validator(MEMES_FILTERS_SCHEMA)
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ data, context }) => {
-    // page starts at 1 in UI, 0 in API
-    const page = (data.page ?? 1) - 1
-    const skip = page * 30
+    const currentPage = data.page ?? 1
     const dataQueryNormalized = data.query?.toLowerCase().trim() ?? ''
 
     const filters = dataQueryNormalized
@@ -139,7 +137,8 @@ export const getMemes = createServerFn({ method: 'GET' })
 
     const memes = await prismaClient.meme.findMany({
       take: 30,
-      skip,
+      // page starts at 1 in UI, 0 in API
+      skip: (currentPage - 1) * 30,
       include: {
         video: true,
         bookmarkedBy: {
@@ -160,11 +159,14 @@ export const getMemes = createServerFn({ method: 'GET' })
       }
     })
 
+    const totalPages = Math.ceil(totalMemes / 30)
+
     return {
       memes: memesWithIsBookmarked,
       query: data.query,
-      currentPage: page + 1,
-      totalPages: Math.ceil(totalMemes / 30)
+      currentPage,
+      nextPage: currentPage + 1 <= totalPages ? currentPage + 1 : null,
+      totalPages
     }
   })
 

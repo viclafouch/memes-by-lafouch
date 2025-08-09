@@ -6,7 +6,7 @@ export const MEMES_ORDER_BY_OPTIONS = ['most_recent', 'most_old'] as const
 export const MEMES_FILTERS_SCHEMA = z.object({
   query: z.string().optional().catch(undefined),
   orderBy: z.enum(MEMES_ORDER_BY_OPTIONS).optional().catch('most_recent'),
-  page: z.coerce.number().optional().catch(0)
+  page: z.coerce.number().optional().catch(1)
 })
 
 export type MemeWithVideo = Prisma.MemeGetPayload<{
