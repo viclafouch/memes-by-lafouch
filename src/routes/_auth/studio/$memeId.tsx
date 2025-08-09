@@ -1,48 +1,23 @@
 import React from 'react'
 import { toast } from 'sonner'
+import { Progress } from '@/components/animate-ui/radix/progress'
 import { Button } from '@/components/ui/button'
-import { LoadingButton } from '@/components/ui/loading-button'
+import { Input } from '@/components/ui/input'
+import {
+  useVideoInitializer,
+  useVideoProcessor
+} from '@/hooks/use-video-processor'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
-import { VideoProcessor } from '@/lib/video-processor'
 import { shareMeme } from '@/server/meme'
 import { downloadBlob } from '@/utils/download'
-import { useMutation } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { meme } = Route.useLoaderData()
-  const [progress, setProgress] = React.useState(0)
+  const { data: ffmpeg } = useVideoInitializer()
+  const [text, setText] = React.useState('')
 
-  const processor = React.useMemo(() => {
-    return new VideoProcessor()
-  }, [])
-
-  const initializeMutation = useMutation({
-    mutationFn: async () => {
-      await processor.initialize((message) => {
-        console.log(message)
-      })
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    }
-  })
-
-  const handleInitialize = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    initializeMutation.mutate()
-  }
-
-  const processMutation = useMutation({
-    mutationFn: async ({ text }: { text: string }) => {
-      const response = await shareMeme({ data: meme.id })
-      const blob = await response.blob()
-
-      return processor.addTextBand({ videoBlob: blob, text }, setProgress)
-    },
-    onMutate: () => {
-      setProgress(0)
-    },
+  const { progress, processVideo, isLoading } = useVideoProcessor(ffmpeg, {
     onSuccess: (blob) => {
       downloadBlob(blob, 'meme.mp4')
     },
@@ -51,24 +26,24 @@ const RouteComponent = () => {
     }
   })
 
-  React.useEffect(() => {
-    return () => {
-      processor.ffmpeg.terminate()
-    }
-  }, [])
+  const handleInitialize = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-  const handleCreateMeme = () => {
-    if (!processor.ffmpeg.loaded) {
+    if (!text.trim()) {
+      toast.error('Veuillez saisir du texte')
+
       return
     }
 
-    processMutation.mutate({
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate asperiores aliquid autem nulla perspiciatis quasi in nemo consectetur commodi mollitia. Corrupti consequatur aliquam blanditiis doloremque rem omnis incidunt quas quae.'
+    const response = await shareMeme({ data: meme.id })
+    processVideo({
+      videoBlob: await response.blob(),
+      text
     })
   }
 
   return (
-    <div className="relative w-full aspect-video">
+    <div className="w-full flex flex-col gap-4">
       <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
         <iframe
           src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?preload=false&autoplay=false`}
@@ -78,20 +53,34 @@ const RouteComponent = () => {
           allow="autoplay"
         />
       </div>
-      <div>
-        {!processor.ffmpeg.loaded ? (
-          <LoadingButton
-            isLoading={initializeMutation.isPending}
-            onClick={handleInitialize}
+      <div className="flex flex-col gap-4">
+        <h1 className="text-xl">Ajouter du texte</h1>
+        <form
+          className="max-w-xl flex flex-col gap-4 items-start"
+          onSubmit={handleInitialize}
+        >
+          <Input
+            value={text}
+            onChange={(event) => {
+              setText(event.target.value)
+            }}
+            placeholder="Texte à ajouter"
+            name="text"
+            type="text"
+          />
+          <Button
+            disabled={text.trim().length === 0 || isLoading}
+            type="submit"
           >
-            Initialize
-          </LoadingButton>
-        ) : (
-          <div>
-            <Button onClick={handleCreateMeme}>Create Meme</Button>
-            <p>{progress}%</p>
+            Prévisualiser la vidéo
+          </Button>
+        </form>
+        {isLoading ? (
+          <div className="flex flex-col gap-2">
+            <span>{progress}%</span>
+            <Progress value={progress} />
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   )
