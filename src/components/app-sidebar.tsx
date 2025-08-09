@@ -1,4 +1,11 @@
-import { Download, Home, Shuffle, Stars, User2 } from 'lucide-react'
+import {
+  Clapperboard,
+  Download,
+  Home,
+  Shuffle,
+  Stars,
+  User2
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -72,6 +79,14 @@ export const AppSidebar = ({
                         {favoritesCountQuery.data.count}
                       </SidebarMenuBadge>
                     ) : null}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/studio">
+                    <Clapperboard />
+                    <span>Studio</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

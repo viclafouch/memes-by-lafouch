@@ -77,7 +77,7 @@ const RouteComponent = () => {
         <div className="flex flex-col gap-y-4">
           <div className="border-b border-muted pb-4 flex justify-between gap-x-3">
             <MemesQuery />
-            <div className="flex gap-x-3">
+            <div className="gap-x-3 hidden xl:flex">
               <MemesToggleGrid
                 columnValue={columnGridCount}
                 onColumnValueChange={setColumnGridCount}
