@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { Sheet, SheetTrigger } from '@/components/animate-ui/radix/sheet'
 import { StudioDialogExport } from '@/components/studio/studio-dialog-export'
 import { StudioMobileSheet } from '@/components/studio/studio-mobile-sheet'
+import { StudioTabs } from '@/components/studio/studio-tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LoadingSpinner } from '@/components/ui/spinner'
@@ -44,56 +45,65 @@ const RouteComponent = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
-        <iframe
-          src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?preload=false&autoplay=false`}
-          loading="eager"
-          title={meme.title}
-          className="w-full h-full"
-          allow="autoplay"
-        />
-      </div>
-      <div className="flex flex-col gap-4">
-        <h1 className="text-xl">Ajouter du texte</h1>
-        <form
-          className="max-w-xl flex flex-col gap-4 items-start"
-          onSubmit={handleInitialize}
-        >
-          <Input
-            value={text}
-            onChange={(event) => {
-              setText(event.target.value)
-            }}
-            placeholder="Texte à ajouter"
-            name="text"
-            type="text"
-          />
-          <div className="flex gap-2">
-            <Button
-              disabled={text.trim().length === 0 || isLoading}
-              type="submit"
-            >
-              Prévisualiser la vidéo
-            </Button>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="secondary" className="lg:hidden">
-                  Choisir un autre mème
-                </Button>
-              </SheetTrigger>
-              <StudioMobileSheet />
-            </Sheet>
+    <div className="w-full h-full overflow-hidden">
+      <div className="grid lg:grid-cols-[auto_350px] h-full overflow-hidden">
+        <div className="w-full flex flex-col gap-4 p-4">
+          <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
+            <iframe
+              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?preload=false&autoplay=false`}
+              loading="eager"
+              title={meme.title}
+              className="w-full h-full"
+              allow="autoplay"
+            />
           </div>
-        </form>
+          <div className="flex flex-col gap-4">
+            <h1 className="text-xl">Ajouter du texte</h1>
+            <form
+              className="max-w-xl flex flex-col gap-4 items-start"
+              onSubmit={handleInitialize}
+            >
+              <Input
+                value={text}
+                onChange={(event) => {
+                  setText(event.target.value)
+                }}
+                placeholder="Texte à ajouter"
+                name="text"
+                type="text"
+              />
+              <div className="flex gap-2">
+                <Button
+                  disabled={text.trim().length === 0 || isLoading}
+                  type="submit"
+                >
+                  Prévisualiser la vidéo
+                </Button>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="secondary" className="lg:hidden">
+                      Choisir un autre mème
+                    </Button>
+                  </SheetTrigger>
+                  <StudioMobileSheet />
+                </Sheet>
+              </div>
+            </form>
+          </div>
+          <StudioDialogExport
+            open={isDialogOpened}
+            onOpenChange={setIsDialogOpened}
+            progress={progress}
+            isLoading={isLoading}
+            data={data}
+          />
+        </div>
+        <div className="p-4 border-l border-accent h-full overflow-scroll hidden lg:block">
+          <div>
+            <StudioTabs />
+          </div>
+        </div>
       </div>
-      <StudioDialogExport
-        open={isDialogOpened}
-        onOpenChange={setIsDialogOpened}
-        progress={progress}
-        isLoading={isLoading}
-        data={data}
-      />
     </div>
   )
 }

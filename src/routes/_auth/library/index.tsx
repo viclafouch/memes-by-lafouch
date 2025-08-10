@@ -16,13 +16,7 @@ import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
-type ColumnGridCount = 3 | 5 | 6
-
-const MemesListWrapper = ({
-  columnGridCount
-}: {
-  columnGridCount: ColumnGridCount
-}) => {
+const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
   const search = Route.useSearch()
 
   const [debouncedValue] = useDebouncedValue(search.query, {
@@ -59,7 +53,7 @@ const MemesListWrapper = ({
 
 const RouteComponent = () => {
   const { user } = Route.useRouteContext()
-  const [columnGridCount, setColumnGridCount] = React.useState<3 | 5 | 6>(3)
+  const [columnGridCount, setColumnGridCount] = React.useState<number>(3)
 
   return (
     <Container className="overflow-scroll">

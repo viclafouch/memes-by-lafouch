@@ -1,16 +1,20 @@
 import React from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
+const defaultValues = [3, 5, 6]
+
 const MemesToggleGrid = ({
   columnValue,
+  values = defaultValues,
   onColumnValueChange
 }: {
-  columnValue: 3 | 5 | 6
-  onColumnValueChange: (value: 3 | 5 | 6) => void
+  columnValue: number
+  values?: number[]
+  onColumnValueChange: (value: number) => void
 }) => {
   const handleChange = (value: string) => {
     if (value) {
-      onColumnValueChange(parseInt(value, 10) as 3 | 5 | 6)
+      onColumnValueChange(parseInt(value, 10))
     }
   }
 
@@ -22,9 +26,13 @@ const MemesToggleGrid = ({
       value={columnValue.toString()}
       onValueChange={handleChange}
     >
-      <ToggleGroupItem value="3">3</ToggleGroupItem>
-      <ToggleGroupItem value="5">5</ToggleGroupItem>
-      <ToggleGroupItem value="6">6</ToggleGroupItem>
+      {values.map((value) => {
+        return (
+          <ToggleGroupItem key={value} value={value.toString()}>
+            {value}
+          </ToggleGroupItem>
+        )
+      })}
     </ToggleGroup>
   )
 }

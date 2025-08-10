@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
 @import "tailwindcss" source("../");
 @import "tw-animate-css";
 
@@ -143,7 +144,6 @@
   }
 }
 
-/* Hide spinner on video (only Chrome)  */
-video::-webkit-media-controls-enclosure {
-  visibility: visible;
+@theme {
+  --font-bricolage: "Bricolage Grotesque","Bricolage Grotesque Fallback"
 }

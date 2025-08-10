@@ -1,29 +1,26 @@
 import React from 'react'
-import {
-  Tabs,
-  TabsContent,
-  TabsContents,
-  TabsList,
-  TabsTrigger
-} from '@/components/animate-ui/radix/tabs'
 import { StudioFavorites } from '@/components/studio/studio-favorites'
 import { StudioMemes } from '@/components/studio/studio-memes'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export const StudioTabs = () => {
+  const [columnGridCount, setColumnGridCount] = React.useState<number>(3)
+
   return (
-    <Tabs defaultValue="tab1">
+    <Tabs defaultValue="all-memes" className="h-full">
       <TabsList className="w-full">
-        <TabsTrigger value="tab1">Tous les Memes</TabsTrigger>
-        <TabsTrigger value="tab2">Mes favoris</TabsTrigger>
+        <TabsTrigger value="all-memes">Tous les Memes</TabsTrigger>
+        <TabsTrigger value="favorites-memes">Mes favoris</TabsTrigger>
       </TabsList>
-      <TabsContents>
-        <TabsContent value="tab1">
-          <StudioMemes />
-        </TabsContent>
-        <TabsContent value="tab2">
-          <StudioFavorites />
-        </TabsContent>
-      </TabsContents>
+      <TabsContent value="all-memes" className="h-full">
+        <StudioMemes
+          columnGridCount={columnGridCount}
+          onColumnValueChange={setColumnGridCount}
+        />
+      </TabsContent>
+      <TabsContent value="favorites-memes">
+        <StudioFavorites />
+      </TabsContent>
     </Tabs>
   )
 }
