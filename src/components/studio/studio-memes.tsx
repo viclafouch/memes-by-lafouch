@@ -35,9 +35,9 @@ export const StudioMemes = ({
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      <div className="flex items-center w-full justify-between gap-4">
+      <div className="flex items-center w-full justify-between gap-2">
         <Input placeholder="Rechercher un meme" />
-        <div className="hidden md:block">
+        <div className="hidden md:block shrink-0">
           <MemesToggleGrid
             columnValue={columnGridCount}
             values={[1, 2, 3]}
@@ -47,7 +47,7 @@ export const StudioMemes = ({
       </div>
       <div className="overflow-scroll">
         <div
-          className="w-full grid grid-cols-1 gap-2 sm:[grid-template-columns:var(--cols)] flex-1 overflow-scroll"
+          className="w-full grid grid-cols-1 gap-2 sm:[grid-template-columns:var(--cols)] flex-1"
           style={
             {
               '--cols': `repeat(${columnGridCount}, 1fr)`

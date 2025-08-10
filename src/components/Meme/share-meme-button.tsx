@@ -8,9 +8,10 @@ import { useMutation } from '@tanstack/react-query'
 
 type ShareMemeButtonProps = {
   meme: MemeWithVideo
+  className?: string
 }
 
-export const ShareMemeButton = ({ meme }: ShareMemeButtonProps) => {
+export const ShareMemeButton = ({ meme, className }: ShareMemeButtonProps) => {
   const shareMutation = useMutation({
     mutationFn: async () => {
       const response = await shareMeme({ data: meme.id })
@@ -33,6 +34,7 @@ export const ShareMemeButton = ({ meme }: ShareMemeButtonProps) => {
       icon={Share2}
       active={shareMutation.isPending}
       onClick={handleShare}
+      className={className}
     />
   )
 }

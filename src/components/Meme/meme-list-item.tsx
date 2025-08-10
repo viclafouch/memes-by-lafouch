@@ -9,18 +9,26 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { MemeWithVideo } from '@/constants/meme'
 import { getVideoStatusByIdQueryOpts } from '@/lib/queries'
+import { cn } from '@/lib/utils'
 import { matchIsVideoPlayable } from '@/utils/video'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
-type MemeListItemProps = {
+export type MemeListItemProps = {
   meme: MemeWithBoomarked
   layoutContext: string
+  size?: keyof typeof sizes
   onPlayClick: (meme: MemeWithVideo) => void
 }
 
+const sizes = {
+  sm: 'size-6 [&_svg]:size-4',
+  md: 'size-8 [&_svg]:size-5',
+  lg: 'size-12 [&_svg]:size-7'
+}
+
 export const MemeListItem = React.memo(
-  ({ meme, onPlayClick, layoutContext }: MemeListItemProps) => {
+  ({ meme, onPlayClick, layoutContext, size = 'lg' }: MemeListItemProps) => {
     const isVideoInitialPlayable = matchIsVideoPlayable(meme.video.bunnyStatus)
 
     const videoStatusQuery = useQuery({
@@ -98,11 +106,14 @@ export const MemeListItem = React.memo(
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             <MotionLink
               to="/studio/$memeId"
               params={{ memeId: meme.id }}
-              className="group/icon-button cursor-pointer relative shrink-0 rounded-full hover:bg-[var(--icon-button-color)]/10 active:bg-[var(--icon-button-color)]/20 text-[var(--icon-button-color)] size-8 [&_svg]:size-5"
+              className={cn(
+                'group/icon-button cursor-pointer relative shrink-0 rounded-full hover:bg-[var(--icon-button-color)]/10 active:bg-[var(--icon-button-color)]/20 text-[var(--icon-button-color)] size-8 [&_svg]:size-5',
+                sizes[size]
+              )}
               style={
                 {
                   '--icon-button-color': `rgb(255, 255, 255)`
@@ -118,8 +129,8 @@ export const MemeListItem = React.memo(
                 <Clapperboard />
               </motion.div>
             </MotionLink>
-            <ToggleLikeButton meme={meme} />
-            <ShareMemeButton meme={meme} />
+            <ToggleLikeButton meme={meme} className={sizes[size]} />
+            <ShareMemeButton meme={meme} className={sizes[size]} />
           </div>
         </div>
       </motion.div>

@@ -13,9 +13,10 @@ import { useRouter } from '@tanstack/react-router'
 
 type ToggleLikeButtonProps = {
   meme: Meme & { isBookmarked: boolean }
+  className?: string
 }
 
-const ToggleLikeButton = ({ meme }: ToggleLikeButtonProps) => {
+const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
 
@@ -86,6 +87,7 @@ const ToggleLikeButton = ({ meme }: ToggleLikeButtonProps) => {
     <IconButton
       icon={Star}
       active={meme.isBookmarked}
+      className={className}
       onClick={handleToggleLike}
     />
   )
