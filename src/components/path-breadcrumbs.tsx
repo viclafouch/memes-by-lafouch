@@ -35,15 +35,14 @@ export const PathBreadcrumbs = () => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
+        <BreadcrumbItem className="shrink-0">
           <BreadcrumbLink asChild>
             <Link to="/library">
               <Home className="h-4 w-4" />
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-
+        <BreadcrumbSeparator className="shrink-0" />
         {matchesWithCrumbs.map((match, index) => {
           const isLast = index === matchesWithCrumbs.length - 1
 
@@ -51,9 +50,11 @@ export const PathBreadcrumbs = () => {
             <React.Fragment key={match.fullPath}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{match.loaderData?.crumb}</BreadcrumbPage>
+                  <BreadcrumbPage className="truncate">
+                    {match.loaderData?.crumb}
+                  </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
+                  <BreadcrumbLink asChild className="truncate">
                     <Link from={match.fullPath}>{match.loaderData?.crumb}</Link>
                   </BreadcrumbLink>
                 )}
