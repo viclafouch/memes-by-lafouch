@@ -4,9 +4,9 @@ import { MotionLink } from '@/components/motion-link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LoadingSpinner } from '@/components/ui/spinner'
-import { Route } from '@/routes/_auth/studio/$memeId'
 import { getMemes } from '@/server/meme'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useParams } from '@tanstack/react-router'
 
 export const StudioMemes = ({
   columnGridCount,
@@ -15,7 +15,7 @@ export const StudioMemes = ({
   columnGridCount: number
   onColumnValueChange: (value: number) => void
 }) => {
-  const { memeId } = Route.useParams()
+  const { memeId } = useParams({ strict: false })
 
   const memesInfinityQuery = useInfiniteQuery({
     queryKey: ['memes'],
