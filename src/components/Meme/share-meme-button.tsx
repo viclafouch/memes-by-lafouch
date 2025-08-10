@@ -3,6 +3,7 @@ import { Share2 } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
 import { shareMeme } from '@/server/meme'
+import { shareBlob } from '@/utils/download'
 import { useMutation } from '@tanstack/react-query'
 
 type ShareMemeButtonProps = {
@@ -15,12 +16,7 @@ export const ShareMemeButton = ({ meme }: ShareMemeButtonProps) => {
       const response = await shareMeme({ data: meme.id })
       const blob = await response.blob()
 
-      const data: ShareData = {
-        files: [new File([blob], `${meme.title}.mp4`, { type: blob.type })],
-        title: meme.title
-      }
-
-      await navigator.share(data).catch(() => {})
+      shareBlob(blob, meme.title)
     }
   })
 

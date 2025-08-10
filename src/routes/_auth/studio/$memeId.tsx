@@ -1,7 +1,7 @@
 import React from 'react'
 import { toast } from 'sonner'
-import { Progress } from '@/components/animate-ui/radix/progress'
 import { Sheet, SheetTrigger } from '@/components/animate-ui/radix/sheet'
+import { StudioDialogExport } from '@/components/studio/studio-dialog-export'
 import { StudioMobileSheet } from '@/components/studio/studio-mobile-sheet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,23 +11,26 @@ import {
   useVideoProcessor
 } from '@/hooks/use-video-processor'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
-import { shareMeme } from '@/server/meme'
-import { downloadBlob } from '@/utils/download'
 import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { meme } = Route.useLoaderData()
   const { data: ffmpeg } = useVideoInitializer()
   const [text, setText] = React.useState('')
+  const [isDialogOpened, setIsDialogOpened] = React.useState(false)
 
-  const { progress, processVideo, isLoading } = useVideoProcessor(ffmpeg, {
-    onSuccess: (blob) => {
-      downloadBlob(blob, 'meme.mp4')
-    },
-    onError: (error) => {
-      toast.error(error.message)
+  const { progress, processVideo, isLoading, data } = useVideoProcessor(
+    ffmpeg,
+    {
+      onMutate: () => {
+        setIsDialogOpened(true)
+      },
+      onError: (error) => {
+        setIsDialogOpened(false)
+        toast.error(error.message)
+      }
     }
-  })
+  )
 
   const handleInitialize = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -38,11 +41,7 @@ const RouteComponent = () => {
       return
     }
 
-    const response = await shareMeme({ data: meme.id })
-    processVideo({
-      videoBlob: await response.blob(),
-      text
-    })
+    processVideo({ meme, text })
   }
 
   return (
@@ -88,13 +87,14 @@ const RouteComponent = () => {
             </Sheet>
           </div>
         </form>
-        {isLoading ? (
-          <div className="flex flex-col gap-2">
-            <span>{progress}%</span>
-            <Progress value={progress} />
-          </div>
-        ) : null}
       </div>
+      <StudioDialogExport
+        open={isDialogOpened}
+        onOpenChange={setIsDialogOpened}
+        progress={progress}
+        isLoading={isLoading}
+        data={data}
+      />
     </div>
   )
 }
@@ -115,6 +115,7 @@ export const Route = createFileRoute('/_auth/studio/$memeId')({
     )
 
     return {
+      crumb: `Studio - ${meme.title}`,
       meme
     }
   }

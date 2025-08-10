@@ -1,16 +1,25 @@
 import React from 'react'
+import { shareMeme } from '@/server/meme'
 import type { ProgressEvent } from '@ffmpeg/ffmpeg'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
+import type { Meme } from '@prisma/client'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
-interface VideoProcessingOptions {
-  videoBlob: Blob
+type VideoProcessingOptions = {
   text: string
   bandHeight?: number
   fontSize?: number
   fontColor?: string
 }
+
+type ProcessingParams = {
+  videoBlob: Blob
+} & VideoProcessingOptions
+
+type MutationBody = {
+  meme: Meme
+} & VideoProcessingOptions
 
 const addTextToVideo = async (
   ffmpeg: FFmpeg,
@@ -20,7 +29,7 @@ const addTextToVideo = async (
     bandHeight = 100,
     fontSize = 24,
     fontColor = 'black'
-  }: VideoProcessingOptions
+  }: ProcessingParams
 ) => {
   await ffmpeg.writeFile('input.mp4', await fetchFile(videoBlob))
   await ffmpeg.writeFile(
@@ -79,8 +88,9 @@ export const useVideoInitializer = () => {
 export const useVideoProcessor = (
   ffmpeg: FFmpeg,
   options?: {
-    onSuccess: (blob: Blob) => void
-    onError: (error: Error) => void
+    onMutate?: () => void
+    onSuccess?: (blob: Blob) => void
+    onError?: (error: Error) => void
   }
 ) => {
   const [progress, setProgress] = React.useState(0)
@@ -95,32 +105,45 @@ export const useVideoProcessor = (
   const mutation = useMutation({
     onMutate: async () => {
       setProgress(0)
+      options?.onMutate?.()
       await ffmpeg.load()
       ffmpeg.on('progress', progressSubscription)
     },
     mutationFn: async ({
-      videoBlob,
+      meme,
       text,
       bandHeight = 100,
       fontSize = 24,
       fontColor = 'black'
-    }: VideoProcessingOptions) => {
-      return addTextToVideo(ffmpeg, {
+    }: MutationBody) => {
+      const response = await shareMeme({ data: meme.id })
+      const videoBlob = await response.blob()
+      const blob = await addTextToVideo(ffmpeg, {
         videoBlob,
         text,
         bandHeight,
         fontSize,
         fontColor
       })
+
+      return {
+        blob,
+        url: URL.createObjectURL(blob),
+        title: meme.title
+      }
     },
-    onSuccess: (blob) => {
-      options?.onSuccess(blob)
+    onSuccess: ({ blob }) => {
+      options?.onSuccess?.(blob)
     },
     onError: (error) => {
-      options?.onError(error)
+      options?.onError?.(error)
     },
     onSettled: () => {
-      ffmpeg.terminate()
+      try {
+        ffmpeg.terminate()
+      } catch (error) {
+        console.log(error)
+      }
     }
   })
 

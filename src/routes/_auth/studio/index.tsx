@@ -9,5 +9,10 @@ const RouteComponent = () => {
 }
 
 export const Route = createFileRoute('/_auth/studio/')({
-  component: RouteComponent
+  component: RouteComponent,
+  loader: async () => {
+    return {
+      crumb: 'Studio'
+    }
+  }
 })

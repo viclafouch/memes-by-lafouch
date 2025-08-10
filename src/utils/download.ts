@@ -8,3 +8,12 @@ export function downloadBlob(blob: Blob, filename: string) {
   window.URL.revokeObjectURL(url)
   element.remove()
 }
+
+export async function shareBlob(blob: Blob, title: string, extension = 'mp4') {
+  const data: ShareData = {
+    files: [new File([blob], `${title}.${extension}`, { type: blob.type })],
+    title
+  }
+
+  await navigator.share(data).catch(() => {})
+}
