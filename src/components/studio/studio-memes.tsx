@@ -37,15 +37,17 @@ export const StudioMemes = ({
     <div className="flex flex-col gap-4 h-full">
       <div className="flex items-center w-full justify-between gap-4">
         <Input placeholder="Rechercher un meme" />
-        <MemesToggleGrid
-          columnValue={columnGridCount}
-          values={[1, 2, 3]}
-          onColumnValueChange={onColumnValueChange}
-        />
+        <div className="hidden md:block">
+          <MemesToggleGrid
+            columnValue={columnGridCount}
+            values={[1, 2, 3]}
+            onColumnValueChange={onColumnValueChange}
+          />
+        </div>
       </div>
       <div className="overflow-scroll">
         <div
-          className="w-full grid grid-cols-2 gap-2 sm:[grid-template-columns:var(--cols)] flex-1 overflow-scroll"
+          className="w-full grid grid-cols-1 gap-2 sm:[grid-template-columns:var(--cols)] flex-1 overflow-scroll"
           style={
             {
               '--cols': `repeat(${columnGridCount}, 1fr)`
@@ -79,7 +81,7 @@ export const StudioMemes = ({
                           alt={meme.title}
                           className="absolute w-full h-full inset-0 hidden duration-600 group-hover:block transition-discrete z-10 object-cover opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus-within:block"
                         />
-                        <span className="absolute inset-0 md:opacity-0 group-hover:opacity-100 text-white/80 place-items-center bg-muted/60 text-center p-2 text-balance flex justify-center items-center z-20">
+                        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 text-white/80 place-items-center bg-muted/60 text-center p-2 text-balance flex justify-center items-center z-20">
                           {meme.title}
                         </span>
                       </div>

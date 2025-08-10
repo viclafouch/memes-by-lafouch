@@ -9,7 +9,7 @@ const RouteComponent = () => {
   return (
     <div className="relative w-full flex flex-col gap-4 h-full">
       <StarsBackground className="flex absolute inset-0 items-center justify-center">
-        <div className="z-10 space-y-4 lg:space-y-6 text-center flex flex-col items-center justify-center">
+        <div className="z-10 space-y-4 lg:space-y-6 text-center flex flex-col items-center justify-center px-4">
           <h4 className="mb-4 max-w-(--breakpoint-md) text-3xl leading-12 md:leading-16 font-extrabold tracking-tight md:text-5xl font-bricolage">
             Créer votre mème avec
             <br /> <HighlightText text="Le Meme Studio" />
