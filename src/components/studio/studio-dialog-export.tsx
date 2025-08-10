@@ -83,7 +83,11 @@ export const StudioDialogExport = ({
                 </div>
               </div>
             ) : data ? (
-              <video src={data.url} controls className="w-full" />
+              <video
+                src={data.url}
+                controls
+                className="w-full max-h-[500px] flex"
+              />
             ) : null}
           </>
         ) : null}

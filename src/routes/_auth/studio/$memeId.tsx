@@ -25,9 +25,8 @@ const RouteComponent = () => {
       onMutate: () => {
         setIsDialogOpened(true)
       },
-      onError: (error) => {
+      onError: () => {
         setIsDialogOpened(false)
-        toast.error(error.message)
       }
     }
   )

@@ -1,9 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { PlaySquare } from 'lucide-react'
+import { Clapperboard, PlaySquare } from 'lucide-react'
 import type { MemeWithBoomarked } from '@/@types/meme'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
+import { MotionLink } from '@/components/motion-link'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { MemeWithVideo } from '@/constants/meme'
@@ -98,6 +99,25 @@ export const MemeListItem = React.memo(
             </div>
           </div>
           <div className="flex items-center gap-1">
+            <MotionLink
+              to="/studio/$memeId"
+              params={{ memeId: meme.id }}
+              className="group/icon-button cursor-pointer relative shrink-0 rounded-full hover:bg-[var(--icon-button-color)]/10 active:bg-[var(--icon-button-color)]/20 text-[var(--icon-button-color)] size-8 [&_svg]:size-5"
+              style={
+                {
+                  '--icon-button-color': `rgb(255, 255, 255)`
+                } as React.CSSProperties
+              }
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-muted-foreground group-hover/icon-button:stroke-[var(--icon-button-color)]"
+                aria-hidden="true"
+              >
+                <Clapperboard />
+              </motion.div>
+            </MotionLink>
             <ToggleLikeButton meme={meme} />
             <ShareMemeButton meme={meme} />
           </div>

@@ -11,41 +11,67 @@ type VideoProcessingOptions = {
   bandHeight?: number
   fontSize?: number
   fontColor?: string
+  maxCharsPerLine?: number
 }
-
-type ProcessingParams = {
-  videoBlob: Blob
-} & VideoProcessingOptions
 
 type MutationBody = {
   meme: Meme
 } & VideoProcessingOptions
 
+const wrapText = (text: string, maxLength: number): string => {
+  const words = text.split(' ')
+  const lines: string[] = []
+  let currentLine = ''
+
+  for (const word of words) {
+    if ((currentLine + word).length <= maxLength) {
+      currentLine += (currentLine ? ' ' : '') + word
+    } else {
+      if (currentLine) {
+        lines.push(currentLine)
+      }
+
+      currentLine = word
+    }
+  }
+
+  if (currentLine) {
+    lines.push(currentLine)
+  }
+
+  return lines.join('\n')
+}
+
 const addTextToVideo = async (
   ffmpeg: FFmpeg,
+  videoBlob: Blob,
   {
-    videoBlob,
     text,
     bandHeight = 100,
-    fontSize = 24,
-    fontColor = 'black'
-  }: ProcessingParams
+    fontSize = 36,
+    fontColor = 'black',
+    maxCharsPerLine = 50
+  }: VideoProcessingOptions
 ) => {
   await ffmpeg.writeFile('input.mp4', await fetchFile(videoBlob))
-  await ffmpeg.writeFile(
-    'arial.ttf',
-    await fetchFile(
-      'https://raw.githubusercontent.com/ffmpegwasm/testdata/master/arial.ttf'
-    )
-  )
+  await ffmpeg.writeFile('arial.ttf', await fetchFile('/fonts/arial.ttf'))
+  const wrappedText = wrapText(text, maxCharsPerLine)
+  await ffmpeg.writeFile('text.txt', new TextEncoder().encode(wrappedText))
 
-  await ffmpeg.exec([
+  const lineCount = wrappedText.split('\n').length
+  const lineSpacing = 4
+  const baselineOffset = Math.floor(fontSize * 0.2)
+  const totalTextHeight = lineCount * fontSize + (lineCount - 1) * lineSpacing
+
+  const yPosition = `h-${Math.floor(bandHeight / 2)}-${Math.floor(totalTextHeight / 2)}+${baselineOffset}`
+
+  const result = await ffmpeg.exec([
     '-i',
     'input.mp4',
     '-vf',
     [
       `pad=iw:ih+${bandHeight}:0:0:white`,
-      `drawtext=fontfile=/arial.ttf:text='${text}':x=(w-text_w)/2:y=h-${Math.floor(bandHeight / 2)}:fontsize=${fontSize}:fontcolor=${fontColor}`
+      `drawtext=fontfile=arial.ttf:textfile=text.txt:x=(w-text_w)/2:y=${yPosition}:fontsize=${fontSize}:fontcolor=${fontColor}:line_spacing=${lineSpacing}`
     ].join(','),
     '-c:a',
     'copy',
@@ -56,6 +82,10 @@ const addTextToVideo = async (
     '-y',
     'output.mp4'
   ])
+
+  if (result !== 0) {
+    throw new Error('FFmpeg error')
+  }
 
   const data = await ffmpeg.readFile('output.mp4')
 
@@ -109,22 +139,10 @@ export const useVideoProcessor = (
       await ffmpeg.load()
       ffmpeg.on('progress', progressSubscription)
     },
-    mutationFn: async ({
-      meme,
-      text,
-      bandHeight = 100,
-      fontSize = 24,
-      fontColor = 'black'
-    }: MutationBody) => {
+    mutationFn: async ({ meme, ...restOptions }: MutationBody) => {
       const response = await shareMeme({ data: meme.id })
       const videoBlob = await response.blob()
-      const blob = await addTextToVideo(ffmpeg, {
-        videoBlob,
-        text,
-        bandHeight,
-        fontSize,
-        fontColor
-      })
+      const blob = await addTextToVideo(ffmpeg, videoBlob, restOptions)
 
       return {
         blob,
