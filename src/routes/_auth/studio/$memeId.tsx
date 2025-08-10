@@ -1,8 +1,11 @@
 import React from 'react'
 import { toast } from 'sonner'
 import { Progress } from '@/components/animate-ui/radix/progress'
+import { Sheet, SheetTrigger } from '@/components/animate-ui/radix/sheet'
+import { StudioMobileSheet } from '@/components/studio/studio-mobile-sheet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LoadingSpinner } from '@/components/ui/spinner'
 import {
   useVideoInitializer,
   useVideoProcessor
@@ -68,12 +71,22 @@ const RouteComponent = () => {
             name="text"
             type="text"
           />
-          <Button
-            disabled={text.trim().length === 0 || isLoading}
-            type="submit"
-          >
-            Prévisualiser la vidéo
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              disabled={text.trim().length === 0 || isLoading}
+              type="submit"
+            >
+              Prévisualiser la vidéo
+            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="secondary" className="lg:hidden">
+                  Choisir un autre mème
+                </Button>
+              </SheetTrigger>
+              <StudioMobileSheet />
+            </Sheet>
+          </div>
         </form>
         {isLoading ? (
           <div className="flex flex-col gap-2">
@@ -89,6 +102,13 @@ const RouteComponent = () => {
 export const Route = createFileRoute('/_auth/studio/$memeId')({
   component: RouteComponent,
   ssr: 'data-only',
+  pendingComponent: () => {
+    return (
+      <div className="h-full w-full flex justify-center items-center">
+        <LoadingSpinner />
+      </div>
+    )
+  },
   loader: async ({ context, params }) => {
     const meme = await context.queryClient.ensureQueryData(
       getMemeByIdQueryOpts(params.memeId)

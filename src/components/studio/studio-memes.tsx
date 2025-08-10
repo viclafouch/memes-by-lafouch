@@ -24,7 +24,7 @@ export const StudioMemes = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="w-full grid grid-cols-2 gap-2 h-full">
+      <div className="w-full grid grid-cols-2 gap-2">
         {memesInfinityQuery.data?.pages.map((group, index) => {
           const { memes } = group
 

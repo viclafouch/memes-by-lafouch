@@ -3,12 +3,12 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   return (
-    <div className="h-full border border-accent rounded-xl mb-4 overflow-hidden">
-      <div className="grid grid-cols-[auto_350px] h-full overflow-hidden">
+    <div className="lg:h-full border border-accent rounded-xl mb-4 overflow-hidden">
+      <div className="grid lg:grid-cols-[auto_350px] h-full overflow-hidden">
         <div className="p-4">
           <Outlet />
         </div>
-        <div className="p-4 border-l border-accent h-full overflow-scroll">
+        <div className="p-4 border-l border-accent h-full overflow-scroll hidden lg:block">
           <div>
             <StudioTabs />
           </div>
