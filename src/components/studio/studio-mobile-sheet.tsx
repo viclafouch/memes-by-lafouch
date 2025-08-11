@@ -16,7 +16,7 @@ export const StudioMobileSheet = () => {
           Make changes to your profile here. Click save when you&apos;re done.
         </SheetDescription>
       </SheetHeader>
-      <div className="h-full flex-1">
+      <div className="h-full flex-1 overflow-hidden">
         <StudioTabs />
       </div>
     </SheetContent>

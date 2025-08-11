@@ -28,12 +28,13 @@ export const getMemeById = createServerFn({ method: 'GET' })
     return z.string().parse(data)
   })
   .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: memeId }) => {
+  .handler(async ({ data: memeId, context }) => {
     const meme = await prismaClient.meme.findUnique({
       where: {
         id: memeId
       },
       include: {
+        bookmarkedBy: true,
         video: true
       }
     })
@@ -42,7 +43,14 @@ export const getMemeById = createServerFn({ method: 'GET' })
       throw notFound()
     }
 
-    return meme
+    const { bookmarkedBy, ...memeWithoutBookmarkedBy } = meme
+
+    return {
+      ...memeWithoutBookmarkedBy,
+      isBookmarked: bookmarkedBy.some(({ userId }) => {
+        return userId === context.user.id
+      })
+    }
   })
 
 const toggleBookmark = serverOnly(

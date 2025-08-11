@@ -12,7 +12,7 @@ export const StudioTabs = () => {
         <TabsTrigger value="all-memes">Tous les Memes</TabsTrigger>
         <TabsTrigger value="favorites-memes">Mes favoris</TabsTrigger>
       </TabsList>
-      <TabsContent value="all-memes" className="h-full">
+      <TabsContent value="all-memes" className="h-full overflow-hidden">
         <StudioMemes
           columnGridCount={columnGridCount}
           onColumnValueChange={setColumnGridCount}

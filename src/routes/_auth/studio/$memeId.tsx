@@ -1,6 +1,8 @@
 import React from 'react'
 import { toast } from 'sonner'
 import { Sheet, SheetTrigger } from '@/components/animate-ui/radix/sheet'
+import { ShareMemeButton } from '@/components/Meme/share-meme-button'
+import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { StudioDialogExport } from '@/components/studio/studio-dialog-export'
 import { StudioMobileSheet } from '@/components/studio/studio-mobile-sheet'
 import { StudioTabs } from '@/components/studio/studio-tabs'
@@ -57,8 +59,14 @@ const RouteComponent = () => {
               allow="autoplay"
             />
           </div>
-          <div className="flex flex-col gap-4">
-            <h1 className="text-xl">Ajouter du texte</h1>
+          <div className="flex flex-col gap-4 w-full">
+            <div className="flex items-center justify-between gap-x-2">
+              <h1 className="text-xl">{meme.title}</h1>
+              <div>
+                <ToggleLikeButton meme={meme} />
+                <ShareMemeButton meme={meme} />
+              </div>
+            </div>
             <form
               className="max-w-xl flex flex-col gap-4 items-start"
               onSubmit={handleInitialize}
@@ -98,10 +106,8 @@ const RouteComponent = () => {
             data={data}
           />
         </div>
-        <div className="p-4 border-l border-accent h-full overflow-scroll hidden lg:block">
-          <div>
-            <StudioTabs />
-          </div>
+        <div className="p-4 border-l border-accent h-full overflow-hidden hidden lg:block">
+          <StudioTabs />
         </div>
       </div>
     </div>
@@ -118,6 +124,7 @@ export const Route = createFileRoute('/_auth/studio/$memeId')({
       </div>
     )
   },
+  pendingMs: 2000,
   loader: async ({ context, params }) => {
     const meme = await context.queryClient.ensureQueryData(
       getMemeByIdQueryOpts(params.memeId)

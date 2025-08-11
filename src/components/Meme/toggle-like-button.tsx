@@ -3,6 +3,7 @@ import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import {
   getFavoritesMemesCountQueryOpts,
+  getMemeByIdQueryOpts,
   getMemesListQueryOpts
 } from '@/lib/queries'
 import type { getMemes } from '@/server/meme'
@@ -42,6 +43,20 @@ const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
         }
       )
 
+      await queryClient.setQueryData(
+        getMemeByIdQueryOpts(meme.id).queryKey,
+        (old) => {
+          if (old) {
+            return {
+              ...old,
+              isBookmarked: !meme.isBookmarked
+            }
+          }
+
+          return undefined
+        }
+      )
+
       type Data = Awaited<ReturnType<typeof getMemes>>
 
       const queries = queryClient.getQueriesData<Data>({
@@ -67,6 +82,7 @@ const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries(getFavoritesMemesCountQueryOpts())
+      queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
       router.invalidate({
         filter: (route) => {
           return route.routeId === '/_auth/favorites'
