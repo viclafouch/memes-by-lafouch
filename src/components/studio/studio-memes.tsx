@@ -58,7 +58,6 @@ export const StudioMemes = ({
             const { memes } = group
 
             return (
-              // eslint-disable-next-line react/no-array-index-key
               <React.Fragment key={index}>
                 {memes.map((meme) => {
                   return (
@@ -70,7 +69,7 @@ export const StudioMemes = ({
                       key={meme.id}
                       aria-selected={meme.id === memeId}
                     >
-                      <div className="relative w-full h-full">
+                      <div className="relative w-full h-full @container">
                         <img
                           src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/thumbnail.jpg`}
                           alt={meme.title}
@@ -81,7 +80,7 @@ export const StudioMemes = ({
                           alt={meme.title}
                           className="absolute w-full h-full inset-0 hidden duration-600 group-hover:block transition-discrete z-10 object-cover opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus-within:block"
                         />
-                        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 text-white/80 place-items-center bg-muted/60 text-center p-2 text-balance flex justify-center items-center z-20">
+                        <span className="absolute inset-0 opacity-0 group-hover:opacity-100 text-white/80 place-items-center bg-muted/60 text-center p-2 text-balance flex justify-center items-center z-20 @max-[100px]:hidden @min-[200px]:text-xl">
                           {meme.title}
                         </span>
                       </div>

@@ -62,7 +62,7 @@ const RouteComponent = () => {
   })
 
   return (
-    <section className="relative w-full h-screen">
+    <section className="relative w-full">
       <div className="relative flex h-full items-center justify-center z-10">
         <div className="flex flex-col items-center gap-6 lg:justify-start">
           <Link to="/">

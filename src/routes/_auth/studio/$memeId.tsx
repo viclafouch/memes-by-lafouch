@@ -60,9 +60,9 @@ const RouteComponent = () => {
             />
           </div>
           <div className="flex flex-col gap-4 w-full">
-            <div className="flex items-center justify-between gap-x-2">
+            <div className="flex items-start justify-between gap-x-6">
               <h1 className="text-xl">{meme.title}</h1>
-              <div>
+              <div className="flex items-center gap-x-2 shrink-0">
                 <ToggleLikeButton meme={meme} />
                 <ShareMemeButton meme={meme} />
               </div>

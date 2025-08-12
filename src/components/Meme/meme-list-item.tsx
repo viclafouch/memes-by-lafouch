@@ -90,7 +90,7 @@ export const MemeListItem = React.memo(
             </div>
           )}
         </motion.div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col gap-1.5">
             <Link
               to="/library/$memeId"

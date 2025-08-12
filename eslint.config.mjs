@@ -28,6 +28,7 @@ export default [
       'react/no-children-prop': 'off',
       '@typescript-eslint/no-use-before-define': 'off',
       'react/iframe-missing-sandbox': 'off',
+      'react/no-array-index-key': 'off',
       'id-length': ['error', { exceptions: ['R', '_'] }]
     }
   }

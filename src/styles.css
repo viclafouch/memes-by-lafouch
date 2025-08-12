@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
-@import "tailwindcss" source("../");
-@import "tw-animate-css";
+@import 'tailwindcss' source('../');
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -145,5 +145,11 @@
 }
 
 @theme {
-  --font-bricolage: "Bricolage Grotesque","Bricolage Grotesque Fallback"
+  --font-bricolage: 'Bricolage Grotesque', 'Bricolage Grotesque Fallback';
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto max-w-6xl px-4 xl:px-6;
+  }
 }
