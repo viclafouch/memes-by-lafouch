@@ -43,7 +43,8 @@ export function createRouter() {
       defaultErrorComponent: ({ error }) => {
         return <ErrorComponent error={error} />
       },
-      defaultPreload: 'intent'
+      defaultPreload: 'intent',
+      scrollRestoration: true
     }),
     queryClient
   )

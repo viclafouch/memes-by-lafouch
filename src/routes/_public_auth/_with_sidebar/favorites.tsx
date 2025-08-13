@@ -1,6 +1,6 @@
 import { MemesList } from '@/components/Meme/memes-list'
 import { getFavoritesMemes } from '@/server/user'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const loaderData = Route.useLoaderData()
@@ -8,13 +8,16 @@ const RouteComponent = () => {
   return <MemesList layoutContext="favorites" memes={loaderData.memes} />
 }
 
-export const Route = createFileRoute('/_auth/favorites')({
+export const Route = createFileRoute('/_public_auth/_with_sidebar/favorites')({
   component: RouteComponent,
-  loader: async () => {
+  loader: async ({ context, location }) => {
+    if (!context.user) {
+      throw redirect({ to: '/login', search: { redirect: location.href } })
+    }
+
     const memes = await getFavoritesMemes()
 
     return {
-      crumb: 'Favoris',
       memes
     }
   }

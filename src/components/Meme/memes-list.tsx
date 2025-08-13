@@ -1,12 +1,11 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import type { MemeWithBoomarked } from '@/@types/meme'
 import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
 import type { MemeWithVideo } from '@/constants/meme'
 
 export type MemesListProps = {
-  memes: MemeWithBoomarked[]
+  memes: MemeWithVideo[]
   layoutContext: string
   columnGridCount?: number
 }

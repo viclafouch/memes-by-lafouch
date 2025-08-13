@@ -13,7 +13,7 @@ const MemesPagination = ({ currentPage, totalPages }: MemesPaginationProps) => {
 
   const handlePageChange = (page: MemesFilters['page']) => {
     navigate({
-      to: '/library',
+      to: '/memes',
       search: (prevState) => {
         return {
           page,

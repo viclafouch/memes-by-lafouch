@@ -3,7 +3,7 @@ import React from 'react'
 import { OnlyPortrait } from '@/components/only-portrait'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
-import { getAuthUserQueryOpts } from '@/lib/queries'
+import { getAuthUserQueryOpts, getFavoritesMemesQueryOpts } from '@/lib/queries'
 import { seo } from '@/lib/seo'
 import type { getAuthUser } from '@/server/user-auth'
 import type { QueryClient } from '@tanstack/react-query'
@@ -89,6 +89,10 @@ export const Route = createRootRouteWithContext<{
 }>()({
   beforeLoad: async ({ context }) => {
     const user = await context.queryClient.fetchQuery(getAuthUserQueryOpts())
+
+    if (user) {
+      context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
+    }
 
     return { user }
   },

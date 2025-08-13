@@ -10,7 +10,7 @@ const RouteComponent = () => {
 
   return (
     <PageContainer>
-      <section className="flex w-full flex-col gap-16">
+      <section className="flex w-full flex-col gap-16 py-30 pb-10 sm:pt-42">
         <Hero />
         <Demo memes={memes} />
       </section>
@@ -20,16 +20,11 @@ const RouteComponent = () => {
 
 export const Route = createFileRoute('/_public_auth/')({
   component: RouteComponent,
-  loader: async () => {
-    const memes = await getBestMemes()
+  loader: () => {
+    const memes = getBestMemes()
 
     return {
-      memes: memes.map((meme) => {
-        return {
-          ...meme,
-          isBookmarked: false
-        }
-      })
+      memes
     }
   }
 })

@@ -37,7 +37,7 @@ export const DeleteMemeButton = ({
         queryKey: getMemesListQueryOpts.all,
         exact: false
       })
-      navigate({ to: '/library' })
+      navigate({ to: '/memes' })
     }
   })
 

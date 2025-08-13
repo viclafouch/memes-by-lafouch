@@ -37,7 +37,7 @@ export const PathBreadcrumbs = () => {
       <BreadcrumbList>
         <BreadcrumbItem className="shrink-0">
           <BreadcrumbLink asChild>
-            <Link to="/library">
+            <Link to="/admin">
               <Home className="h-4 w-4" />
             </Link>
           </BreadcrumbLink>

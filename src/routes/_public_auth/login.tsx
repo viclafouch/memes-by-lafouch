@@ -41,7 +41,7 @@ const RouteComponent = () => {
         {
           onSuccess: async () => {
             await queryClient.invalidateQueries(getAuthUserQueryOpts())
-            navigate({ to: '/library' })
+            navigate({ to: '/memes' })
           },
           onError: (context) => {
             toast.error(context.error.message)

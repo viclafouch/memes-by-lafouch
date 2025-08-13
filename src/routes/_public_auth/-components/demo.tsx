@@ -1,12 +1,12 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
-import type { MemeWithBoomarked } from '@/@types/meme'
 import { MemesList } from '@/components/Meme/memes-list'
 import { Button } from '@/components/ui/button'
-import { Link } from '@tanstack/react-router'
+import type { MemeWithVideo } from '@/constants/meme'
+import { Await, Link } from '@tanstack/react-router'
 
-export const Demo = ({ memes }: { memes: MemeWithBoomarked[] }) => {
+export const Demo = ({ memes }: { memes: Promise<MemeWithVideo[]> }) => {
   return (
     <div className="container">
       <motion.div
@@ -22,7 +22,7 @@ export const Demo = ({ memes }: { memes: MemeWithBoomarked[] }) => {
             </div>
             <Link
               className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-100 focus:text-gray-100"
-              to="/library"
+              to="/memes"
             >
               <span>Tout parcourir</span>
               <ChevronRight size={16} />
@@ -33,9 +33,15 @@ export const Demo = ({ memes }: { memes: MemeWithBoomarked[] }) => {
           </p>
         </div>
         <section className="flex flex-col items-center gap-y-12">
-          <MemesList layoutContext="index" memes={memes} />
+          <React.Suspense>
+            <Await promise={memes}>
+              {(resolvedMemes) => {
+                return <MemesList layoutContext="index" memes={resolvedMemes} />
+              }}
+            </Await>
+          </React.Suspense>
           <Button asChild variant="outline" size="lg">
-            <Link to="/library">Voir tous les mèmes</Link>
+            <Link to="/memes">Voir tous les mèmes</Link>
           </Button>
         </section>
       </motion.div>

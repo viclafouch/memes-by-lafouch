@@ -1,93 +1,65 @@
 import React from 'react'
+import type { User } from 'better-auth'
 import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
-import {
-  getFavoritesMemesCountQueryOpts,
-  getMemeByIdQueryOpts,
-  getMemesListQueryOpts
-} from '@/lib/queries'
-import type { getMemes } from '@/server/meme'
+import type { MemeWithVideo } from '@/constants/meme'
+import { authClient } from '@/lib/auth-client'
+import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
 import { toggleBookmarkByMemeId } from '@/server/meme'
-import type { Meme } from '@prisma/client'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery
+} from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
 
 type ToggleLikeButtonProps = {
-  meme: Meme & { isBookmarked: boolean }
+  meme: MemeWithVideo
   className?: string
 }
 
-const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
-  const router = useRouter()
+const AuthBookmarkButton = ({
+  user,
+  meme,
+  className
+}: {
+  user: User
+} & ToggleLikeButtonProps) => {
   const queryClient = useQueryClient()
+  const query = useSuspenseQuery(getFavoritesMemesQueryOpts())
+
+  const isMemeBookmarked = React.useMemo(() => {
+    return query.data.some((bookmark) => {
+      return bookmark.id === meme.id
+    })
+  }, [user, query.data])
 
   const toggleLikeMutation = useMutation({
     mutationFn: toggleBookmarkByMemeId,
     onMutate: async () => {
+      const newValue = !isMemeBookmarked
+
       await queryClient.cancelQueries({
-        queryKey: getMemesListQueryOpts.all,
-        exact: false
+        queryKey: getFavoritesMemesQueryOpts.all
       })
 
-      await queryClient.setQueryData(
-        getFavoritesMemesCountQueryOpts().queryKey,
-        (old) => {
-          if (old) {
-            return {
-              ...old,
-              count: old.count + (meme.isBookmarked ? -1 : 1)
-            }
-          }
-
-          return undefined
-        }
-      )
-
-      await queryClient.setQueryData(
-        getMemeByIdQueryOpts(meme.id).queryKey,
-        (old) => {
-          if (old) {
-            return {
-              ...old,
-              isBookmarked: !meme.isBookmarked
-            }
-          }
-
-          return undefined
-        }
-      )
-
-      type Data = Awaited<ReturnType<typeof getMemes>>
-
-      const queries = queryClient.getQueriesData<Data>({
-        queryKey: getMemesListQueryOpts.all,
-        exact: false
-      })
-
-      for (const query of queries) {
-        queryClient.setQueryData(query[0], (old: Data) => {
-          return {
-            ...old,
-            memes: old.memes.map((memeItem) => {
-              return memeItem.id === meme.id
-                ? {
-                    ...memeItem,
-                    isBookmarked: !meme.isBookmarked
-                  }
-                : memeItem
+      queryClient.setQueryData(getFavoritesMemesQueryOpts().queryKey, (old) => {
+        if (old) {
+          if (!newValue) {
+            return old.filter((bookmark) => {
+              return bookmark.id !== meme.id
             })
           }
-        })
-      }
+
+          return [meme, ...old]
+        }
+
+        return undefined
+      })
     },
     onSettled: () => {
-      queryClient.invalidateQueries(getFavoritesMemesCountQueryOpts())
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
-      router.invalidate({
-        filter: (route) => {
-          return route.routeId === '/_auth/favorites'
-        }
-      })
+      queryClient.invalidateQueries(getFavoritesMemesQueryOpts())
     }
   })
 
@@ -102,10 +74,39 @@ const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
   return (
     <IconButton
       icon={Star}
-      active={meme.isBookmarked}
+      active={isMemeBookmarked}
       className={className}
       onClick={handleToggleLike}
     />
+  )
+}
+
+const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
+  const session = authClient.useSession()
+  const navigate = useNavigate()
+
+  if (!session.data) {
+    return (
+      <IconButton
+        icon={Star}
+        active={false}
+        className={className}
+        onClick={(event) => {
+          event.preventDefault()
+          navigate({ to: '/login' })
+        }}
+      />
+    )
+  }
+
+  return (
+    <React.Suspense fallback={<div />}>
+      <AuthBookmarkButton
+        user={session.data.user}
+        meme={meme}
+        className={className}
+      />
+    </React.Suspense>
   )
 }
 

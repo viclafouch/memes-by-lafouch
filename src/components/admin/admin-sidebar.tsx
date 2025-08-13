@@ -21,7 +21,7 @@ export const AdminSidebar = ({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link to="/library">
+              <Link to="/memes">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <User2 className="size-4" />
                 </div>

@@ -27,8 +27,7 @@ export const getMemeById = createServerFn({ method: 'GET' })
   .validator((data) => {
     return z.string().parse(data)
   })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: memeId, context }) => {
+  .handler(async ({ data: memeId }) => {
     const meme = await prismaClient.meme.findUnique({
       where: {
         id: memeId
@@ -47,9 +46,7 @@ export const getMemeById = createServerFn({ method: 'GET' })
 
     return {
       ...memeWithoutBookmarkedBy,
-      isBookmarked: bookmarkedBy.some(({ userId }) => {
-        return userId === context.user.id
-      })
+      isBookmarked: false
     }
   })
 
@@ -119,8 +116,7 @@ export const getVideoStatusById = createServerFn({ method: 'GET' })
 
 export const getMemes = createServerFn({ method: 'GET' })
   .validator(MEMES_FILTERS_SCHEMA)
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     const currentPage = data.page ?? 1
     const dataQueryNormalized = data.query?.toLowerCase().trim() ?? ''
 
@@ -148,11 +144,7 @@ export const getMemes = createServerFn({ method: 'GET' })
       // page starts at 1 in UI, 0 in API
       skip: (currentPage - 1) * 30,
       include: {
-        video: true,
-        bookmarkedBy: {
-          where: { userId: context.user.id },
-          select: { id: true }
-        }
+        video: true
       },
       orderBy: {
         createdAt: data.orderBy === 'most_old' ? 'asc' : 'desc'
@@ -160,17 +152,10 @@ export const getMemes = createServerFn({ method: 'GET' })
       where: filters
     })
 
-    const memesWithIsBookmarked = memes.map(({ bookmarkedBy, ...meme }) => {
-      return {
-        ...meme,
-        isBookmarked: bookmarkedBy.length > 0
-      }
-    })
-
     const totalPages = Math.ceil(totalMemes / 30)
 
     return {
-      memes: memesWithIsBookmarked,
+      memes,
       query: data.query,
       currentPage,
       nextPage: currentPage + 1 <= totalPages ? currentPage + 1 : null,

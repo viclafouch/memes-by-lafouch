@@ -50,7 +50,7 @@ export const Route = createFileRoute('/admin')({
     }
 
     if (context.user.role !== 'admin') {
-      throw redirect({ to: '/library' })
+      throw redirect({ to: '/' })
     }
 
     if (location.pathname === '/admin') {

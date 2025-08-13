@@ -13,20 +13,20 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as Public_authRouteRouteImport } from './routes/_public_auth/route'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as Public_authIndexRouteImport } from './routes/_public_auth/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as Public_authSignupRouteImport } from './routes/_public_auth/signup'
 import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
-import { Route as AuthFavoritesRouteImport } from './routes/_auth/favorites'
-import { Route as AuthDownloaderRouteImport } from './routes/_auth/downloader'
-import { Route as AuthStudioRouteRouteImport } from './routes/_auth/studio/route'
-import { Route as AuthStudioIndexRouteImport } from './routes/_auth/studio/index'
-import { Route as AuthRandomIndexRouteImport } from './routes/_auth/random/index'
-import { Route as AuthLibraryIndexRouteImport } from './routes/_auth/library/index'
-import { Route as AuthStudioMemeIdRouteImport } from './routes/_auth/studio/$memeId'
-import { Route as AuthRandomMemeIdRouteImport } from './routes/_auth/random/$memeId'
-import { Route as AuthLibraryMemeIdRouteImport } from './routes/_auth/library/$memeId'
+import { Route as Public_authWith_sidebarRouteRouteImport } from './routes/_public_auth/_with_sidebar/route'
+import { Route as Public_authWith_sidebarFavoritesRouteImport } from './routes/_public_auth/_with_sidebar/favorites'
+import { Route as Public_authWith_sidebarDownloaderRouteImport } from './routes/_public_auth/_with_sidebar/downloader'
+import { Route as Public_authWith_sidebarStudioRouteRouteImport } from './routes/_public_auth/_with_sidebar/studio/route'
+import { Route as Public_authWith_sidebarStudioIndexRouteImport } from './routes/_public_auth/_with_sidebar/studio/index'
+import { Route as Public_authWith_sidebarRandomIndexRouteImport } from './routes/_public_auth/_with_sidebar/random/index'
+import { Route as Public_authWith_sidebarMemesIndexRouteImport } from './routes/_public_auth/_with_sidebar/memes/index'
+import { Route as Public_authWith_sidebarStudioMemeIdRouteImport } from './routes/_public_auth/_with_sidebar/studio/$memeId'
+import { Route as Public_authWith_sidebarRandomMemeIdRouteImport } from './routes/_public_auth/_with_sidebar/random/$memeId'
+import { Route as Public_authWith_sidebarMemesMemeIdRouteImport } from './routes/_public_auth/_with_sidebar/memes/$memeId'
 import { ServerRoute as ApiBunnyServerRouteImport } from './routes/api/bunny'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
 
@@ -39,10 +39,6 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
 } as any)
 const Public_authRouteRoute = Public_authRouteRouteImport.update({
   id: '/_public_auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Public_authIndexRoute = Public_authIndexRouteImport.update({
@@ -65,51 +61,65 @@ const Public_authLoginRoute = Public_authLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => Public_authRouteRoute,
 } as any)
-const AuthFavoritesRoute = AuthFavoritesRouteImport.update({
-  id: '/favorites',
-  path: '/favorites',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthDownloaderRoute = AuthDownloaderRouteImport.update({
-  id: '/downloader',
-  path: '/downloader',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthStudioRouteRoute = AuthStudioRouteRouteImport.update({
-  id: '/studio',
-  path: '/studio',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthStudioIndexRoute = AuthStudioIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthStudioRouteRoute,
-} as any)
-const AuthRandomIndexRoute = AuthRandomIndexRouteImport.update({
-  id: '/random/',
-  path: '/random/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthLibraryIndexRoute = AuthLibraryIndexRouteImport.update({
-  id: '/library/',
-  path: '/library/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthStudioMemeIdRoute = AuthStudioMemeIdRouteImport.update({
-  id: '/$memeId',
-  path: '/$memeId',
-  getParentRoute: () => AuthStudioRouteRoute,
-} as any)
-const AuthRandomMemeIdRoute = AuthRandomMemeIdRouteImport.update({
-  id: '/random/$memeId',
-  path: '/random/$memeId',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthLibraryMemeIdRoute = AuthLibraryMemeIdRouteImport.update({
-  id: '/library/$memeId',
-  path: '/library/$memeId',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
+const Public_authWith_sidebarRouteRoute =
+  Public_authWith_sidebarRouteRouteImport.update({
+    id: '/_with_sidebar',
+    getParentRoute: () => Public_authRouteRoute,
+  } as any)
+const Public_authWith_sidebarFavoritesRoute =
+  Public_authWith_sidebarFavoritesRouteImport.update({
+    id: '/favorites',
+    path: '/favorites',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
+const Public_authWith_sidebarDownloaderRoute =
+  Public_authWith_sidebarDownloaderRouteImport.update({
+    id: '/downloader',
+    path: '/downloader',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
+const Public_authWith_sidebarStudioRouteRoute =
+  Public_authWith_sidebarStudioRouteRouteImport.update({
+    id: '/studio',
+    path: '/studio',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
+const Public_authWith_sidebarStudioIndexRoute =
+  Public_authWith_sidebarStudioIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => Public_authWith_sidebarStudioRouteRoute,
+  } as any)
+const Public_authWith_sidebarRandomIndexRoute =
+  Public_authWith_sidebarRandomIndexRouteImport.update({
+    id: '/random/',
+    path: '/random/',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
+const Public_authWith_sidebarMemesIndexRoute =
+  Public_authWith_sidebarMemesIndexRouteImport.update({
+    id: '/memes/',
+    path: '/memes/',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
+const Public_authWith_sidebarStudioMemeIdRoute =
+  Public_authWith_sidebarStudioMemeIdRouteImport.update({
+    id: '/$memeId',
+    path: '/$memeId',
+    getParentRoute: () => Public_authWith_sidebarStudioRouteRoute,
+  } as any)
+const Public_authWith_sidebarRandomMemeIdRoute =
+  Public_authWith_sidebarRandomMemeIdRouteImport.update({
+    id: '/random/$memeId',
+    path: '/random/$memeId',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
+const Public_authWith_sidebarMemesMemeIdRoute =
+  Public_authWith_sidebarMemesMemeIdRouteImport.update({
+    id: '/memes/$memeId',
+    path: '/memes/$memeId',
+    getParentRoute: () => Public_authWith_sidebarRouteRoute,
+  } as any)
 const ApiBunnyServerRoute = ApiBunnyServerRouteImport.update({
   id: '/api/bunny',
   path: '/api/bunny',
@@ -123,108 +133,107 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
-  '/studio': typeof AuthStudioRouteRouteWithChildren
-  '/downloader': typeof AuthDownloaderRoute
-  '/favorites': typeof AuthFavoritesRoute
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public_authIndexRoute
-  '/library/$memeId': typeof AuthLibraryMemeIdRoute
-  '/random/$memeId': typeof AuthRandomMemeIdRoute
-  '/studio/$memeId': typeof AuthStudioMemeIdRoute
-  '/library': typeof AuthLibraryIndexRoute
-  '/random': typeof AuthRandomIndexRoute
-  '/studio/': typeof AuthStudioIndexRoute
+  '/studio': typeof Public_authWith_sidebarStudioRouteRouteWithChildren
+  '/downloader': typeof Public_authWith_sidebarDownloaderRoute
+  '/favorites': typeof Public_authWith_sidebarFavoritesRoute
+  '/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
+  '/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
+  '/studio/$memeId': typeof Public_authWith_sidebarStudioMemeIdRoute
+  '/memes': typeof Public_authWith_sidebarMemesIndexRoute
+  '/random': typeof Public_authWith_sidebarRandomIndexRoute
+  '/studio/': typeof Public_authWith_sidebarStudioIndexRoute
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
-  '/downloader': typeof AuthDownloaderRoute
-  '/favorites': typeof AuthFavoritesRoute
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public_authIndexRoute
-  '/library/$memeId': typeof AuthLibraryMemeIdRoute
-  '/random/$memeId': typeof AuthRandomMemeIdRoute
-  '/studio/$memeId': typeof AuthStudioMemeIdRoute
-  '/library': typeof AuthLibraryIndexRoute
-  '/random': typeof AuthRandomIndexRoute
-  '/studio': typeof AuthStudioIndexRoute
+  '/downloader': typeof Public_authWith_sidebarDownloaderRoute
+  '/favorites': typeof Public_authWith_sidebarFavoritesRoute
+  '/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
+  '/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
+  '/studio/$memeId': typeof Public_authWith_sidebarStudioMemeIdRoute
+  '/memes': typeof Public_authWith_sidebarMemesIndexRoute
+  '/random': typeof Public_authWith_sidebarRandomIndexRoute
+  '/studio': typeof Public_authWith_sidebarStudioIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_auth': typeof AuthRouteRouteWithChildren
   '/_public_auth': typeof Public_authRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
-  '/_auth/studio': typeof AuthStudioRouteRouteWithChildren
-  '/_auth/downloader': typeof AuthDownloaderRoute
-  '/_auth/favorites': typeof AuthFavoritesRoute
+  '/_public_auth/_with_sidebar': typeof Public_authWith_sidebarRouteRouteWithChildren
   '/_public_auth/login': typeof Public_authLoginRoute
   '/_public_auth/signup': typeof Public_authSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public_auth/': typeof Public_authIndexRoute
-  '/_auth/library/$memeId': typeof AuthLibraryMemeIdRoute
-  '/_auth/random/$memeId': typeof AuthRandomMemeIdRoute
-  '/_auth/studio/$memeId': typeof AuthStudioMemeIdRoute
-  '/_auth/library/': typeof AuthLibraryIndexRoute
-  '/_auth/random/': typeof AuthRandomIndexRoute
-  '/_auth/studio/': typeof AuthStudioIndexRoute
+  '/_public_auth/_with_sidebar/studio': typeof Public_authWith_sidebarStudioRouteRouteWithChildren
+  '/_public_auth/_with_sidebar/downloader': typeof Public_authWith_sidebarDownloaderRoute
+  '/_public_auth/_with_sidebar/favorites': typeof Public_authWith_sidebarFavoritesRoute
+  '/_public_auth/_with_sidebar/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
+  '/_public_auth/_with_sidebar/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
+  '/_public_auth/_with_sidebar/studio/$memeId': typeof Public_authWith_sidebarStudioMemeIdRoute
+  '/_public_auth/_with_sidebar/memes/': typeof Public_authWith_sidebarMemesIndexRoute
+  '/_public_auth/_with_sidebar/random/': typeof Public_authWith_sidebarRandomIndexRoute
+  '/_public_auth/_with_sidebar/studio/': typeof Public_authWith_sidebarStudioIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/admin'
-    | '/studio'
-    | '/downloader'
-    | '/favorites'
     | '/login'
     | '/signup'
     | '/admin/users'
     | '/'
-    | '/library/$memeId'
+    | '/studio'
+    | '/downloader'
+    | '/favorites'
+    | '/memes/$memeId'
     | '/random/$memeId'
     | '/studio/$memeId'
-    | '/library'
+    | '/memes'
     | '/random'
     | '/studio/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
-    | '/downloader'
-    | '/favorites'
     | '/login'
     | '/signup'
     | '/admin/users'
     | '/'
-    | '/library/$memeId'
+    | '/downloader'
+    | '/favorites'
+    | '/memes/$memeId'
     | '/random/$memeId'
     | '/studio/$memeId'
-    | '/library'
+    | '/memes'
     | '/random'
     | '/studio'
   id:
     | '__root__'
-    | '/_auth'
     | '/_public_auth'
     | '/admin'
-    | '/_auth/studio'
-    | '/_auth/downloader'
-    | '/_auth/favorites'
+    | '/_public_auth/_with_sidebar'
     | '/_public_auth/login'
     | '/_public_auth/signup'
     | '/admin/users'
     | '/_public_auth/'
-    | '/_auth/library/$memeId'
-    | '/_auth/random/$memeId'
-    | '/_auth/studio/$memeId'
-    | '/_auth/library/'
-    | '/_auth/random/'
-    | '/_auth/studio/'
+    | '/_public_auth/_with_sidebar/studio'
+    | '/_public_auth/_with_sidebar/downloader'
+    | '/_public_auth/_with_sidebar/favorites'
+    | '/_public_auth/_with_sidebar/memes/$memeId'
+    | '/_public_auth/_with_sidebar/random/$memeId'
+    | '/_public_auth/_with_sidebar/studio/$memeId'
+    | '/_public_auth/_with_sidebar/memes/'
+    | '/_public_auth/_with_sidebar/random/'
+    | '/_public_auth/_with_sidebar/studio/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   Public_authRouteRoute: typeof Public_authRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
 }
@@ -270,13 +279,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public_authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_public_auth/': {
       id: '/_public_auth/'
       path: '/'
@@ -305,68 +307,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public_authLoginRouteImport
       parentRoute: typeof Public_authRouteRoute
     }
-    '/_auth/favorites': {
-      id: '/_auth/favorites'
+    '/_public_auth/_with_sidebar': {
+      id: '/_public_auth/_with_sidebar'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof Public_authWith_sidebarRouteRouteImport
+      parentRoute: typeof Public_authRouteRoute
+    }
+    '/_public_auth/_with_sidebar/favorites': {
+      id: '/_public_auth/_with_sidebar/favorites'
       path: '/favorites'
       fullPath: '/favorites'
-      preLoaderRoute: typeof AuthFavoritesRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarFavoritesRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
-    '/_auth/downloader': {
-      id: '/_auth/downloader'
+    '/_public_auth/_with_sidebar/downloader': {
+      id: '/_public_auth/_with_sidebar/downloader'
       path: '/downloader'
       fullPath: '/downloader'
-      preLoaderRoute: typeof AuthDownloaderRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarDownloaderRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
-    '/_auth/studio': {
-      id: '/_auth/studio'
+    '/_public_auth/_with_sidebar/studio': {
+      id: '/_public_auth/_with_sidebar/studio'
       path: '/studio'
       fullPath: '/studio'
-      preLoaderRoute: typeof AuthStudioRouteRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarStudioRouteRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
-    '/_auth/studio/': {
-      id: '/_auth/studio/'
+    '/_public_auth/_with_sidebar/studio/': {
+      id: '/_public_auth/_with_sidebar/studio/'
       path: '/'
       fullPath: '/studio/'
-      preLoaderRoute: typeof AuthStudioIndexRouteImport
-      parentRoute: typeof AuthStudioRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarStudioIndexRouteImport
+      parentRoute: typeof Public_authWith_sidebarStudioRouteRoute
     }
-    '/_auth/random/': {
-      id: '/_auth/random/'
+    '/_public_auth/_with_sidebar/random/': {
+      id: '/_public_auth/_with_sidebar/random/'
       path: '/random'
       fullPath: '/random'
-      preLoaderRoute: typeof AuthRandomIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarRandomIndexRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
-    '/_auth/library/': {
-      id: '/_auth/library/'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof AuthLibraryIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
+    '/_public_auth/_with_sidebar/memes/': {
+      id: '/_public_auth/_with_sidebar/memes/'
+      path: '/memes'
+      fullPath: '/memes'
+      preLoaderRoute: typeof Public_authWith_sidebarMemesIndexRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
-    '/_auth/studio/$memeId': {
-      id: '/_auth/studio/$memeId'
+    '/_public_auth/_with_sidebar/studio/$memeId': {
+      id: '/_public_auth/_with_sidebar/studio/$memeId'
       path: '/$memeId'
       fullPath: '/studio/$memeId'
-      preLoaderRoute: typeof AuthStudioMemeIdRouteImport
-      parentRoute: typeof AuthStudioRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarStudioMemeIdRouteImport
+      parentRoute: typeof Public_authWith_sidebarStudioRouteRoute
     }
-    '/_auth/random/$memeId': {
-      id: '/_auth/random/$memeId'
+    '/_public_auth/_with_sidebar/random/$memeId': {
+      id: '/_public_auth/_with_sidebar/random/$memeId'
       path: '/random/$memeId'
       fullPath: '/random/$memeId'
-      preLoaderRoute: typeof AuthRandomMemeIdRouteImport
-      parentRoute: typeof AuthRouteRoute
+      preLoaderRoute: typeof Public_authWith_sidebarRandomMemeIdRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
-    '/_auth/library/$memeId': {
-      id: '/_auth/library/$memeId'
-      path: '/library/$memeId'
-      fullPath: '/library/$memeId'
-      preLoaderRoute: typeof AuthLibraryMemeIdRouteImport
-      parentRoute: typeof AuthRouteRoute
+    '/_public_auth/_with_sidebar/memes/$memeId': {
+      id: '/_public_auth/_with_sidebar/memes/$memeId'
+      path: '/memes/$memeId'
+      fullPath: '/memes/$memeId'
+      preLoaderRoute: typeof Public_authWith_sidebarMemesMemeIdRouteImport
+      parentRoute: typeof Public_authWith_sidebarRouteRoute
     }
   }
 }
@@ -389,51 +398,67 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
-interface AuthStudioRouteRouteChildren {
-  AuthStudioMemeIdRoute: typeof AuthStudioMemeIdRoute
-  AuthStudioIndexRoute: typeof AuthStudioIndexRoute
+interface Public_authWith_sidebarStudioRouteRouteChildren {
+  Public_authWith_sidebarStudioMemeIdRoute: typeof Public_authWith_sidebarStudioMemeIdRoute
+  Public_authWith_sidebarStudioIndexRoute: typeof Public_authWith_sidebarStudioIndexRoute
 }
 
-const AuthStudioRouteRouteChildren: AuthStudioRouteRouteChildren = {
-  AuthStudioMemeIdRoute: AuthStudioMemeIdRoute,
-  AuthStudioIndexRoute: AuthStudioIndexRoute,
+const Public_authWith_sidebarStudioRouteRouteChildren: Public_authWith_sidebarStudioRouteRouteChildren =
+  {
+    Public_authWith_sidebarStudioMemeIdRoute:
+      Public_authWith_sidebarStudioMemeIdRoute,
+    Public_authWith_sidebarStudioIndexRoute:
+      Public_authWith_sidebarStudioIndexRoute,
+  }
+
+const Public_authWith_sidebarStudioRouteRouteWithChildren =
+  Public_authWith_sidebarStudioRouteRoute._addFileChildren(
+    Public_authWith_sidebarStudioRouteRouteChildren,
+  )
+
+interface Public_authWith_sidebarRouteRouteChildren {
+  Public_authWith_sidebarStudioRouteRoute: typeof Public_authWith_sidebarStudioRouteRouteWithChildren
+  Public_authWith_sidebarDownloaderRoute: typeof Public_authWith_sidebarDownloaderRoute
+  Public_authWith_sidebarFavoritesRoute: typeof Public_authWith_sidebarFavoritesRoute
+  Public_authWith_sidebarMemesMemeIdRoute: typeof Public_authWith_sidebarMemesMemeIdRoute
+  Public_authWith_sidebarRandomMemeIdRoute: typeof Public_authWith_sidebarRandomMemeIdRoute
+  Public_authWith_sidebarMemesIndexRoute: typeof Public_authWith_sidebarMemesIndexRoute
+  Public_authWith_sidebarRandomIndexRoute: typeof Public_authWith_sidebarRandomIndexRoute
 }
 
-const AuthStudioRouteRouteWithChildren = AuthStudioRouteRoute._addFileChildren(
-  AuthStudioRouteRouteChildren,
-)
+const Public_authWith_sidebarRouteRouteChildren: Public_authWith_sidebarRouteRouteChildren =
+  {
+    Public_authWith_sidebarStudioRouteRoute:
+      Public_authWith_sidebarStudioRouteRouteWithChildren,
+    Public_authWith_sidebarDownloaderRoute:
+      Public_authWith_sidebarDownloaderRoute,
+    Public_authWith_sidebarFavoritesRoute:
+      Public_authWith_sidebarFavoritesRoute,
+    Public_authWith_sidebarMemesMemeIdRoute:
+      Public_authWith_sidebarMemesMemeIdRoute,
+    Public_authWith_sidebarRandomMemeIdRoute:
+      Public_authWith_sidebarRandomMemeIdRoute,
+    Public_authWith_sidebarMemesIndexRoute:
+      Public_authWith_sidebarMemesIndexRoute,
+    Public_authWith_sidebarRandomIndexRoute:
+      Public_authWith_sidebarRandomIndexRoute,
+  }
 
-interface AuthRouteRouteChildren {
-  AuthStudioRouteRoute: typeof AuthStudioRouteRouteWithChildren
-  AuthDownloaderRoute: typeof AuthDownloaderRoute
-  AuthFavoritesRoute: typeof AuthFavoritesRoute
-  AuthLibraryMemeIdRoute: typeof AuthLibraryMemeIdRoute
-  AuthRandomMemeIdRoute: typeof AuthRandomMemeIdRoute
-  AuthLibraryIndexRoute: typeof AuthLibraryIndexRoute
-  AuthRandomIndexRoute: typeof AuthRandomIndexRoute
-}
-
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthStudioRouteRoute: AuthStudioRouteRouteWithChildren,
-  AuthDownloaderRoute: AuthDownloaderRoute,
-  AuthFavoritesRoute: AuthFavoritesRoute,
-  AuthLibraryMemeIdRoute: AuthLibraryMemeIdRoute,
-  AuthRandomMemeIdRoute: AuthRandomMemeIdRoute,
-  AuthLibraryIndexRoute: AuthLibraryIndexRoute,
-  AuthRandomIndexRoute: AuthRandomIndexRoute,
-}
-
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
+const Public_authWith_sidebarRouteRouteWithChildren =
+  Public_authWith_sidebarRouteRoute._addFileChildren(
+    Public_authWith_sidebarRouteRouteChildren,
+  )
 
 interface Public_authRouteRouteChildren {
+  Public_authWith_sidebarRouteRoute: typeof Public_authWith_sidebarRouteRouteWithChildren
   Public_authLoginRoute: typeof Public_authLoginRoute
   Public_authSignupRoute: typeof Public_authSignupRoute
   Public_authIndexRoute: typeof Public_authIndexRoute
 }
 
 const Public_authRouteRouteChildren: Public_authRouteRouteChildren = {
+  Public_authWith_sidebarRouteRoute:
+    Public_authWith_sidebarRouteRouteWithChildren,
   Public_authLoginRoute: Public_authLoginRoute,
   Public_authSignupRoute: Public_authSignupRoute,
   Public_authIndexRoute: Public_authIndexRoute,
@@ -455,7 +480,6 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthRouteRoute: AuthRouteRouteWithChildren,
   Public_authRouteRoute: Public_authRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
 }

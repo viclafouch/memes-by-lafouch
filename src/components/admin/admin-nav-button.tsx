@@ -49,7 +49,7 @@ export const AdminNavButton = ({ user }: { user: UserWithRole }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/library">Application</Link>
+          <Link to="/memes">Application</Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>
           Se déconnecter

@@ -17,7 +17,7 @@ export const getFavoritesMemesCount = createServerFn({ method: 'GET' })
 export const getFavoritesMemes = createServerFn({ method: 'GET' })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ context }) => {
-    const userBookmarks = await prismaClient.userBookmark.findMany({
+    const bookmarks = await prismaClient.userBookmark.findMany({
       where: {
         userId: context.user.id
       },
@@ -33,10 +33,7 @@ export const getFavoritesMemes = createServerFn({ method: 'GET' })
       }
     })
 
-    return userBookmarks.map(({ meme }) => {
-      return {
-        ...meme,
-        isBookmarked: true
-      }
+    return bookmarks.map((bookmark) => {
+      return bookmark.meme
     })
   })

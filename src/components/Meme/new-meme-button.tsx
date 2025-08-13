@@ -27,7 +27,7 @@ export const NewMemeButton = ({ ...restButtonProps }: NewMemeButtonProps) => {
 
   const handleAddMeme = () => {
     queryClient.invalidateQueries({ queryKey: ['memes-list'], exact: false })
-    navigate({ to: '/library' })
+    navigate({ to: '/memes' })
     closeDialog()
   }
 

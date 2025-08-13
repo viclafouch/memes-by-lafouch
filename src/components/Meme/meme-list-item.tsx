@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Clapperboard, PlaySquare } from 'lucide-react'
-import type { MemeWithBoomarked } from '@/@types/meme'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { MotionLink } from '@/components/motion-link'
@@ -15,7 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 export type MemeListItemProps = {
-  meme: MemeWithBoomarked
+  meme: MemeWithVideo
   layoutContext: string
   size?: keyof typeof sizes
   onPlayClick: (meme: MemeWithVideo) => void
@@ -93,7 +92,7 @@ export const MemeListItem = React.memo(
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col gap-1.5">
             <Link
-              to="/library/$memeId"
+              to="/memes/$memeId"
               params={{ memeId: meme.id }}
               title={meme.title}
               className="line-clamp-1 font-medium leading-none text-gray-100"

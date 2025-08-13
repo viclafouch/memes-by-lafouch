@@ -24,7 +24,7 @@ const RouteComponent = () => {
         action={
           <div className="flex gap-2 flex-wrap justify-end">
             <ShareMemeButton meme={meme} />
-            {matchIsUserAdmin(user) ? (
+            {user && matchIsUserAdmin(user) ? (
               <>
                 <EditMemeButton size="sm" variant="secondary" meme={meme}>
                   <Pen /> Modifier
@@ -51,7 +51,9 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_auth/library/$memeId')({
+export const Route = createFileRoute(
+  '/_public_auth/_with_sidebar/memes/$memeId'
+)({
   component: RouteComponent,
   loader: async ({ params, context }) => {
     const meme = await context.queryClient.ensureQueryData(
@@ -59,8 +61,7 @@ export const Route = createFileRoute('/_auth/library/$memeId')({
     )
 
     return {
-      meme,
-      crumb: meme.title
+      meme
     }
   },
   head: ({ loaderData }) => {

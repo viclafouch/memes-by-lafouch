@@ -1,17 +1,18 @@
 import React from 'react'
-import { Plus } from 'lucide-react'
 import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
 import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
 import MemesToggleGrid from '@/components/Meme/Filters/memes-toggle-grid'
 import { MemesList } from '@/components/Meme/memes-list'
-import { NewMemeButton } from '@/components/Meme/new-meme-button'
-import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
 import { LoadingSpinner } from '@/components/ui/spinner'
+import type { MemesFilters } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
-import { matchIsUserAdmin } from '@/lib/auth-client'
 import { getMemesListQueryOpts } from '@/lib/queries'
+import {
+  PageDescription,
+  PageHeading
+} from '@/routes/_public_auth/-components/page-headers'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -52,31 +53,64 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
 }
 
 const RouteComponent = () => {
-  const { user } = Route.useRouteContext()
   const [columnGridCount, setColumnGridCount] = React.useState<number>(3)
+  const navigate = Route.useNavigate()
+  const search = Route.useSearch()
+
+  const handleOrderByChange = (value: string) => {
+    navigate({
+      to: '/memes',
+      search: (prevState) => {
+        return {
+          page: prevState.page,
+          query: prevState.query,
+          orderBy: value as MemesFilters['orderBy']
+        }
+      },
+      viewTransition: false,
+      replace: true
+    })
+  }
+
+  const handleQueryChange = (value: string) => {
+    navigate({
+      to: '/memes',
+      search: (prevState) => {
+        return {
+          page: 1,
+          query: value,
+          orderBy: prevState.orderBy
+        }
+      },
+      viewTransition: false,
+      replace: true
+    })
+  }
 
   return (
-    <Container className="overflow-scroll">
-      <PageHeader
-        title="Memes"
-        action={
-          matchIsUserAdmin(user) ? (
-            <NewMemeButton>
-              <Plus /> Ajouter un mème
-            </NewMemeButton>
-          ) : null
-        }
-      />
+    <Container>
+      <PageHeading title="Memes" className="container">
+        Memes
+      </PageHeading>
+      <PageDescription className="container">
+        A collection of memes from the internet
+      </PageDescription>
       <div className="w-full mx-auto py-10">
         <div className="flex flex-col gap-y-4">
           <div className="border-b border-muted pb-4 flex justify-between gap-x-3">
-            <MemesQuery />
+            <MemesQuery
+              query={search.query ?? ''}
+              onQueryChange={handleQueryChange}
+            />
             <div className="gap-x-3 hidden xl:flex">
               <MemesToggleGrid
                 columnValue={columnGridCount}
                 onColumnValueChange={setColumnGridCount}
               />
-              <MemesOrderBy />
+              <MemesOrderBy
+                orderBy={search.orderBy ?? 'most_recent'}
+                onOrderByChange={handleOrderByChange}
+              />
             </div>
           </div>
           <React.Suspense fallback={<LoadingSpinner />}>
@@ -88,17 +122,12 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_auth/library/')({
+export const Route = createFileRoute('/_public_auth/_with_sidebar/memes/')({
   component: RouteComponent,
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)
   },
   pendingComponent: () => {
     return <div>Loading...</div>
-  },
-  loader: () => {
-    return {
-      crumb: 'Memes'
-    }
   }
 })

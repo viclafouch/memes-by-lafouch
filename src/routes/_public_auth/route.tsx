@@ -8,12 +8,12 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 const RouteComponent = () => {
   return (
     <StarsBackground>
-      <div className="z-10 relative">
+      <div className="z-10 relative min-h-screen">
         <AnimatedBanner>
           This website is currently under construction.
         </AnimatedBanner>
         <Navbar />
-        <main className="flex flex-1 flex-col py-30 pb-10 sm:pt-42 sm:pb-14">
+        <main className="flex flex-1 flex-col">
           <Outlet />
         </main>
         <Footer />

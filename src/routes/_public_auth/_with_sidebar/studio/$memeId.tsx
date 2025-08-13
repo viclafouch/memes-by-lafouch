@@ -106,7 +106,7 @@ const RouteComponent = () => {
             data={data}
           />
         </div>
-        <div className="p-4 border-l border-accent h-full overflow-hidden hidden lg:block">
+        <div className="p-4 h-full overflow-hidden hidden lg:block">
           <StudioTabs />
         </div>
       </div>
@@ -114,7 +114,9 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_auth/studio/$memeId')({
+export const Route = createFileRoute(
+  '/_public_auth/_with_sidebar/studio/$memeId'
+)({
   component: RouteComponent,
   ssr: 'data-only',
   pendingComponent: () => {

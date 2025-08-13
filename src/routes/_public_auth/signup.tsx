@@ -51,7 +51,7 @@ const RouteComponent = () => {
         },
         {
           onSuccess: () => {
-            navigate({ to: '/library' })
+            navigate({ to: '/memes' })
           },
           onError: (context) => {
             toast.error(context.error.message)
