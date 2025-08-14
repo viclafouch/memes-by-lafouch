@@ -2,6 +2,7 @@ import React from 'react'
 import type { User } from 'better-auth'
 import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
+import { AuthDialog } from '@/components/User/auth-dialog'
 import type { MemeWithVideo } from '@/constants/meme'
 import { authClient } from '@/lib/auth-client'
 import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
@@ -11,7 +12,6 @@ import {
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
 
 type ToggleLikeButtonProps = {
   meme: MemeWithVideo
@@ -83,19 +83,25 @@ const AuthBookmarkButton = ({
 
 const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
   const session = authClient.useSession()
-  const navigate = useNavigate()
+  const [isLoginDialogOpened, setIsLoginDialogOpened] = React.useState(false)
 
   if (!session.data) {
     return (
-      <IconButton
-        icon={Star}
-        active={false}
-        className={className}
-        onClick={(event) => {
-          event.preventDefault()
-          navigate({ to: '/login' })
-        }}
-      />
+      <>
+        <AuthDialog
+          open={isLoginDialogOpened}
+          onOpenChange={setIsLoginDialogOpened}
+        />
+        <IconButton
+          icon={Star}
+          active={false}
+          className={className}
+          onClick={(event) => {
+            event.preventDefault()
+            setIsLoginDialogOpened(true)
+          }}
+        />
+      </>
     )
   }
 

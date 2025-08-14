@@ -1,4 +1,5 @@
 import type { MemesFilters } from '@/constants/meme'
+import { getBestMemes } from '@/server/ai'
 import { getMemeById, getMemes, getVideoStatusById } from '@/server/meme'
 import { getFavoritesMemes, getFavoritesMemesCount } from '@/server/user'
 import { getAuthUser } from '@/server/user-auth'
@@ -15,6 +16,17 @@ export const getMemesListQueryOpts = (filters: MemesFilters) => {
 }
 
 getMemesListQueryOpts.all = ['memes-list'] as const
+
+export const getBestMemesQueryOpts = () => {
+  return queryOptions({
+    queryKey: [...getBestMemesQueryOpts.all],
+    queryFn: async () => {
+      return getBestMemes()
+    }
+  })
+}
+
+getBestMemesQueryOpts.all = ['best-memes'] as const
 
 export const getMemeByIdQueryOpts = (memeId: Meme['id']) => {
   return queryOptions({

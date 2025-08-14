@@ -3,10 +3,13 @@ import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import { MemesList } from '@/components/Meme/memes-list'
 import { Button } from '@/components/ui/button'
-import type { MemeWithVideo } from '@/constants/meme'
-import { Await, Link } from '@tanstack/react-router'
+import { getBestMemesQueryOpts } from '@/lib/queries'
+import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 
-export const Demo = ({ memes }: { memes: Promise<MemeWithVideo[]> }) => {
+export const Demo = () => {
+  const bestMemesQuery = useQuery(getBestMemesQueryOpts())
+
   return (
     <div className="container">
       <motion.div
@@ -33,13 +36,9 @@ export const Demo = ({ memes }: { memes: Promise<MemeWithVideo[]> }) => {
           </p>
         </div>
         <section className="flex flex-col items-center gap-y-12">
-          <React.Suspense>
-            <Await promise={memes}>
-              {(resolvedMemes) => {
-                return <MemesList layoutContext="index" memes={resolvedMemes} />
-              }}
-            </Await>
-          </React.Suspense>
+          {bestMemesQuery.data ? (
+            <MemesList layoutContext="index" memes={bestMemesQuery.data} />
+          ) : null}
           <Button asChild variant="outline" size="lg">
             <Link to="/memes">Voir tous les mèmes</Link>
           </Button>
