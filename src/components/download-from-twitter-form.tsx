@@ -61,7 +61,6 @@ export const DownloadFromTwitterForm = () => {
   })
 
   const handlePasteFromClipboard = async () => {
-    // eslint-disable-next-line promise/prefer-await-to-then
     clipboardMutation.mutateAsync().finally(() => {
       setTimeout(() => {
         clipboardMutation.reset()

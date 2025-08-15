@@ -1,7 +1,6 @@
+/* eslint-disable no-console */
 import fs from 'node:fs/promises'
-import { PrismaClient } from '@prisma/client'
-
-const prismaClient = new PrismaClient()
+import { prismaClient } from '@/db'
 
 export const exportJson = async () => {
   const memes = await prismaClient.meme.findMany({
@@ -11,6 +10,9 @@ export const exportJson = async () => {
   })
 
   await fs.writeFile('./backup.json', JSON.stringify(memes, null, 2))
+
+  console.log(`${memes.length} memes exported to ${process.cwd()}/backup.json`)
 }
 
+// npx vite-node scripts/export-json.ts
 exportJson()

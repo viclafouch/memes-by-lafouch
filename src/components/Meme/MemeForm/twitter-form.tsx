@@ -57,7 +57,6 @@ export const TwitterForm = ({ onSuccess, closeDialog }: TwitterFormProps) => {
   })
 
   const handlePasteFromClipboard = async () => {
-    // eslint-disable-next-line promise/prefer-await-to-then
     clipboardMutation.mutateAsync().finally(() => {
       setTimeout(() => {
         clipboardMutation.reset()

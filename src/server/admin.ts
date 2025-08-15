@@ -2,6 +2,11 @@ import { filesize } from 'filesize'
 import { z } from 'zod'
 import { MAX_SIZE_MEME_IN_BYTES, TWEET_LINK_SCHEMA } from '@/constants/meme'
 import { prismaClient } from '@/db'
+import {
+  algoliaClient,
+  algoliaIndexName,
+  memeToAlgoliaRecord
+} from '@/lib/algolia'
 import { auth } from '@/lib/auth'
 import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
 import { adminRequiredMiddleware } from '@/server/user-auth'
@@ -78,6 +83,17 @@ export const editMeme = createServerFn({ method: 'POST' })
       }
     })
 
+    await algoliaClient
+      .partialUpdateObject({
+        indexName: algoliaIndexName,
+        objectID: meme.id,
+        attributesToUpdate: memeToAlgoliaRecord(meme)
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      })
+
     return { id: meme.id }
   })
 
@@ -101,6 +117,16 @@ export const deleteMemeById = createServerFn({ method: 'POST' })
         id: meme.videoId
       }
     })
+
+    await algoliaClient
+      .deleteObject({
+        indexName: algoliaIndexName,
+        objectID: meme.id
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      })
 
     await deleteVideo(meme.video.bunnyId)
 
@@ -139,8 +165,21 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
             bunnyId: videoId
           }
         }
+      },
+      include: {
+        video: true
       }
     })
+
+    await algoliaClient
+      .saveObject({
+        indexName: algoliaIndexName,
+        body: memeToAlgoliaRecord(meme)
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      })
 
     await uploadVideo(videoId, buffer)
 
@@ -178,10 +217,23 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
             bunnyId: videoId
           }
         }
+      },
+      include: {
+        video: true
       }
     })
 
     await uploadVideo(videoId, buffer)
+
+    await algoliaClient
+      .saveObject({
+        indexName: algoliaIndexName,
+        body: memeToAlgoliaRecord(meme)
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      })
 
     return {
       id: meme.id

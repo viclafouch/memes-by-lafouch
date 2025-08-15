@@ -11,7 +11,6 @@ export function stopVideo(node: Element) {
 export function playVideo(node: Element) {
   if (matchIsVideoElement(node)) {
     node.currentTime = 0
-    // eslint-disable-next-line promise/prefer-await-to-then
     node.play().catch(() => {})
   }
 }

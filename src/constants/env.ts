@@ -6,7 +6,8 @@ export const ENV = createEnv({
     AUTH_TWITTER_ID: z.string(),
     AUTH_TWITTER_SECRET: z.string(),
     BETTER_AUTH_SECRET: z.string(),
-    BUNNY_ACCESS_KEY: z.string()
+    BUNNY_ACCESS_KEY: z.string(),
+    ALGOLIA_SECRET: z.string()
   },
   clientPrefix: 'PUBLIC_',
   client: {},
