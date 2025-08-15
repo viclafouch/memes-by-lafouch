@@ -15,6 +15,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as Public_authRouteRouteImport } from './routes/_public_auth/route'
 import { Route as Public_authIndexRouteImport } from './routes/_public_auth/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminLibraryRouteImport } from './routes/admin/library'
 import { Route as Public_authSignupRouteImport } from './routes/_public_auth/signup'
 import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
 import { Route as Public_authWith_sidebarRouteRouteImport } from './routes/_public_auth/_with_sidebar/route'
@@ -49,6 +50,11 @@ const Public_authIndexRoute = Public_authIndexRouteImport.update({
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLibraryRoute = AdminLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const Public_authSignupRoute = Public_authSignupRouteImport.update({
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
+  '/admin/library': typeof AdminLibraryRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public_authIndexRoute
   '/studio': typeof Public_authWith_sidebarStudioRouteRouteWithChildren
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
+  '/admin/library': typeof AdminLibraryRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public_authIndexRoute
   '/downloader': typeof Public_authWith_sidebarDownloaderRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/_public_auth/_with_sidebar': typeof Public_authWith_sidebarRouteRouteWithChildren
   '/_public_auth/login': typeof Public_authLoginRoute
   '/_public_auth/signup': typeof Public_authSignupRoute
+  '/admin/library': typeof AdminLibraryRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public_auth/': typeof Public_authIndexRoute
   '/_public_auth/_with_sidebar/studio': typeof Public_authWith_sidebarStudioRouteRouteWithChildren
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
+    | '/admin/library'
     | '/admin/users'
     | '/'
     | '/studio'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
+    | '/admin/library'
     | '/admin/users'
     | '/'
     | '/downloader'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/_public_auth/_with_sidebar'
     | '/_public_auth/login'
     | '/_public_auth/signup'
+    | '/admin/library'
     | '/admin/users'
     | '/_public_auth/'
     | '/_public_auth/_with_sidebar/studio'
@@ -291,6 +303,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/library': {
+      id: '/admin/library'
+      path: '/library'
+      fullPath: '/admin/library'
+      preLoaderRoute: typeof AdminLibraryRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/_public_auth/signup': {
@@ -468,10 +487,12 @@ const Public_authRouteRouteWithChildren =
   Public_authRouteRoute._addFileChildren(Public_authRouteRouteChildren)
 
 interface AdminRouteRouteChildren {
+  AdminLibraryRoute: typeof AdminLibraryRoute
   AdminUsersRoute: typeof AdminUsersRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminLibraryRoute: AdminLibraryRoute,
   AdminUsersRoute: AdminUsersRoute,
 }
 

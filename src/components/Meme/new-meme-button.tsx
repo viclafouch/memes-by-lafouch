@@ -25,9 +25,9 @@ export const NewMemeButton = ({ ...restButtonProps }: NewMemeButtonProps) => {
     setIsOpen(false)
   }
 
-  const handleAddMeme = () => {
+  const handleAddMeme = ({ memeId }: { memeId: string }) => {
     queryClient.invalidateQueries({ queryKey: ['memes-list'], exact: false })
-    navigate({ to: '/memes' })
+    navigate({ to: '/memes/$memeId', params: { memeId } })
     closeDialog()
   }
 

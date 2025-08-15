@@ -1,4 +1,15 @@
+import { filesize } from 'filesize'
+import { z } from 'zod'
+import { MAX_SIZE_MEME_IN_BYTES, TWEET_LINK_SCHEMA } from '@/constants/meme'
+import { prismaClient } from '@/db'
 import { auth } from '@/lib/auth'
+import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
+import { adminRequiredMiddleware } from '@/server/user-auth'
+import {
+  extractTweetIdFromUrl,
+  getTweetById,
+  getTweetMedia
+} from '@/utils/tweet'
 import { createServerFn } from '@tanstack/react-start'
 import { getWebRequest } from '@tanstack/react-start/server'
 
@@ -18,3 +29,161 @@ export const getListUsers = createServerFn({ method: 'GET' }).handler(
     return listUsers
   }
 )
+
+export const EDIT_MEME_SCHEMA = z.object({
+  title: z.string().min(3),
+  keywords: z.array(z.string()),
+  tweetUrl: TWEET_LINK_SCHEMA.nullable().or(
+    z
+      .string()
+      .length(0)
+      .transform(() => {
+        return null
+      })
+  )
+})
+
+export const editMeme = createServerFn({ method: 'POST' })
+  .validator((data) => {
+    return EDIT_MEME_SCHEMA.extend({ memeId: z.string() }).parse(data)
+  })
+  .middleware([adminRequiredMiddleware])
+  .handler(async ({ data: values }) => {
+    const meme = await prismaClient.meme.findUnique({
+      where: {
+        id: values.memeId
+      },
+      include: {
+        video: true
+      }
+    })
+
+    if (!meme) {
+      throw new Error('Meme not found')
+    }
+
+    await prismaClient.meme.update({
+      where: {
+        id: values.memeId
+      },
+      data: {
+        title: values.title,
+        keywords: values.keywords.map((keyword) => {
+          return keyword.toLowerCase().trim()
+        }),
+        tweetUrl: values.tweetUrl || null
+      },
+      include: {
+        video: true
+      }
+    })
+
+    return { id: meme.id }
+  })
+
+export const deleteMemeById = createServerFn({ method: 'POST' })
+  .validator((data) => {
+    return z.string().parse(data)
+  })
+  .middleware([adminRequiredMiddleware])
+  .handler(async ({ data: memeId }) => {
+    const meme = await prismaClient.meme.delete({
+      where: {
+        id: memeId
+      },
+      include: {
+        video: true
+      }
+    })
+
+    await prismaClient.video.delete({
+      where: {
+        id: meme.videoId
+      }
+    })
+
+    await deleteVideo(meme.video.bunnyId)
+
+    return { id: meme.id }
+  })
+
+export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
+  .validator((url: string) => {
+    return TWEET_LINK_SCHEMA.parse(url)
+  })
+  .middleware([adminRequiredMiddleware])
+  .handler(async ({ data: url }) => {
+    const tweetId = z.string().parse(extractTweetIdFromUrl(url))
+
+    const tweet = await getTweetById(tweetId)
+    const media = await getTweetMedia(tweet.video.url, tweet.poster.url)
+
+    if (media.video.blob.size > MAX_SIZE_MEME_IN_BYTES) {
+      throw new Error(
+        `Video size is too big: ${filesize(media.video.blob.size)}`
+      )
+    }
+
+    const title = 'Sans titre'
+    const arrayBuffer = await media.video.blob.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const { videoId } = await createVideo(title)
+
+    const meme = await prismaClient.meme.create({
+      data: {
+        title,
+        tweetUrl: tweet.url,
+        video: {
+          create: {
+            bunnyId: videoId
+          }
+        }
+      }
+    })
+
+    await uploadVideo(videoId, buffer)
+
+    return {
+      id: meme.id
+    }
+  })
+
+export const CREATE_MEME_FROM_FILE_SCHEMA = z.object({
+  video: z.file().min(1).max(MAX_SIZE_MEME_IN_BYTES).mime('video/mp4')
+})
+
+export const createMemeFromFile = createServerFn({ method: 'POST' })
+  .validator((data) => {
+    const formData = z.instanceof(FormData).parse(data)
+
+    return CREATE_MEME_FROM_FILE_SCHEMA.parse({
+      video: formData.get('video')
+    })
+  })
+  .middleware([adminRequiredMiddleware])
+  .handler(async ({ data: values }) => {
+    const title = 'Sans titre'
+    const arrayBuffer = await values.video.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const { videoId } = await createVideo(title)
+
+    const meme = await prismaClient.meme.create({
+      data: {
+        title,
+        tweetUrl: '',
+        video: {
+          create: {
+            bunnyId: videoId
+          }
+        }
+      }
+    })
+
+    await uploadVideo(videoId, buffer)
+
+    return {
+      id: meme.id
+    }
+  })

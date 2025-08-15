@@ -28,8 +28,18 @@ export const StudioMemes = ({
       })
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      return lastPage.nextPage
+    getNextPageParam: (result) => {
+      const { page, totalPages } = result
+
+      if (page === undefined || totalPages === undefined) {
+        return null
+      }
+
+      if (page + 1 > totalPages) {
+        return null
+      }
+
+      return page + 1
     }
   })
 

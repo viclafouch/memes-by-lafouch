@@ -1,24 +1,24 @@
 import React from 'react'
+import { Plus } from 'lucide-react'
 import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
-import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
 import MemesToggleGrid from '@/components/Meme/Filters/memes-toggle-grid'
 import { MemesList } from '@/components/Meme/memes-list'
+import { NewMemeButton } from '@/components/Meme/new-meme-button'
+import { PageHeader } from '@/components/page-header'
+import { Paginator } from '@/components/paginator'
 import { Container } from '@/components/ui/container'
 import { LoadingSpinner } from '@/components/ui/spinner'
 import type { MemesFilters } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
 import { getMemesListQueryOpts } from '@/lib/queries'
-import {
-  PageDescription,
-  PageHeading
-} from '@/routes/_public_auth/-components/page-headers'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
   const search = Route.useSearch()
+  const navigate = Route.useNavigate()
 
   const [debouncedValue] = useDebouncedValue(search.query, {
     wait: 300,
@@ -33,6 +33,21 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
     }
   }, [debouncedValue, search.page, search.orderBy])
 
+  const handlePageChange = (page: MemesFilters['page']) => {
+    navigate({
+      to: '/admin/library',
+      search: (prevState) => {
+        return {
+          page,
+          query: prevState.query,
+          orderBy: prevState.orderBy
+        }
+      },
+      viewTransition: false,
+      replace: true
+    })
+  }
+
   const memesListQuery = useSuspenseQuery(getMemesListQueryOpts(filters))
 
   return (
@@ -43,9 +58,11 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
         memes={memesListQuery.data.memes}
       />
       <div className="flex justify-end z-0">
-        <MemesPagination
+        <Paginator
           currentPage={(memesListQuery.data.page || 0) + 1}
           totalPages={memesListQuery.data.totalPages ?? 0}
+          onPageChange={handlePageChange}
+          showPreviousNext
         />
       </div>
     </div>
@@ -59,7 +76,7 @@ const RouteComponent = () => {
 
   const handleOrderByChange = (value: string) => {
     navigate({
-      to: '/memes',
+      to: '/admin/library',
       search: (prevState) => {
         return {
           page: prevState.page,
@@ -74,7 +91,7 @@ const RouteComponent = () => {
 
   const handleQueryChange = (value: string) => {
     navigate({
-      to: '/memes',
+      to: '/admin/library',
       search: (prevState) => {
         return {
           page: 1,
@@ -89,12 +106,14 @@ const RouteComponent = () => {
 
   return (
     <Container>
-      <PageHeading title="Memes" className="container">
-        Memes
-      </PageHeading>
-      <PageDescription className="container">
-        A collection of memes from the internet
-      </PageDescription>
+      <PageHeader
+        title="Librairie"
+        action={
+          <NewMemeButton>
+            <Plus /> Ajouter un mème
+          </NewMemeButton>
+        }
+      />
       <div className="w-full mx-auto py-10">
         <div className="flex flex-col gap-y-4">
           <div className="border-b border-muted pb-4 flex justify-between gap-x-3">
@@ -122,9 +141,14 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth/_with_sidebar/memes/')({
+export const Route = createFileRoute('/admin/library')({
   component: RouteComponent,
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)
+  },
+  loader: () => {
+    return {
+      crumb: 'Librairie'
+    }
   }
 })

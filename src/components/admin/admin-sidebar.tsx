@@ -1,4 +1,4 @@
-import { User2, Users2 } from 'lucide-react'
+import { User2, Users2, Video } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -42,6 +42,12 @@ export const AdminSidebar = ({
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/admin/library">
+                    <Video />
+                    <span>Librairie</span>
+                  </Link>
+                </SidebarMenuButton>
                 <SidebarMenuButton asChild>
                   <Link to="/admin/users">
                     <Users2 />

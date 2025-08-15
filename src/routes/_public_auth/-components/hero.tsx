@@ -1,7 +1,7 @@
 /* eslint-disable id-length */
 import type { Variants } from 'framer-motion'
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { FloatingLogos } from '@/routes/_public_auth/-components/floating-logo'
@@ -12,6 +12,7 @@ import {
   PageHeader,
   PageHeading
 } from '@/routes/_public_auth/-components/page-headers'
+import { Link } from '@tanstack/react-router'
 
 const h1Transition = {
   delay: 0,
@@ -88,7 +89,13 @@ export const Hero = () => {
           animate="visible"
           custom={{ delay: 1.1 }}
         >
-          <Button size="lg">Découvrir les mèmes</Button>
+          <Link
+            viewTransition
+            className={buttonVariants({ size: 'lg' })}
+            to="/memes"
+          >
+            Découvrir les mèmes
+          </Link>
         </motion.div>
       </PageActions>
       {!isMobile ? <FloatingLogos variants={variants} /> : null}

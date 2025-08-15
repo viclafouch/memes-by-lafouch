@@ -1,27 +1,20 @@
 /* eslint-disable camelcase */
-import { filesize } from 'filesize'
 import { z } from 'zod'
-import {
-  MAX_SIZE_MEME_IN_BYTES,
-  MEMES_FILTERS_SCHEMA,
-  TWEET_LINK_SCHEMA
-} from '@/constants/meme'
+import type { MemeWithVideo } from '@/constants/meme'
+import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
 import { prismaClient } from '@/db'
-import {
-  createVideo,
-  deleteVideo,
-  getVideoPlayData,
-  uploadVideo
-} from '@/lib/bunny'
+import { getVideoPlayData } from '@/lib/bunny'
 import { authUserRequiredMiddleware } from '@/server/user-auth'
-import {
-  extractTweetIdFromUrl,
-  getTweetById,
-  getTweetMedia
-} from '@/utils/tweet'
+import { searchClient } from '@algolia/client-search'
 import type { Meme, User } from '@prisma/client'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn, serverOnly } from '@tanstack/react-start'
+
+const appID = 'W4S6H0K8DZ'
+const apiKey = 'df745aae70b47dcff698517eddfbf684'
+const indexName = 'backup'
+
+const client = searchClient(appID, apiKey)
 
 export const getMemeById = createServerFn({ method: 'GET' })
   .validator((data) => {
@@ -117,49 +110,20 @@ export const getVideoStatusById = createServerFn({ method: 'GET' })
 export const getMemes = createServerFn({ method: 'GET' })
   .validator(MEMES_FILTERS_SCHEMA)
   .handler(async ({ data }) => {
-    const currentPage = data.page ?? 1
-    const dataQueryNormalized = data.query?.toLowerCase().trim() ?? ''
-
-    const filters = dataQueryNormalized
-      ? {
-          OR: [
-            {
-              title: {
-                search: dataQueryNormalized.split(' ').join(' & ')
-              }
-            },
-            {
-              keywords: {
-                hasSome: dataQueryNormalized.split(' ')
-              }
-            }
-          ]
-        }
-      : undefined
-
-    const totalMemes = await prismaClient.meme.count({ where: filters })
-
-    const memes = await prismaClient.meme.findMany({
-      take: 30,
-      // page starts at 1 in UI, 0 in API
-      skip: (currentPage - 1) * 30,
-      include: {
-        video: true
-      },
-      orderBy: {
-        createdAt: data.orderBy === 'most_old' ? 'asc' : 'desc'
-      },
-      where: filters
+    const response = await client.searchSingleIndex<MemeWithVideo>({
+      indexName,
+      searchParams: {
+        query: data.query,
+        page: data.page ? data.page - 1 : 0,
+        hitsPerPage: 30
+      }
     })
 
-    const totalPages = Math.ceil(totalMemes / 30)
-
     return {
-      memes,
+      memes: response.hits as MemeWithVideo[],
       query: data.query,
-      currentPage,
-      nextPage: currentPage + 1 <= totalPages ? currentPage + 1 : null,
-      totalPages
+      page: response.page,
+      totalPages: response.nbPages
     }
   })
 
@@ -181,164 +145,6 @@ export const getRandomMeme = createServerFn({ method: 'GET' })
     const randomIndex = Math.floor(Math.random() * withoutCurrentMeme.length)
 
     return withoutCurrentMeme[randomIndex]
-  })
-
-export const EDIT_MEME_SCHEMA = z.object({
-  title: z.string().min(3),
-  keywords: z.array(z.string()),
-  tweetUrl: TWEET_LINK_SCHEMA.nullable().or(
-    z
-      .string()
-      .length(0)
-      .transform(() => {
-        return null
-      })
-  )
-})
-
-export const editMeme = createServerFn({ method: 'POST' })
-  .validator((data) => {
-    return EDIT_MEME_SCHEMA.extend({ memeId: z.string() }).parse(data)
-  })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: values }) => {
-    const meme = await prismaClient.meme.findUnique({
-      where: {
-        id: values.memeId
-      },
-      include: {
-        video: true
-      }
-    })
-
-    if (!meme) {
-      throw new Error('Meme not found')
-    }
-
-    await prismaClient.meme.update({
-      where: {
-        id: values.memeId
-      },
-      data: {
-        title: values.title,
-        keywords: values.keywords.map((keyword) => {
-          return keyword.toLowerCase().trim()
-        }),
-        tweetUrl: values.tweetUrl || null
-      },
-      include: {
-        video: true
-      }
-    })
-
-    return { id: meme.id }
-  })
-
-export const deleteMemeById = createServerFn({ method: 'POST' })
-  .validator((data) => {
-    return z.string().parse(data)
-  })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: memeId }) => {
-    const meme = await prismaClient.meme.delete({
-      where: {
-        id: memeId
-      },
-      include: {
-        video: true
-      }
-    })
-
-    await prismaClient.video.delete({
-      where: {
-        id: meme.videoId
-      }
-    })
-
-    await deleteVideo(meme.video.bunnyId)
-
-    return { id: meme.id }
-  })
-
-export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
-  .validator((url: string) => {
-    return TWEET_LINK_SCHEMA.parse(url)
-  })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: url }) => {
-    const tweetId = z.string().parse(extractTweetIdFromUrl(url))
-
-    const tweet = await getTweetById(tweetId)
-    const media = await getTweetMedia(tweet.video.url, tweet.poster.url)
-
-    if (media.video.blob.size > MAX_SIZE_MEME_IN_BYTES) {
-      throw new Error(
-        `Video size is too big: ${filesize(media.video.blob.size)}`
-      )
-    }
-
-    const title = 'Sans titre'
-    const arrayBuffer = await media.video.blob.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const { videoId } = await createVideo(title)
-
-    const meme = await prismaClient.meme.create({
-      data: {
-        title,
-        tweetUrl: tweet.url,
-        video: {
-          create: {
-            bunnyId: videoId
-          }
-        }
-      }
-    })
-
-    await uploadVideo(videoId, buffer)
-
-    return {
-      id: meme.id
-    }
-  })
-
-export const CREATE_MEME_FROM_FILE_SCHEMA = z.object({
-  video: z.file().min(1).max(MAX_SIZE_MEME_IN_BYTES).mime('video/mp4')
-})
-
-export const createMemeFromFile = createServerFn({ method: 'POST' })
-  .validator((data) => {
-    const formData = z.instanceof(FormData).parse(data)
-
-    return CREATE_MEME_FROM_FILE_SCHEMA.parse({
-      video: formData.get('video')
-    })
-  })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: values }) => {
-    const title = 'Sans titre'
-    const arrayBuffer = await values.video.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const { videoId } = await createVideo(title)
-
-    const meme = await prismaClient.meme.create({
-      data: {
-        title,
-        tweetUrl: '',
-        video: {
-          create: {
-            bunnyId: videoId
-          }
-        }
-      }
-    })
-
-    await uploadVideo(videoId, buffer)
-
-    return {
-      id: meme.id
-    }
   })
 
 export const shareMeme = createServerFn({ method: 'GET', response: 'raw' })

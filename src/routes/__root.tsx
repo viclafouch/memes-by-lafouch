@@ -54,6 +54,7 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="fr">
       <head>
+        <meta name="algolia-site-verification" content="57C07DF31C29F6D0" />
         <HeadContent />
         <script
           type="text/javascript"

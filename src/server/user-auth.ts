@@ -32,3 +32,18 @@ export const authUserRequiredMiddleware = createMiddleware({
 
   return next({ context: { user: session.user } })
 })
+
+export const adminRequiredMiddleware = createMiddleware({
+  type: 'function'
+})
+  .middleware([authUserRequiredMiddleware])
+  .server(async ({ context, next }) => {
+    const { user } = context
+
+    if (user.role !== 'admin') {
+      setResponseStatus(401)
+      throw new Error('Unauthorized')
+    }
+
+    return next({ context: { user } })
+  })

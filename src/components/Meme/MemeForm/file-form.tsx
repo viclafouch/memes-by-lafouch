@@ -15,12 +15,15 @@ import {
 } from '@/components/ui/file-upload'
 import { FormItem, FormMessage } from '@/components/ui/form'
 import { getFieldErrorMessage } from '@/lib/utils'
-import { CREATE_MEME_FROM_FILE_SCHEMA, createMemeFromFile } from '@/server/meme'
+import {
+  CREATE_MEME_FROM_FILE_SCHEMA,
+  createMemeFromFile
+} from '@/server/admin'
 import { formOptions, useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 
 type FileFormProps = {
-  onSuccess?: () => void
+  onSuccess?: ({ memeId }: { memeId: string }) => void
   closeDialog: () => void
 }
 
@@ -64,8 +67,8 @@ export const FileForm = ({ onSuccess, closeDialog }: FileFormProps) => {
 
       return promise
     },
-    onSuccess: () => {
-      onSuccess?.()
+    onSuccess: (data) => {
+      onSuccess?.({ memeId: data.id })
     }
   })
 

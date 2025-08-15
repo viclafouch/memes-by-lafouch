@@ -14,6 +14,10 @@ import {
   useVideoProcessor
 } from '@/hooks/use-video-processor'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
+import {
+  PageDescription,
+  PageHeading
+} from '@/routes/_public_auth/-components/page-headers'
 import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {
@@ -47,7 +51,15 @@ const RouteComponent = () => {
   }
 
   return (
-    <div className="w-full h-full overflow-hidden">
+    <div className="w-full flex flex-col gap-y-8">
+      <div className="text-center flex flex-col items-center justify-center px-4">
+        <PageHeading>Studio</PageHeading>
+        <PageDescription className="lg:max-w-3xl">
+          A large collection of admin dashboards, website templates, UI
+          components, and ready-to-use blocks. Save time and deliver projects
+          faster.
+        </PageDescription>
+      </div>
       <div className="grid lg:grid-cols-[auto_350px] h-full overflow-hidden">
         <div className="w-full flex flex-col gap-4 p-4">
           <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
@@ -107,7 +119,9 @@ const RouteComponent = () => {
           />
         </div>
         <div className="p-4 h-full overflow-hidden hidden lg:block">
-          <StudioTabs />
+          <div className="max-h-52 overflow-hidden">
+            <StudioTabs />
+          </div>
         </div>
       </div>
     </div>

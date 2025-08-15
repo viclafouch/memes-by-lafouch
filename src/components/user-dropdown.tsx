@@ -1,12 +1,12 @@
 import React from 'react'
 import type { User } from 'better-auth'
 import {
-  BadgeCheckIcon,
   BellIcon,
   ChevronDown,
   CreditCardIcon,
   LogOutIcon,
-  SparklesIcon
+  SparklesIcon,
+  Star
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -20,14 +20,19 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { authClient } from '@/lib/auth-client'
-import { getAuthUserQueryOpts } from '@/lib/queries'
-import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import {
+  getAuthUserQueryOpts,
+  getFavoritesMemesCountQueryOpts
+} from '@/lib/queries'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link, useRouter } from '@tanstack/react-router'
 
 export const UserMenuSimple = ({ user }: { user: User }) => {
   const [open, setOpen] = React.useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
+
+  const favoritesMemesCountQuery = useQuery(getFavoritesMemesCountQueryOpts())
 
   const handleLogout = async () => {
     await authClient.signOut()
@@ -80,9 +85,14 @@ export const UserMenuSimple = ({ user }: { user: User }) => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheckIcon />
-            Account
+          <DropdownMenuItem asChild>
+            <Link to="/favorites">
+              <Star />
+              Favoris
+              {favoritesMemesCountQuery.data?.count
+                ? ` (${favoritesMemesCountQuery.data.count})`
+                : ''}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCardIcon />

@@ -43,6 +43,7 @@
     "@tanstack/react-start": "^1.131.8",
     "@tanstack/react-table": "^8.21.3",
     "@vercel/speed-insights": "^1.2.0",
+    "algoliasearch": "^5.35.0",
     "better-auth": "^1.3.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

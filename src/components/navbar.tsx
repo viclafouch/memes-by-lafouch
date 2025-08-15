@@ -8,7 +8,7 @@ import {
   NavigationMenuList
 } from '@/components/ui/navigation-menu'
 import { AuthDialog } from '@/components/User/auth-dialog'
-import { UserMenuSimple } from '@/components/user-dropdown-01'
+import { UserMenuSimple } from '@/components/user-dropdown'
 import { cn } from '@/lib/utils'
 import type { LinkOptions } from '@tanstack/react-router'
 import { Link, useRouteContext } from '@tanstack/react-router'

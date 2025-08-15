@@ -10,7 +10,7 @@ export const exportJson = async () => {
     }
   })
 
-  await fs.writeFile('./memes.json', JSON.stringify(memes, null, 2))
+  await fs.writeFile('./backup.json', JSON.stringify(memes, null, 2))
 }
 
 exportJson()
