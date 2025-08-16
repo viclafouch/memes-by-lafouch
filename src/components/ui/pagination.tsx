@@ -7,6 +7,8 @@ import {
 import type { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import type { LinkProps } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => {
   return (
@@ -39,18 +41,18 @@ const PaginationItem = ({ ...props }: React.ComponentProps<'li'>) => {
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<React.ComponentProps<typeof Button>, 'size'> &
-  React.ComponentProps<'a'>
+  className?: string
+  size: React.ComponentProps<typeof Button>['size']
+} & LinkProps
 
 const PaginationLink = ({
-  className,
   isActive,
-  size = 'icon',
+  size,
+  className,
   ...props
 }: PaginationLinkProps) => {
   return (
-    // eslint-disable-next-line jsx-a11y/anchor-has-content
-    <a
+    <Link
       aria-current={isActive ? 'page' : undefined}
       data-slot="pagination-link"
       data-active={isActive}
@@ -73,7 +75,6 @@ const PaginationPrevious = ({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
       className={cn('gap-1 px-2.5 sm:pl-2.5', className)}
       {...props}
     >
@@ -90,7 +91,6 @@ const PaginationNext = ({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >

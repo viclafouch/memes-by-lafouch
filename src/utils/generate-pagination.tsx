@@ -1,10 +1,11 @@
 import type { JSX } from 'react'
 import { PaginationItem, PaginationLink } from '@/components/ui/pagination'
+import type { LinkProps } from '@tanstack/react-router'
 
 export const generatePaginationLinks = (
   currentPage: number,
   totalPages: number,
-  onPageChange: (page: number) => void
+  getLinkProps: (page: number) => LinkProps
 ): JSX.Element[] => {
   const pages: JSX.Element[] = []
   const maxVisible = 6
@@ -14,10 +15,9 @@ export const generatePaginationLinks = (
       pages.push(
         <PaginationItem key={index}>
           <PaginationLink
-            onClick={() => {
-              return onPageChange(index)
-            }}
             isActive={index === currentPage}
+            size="icon"
+            {...getLinkProps(index)}
           >
             {index}
           </PaginationLink>
@@ -40,9 +40,8 @@ export const generatePaginationLinks = (
     pages.push(
       <PaginationItem key={index}>
         <PaginationLink
-          onClick={() => {
-            return onPageChange(index)
-          }}
+          {...getLinkProps(index)}
+          size="icon"
           isActive={index === currentPage}
         >
           {index}

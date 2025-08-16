@@ -17,7 +17,6 @@ import { createFileRoute } from '@tanstack/react-router'
 
 const MemesListWrapper = () => {
   const search = Route.useSearch()
-  const navigate = Route.useNavigate()
 
   const [debouncedValue] = useDebouncedValue(search.query, {
     wait: 300,
@@ -32,21 +31,6 @@ const MemesListWrapper = () => {
     }
   }, [debouncedValue, search.page, search.orderBy])
 
-  const handlePageChange = (page: MemesFilters['page']) => {
-    navigate({
-      to: '/admin/library',
-      search: (prevState) => {
-        return {
-          page,
-          query: prevState.query,
-          orderBy: prevState.orderBy
-        }
-      },
-      viewTransition: false,
-      replace: true
-    })
-  }
-
   const memesListQuery = useSuspenseQuery(getMemesListQueryOpts(filters))
 
   return (
@@ -60,7 +44,18 @@ const MemesListWrapper = () => {
         <Paginator
           currentPage={(memesListQuery.data.page || 0) + 1}
           totalPages={memesListQuery.data.totalPages ?? 0}
-          onPageChange={handlePageChange}
+          getLinkProps={(page) => {
+            return {
+              to: '/admin/library',
+              search: (prevState) => {
+                return {
+                  page,
+                  query: prevState.query,
+                  orderBy: prevState.orderBy
+                }
+              }
+            }
+          }}
           showPreviousNext
         />
       </div>

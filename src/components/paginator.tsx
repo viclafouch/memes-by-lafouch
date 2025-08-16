@@ -6,18 +6,19 @@ import {
   PaginationPrevious
 } from '@/components/ui/pagination'
 import { generatePaginationLinks } from '@/utils/generate-pagination'
+import type { LinkProps } from '@tanstack/react-router'
 
 export type PaginatorProps = {
   currentPage: number
   totalPages: number
-  onPageChange: (pageNumber: number) => void
+  getLinkProps: (pageNumber: number) => LinkProps
   showPreviousNext: boolean
 }
 
 export const Paginator = ({
   currentPage,
   totalPages,
-  onPageChange,
+  getLinkProps,
   showPreviousNext
 }: PaginatorProps) => {
   return (
@@ -26,20 +27,15 @@ export const Paginator = ({
         {showPreviousNext && totalPages && currentPage - 1 >= 1 ? (
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => {
-                return onPageChange(currentPage - 1)
-              }}
+              size="default"
+              {...getLinkProps(currentPage - 1)}
             />
           </PaginationItem>
         ) : null}
-        {generatePaginationLinks(currentPage, totalPages, onPageChange)}
+        {generatePaginationLinks(currentPage, totalPages, getLinkProps)}
         {showPreviousNext && totalPages && currentPage + 1 <= totalPages ? (
           <PaginationItem>
-            <PaginationNext
-              onClick={() => {
-                return onPageChange(currentPage + 1)
-              }}
-            />
+            <PaginationNext size="default" {...getLinkProps(currentPage + 1)} />
           </PaginationItem>
         ) : null}
       </PaginationContent>
