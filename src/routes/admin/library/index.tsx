@@ -1,9 +1,8 @@
 import React from 'react'
 import { Plus } from 'lucide-react'
+import { MemeListItem } from '@/components/admin/meme-list-item'
 import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
-import MemesToggleGrid from '@/components/Meme/Filters/memes-toggle-grid'
-import { MemesList } from '@/components/Meme/memes-list'
 import { NewMemeButton } from '@/components/Meme/new-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Paginator } from '@/components/paginator'
@@ -16,7 +15,7 @@ import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
-const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
+const MemesListWrapper = () => {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
 
@@ -52,11 +51,11 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
 
   return (
     <div className="w-full flex flex-col gap-12">
-      <MemesList
-        columnGridCount={columnGridCount}
-        layoutContext="library"
-        memes={memesListQuery.data.memes}
-      />
+      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {memesListQuery.data.memes.map((meme) => {
+          return <MemeListItem key={meme.id} meme={meme} />
+        })}
+      </div>
       <div className="flex justify-end z-0">
         <Paginator
           currentPage={(memesListQuery.data.page || 0) + 1}
@@ -70,7 +69,6 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
 }
 
 const RouteComponent = () => {
-  const [columnGridCount, setColumnGridCount] = React.useState<number>(3)
   const navigate = Route.useNavigate()
   const search = Route.useSearch()
 
@@ -107,7 +105,7 @@ const RouteComponent = () => {
   return (
     <Container>
       <PageHeader
-        title="Librairie"
+        title="Memes"
         action={
           <NewMemeButton>
             <Plus /> Ajouter un mème
@@ -122,10 +120,6 @@ const RouteComponent = () => {
               onQueryChange={handleQueryChange}
             />
             <div className="gap-x-3 hidden xl:flex">
-              <MemesToggleGrid
-                columnValue={columnGridCount}
-                onColumnValueChange={setColumnGridCount}
-              />
               <MemesOrderBy
                 orderBy={search.orderBy ?? 'most_recent'}
                 onOrderByChange={handleOrderByChange}
@@ -133,7 +127,7 @@ const RouteComponent = () => {
             </div>
           </div>
           <React.Suspense fallback={<LoadingSpinner />}>
-            <MemesListWrapper columnGridCount={columnGridCount} />
+            <MemesListWrapper />
           </React.Suspense>
         </div>
       </div>
@@ -141,7 +135,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/admin/library')({
+export const Route = createFileRoute('/admin/library/')({
   component: RouteComponent,
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)

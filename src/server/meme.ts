@@ -151,7 +151,6 @@ export const shareMeme = createServerFn({ method: 'GET', response: 'raw' })
   .validator((data) => {
     return z.string().parse(data)
   })
-  .middleware([authUserRequiredMiddleware])
   .handler(async ({ data: memeId }) => {
     const meme = await prismaClient.meme.findUnique({
       where: {

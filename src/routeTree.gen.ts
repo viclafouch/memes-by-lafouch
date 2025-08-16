@@ -15,10 +15,11 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as Public_authRouteRouteImport } from './routes/_public_auth/route'
 import { Route as Public_authIndexRouteImport } from './routes/_public_auth/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
-import { Route as AdminLibraryRouteImport } from './routes/admin/library'
 import { Route as Public_authSignupRouteImport } from './routes/_public_auth/signup'
 import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
 import { Route as Public_authWith_sidebarRouteRouteImport } from './routes/_public_auth/_with_sidebar/route'
+import { Route as AdminLibraryIndexRouteImport } from './routes/admin/library/index'
+import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
 import { Route as Public_authWith_sidebarFavoritesRouteImport } from './routes/_public_auth/_with_sidebar/favorites'
 import { Route as Public_authWith_sidebarDownloaderRouteImport } from './routes/_public_auth/_with_sidebar/downloader'
 import { Route as Public_authWith_sidebarStudioRouteRouteImport } from './routes/_public_auth/_with_sidebar/studio/route'
@@ -52,11 +53,6 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminLibraryRoute = AdminLibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const Public_authSignupRoute = Public_authSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -72,6 +68,16 @@ const Public_authWith_sidebarRouteRoute =
     id: '/_with_sidebar',
     getParentRoute: () => Public_authRouteRoute,
   } as any)
+const AdminLibraryIndexRoute = AdminLibraryIndexRouteImport.update({
+  id: '/library/',
+  path: '/library/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLibraryMemeIdRoute = AdminLibraryMemeIdRouteImport.update({
+  id: '/library/$memeId',
+  path: '/library/$memeId',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const Public_authWith_sidebarFavoritesRoute =
   Public_authWith_sidebarFavoritesRouteImport.update({
     id: '/favorites',
@@ -141,12 +147,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
-  '/admin/library': typeof AdminLibraryRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public_authIndexRoute
   '/studio': typeof Public_authWith_sidebarStudioRouteRouteWithChildren
   '/downloader': typeof Public_authWith_sidebarDownloaderRoute
   '/favorites': typeof Public_authWith_sidebarFavoritesRoute
+  '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
+  '/admin/library': typeof AdminLibraryIndexRoute
   '/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
   '/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
   '/studio/$memeId': typeof Public_authWith_sidebarStudioMemeIdRoute
@@ -158,11 +165,12 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof Public_authLoginRoute
   '/signup': typeof Public_authSignupRoute
-  '/admin/library': typeof AdminLibraryRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public_authIndexRoute
   '/downloader': typeof Public_authWith_sidebarDownloaderRoute
   '/favorites': typeof Public_authWith_sidebarFavoritesRoute
+  '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
+  '/admin/library': typeof AdminLibraryIndexRoute
   '/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
   '/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
   '/studio/$memeId': typeof Public_authWith_sidebarStudioMemeIdRoute
@@ -177,12 +185,13 @@ export interface FileRoutesById {
   '/_public_auth/_with_sidebar': typeof Public_authWith_sidebarRouteRouteWithChildren
   '/_public_auth/login': typeof Public_authLoginRoute
   '/_public_auth/signup': typeof Public_authSignupRoute
-  '/admin/library': typeof AdminLibraryRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public_auth/': typeof Public_authIndexRoute
   '/_public_auth/_with_sidebar/studio': typeof Public_authWith_sidebarStudioRouteRouteWithChildren
   '/_public_auth/_with_sidebar/downloader': typeof Public_authWith_sidebarDownloaderRoute
   '/_public_auth/_with_sidebar/favorites': typeof Public_authWith_sidebarFavoritesRoute
+  '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
+  '/admin/library/': typeof AdminLibraryIndexRoute
   '/_public_auth/_with_sidebar/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
   '/_public_auth/_with_sidebar/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
   '/_public_auth/_with_sidebar/studio/$memeId': typeof Public_authWith_sidebarStudioMemeIdRoute
@@ -196,12 +205,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
-    | '/admin/library'
     | '/admin/users'
     | '/'
     | '/studio'
     | '/downloader'
     | '/favorites'
+    | '/admin/library/$memeId'
+    | '/admin/library'
     | '/memes/$memeId'
     | '/random/$memeId'
     | '/studio/$memeId'
@@ -213,11 +223,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
-    | '/admin/library'
     | '/admin/users'
     | '/'
     | '/downloader'
     | '/favorites'
+    | '/admin/library/$memeId'
+    | '/admin/library'
     | '/memes/$memeId'
     | '/random/$memeId'
     | '/studio/$memeId'
@@ -231,12 +242,13 @@ export interface FileRouteTypes {
     | '/_public_auth/_with_sidebar'
     | '/_public_auth/login'
     | '/_public_auth/signup'
-    | '/admin/library'
     | '/admin/users'
     | '/_public_auth/'
     | '/_public_auth/_with_sidebar/studio'
     | '/_public_auth/_with_sidebar/downloader'
     | '/_public_auth/_with_sidebar/favorites'
+    | '/admin/library/$memeId'
+    | '/admin/library/'
     | '/_public_auth/_with_sidebar/memes/$memeId'
     | '/_public_auth/_with_sidebar/random/$memeId'
     | '/_public_auth/_with_sidebar/studio/$memeId'
@@ -305,13 +317,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/library': {
-      id: '/admin/library'
-      path: '/library'
-      fullPath: '/admin/library'
-      preLoaderRoute: typeof AdminLibraryRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/_public_auth/signup': {
       id: '/_public_auth/signup'
       path: '/signup'
@@ -332,6 +337,20 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof Public_authWith_sidebarRouteRouteImport
       parentRoute: typeof Public_authRouteRoute
+    }
+    '/admin/library/': {
+      id: '/admin/library/'
+      path: '/library'
+      fullPath: '/admin/library'
+      preLoaderRoute: typeof AdminLibraryIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/library/$memeId': {
+      id: '/admin/library/$memeId'
+      path: '/library/$memeId'
+      fullPath: '/admin/library/$memeId'
+      preLoaderRoute: typeof AdminLibraryMemeIdRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/_public_auth/_with_sidebar/favorites': {
       id: '/_public_auth/_with_sidebar/favorites'
@@ -487,13 +506,15 @@ const Public_authRouteRouteWithChildren =
   Public_authRouteRoute._addFileChildren(Public_authRouteRouteChildren)
 
 interface AdminRouteRouteChildren {
-  AdminLibraryRoute: typeof AdminLibraryRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  AdminLibraryMemeIdRoute: typeof AdminLibraryMemeIdRoute
+  AdminLibraryIndexRoute: typeof AdminLibraryIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminLibraryRoute: AdminLibraryRoute,
   AdminUsersRoute: AdminUsersRoute,
+  AdminLibraryMemeIdRoute: AdminLibraryMemeIdRoute,
+  AdminLibraryIndexRoute: AdminLibraryIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
