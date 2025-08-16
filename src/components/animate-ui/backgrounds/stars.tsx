@@ -82,7 +82,6 @@ type StarsBackgroundProps = React.ComponentProps<'div'> & {
 export const StarsBackground = ({
   children,
   className,
-  factor = 0.05,
   speed = 50,
   transition = { stiffness: 50, damping: 20 },
   starColor = '#fff',
@@ -94,18 +93,6 @@ export const StarsBackground = ({
   const springX = useSpring(offsetX, transition)
   const springY = useSpring(offsetY, transition)
 
-  const handleMouseMove = React.useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const centerX = window.innerWidth / 2
-      const centerY = window.innerHeight / 2
-      const newOffsetX = -(e.clientX - centerX) * factor
-      const newOffsetY = -(e.clientY - centerY) * factor
-      offsetX.set(newOffsetX)
-      offsetY.set(newOffsetY)
-    },
-    [offsetX, offsetY, factor]
-  )
-
   return (
     <div
       data-slot="stars-background"
@@ -113,10 +100,9 @@ export const StarsBackground = ({
         'relative size-full overflow-hidden bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)]',
         className
       )}
-      onMouseMove={handleMouseMove}
       {...props}
     >
-      <motion.div style={{ x: springX, y: springY }}>
+      <motion.div style={{ x: springX, y: springY }} className="max-lg:hidden">
         <StarLayer
           count={1000}
           size={1}
