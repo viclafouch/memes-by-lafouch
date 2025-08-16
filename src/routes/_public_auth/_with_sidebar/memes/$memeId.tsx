@@ -1,18 +1,13 @@
 import React from 'react'
-import { Pen, Trash } from 'lucide-react'
-import { DeleteMemeButton } from '@/components/Meme/delete-meme-button'
-import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
-import { matchIsUserAdmin } from '@/lib/auth-client'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { memeId } = Route.useParams()
-  const { user } = Route.useRouteContext()
   const memeQuery = useSuspenseQuery(getMemeByIdQueryOpts(memeId))
   const meme = memeQuery.data
 
@@ -24,16 +19,6 @@ const RouteComponent = () => {
         action={
           <div className="flex gap-2 flex-wrap justify-end">
             <ShareMemeButton meme={meme} />
-            {user && matchIsUserAdmin(user) ? (
-              <>
-                <EditMemeButton size="sm" variant="secondary" meme={meme}>
-                  <Pen /> Modifier
-                </EditMemeButton>
-                <DeleteMemeButton size="sm" meme={meme}>
-                  <Trash /> Supprimer
-                </DeleteMemeButton>
-              </>
-            ) : null}
           </div>
         }
       />
