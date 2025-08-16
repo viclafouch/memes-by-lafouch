@@ -1,8 +1,10 @@
 import React from 'react'
+import { formatDate } from 'date-fns'
 import { Pen, Trash } from 'lucide-react'
 import { DeleteMemeButton } from '@/components/Meme/delete-meme-button'
 import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { PageHeader } from '@/components/page-header'
+import { Badge } from '@/components/ui/badge'
 import { Container } from '@/components/ui/container'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -17,7 +19,24 @@ const RouteComponent = () => {
     <Container>
       <PageHeader
         title={meme.title}
-        description={`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`}
+        description={
+          <div className="flex flex-col gap-y-2">
+            <span className="text-sm text-gray-500">
+              {`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`} -
+              {' Ajouté le '}
+              {formatDate(meme.createdAt, 'dd/MM/yyyy')}
+            </span>
+            <div className="flex flex-wrap gap-1">
+              {meme.keywords.map((keyword, index) => {
+                return (
+                  <Badge variant="outline" key={index}>
+                    {keyword}
+                  </Badge>
+                )
+              })}
+            </div>
+          </div>
+        }
         action={
           <div className="flex gap-2 flex-wrap justify-end">
             <EditMemeButton size="sm" variant="secondary" meme={meme}>

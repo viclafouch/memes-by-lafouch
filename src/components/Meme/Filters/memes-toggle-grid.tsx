@@ -1,7 +1,7 @@
 import React from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
-const defaultValues = [3, 5, 6]
+const defaultValues = [4, 5, 6]
 
 const MemesToggleGrid = ({
   columnValue,

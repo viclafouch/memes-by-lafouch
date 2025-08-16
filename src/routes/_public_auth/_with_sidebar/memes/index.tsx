@@ -53,7 +53,7 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
 }
 
 const RouteComponent = () => {
-  const [columnGridCount, setColumnGridCount] = React.useState<number>(3)
+  const [columnGridCount, setColumnGridCount] = React.useState<number>(4)
   const navigate = Route.useNavigate()
   const search = Route.useSearch()
 
