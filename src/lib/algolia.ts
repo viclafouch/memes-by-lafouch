@@ -1,5 +1,5 @@
 import { ENV } from '@/constants/env'
-import type { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { searchClient } from '@algolia/client-search'
 
 const appID = 'W4S6H0K8DZ'
@@ -7,10 +7,19 @@ export const algoliaIndexName = 'backup'
 
 export const algoliaClient = searchClient(appID, ENV.ALGOLIA_SECRET)
 
-export function memeToAlgoliaRecord(meme: MemeWithVideo) {
+export function memeToAlgoliaRecord(meme: MemeWithVideo & MemeWithCategories) {
   return {
     ...meme,
     objectID: meme.id,
+    categoryTitles: meme.categories.map(({ category }) => {
+      return category.title
+    }),
+    categoryKeywords: meme.categories.map(({ category }) => {
+      return category.keywords
+    }),
+    categoryIds: meme.categories.map(({ category }) => {
+      return category.id
+    }),
     createdAtTime: meme.createdAt.getTime()
   }
 }

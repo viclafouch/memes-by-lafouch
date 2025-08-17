@@ -2,28 +2,22 @@ import type { User } from 'better-auth'
 import { formatDate } from 'date-fns'
 import { EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
+import { AdminTable } from '@/components/admin/admin-table'
+import { PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
+import { Container } from '@/components/ui/container'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
 import { authClient } from '@/lib/auth-client'
 import { getListUsers } from '@/server/admin'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
@@ -184,58 +178,12 @@ const RouteComponent = () => {
   })
 
   return (
-    <div className="w-full overflow-hidden rounded-lg border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => {
-            return (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            )
-          })}
-        </TableHeader>
-        <TableBody className="**:data-[slot=table-cell]:first:w-8">
-          {table.getRowModel().rows?.length ? (
-            <>
-              {table.getRowModel().rows.map((row) => {
-                return (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      )
-                    })}
-                  </TableRow>
-                )
-              })}
-            </>
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+    <Container>
+      <PageHeader title="Utilisateurs" />
+      <div className="w-full mx-auto py-10">
+        <AdminTable table={table} />
+      </div>
+    </Container>
   )
 }
 

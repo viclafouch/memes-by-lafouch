@@ -19,6 +19,10 @@ const DEFAULT_RESPONSE_SCHEMA = z.object({
   success: z.literal(true)
 })
 
+export const buildVideoImageUrl = (videoId: string) => {
+  return `https://vz-eb732fb9-3bc.b-cdn.net/${videoId}/thumbnail.jpg`
+}
+
 export const deleteVideo = serverOnly(async (videoId: string) => {
   return fetchWithZod(
     DEFAULT_RESPONSE_SCHEMA,

@@ -1,7 +1,5 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Pen } from 'lucide-react'
-import { EditMemeButton } from '@/components/Meme/edit-meme-button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { MemeWithVideo } from '@/constants/meme'
@@ -82,11 +80,6 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
               {meme.viewCount} vue{meme.viewCount > 1 ? 's' : ''}
             </span>
           </div>
-        </div>
-        <div className="flex items-center gap-1 shrink-0">
-          <EditMemeButton size="icon" variant="ghost" meme={meme}>
-            <Pen />
-          </EditMemeButton>
         </div>
       </div>
     </motion.div>

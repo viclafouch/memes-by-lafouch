@@ -3,18 +3,12 @@ import { z } from 'zod'
 import type { MemeWithVideo } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
 import { prismaClient } from '@/db'
+import { algoliaClient, algoliaIndexName } from '@/lib/algolia'
 import { getVideoPlayData } from '@/lib/bunny'
 import { authUserRequiredMiddleware } from '@/server/user-auth'
-import { searchClient } from '@algolia/client-search'
 import type { Meme, User } from '@prisma/client'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn, serverOnly } from '@tanstack/react-start'
-
-const appID = 'W4S6H0K8DZ'
-const apiKey = 'df745aae70b47dcff698517eddfbf684'
-const indexName = 'backup'
-
-const client = searchClient(appID, apiKey)
 
 export const getMemeById = createServerFn({ method: 'GET' })
   .validator((data) => {
@@ -27,7 +21,10 @@ export const getMemeById = createServerFn({ method: 'GET' })
       },
       include: {
         bookmarkedBy: true,
-        video: true
+        video: true,
+        categories: {
+          include: { category: true }
+        }
       }
     })
 
@@ -110,8 +107,8 @@ export const getVideoStatusById = createServerFn({ method: 'GET' })
 export const getMemes = createServerFn({ method: 'GET' })
   .validator(MEMES_FILTERS_SCHEMA)
   .handler(async ({ data }) => {
-    const response = await client.searchSingleIndex<MemeWithVideo>({
-      indexName,
+    const response = await algoliaClient.searchSingleIndex<MemeWithVideo>({
+      indexName: algoliaIndexName,
       searchParams: {
         query: data.query,
         page: data.page ? data.page - 1 : 0,

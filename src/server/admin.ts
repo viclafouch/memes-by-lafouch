@@ -35,9 +35,10 @@ export const getListUsers = createServerFn({ method: 'GET' }).handler(
   }
 )
 
-export const EDIT_MEME_SCHEMA = z.object({
+export const MEME_FORM_SCHEMA = z.object({
   title: z.string().min(3),
   keywords: z.array(z.string()),
+  categoryIds: z.array(z.string()),
   tweetUrl: TWEET_LINK_SCHEMA.nullable().or(
     z
       .string()
@@ -50,13 +51,13 @@ export const EDIT_MEME_SCHEMA = z.object({
 
 export const editMeme = createServerFn({ method: 'POST' })
   .validator((data) => {
-    return EDIT_MEME_SCHEMA.extend({ memeId: z.string() }).parse(data)
+    return MEME_FORM_SCHEMA.extend({ id: z.string() }).parse(data)
   })
   .middleware([adminRequiredMiddleware])
   .handler(async ({ data: values }) => {
     const meme = await prismaClient.meme.findUnique({
       where: {
-        id: values.memeId
+        id: values.id
       },
       include: {
         video: true
@@ -67,19 +68,32 @@ export const editMeme = createServerFn({ method: 'POST' })
       throw new Error('Meme not found')
     }
 
-    await prismaClient.meme.update({
+    const memeUpdated = await prismaClient.meme.update({
       where: {
-        id: values.memeId
+        id: values.id
       },
       data: {
         title: values.title,
+        categories: {
+          deleteMany: {},
+          create: values.categoryIds.map((categoryId) => {
+            return {
+              category: {
+                connect: { id: categoryId }
+              }
+            }
+          })
+        },
         keywords: values.keywords.map((keyword) => {
           return keyword.toLowerCase().trim()
         }),
         tweetUrl: values.tweetUrl || null
       },
       include: {
-        video: true
+        video: true,
+        categories: {
+          include: { category: true }
+        }
       }
     })
 
@@ -87,14 +101,14 @@ export const editMeme = createServerFn({ method: 'POST' })
       .partialUpdateObject({
         indexName: algoliaIndexName,
         objectID: meme.id,
-        attributesToUpdate: memeToAlgoliaRecord(meme)
+        attributesToUpdate: memeToAlgoliaRecord(memeUpdated)
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.error(error)
       })
 
-    return { id: meme.id }
+    return { id: memeUpdated.id }
   })
 
 export const deleteMemeById = createServerFn({ method: 'POST' })
@@ -167,7 +181,10 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
         }
       },
       include: {
-        video: true
+        video: true,
+        categories: {
+          include: { category: true }
+        }
       }
     })
 
@@ -219,7 +236,10 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
         }
       },
       include: {
-        video: true
+        video: true,
+        categories: {
+          include: { category: true }
+        }
       }
     })
 

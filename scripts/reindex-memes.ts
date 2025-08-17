@@ -7,7 +7,14 @@ import {
 } from '@/lib/algolia'
 
 async function reindexMemes() {
-  const memes = await prismaClient.meme.findMany({ include: { video: true } })
+  const memes = await prismaClient.meme.findMany({
+    include: {
+      video: true,
+      categories: {
+        include: { category: true }
+      }
+    }
+  })
 
   const response = await algoliaClient.replaceAllObjects({
     indexName: algoliaIndexName,

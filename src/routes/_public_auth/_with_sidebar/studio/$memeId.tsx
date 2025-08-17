@@ -14,6 +14,7 @@ import {
   useVideoProcessor
 } from '@/hooks/use-video-processor'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
+import { buildMemeSeo } from '@/lib/seo'
 import {
   PageDescription,
   PageHeading
@@ -147,8 +148,16 @@ export const Route = createFileRoute(
     )
 
     return {
-      crumb: `Studio - ${meme.title}`,
       meme
     }
+  },
+  head: ({ loaderData }) => {
+    if (loaderData?.meme) {
+      return {
+        meta: [...buildMemeSeo(loaderData.meme)]
+      }
+    }
+
+    return {}
   }
 })

@@ -13,6 +13,10 @@ export type MemeWithVideo = Prisma.MemeGetPayload<{
   include: { video: true }
 }>
 
+export type MemeWithCategories = Prisma.MemeGetPayload<{
+  include: { categories: { include: { category: true } } }
+}>
+
 export const TWITTER_REGEX_THAT_INCLUDES_ID =
   /^https?:\/\/(?:twitter\.com|x\.com)\/(?:[A-Za-z0-9_]+\/status\/\d+|i\/bookmarks\?post_id=\d+)/
 

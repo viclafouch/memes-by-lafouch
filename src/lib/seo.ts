@@ -1,3 +1,6 @@
+import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
+import { buildVideoImageUrl } from '@/lib/bunny'
+
 export function seo({
   title,
   description,
@@ -34,4 +37,17 @@ export function seo({
   ]
 
   return tags
+}
+
+export const buildMemeSeo = (meme: MemeWithVideo & MemeWithCategories) => {
+  const categoryKeywords = meme.categories.flatMap((category) => {
+    return category.category.keywords
+  })
+
+  return seo({
+    title: `Studio - ${meme.title}`,
+    description: `Découvrez et partagez ce mème de "${meme.title}" avec tous vos proches. Meme Studio vous permet de rechercher, partager et découvrir des mèmes...`,
+    keywords: [...meme.keywords, ...categoryKeywords].join(', '),
+    image: buildVideoImageUrl(meme.video.bunnyId)
+  })
 }

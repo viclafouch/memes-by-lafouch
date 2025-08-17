@@ -19,6 +19,7 @@ import { Route as Public_authSignupRouteImport } from './routes/_public_auth/sig
 import { Route as Public_authLoginRouteImport } from './routes/_public_auth/login'
 import { Route as Public_authWith_sidebarRouteRouteImport } from './routes/_public_auth/_with_sidebar/route'
 import { Route as AdminLibraryIndexRouteImport } from './routes/admin/library/index'
+import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
 import { Route as Public_authWith_sidebarFavoritesRouteImport } from './routes/_public_auth/_with_sidebar/favorites'
 import { Route as Public_authWith_sidebarDownloaderRouteImport } from './routes/_public_auth/_with_sidebar/downloader'
@@ -71,6 +72,11 @@ const Public_authWith_sidebarRouteRoute =
 const AdminLibraryIndexRoute = AdminLibraryIndexRouteImport.update({
   id: '/library/',
   path: '/library/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminLibraryMemeIdRoute = AdminLibraryMemeIdRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/downloader': typeof Public_authWith_sidebarDownloaderRoute
   '/favorites': typeof Public_authWith_sidebarFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
   '/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
   '/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/downloader': typeof Public_authWith_sidebarDownloaderRoute
   '/favorites': typeof Public_authWith_sidebarFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
   '/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
   '/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/_public_auth/_with_sidebar/downloader': typeof Public_authWith_sidebarDownloaderRoute
   '/_public_auth/_with_sidebar/favorites': typeof Public_authWith_sidebarFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
+  '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/library/': typeof AdminLibraryIndexRoute
   '/_public_auth/_with_sidebar/memes/$memeId': typeof Public_authWith_sidebarMemesMemeIdRoute
   '/_public_auth/_with_sidebar/random/$memeId': typeof Public_authWith_sidebarRandomMemeIdRoute
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
     | '/downloader'
     | '/favorites'
     | '/admin/library/$memeId'
+    | '/admin/categories'
     | '/admin/library'
     | '/memes/$memeId'
     | '/random/$memeId'
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/downloader'
     | '/favorites'
     | '/admin/library/$memeId'
+    | '/admin/categories'
     | '/admin/library'
     | '/memes/$memeId'
     | '/random/$memeId'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/_public_auth/_with_sidebar/downloader'
     | '/_public_auth/_with_sidebar/favorites'
     | '/admin/library/$memeId'
+    | '/admin/categories/'
     | '/admin/library/'
     | '/_public_auth/_with_sidebar/memes/$memeId'
     | '/_public_auth/_with_sidebar/random/$memeId'
@@ -343,6 +355,13 @@ declare module '@tanstack/react-router' {
       path: '/library'
       fullPath: '/admin/library'
       preLoaderRoute: typeof AdminLibraryIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/categories/': {
+      id: '/admin/categories/'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/admin/library/$memeId': {
@@ -508,12 +527,14 @@ const Public_authRouteRouteWithChildren =
 interface AdminRouteRouteChildren {
   AdminUsersRoute: typeof AdminUsersRoute
   AdminLibraryMemeIdRoute: typeof AdminLibraryMemeIdRoute
+  AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminLibraryIndexRoute: typeof AdminLibraryIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminUsersRoute: AdminUsersRoute,
   AdminLibraryMemeIdRoute: AdminLibraryMemeIdRoute,
+  AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminLibraryIndexRoute: AdminLibraryIndexRoute,
 }
 

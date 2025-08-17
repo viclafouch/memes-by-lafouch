@@ -23,6 +23,27 @@ model UserBookmark {
   @@map("user_bookmark")
 }
 
+model Category {
+  id        String         @id @default(cuid())
+  title     String
+  keywords  String[]       @default([])
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  memes MemeCategory[]
+}
+
+model MemeCategory {
+  memeId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+
+  meme     Meme     @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([memeId, categoryId])
+}
+
 model Video {
   id          Int    @id @default(autoincrement())
   meme        Meme?
@@ -42,6 +63,7 @@ model Meme {
   video        Video          @relation(fields: [videoId], references: [id], onDelete: Cascade)
   embedding    Embedding[]
   bookmarkedBy UserBookmark[]
+  categories MemeCategory[]
 }
 
 model User {

@@ -3,6 +3,7 @@ import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Container } from '@/components/ui/container'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
+import { buildMemeSeo } from '@/lib/seo'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -50,16 +51,12 @@ export const Route = createFileRoute(
     }
   },
   head: ({ loaderData }) => {
-    return {
-      meta: [
-        {
-          name: 'description',
-          content: 'My App is a web application'
-        },
-        {
-          title: loaderData?.meme.title
-        }
-      ]
+    if (loaderData?.meme) {
+      return {
+        meta: [...buildMemeSeo(loaderData.meme)]
+      }
     }
+
+    return {}
   }
 })
