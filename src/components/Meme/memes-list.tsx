@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
@@ -17,6 +18,17 @@ export const MemesList = ({
 }: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
+
+  useHotkeys(
+    'escape',
+    () => {
+      return setSelectedId(null)
+    },
+    {
+      enabled: selectedId !== null
+    },
+    [selectedId]
+  )
 
   if (memes.length === 0) {
     return <p className="text-muted-foreground">Aucun résultat</p>
@@ -75,7 +87,7 @@ export const MemesList = ({
               exit={{ opacity: 0 }}
               onClick={handleUnSelect}
               role="presentation"
-              className="bg-black/50 absolute inset-0"
+              className="bg-black/80 absolute inset-0"
             />
             <motion.div
               layoutId={`${layoutContext}-item-${selectedId}`}
