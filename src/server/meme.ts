@@ -112,7 +112,14 @@ export const getMemes = createServerFn({ method: 'GET' })
       searchParams: {
         query: data.query,
         page: data.page ? data.page - 1 : 0,
-        hitsPerPage: 30
+        hitsPerPage: 30,
+        filters: data.categoryIds?.length
+          ? data.categoryIds
+              .map((id) => {
+                return `categoryIds:${id}`
+              })
+              .join(' OR ')
+          : undefined
       }
     })
 

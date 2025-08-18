@@ -1,4 +1,5 @@
 import React from 'react'
+import { CategoriesList } from '@/components/categories/categories-list'
 import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
 import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
@@ -29,9 +30,10 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
     return {
       query: debouncedValue,
       page: search.page,
-      orderBy: search.orderBy
+      orderBy: search.orderBy,
+      categoryIds: search.categoryIds
     }
-  }, [debouncedValue, search.page, search.orderBy])
+  }, [debouncedValue, search.page, search.orderBy, search.categoryIds])
 
   const memesListQuery = useSuspenseQuery(getMemesListQueryOpts(filters))
 
@@ -64,7 +66,8 @@ const RouteComponent = () => {
         return {
           page: prevState.page,
           query: prevState.query,
-          orderBy: value as MemesFilters['orderBy']
+          orderBy: value as MemesFilters['orderBy'],
+          categoryIds: prevState.categoryIds
         }
       },
       viewTransition: false,
@@ -79,7 +82,8 @@ const RouteComponent = () => {
         return {
           page: 1,
           query: value,
-          orderBy: prevState.orderBy
+          orderBy: prevState.orderBy,
+          categoryIds: prevState.categoryIds
         }
       },
       viewTransition: false,
@@ -97,7 +101,7 @@ const RouteComponent = () => {
       </PageDescription>
       <div className="w-full mx-auto py-10">
         <div className="flex flex-col gap-y-4">
-          <div className="border-b border-muted pb-4 flex justify-between gap-x-3">
+          <div className="flex justify-between gap-x-3">
             <MemesQuery
               query={search.query ?? ''}
               onQueryChange={handleQueryChange}
@@ -112,6 +116,9 @@ const RouteComponent = () => {
                 onOrderByChange={handleOrderByChange}
               />
             </div>
+          </div>
+          <div className="w-full py-2 border-y border-muted">
+            <CategoriesList />
           </div>
           <React.Suspense fallback={<LoadingSpinner />}>
             <MemesListWrapper columnGridCount={columnGridCount} />
