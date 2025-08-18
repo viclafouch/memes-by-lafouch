@@ -1,9 +1,12 @@
 import React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Share2, X } from 'lucide-react'
 import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
+import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
+import { useShareMeme } from '@/hooks/use-share-meme'
 
 export type MemesListProps = {
   memes: MemeWithVideo[]
@@ -18,6 +21,7 @@ export const MemesList = ({
 }: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
+  const shareMeme = useShareMeme()
 
   useHotkeys(
     'escape',
@@ -87,22 +91,49 @@ export const MemesList = ({
               exit={{ opacity: 0 }}
               onClick={handleUnSelect}
               role="presentation"
-              className="bg-black/80 absolute inset-0"
+              className="bg-black/90 absolute inset-0"
             />
+            <motion.div
+              className="absolute top-4 right-4"
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <Button size="icon" onClick={handleUnSelect}>
+                <X />
+              </Button>
+            </motion.div>
             <motion.div
               layoutId={`${layoutContext}-item-${selectedId}`}
               onLayoutAnimationComplete={handleLayoutAnimationComplete}
-              className="relative w-[800px] max-w-[90vw] aspect-video"
+              className="relative w-[800px] max-w-[90vw]"
             >
-              <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
-                <iframe
-                  src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}?autoplay=false`}
-                  loading="lazy"
-                  ref={iframeRef}
-                  title={selectedMeme.title}
-                  className="w-full h-full"
-                  allow="autoplay"
-                />
+              <div className="w-full h-full flex flex-col items-center gap-y-4">
+                <h3 className="text-center w-full text-balance text-lg font-bold">
+                  {selectedMeme.title}
+                </h3>
+                <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
+                  <iframe
+                    src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}?autoplay=false`}
+                    loading="lazy"
+                    ref={iframeRef}
+                    title={selectedMeme.title}
+                    className="w-full h-full"
+                    allow="autoplay"
+                  />
+                </div>
+                <div className="flex justify-center gap-x-2">
+                  <Button
+                    size="default"
+                    disabled={shareMeme.isPending}
+                    onClick={() => {
+                      return shareMeme.mutate(selectedMeme)
+                    }}
+                  >
+                    <Share2 />
+                    Partager
+                  </Button>
+                </div>
               </div>
             </motion.div>
           </div>

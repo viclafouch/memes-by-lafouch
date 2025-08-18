@@ -2,9 +2,7 @@ import React from 'react'
 import { Share2 } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
-import { shareMeme } from '@/server/meme'
-import { shareBlob } from '@/utils/download'
-import { useMutation } from '@tanstack/react-query'
+import { useShareMeme } from '@/hooks/use-share-meme'
 
 type ShareMemeButtonProps = {
   meme: MemeWithVideo
@@ -12,21 +10,14 @@ type ShareMemeButtonProps = {
 }
 
 export const ShareMemeButton = ({ meme, className }: ShareMemeButtonProps) => {
-  const shareMutation = useMutation({
-    mutationFn: async () => {
-      const response = await shareMeme({ data: meme.id })
-      const blob = await response.blob()
-
-      shareBlob(blob, meme.title)
-    }
-  })
+  const shareMutation = useShareMeme()
 
   const handleShare = () => {
     if (shareMutation.isPending) {
       return
     }
 
-    shareMutation.mutate()
+    shareMutation.mutate(meme)
   }
 
   return (
