@@ -8,9 +8,8 @@ export const CATEGORY_FORM_SCHEMA = z.object({
   keywords: z.array(z.string())
 })
 
-export const getCategories = createServerFn({ method: 'GET' })
-  .middleware([adminRequiredMiddleware])
-  .handler(async () => {
+export const getCategories = createServerFn({ method: 'GET' }).handler(
+  async () => {
     const categories = await prismaClient.category.findMany({
       orderBy: {
         createdAt: 'desc'
@@ -18,7 +17,8 @@ export const getCategories = createServerFn({ method: 'GET' })
     })
 
     return categories
-  })
+  }
+)
 
 export const addCategory = createServerFn({ method: 'POST' })
   .middleware([adminRequiredMiddleware])
