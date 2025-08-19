@@ -5,7 +5,6 @@ import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
 import MemesToggleGrid from '@/components/Meme/Filters/memes-toggle-grid'
 import { MemesList } from '@/components/Meme/memes-list'
-import { Container } from '@/components/ui/container'
 import { LoadingSpinner } from '@/components/ui/spinner'
 import type { MemesFilters } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
@@ -89,13 +88,9 @@ const RouteComponent = () => {
   }
 
   return (
-    <Container>
-      <PageHeading title="Memes" className="container">
-        Memes
-      </PageHeading>
-      <PageDescription className="container">
-        A collection of memes from the internet
-      </PageDescription>
+    <div>
+      <PageHeading title="Memes">Memes</PageHeading>
+      <PageDescription>A collection of memes from the internet</PageDescription>
       <div className="w-full mx-auto py-10">
         <div className="flex flex-col gap-y-4">
           <div className="flex justify-between gap-x-3">
@@ -122,7 +117,7 @@ const RouteComponent = () => {
           </React.Suspense>
         </div>
       </div>
-    </Container>
+    </div>
   )
 }
 

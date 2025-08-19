@@ -1,16 +1,15 @@
 import { DownloadFromTwitterForm } from '@/components/download-from-twitter-form'
 import { PageHeader } from '@/components/page-header'
-import { Container } from '@/components/ui/container'
 import { createFileRoute } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   return (
-    <Container>
+    <div>
       <PageHeader title="Téléchargeur" />
       <div className="py-10">
         <DownloadFromTwitterForm />
       </div>
-    </Container>
+    </div>
   )
 }
 

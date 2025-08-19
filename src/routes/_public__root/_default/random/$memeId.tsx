@@ -2,7 +2,6 @@ import React from 'react'
 import { Shuffle } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { Button } from '@/components/ui/button'
-import { Container } from '@/components/ui/container'
 import { getMemeById, getRandomMeme } from '@/server/meme'
 import {
   createFileRoute,
@@ -68,30 +67,28 @@ const RouteComponent = () => {
   }
 
   return (
-    <Container>
-      <div className="flex flex-col items-center gap-6">
-        <div className="py-10 w-full max-w-4xl">
-          <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
-            <iframe
-              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?responsive=true&preload=false&autoplay=false`}
-              ref={handleRef}
-              title={meme.title}
-              className="w-full h-full"
-              allow="autoplay; fullscreen"
-            />
-          </div>
-        </div>
-        <div className="flex gap-4 flex-col w-full items-center max-w-96">
-          <div className="flex items-center gap-4">
-            <ShareMemeButton meme={meme} />
-            <Button size="lg" onClick={goToNextRandomMeme}>
-              <Shuffle />
-              Aléatoire
-            </Button>
-          </div>
+    <div className="flex flex-col items-center gap-6">
+      <div className="py-10 w-full max-w-4xl">
+        <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
+          <iframe
+            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?responsive=true&preload=false&autoplay=false`}
+            ref={handleRef}
+            title={meme.title}
+            className="w-full h-full"
+            allow="autoplay; fullscreen"
+          />
         </div>
       </div>
-    </Container>
+      <div className="flex gap-4 flex-col w-full items-center max-w-96">
+        <div className="flex items-center gap-4">
+          <ShareMemeButton meme={meme} />
+          <Button size="lg" onClick={goToNextRandomMeme}>
+            <Shuffle />
+            Aléatoire
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 }
 

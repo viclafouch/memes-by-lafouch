@@ -54,7 +54,7 @@ export const PageHeading = ({
   return (
     <h1
       className={cn(
-        'font-bricolage text-foreground max-w-4xl text-center text-4xl leading-[1.1] font-semibold text-balance sm:text-5xl lg:text-6xl',
+        'font-bricolage text-foreground max-w-4xl text-center text-4xl leading-[1.1] font-semibold text-balance sm:text-5xl lg:text-6xl mx-auto',
         className
       )}
       {...props}
@@ -72,7 +72,7 @@ export const PageDescription = forwardRef<
     <p
       ref={ref}
       className={cn(
-        'text-muted-foreground max-w-2xl text-center font-medium text-balance md:text-lg lg:text-xl',
+        'text-muted-foreground max-w-2xl text-center font-medium text-balance md:text-lg lg:text-xl mx-auto',
         className
       )}
       {...props}

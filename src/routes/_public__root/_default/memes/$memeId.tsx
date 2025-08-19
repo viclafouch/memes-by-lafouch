@@ -1,7 +1,6 @@
 import React from 'react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import { PageHeader } from '@/components/page-header'
-import { Container } from '@/components/ui/container'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { buildMemeSeo } from '@/lib/seo'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -13,7 +12,7 @@ const RouteComponent = () => {
   const meme = memeQuery.data
 
   return (
-    <Container>
+    <div>
       <PageHeader
         title={meme.title}
         description={`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`}
@@ -33,7 +32,7 @@ const RouteComponent = () => {
           />
         </div>
       </div>
-    </Container>
+    </div>
   )
 }
 
