@@ -45,12 +45,12 @@ export type MemeListItemProps = {
 
 const sizes = {
   sm: {
-    title: 'font-normal text-xs',
+    title: 'font-normal text-xs leading-none',
     views: 'text-xs',
     icon: 'size-4'
   },
   md: {
-    title: 'font-medium text-md',
+    title: 'font-medium text-md leading-none',
     views: 'text-md',
     icon: 'size-5'
   }
@@ -221,15 +221,12 @@ export const MemeListItem = React.memo(
               to="/memes/$memeId"
               params={{ memeId: meme.id }}
               title={meme.title}
-              className={cn(
-                'line-clamp-1 leading-none text-gray-100',
-                sizes[size].title
-              )}
+              className={cn('line-clamp-1 text-gray-100', sizes[size].title)}
             >
               {meme.title}
             </Link>
             <div className="flex flex-row items-center gap-1.5 text-gray-500">
-              <span className={cn('leading-none', sizes[size].views)}>
+              <span className={cn(sizes[size].views)}>
                 {meme.viewCount} vue{meme.viewCount > 1 ? 's' : ''}
               </span>
             </div>

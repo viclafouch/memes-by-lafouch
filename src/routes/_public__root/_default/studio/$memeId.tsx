@@ -15,11 +15,8 @@ import {
 } from '@/hooks/use-video-processor'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { buildMemeSeo } from '@/lib/seo'
-import {
-  PageDescription,
-  PageHeading
-} from '@/routes/_public_auth/-components/page-headers'
 import { createFileRoute } from '@tanstack/react-router'
+import { PageDescription, PageHeading } from '../../-components/page-headers'
 
 const RouteComponent = () => {
   const { meme } = Route.useLoaderData()
@@ -129,9 +126,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute(
-  '/_public_auth/_with_sidebar/studio/$memeId'
-)({
+export const Route = createFileRoute('/_public__root/_default/studio/$memeId')({
   component: RouteComponent,
   ssr: 'data-only',
   pendingComponent: () => {

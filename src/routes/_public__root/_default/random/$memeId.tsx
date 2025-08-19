@@ -95,9 +95,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute(
-  '/_public_auth/_with_sidebar/random/$memeId'
-)({
+export const Route = createFileRoute('/_public__root/_default/random/$memeId')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const meme = await getMemeById({ data: params.memeId })

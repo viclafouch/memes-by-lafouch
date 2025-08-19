@@ -8,7 +8,7 @@ const RouteComponent = () => {
   return <MemesList layoutContext="favorites" memes={loaderData.memes} />
 }
 
-export const Route = createFileRoute('/_public_auth/_with_sidebar/favorites')({
+export const Route = createFileRoute('/_public__root/_default/favorites')({
   component: RouteComponent,
   loader: async ({ context, location }) => {
     if (!context.user) {

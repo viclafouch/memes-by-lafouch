@@ -37,9 +37,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute(
-  '/_public_auth/_with_sidebar/memes/$memeId'
-)({
+export const Route = createFileRoute('/_public__root/_default/memes/$memeId')({
   component: RouteComponent,
   loader: async ({ params, context }) => {
     const meme = await context.queryClient.ensureQueryData(

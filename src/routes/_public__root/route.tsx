@@ -22,6 +22,6 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth')({
+export const Route = createFileRoute('/_public__root')({
   component: RouteComponent
 })

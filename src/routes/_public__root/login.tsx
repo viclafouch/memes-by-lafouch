@@ -154,7 +154,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth/login')({
+export const Route = createFileRoute('/_public__root/login')({
   validateSearch: (search) => {
     return z.object({ redirect: z.string().optional() }).parse(search)
   },

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Demo } from '@/routes/_public_auth/-components/demo'
-import { Hero } from '@/routes/_public_auth/-components/hero'
-import { PageContainer } from '@/routes/_public_auth/-components/page-headers'
 import { createFileRoute } from '@tanstack/react-router'
+import { Demo } from './-components/demo'
+import { Hero } from './-components/hero'
+import { PageContainer } from './-components/page-headers'
 
 const RouteComponent = () => {
   return (
@@ -15,6 +15,6 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth/')({
+export const Route = createFileRoute('/_public__root/')({
   component: RouteComponent
 })

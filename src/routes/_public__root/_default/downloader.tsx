@@ -14,7 +14,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth/_with_sidebar/downloader')({
+export const Route = createFileRoute('/_public__root/_default/downloader')({
   component: RouteComponent,
   loader: async () => {
     return {

@@ -4,15 +4,15 @@ import { motion } from 'framer-motion'
 import { buttonVariants } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { FloatingLogos } from '@/routes/_public_auth/-components/floating-logo'
+import { Link } from '@tanstack/react-router'
+import { FloatingLogos } from './floating-logo'
 import {
   Announcement,
   PageActions,
   PageDescription,
   PageHeader,
   PageHeading
-} from '@/routes/_public_auth/-components/page-headers'
-import { Link } from '@tanstack/react-router'
+} from './page-headers'
 
 const h1Transition = {
   delay: 0,

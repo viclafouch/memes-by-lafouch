@@ -1,11 +1,8 @@
 import { Sheet, SheetTrigger } from '@/components/animate-ui/radix/sheet'
 import { StudioMobileSheet } from '@/components/studio/studio-mobile-sheet'
 import { Button } from '@/components/ui/button'
-import {
-  PageDescription,
-  PageHeading
-} from '@/routes/_public_auth/-components/page-headers'
 import { createFileRoute } from '@tanstack/react-router'
+import { PageDescription, PageHeading } from '../../-components/page-headers'
 
 const RouteComponent = () => {
   return (
@@ -30,7 +27,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth/_with_sidebar/studio/')({
+export const Route = createFileRoute('/_public__root/_default/studio/')({
   component: RouteComponent,
   loader: async () => {
     return {

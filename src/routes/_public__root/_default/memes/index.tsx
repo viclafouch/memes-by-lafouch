@@ -10,13 +10,10 @@ import { LoadingSpinner } from '@/components/ui/spinner'
 import type { MemesFilters } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
 import { getMemesListQueryOpts } from '@/lib/queries'
-import {
-  PageDescription,
-  PageHeading
-} from '@/routes/_public_auth/-components/page-headers'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { PageDescription, PageHeading } from '../../-components/page-headers'
 
 const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
   const search = Route.useSearch()
@@ -129,7 +126,7 @@ const RouteComponent = () => {
   )
 }
 
-export const Route = createFileRoute('/_public_auth/_with_sidebar/memes/')({
+export const Route = createFileRoute('/_public__root/_default/memes/')({
   component: RouteComponent,
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)

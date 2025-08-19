@@ -1,7 +1,7 @@
 import { getRandomMeme } from '@/server/meme'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_public_auth/_with_sidebar/random/')({
+export const Route = createFileRoute('/_public__root/_default/random/')({
   beforeLoad: async () => {
     const meme = await getRandomMeme()
 
