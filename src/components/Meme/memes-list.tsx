@@ -2,7 +2,6 @@ import React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Share2, X } from 'lucide-react'
-import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
 import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
@@ -58,8 +57,6 @@ export const MemesList = ({
     }
   }
 
-  const size: MemeListItemProps['size'] = columnGridCount < 5 ? 'md' : 'sm'
-
   return (
     <div className="w-full">
       <div
@@ -75,7 +72,6 @@ export const MemesList = ({
             <MemeListItem
               onPlayClick={handleSelect}
               key={meme.id}
-              size={size}
               layoutContext={layoutContext}
               meme={meme}
             />

@@ -1,34 +1,140 @@
 import React from 'react'
+import type { User } from 'better-auth'
 import { motion } from 'framer-motion'
-import { Clapperboard, PlaySquare } from 'lucide-react'
-import { ShareMemeButton } from '@/components/Meme/share-meme-button'
-import ToggleLikeButton from '@/components/Meme/toggle-like-button'
-import { MotionLink } from '@/components/motion-link'
+import {
+  Clapperboard,
+  Download,
+  EllipsisVertical,
+  PlaySquare,
+  Star
+} from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
+import { AuthDialog } from '@/components/User/auth-dialog'
 import type { MemeWithVideo } from '@/constants/meme'
-import { getVideoStatusByIdQueryOpts } from '@/lib/queries'
-import { cn } from '@/lib/utils'
+import { useDownloadMeme } from '@/hooks/use-download-meme'
+import { authClient } from '@/lib/auth-client'
+import {
+  getFavoritesMemesQueryOpts,
+  getMemeByIdQueryOpts,
+  getVideoStatusByIdQueryOpts
+} from '@/lib/queries'
+import { toggleBookmarkByMemeId } from '@/server/meme'
 import { matchIsVideoPlayable } from '@/utils/video'
-import { useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery
+} from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 export type MemeListItemProps = {
   meme: MemeWithVideo
   layoutContext: string
-  size?: keyof typeof sizes
   onPlayClick: (meme: MemeWithVideo) => void
 }
 
-const sizes = {
-  sm: 'size-6 [&_svg]:size-4',
-  md: 'size-8 [&_svg]:size-5',
-  lg: 'size-12 [&_svg]:size-7'
+const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
+  const queryClient = useQueryClient()
+  const query = useSuspenseQuery(getFavoritesMemesQueryOpts())
+
+  const isMemeBookmarked = React.useMemo(() => {
+    return query.data.some((bookmark) => {
+      return bookmark.id === meme.id
+    })
+  }, [user, query.data])
+
+  const toggleFavorite = useMutation({
+    mutationFn: toggleBookmarkByMemeId,
+    onMutate: async () => {
+      const newValue = !isMemeBookmarked
+
+      await queryClient.cancelQueries({
+        queryKey: getFavoritesMemesQueryOpts.all
+      })
+
+      queryClient.setQueryData(getFavoritesMemesQueryOpts().queryKey, (old) => {
+        if (old) {
+          if (!newValue) {
+            return old.filter((bookmark) => {
+              return bookmark.id !== meme.id
+            })
+          }
+
+          return [meme, ...old]
+        }
+
+        return undefined
+      })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
+      queryClient.invalidateQueries(getFavoritesMemesQueryOpts())
+    }
+  })
+
+  const handleToggleFavorite = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault()
+
+    toggleFavorite.mutate({
+      data: meme.id
+    })
+  }
+
+  return (
+    <DropdownMenuItem onClick={handleToggleFavorite}>
+      <Star
+        data-active={isMemeBookmarked}
+        className="data-[active=true]:fill-muted-foreground"
+      />
+      {isMemeBookmarked ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+    </DropdownMenuItem>
+  )
+}
+
+const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
+  const session = authClient.useSession()
+  const [isLoginDialogOpened, setIsLoginDialogOpened] = React.useState(false)
+
+  if (!session.data) {
+    return (
+      <>
+        <AuthDialog
+          open={isLoginDialogOpened}
+          onOpenChange={setIsLoginDialogOpened}
+        />
+        <DropdownMenuItem
+          onClick={(event) => {
+            event.preventDefault()
+            setIsLoginDialogOpened(true)
+          }}
+        >
+          <Star />
+          Ajouter aux favoris
+        </DropdownMenuItem>
+      </>
+    )
+  }
+
+  return (
+    <React.Suspense fallback={<div />}>
+      <FavoriteItem user={session.data.user} meme={meme} />
+    </React.Suspense>
+  )
 }
 
 export const MemeListItem = React.memo(
-  ({ meme, onPlayClick, layoutContext, size = 'lg' }: MemeListItemProps) => {
+  ({ meme, onPlayClick, layoutContext }: MemeListItemProps) => {
     const isVideoInitialPlayable = matchIsVideoPlayable(meme.video.bunnyStatus)
+
+    const downloadMutation = useDownloadMeme()
 
     const videoStatusQuery = useQuery({
       ...getVideoStatusByIdQueryOpts(meme.video.id),
@@ -111,30 +217,28 @@ export const MemeListItem = React.memo(
             </div>
           </div>
           <div className="flex items-center gap-1 shrink-0">
-            <MotionLink
-              to="/studio/$memeId"
-              params={{ memeId: meme.id }}
-              className={cn(
-                'group/icon-button cursor-pointer relative shrink-0 rounded-full hover:bg-[var(--icon-button-color)]/10 active:bg-[var(--icon-button-color)]/20 text-[var(--icon-button-color)] size-8 [&_svg]:size-5',
-                sizes[size]
-              )}
-              style={
-                {
-                  '--icon-button-color': `rgb(255, 255, 255)`
-                } as React.CSSProperties
-              }
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <motion.div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-muted-foreground group-hover/icon-button:stroke-[var(--icon-button-color)]"
-                aria-hidden="true"
-              >
-                <Clapperboard />
-              </motion.div>
-            </MotionLink>
-            <ToggleLikeButton meme={meme} className={sizes[size]} />
-            <ShareMemeButton meme={meme} className={sizes[size]} />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical size={18} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link to="/studio/$memeId" params={{ memeId: meme.id }}>
+                    <Clapperboard />
+                    Ouvrir dans studio
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    return downloadMutation.mutate(meme)
+                  }}
+                >
+                  <Download />
+                  Télécharger
+                </DropdownMenuItem>
+                <FavoriteItemGuard meme={meme} />
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </motion.div>

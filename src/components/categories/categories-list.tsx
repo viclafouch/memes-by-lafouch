@@ -26,6 +26,7 @@ export const CategoriesList = () => {
               <Link
                 to="/memes"
                 replace
+                resetScroll={false}
                 aria-current={isActive}
                 search={(prevState) => {
                   const categoryIds = toggleValue(
