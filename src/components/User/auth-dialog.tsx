@@ -1,4 +1,5 @@
 import React from 'react'
+import { CheckCircle, CircleAlert } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import {
@@ -9,12 +10,13 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/animate-ui/radix/dialog'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { Separator } from '@/components/ui/separator'
-import { authClient } from '@/lib/auth-client'
+import { authClient, getErrorMessage } from '@/lib/auth-client'
 import { getAuthUserQueryOpts } from '@/lib/queries'
 import { getFieldErrorMessage } from '@/lib/utils'
 import { formOptions, useForm } from '@tanstack/react-form'
@@ -43,6 +45,7 @@ const loginFormOpts = formOptions({
 const LoginForm = ({ onOpenChange }: FormProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
+  const [emailIsNotValid, setEmailIsNotValid] = React.useState(false)
 
   const form = useForm({
     ...loginFormOpts,
@@ -60,7 +63,11 @@ const LoginForm = ({ onOpenChange }: FormProps) => {
             onOpenChange(false)
           },
           onError: (context) => {
-            toast.error(context.error.message)
+            if (context.error.code === 'EMAIL_NOT_VERIFIED') {
+              setEmailIsNotValid(true)
+            } else {
+              toast.error(getErrorMessage(context.error, 'fr'))
+            }
           }
         }
       )
@@ -147,6 +154,16 @@ const LoginForm = ({ onOpenChange }: FormProps) => {
           )
         }}
       />
+      {emailIsNotValid ? (
+        <Alert variant="destructive">
+          <CircleAlert />
+          <AlertTitle>Vous devez vérifier votre email !</AlertTitle>
+          <AlertDescription>
+            Votre compte n’est pas activé. Veuillez l’activer avant d’essayer de
+            vous connecter. Si vous avez besoin d’aide, contactez-nous.
+          </AlertDescription>
+        </Alert>
+      ) : null}
     </form>
   )
 }
@@ -180,7 +197,7 @@ const signupFormOpts = formOptions({
   }
 })
 
-const SignupForm = ({ onOpenChange }: FormProps) => {
+const SignupForm = () => {
   const form = useForm({
     ...signupFormOpts,
     onSubmit: async ({ value }) => {
@@ -188,14 +205,15 @@ const SignupForm = ({ onOpenChange }: FormProps) => {
         {
           email: value.email,
           password: value.password,
-          name: value.name
+          name: value.name,
+          callbackURL: '/'
         },
         {
-          onSuccess: () => {
-            onOpenChange(false)
-          },
           onError: (context) => {
-            toast.error(context.error.message)
+            toast.error(getErrorMessage(context.error, 'fr'))
+          },
+          onSuccess: () => {
+            form.reset()
           }
         }
       )
@@ -336,6 +354,28 @@ const SignupForm = ({ onOpenChange }: FormProps) => {
           )
         }}
       />
+      <form.Subscribe
+        selector={(state) => {
+          return state.isSubmitted
+        }}
+        children={(isSubmitted) => {
+          return isSubmitted ? (
+            <Alert variant="success">
+              <CheckCircle />
+              <AlertTitle>
+                Parfait, plus qu&apos;à valider ton email !
+              </AlertTitle>
+              <AlertDescription>
+                Votre compte a été créé avec succès, mais il doit être activé
+                avant que vous puissiez vous connecter. Nous venons de vous
+                envoyer un e-mail pour l’activer. Si vous ne le recevez pas dans
+                quelques minutes, veuillez vérifier votre dossier spam ou
+                contactez-nous.
+              </AlertDescription>
+            </Alert>
+          ) : null
+        }}
+      />
     </form>
   )
 }
@@ -360,11 +400,11 @@ export const AuthDialog = ({
           {authType === 'login' ? (
             <LoginForm onOpenChange={onOpenChange} />
           ) : (
-            <SignupForm onOpenChange={onOpenChange} />
+            <SignupForm />
           )}
         </div>
         <Separator />
-        <div className="py-3">
+        <div>
           <div className="text-gray-300 flex flex-col items-center justify-center gap-2 text-sm">
             {authType === 'login' ? (
               <p>Pas de compte ?</p>

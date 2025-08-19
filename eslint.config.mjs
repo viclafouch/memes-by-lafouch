@@ -30,6 +30,7 @@ export default [
       'react/iframe-missing-sandbox': 'off',
       'react/no-array-index-key': 'off',
       'promise/prefer-await-to-then': 'off',
+      'no-inline-comments': 'off',
       'id-length': ['error', { exceptions: ['R', '_'] }]
     }
   }

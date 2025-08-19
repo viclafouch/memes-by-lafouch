@@ -23,7 +23,6 @@ import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categor
 import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
 import { Route as Public__rootDefaultFavoritesRouteImport } from './routes/_public__root/_default/favorites'
 import { Route as Public__rootDefaultDownloaderRouteImport } from './routes/_public__root/_default/downloader'
-import { Route as Public__rootDefaultStudioRouteRouteImport } from './routes/_public__root/_default/studio/route'
 import { Route as Public__rootDefaultStudioIndexRouteImport } from './routes/_public__root/_default/studio/index'
 import { Route as Public__rootDefaultRandomIndexRouteImport } from './routes/_public__root/_default/random/index'
 import { Route as Public__rootDefaultMemesIndexRouteImport } from './routes/_public__root/_default/memes/index'
@@ -96,17 +95,11 @@ const Public__rootDefaultDownloaderRoute =
     path: '/downloader',
     getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
-const Public__rootDefaultStudioRouteRoute =
-  Public__rootDefaultStudioRouteRouteImport.update({
-    id: '/studio',
-    path: '/studio',
-    getParentRoute: () => Public__rootDefaultRouteRoute,
-  } as any)
 const Public__rootDefaultStudioIndexRoute =
   Public__rootDefaultStudioIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => Public__rootDefaultStudioRouteRoute,
+    id: '/studio/',
+    path: '/studio/',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
 const Public__rootDefaultRandomIndexRoute =
   Public__rootDefaultRandomIndexRouteImport.update({
@@ -122,9 +115,9 @@ const Public__rootDefaultMemesIndexRoute =
   } as any)
 const Public__rootDefaultStudioMemeIdRoute =
   Public__rootDefaultStudioMemeIdRouteImport.update({
-    id: '/$memeId',
-    path: '/$memeId',
-    getParentRoute: () => Public__rootDefaultStudioRouteRoute,
+    id: '/studio/$memeId',
+    path: '/studio/$memeId',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
 const Public__rootDefaultRandomMemeIdRoute =
   Public__rootDefaultRandomMemeIdRouteImport.update({
@@ -155,7 +148,6 @@ export interface FileRoutesByFullPath {
   '/signup': typeof Public__rootSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
-  '/studio': typeof Public__rootDefaultStudioRouteRouteWithChildren
   '/downloader': typeof Public__rootDefaultDownloaderRoute
   '/favorites': typeof Public__rootDefaultFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
@@ -166,7 +158,7 @@ export interface FileRoutesByFullPath {
   '/studio/$memeId': typeof Public__rootDefaultStudioMemeIdRoute
   '/memes': typeof Public__rootDefaultMemesIndexRoute
   '/random': typeof Public__rootDefaultRandomIndexRoute
-  '/studio/': typeof Public__rootDefaultStudioIndexRoute
+  '/studio': typeof Public__rootDefaultStudioIndexRoute
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
@@ -195,7 +187,6 @@ export interface FileRoutesById {
   '/_public__root/signup': typeof Public__rootSignupRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public__root/': typeof Public__rootIndexRoute
-  '/_public__root/_default/studio': typeof Public__rootDefaultStudioRouteRouteWithChildren
   '/_public__root/_default/downloader': typeof Public__rootDefaultDownloaderRoute
   '/_public__root/_default/favorites': typeof Public__rootDefaultFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
@@ -216,7 +207,6 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin/users'
     | '/'
-    | '/studio'
     | '/downloader'
     | '/favorites'
     | '/admin/library/$memeId'
@@ -227,7 +217,7 @@ export interface FileRouteTypes {
     | '/studio/$memeId'
     | '/memes'
     | '/random'
-    | '/studio/'
+    | '/studio'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
@@ -255,7 +245,6 @@ export interface FileRouteTypes {
     | '/_public__root/signup'
     | '/admin/users'
     | '/_public__root/'
-    | '/_public__root/_default/studio'
     | '/_public__root/_default/downloader'
     | '/_public__root/_default/favorites'
     | '/admin/library/$memeId'
@@ -385,19 +374,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public__rootDefaultDownloaderRouteImport
       parentRoute: typeof Public__rootDefaultRouteRoute
     }
-    '/_public__root/_default/studio': {
-      id: '/_public__root/_default/studio'
-      path: '/studio'
-      fullPath: '/studio'
-      preLoaderRoute: typeof Public__rootDefaultStudioRouteRouteImport
-      parentRoute: typeof Public__rootDefaultRouteRoute
-    }
     '/_public__root/_default/studio/': {
       id: '/_public__root/_default/studio/'
-      path: '/'
-      fullPath: '/studio/'
+      path: '/studio'
+      fullPath: '/studio'
       preLoaderRoute: typeof Public__rootDefaultStudioIndexRouteImport
-      parentRoute: typeof Public__rootDefaultStudioRouteRoute
+      parentRoute: typeof Public__rootDefaultRouteRoute
     }
     '/_public__root/_default/random/': {
       id: '/_public__root/_default/random/'
@@ -415,10 +397,10 @@ declare module '@tanstack/react-router' {
     }
     '/_public__root/_default/studio/$memeId': {
       id: '/_public__root/_default/studio/$memeId'
-      path: '/$memeId'
+      path: '/studio/$memeId'
       fullPath: '/studio/$memeId'
       preLoaderRoute: typeof Public__rootDefaultStudioMemeIdRouteImport
-      parentRoute: typeof Public__rootDefaultStudioRouteRoute
+      parentRoute: typeof Public__rootDefaultRouteRoute
     }
     '/_public__root/_default/random/$memeId': {
       id: '/_public__root/_default/random/$memeId'
@@ -455,42 +437,27 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
-interface Public__rootDefaultStudioRouteRouteChildren {
-  Public__rootDefaultStudioMemeIdRoute: typeof Public__rootDefaultStudioMemeIdRoute
-  Public__rootDefaultStudioIndexRoute: typeof Public__rootDefaultStudioIndexRoute
-}
-
-const Public__rootDefaultStudioRouteRouteChildren: Public__rootDefaultStudioRouteRouteChildren =
-  {
-    Public__rootDefaultStudioMemeIdRoute: Public__rootDefaultStudioMemeIdRoute,
-    Public__rootDefaultStudioIndexRoute: Public__rootDefaultStudioIndexRoute,
-  }
-
-const Public__rootDefaultStudioRouteRouteWithChildren =
-  Public__rootDefaultStudioRouteRoute._addFileChildren(
-    Public__rootDefaultStudioRouteRouteChildren,
-  )
-
 interface Public__rootDefaultRouteRouteChildren {
-  Public__rootDefaultStudioRouteRoute: typeof Public__rootDefaultStudioRouteRouteWithChildren
   Public__rootDefaultDownloaderRoute: typeof Public__rootDefaultDownloaderRoute
   Public__rootDefaultFavoritesRoute: typeof Public__rootDefaultFavoritesRoute
   Public__rootDefaultMemesMemeIdRoute: typeof Public__rootDefaultMemesMemeIdRoute
   Public__rootDefaultRandomMemeIdRoute: typeof Public__rootDefaultRandomMemeIdRoute
+  Public__rootDefaultStudioMemeIdRoute: typeof Public__rootDefaultStudioMemeIdRoute
   Public__rootDefaultMemesIndexRoute: typeof Public__rootDefaultMemesIndexRoute
   Public__rootDefaultRandomIndexRoute: typeof Public__rootDefaultRandomIndexRoute
+  Public__rootDefaultStudioIndexRoute: typeof Public__rootDefaultStudioIndexRoute
 }
 
 const Public__rootDefaultRouteRouteChildren: Public__rootDefaultRouteRouteChildren =
   {
-    Public__rootDefaultStudioRouteRoute:
-      Public__rootDefaultStudioRouteRouteWithChildren,
     Public__rootDefaultDownloaderRoute: Public__rootDefaultDownloaderRoute,
     Public__rootDefaultFavoritesRoute: Public__rootDefaultFavoritesRoute,
     Public__rootDefaultMemesMemeIdRoute: Public__rootDefaultMemesMemeIdRoute,
     Public__rootDefaultRandomMemeIdRoute: Public__rootDefaultRandomMemeIdRoute,
+    Public__rootDefaultStudioMemeIdRoute: Public__rootDefaultStudioMemeIdRoute,
     Public__rootDefaultMemesIndexRoute: Public__rootDefaultMemesIndexRoute,
     Public__rootDefaultRandomIndexRoute: Public__rootDefaultRandomIndexRoute,
+    Public__rootDefaultStudioIndexRoute: Public__rootDefaultStudioIndexRoute,
   }
 
 const Public__rootDefaultRouteRouteWithChildren =
