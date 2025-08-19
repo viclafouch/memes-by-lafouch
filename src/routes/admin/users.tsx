@@ -31,6 +31,7 @@ type UserWithRole = User & {
 
 const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
   const router = useRouter()
+  const { user: admin } = Route.useRouteContext()
 
   const banUserMutation = useMutation({
     mutationFn: async () => {
@@ -61,9 +62,16 @@ const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
 
   const deleteUserMutation = useMutation({
     mutationFn: async () => {
-      await authClient.admin.removeUser({
+      const promise = authClient.admin.removeUser({
         userId: user.id
       })
+      toast.promise(promise, {
+        loading: 'Suppression en cours...',
+        success: 'Utilisateur supprimé avec succès',
+        error: 'Erreur lors de la suppression'
+      })
+
+      return promise
     },
     onError: (error) => {
       toast.error(error.message)
@@ -111,6 +119,7 @@ const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
         ) : null}
         <DropdownMenuItem
           variant="destructive"
+          disabled={user.id === admin.id}
           onClick={() => {
             deleteUserMutation.mutate()
           }}
