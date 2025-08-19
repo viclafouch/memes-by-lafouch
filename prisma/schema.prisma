@@ -48,6 +48,7 @@ model Video {
   id          Int    @id @default(autoincrement())
   meme        Meme?
   bunnyId     String @unique
+  duration  Int
   bunnyStatus Int    @default(0)
 }
 

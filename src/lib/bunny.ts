@@ -35,7 +35,10 @@ export const deleteVideo = serverOnly(async (videoId: string) => {
 })
 
 const VIDEO_PLAY_DATA_SCHEMA = z.object({
-  originalUrl: z.url()
+  originalUrl: z.url(),
+  video: z.object({
+    length: z.number()
+  })
 })
 
 export const getVideoPlayData = serverOnly(async (videoId: string) => {

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { prismaClient } from '@/db'
+import { getVideoPlayData } from '@/lib/bunny'
 import { createServerFileRoute } from '@tanstack/react-start/server'
 
 // see https://docs.bunny.net/docs/stream-webhook
@@ -14,6 +15,8 @@ export const ServerRoute = createServerFileRoute('/api/bunny').methods({
     const data = await request.json()
     const result = WEBHOOK_RESPONSE_SCHEMA.parse(data)
 
+    const videoPlayData = await getVideoPlayData(result.VideoGuid)
+
     await prismaClient.video
       .update({
         where: {
@@ -21,7 +24,8 @@ export const ServerRoute = createServerFileRoute('/api/bunny').methods({
           bunnyStatus: { lt: result.Status }
         },
         data: {
-          bunnyStatus: result.Status
+          bunnyStatus: result.Status,
+          duration: videoPlayData.video.length
         }
       })
       .catch(() => {})

@@ -38,7 +38,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             initial={{ opacity: isVideoInitialPlayable ? 1 : 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 2 }}
-            className="relative w-full h-full"
+            className="relative w-full h-full isolate"
           >
             <img
               src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/thumbnail.jpg`}
@@ -50,9 +50,14 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
               alt={meme.title}
               className="absolute w-full h-full inset-0 hidden duration-600 group-hover:block transition-discrete z-10 object-cover opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus-within:block"
             />
+            <div className="absolute bottom-1 left-1 z-30">
+              <Badge size="sm" variant="black">
+                {meme.video.duration} sec
+              </Badge>
+            </div>
             <Link
               to="/admin/library/$memeId"
-              className="absolute inset-0 md:opacity-0 group-hover:opacity-100 transition-all z-20 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 outline-none grid"
+              className="absolute inset-0 md:opacity-0 group-hover:opacity-100 transition-all z-40 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 outline-none grid"
               params={{ memeId: meme.id }}
             />
           </motion.div>

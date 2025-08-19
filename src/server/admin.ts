@@ -176,6 +176,7 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
         tweetUrl: tweet.url,
         video: {
           create: {
+            duration: 0,
             bunnyId: videoId
           }
         }
@@ -231,6 +232,7 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
         tweetUrl: '',
         video: {
           create: {
+            duration: 0,
             bunnyId: videoId
           }
         }
