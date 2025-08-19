@@ -106,7 +106,7 @@ const RouteComponent = () => {
               query={search.query ?? ''}
               onQueryChange={handleQueryChange}
             />
-            <div className="gap-x-3 hidden xl:flex">
+            <div className="gap-x-3 hidden lg:flex">
               <MemesToggleGrid
                 columnValue={columnGridCount}
                 onColumnValueChange={setColumnGridCount}

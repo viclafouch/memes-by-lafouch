@@ -25,6 +25,7 @@ import {
   getMemeByIdQueryOpts,
   getVideoStatusByIdQueryOpts
 } from '@/lib/queries'
+import { cn } from '@/lib/utils'
 import { toggleBookmarkByMemeId } from '@/server/meme'
 import { matchIsVideoPlayable } from '@/utils/video'
 import {
@@ -38,8 +39,22 @@ import { Link } from '@tanstack/react-router'
 export type MemeListItemProps = {
   meme: MemeWithVideo
   layoutContext: string
+  size: keyof typeof sizes
   onPlayClick: (meme: MemeWithVideo) => void
 }
+
+const sizes = {
+  sm: {
+    title: 'font-normal text-xs',
+    views: 'text-xs',
+    icon: 'size-4'
+  },
+  md: {
+    title: 'font-medium text-md',
+    views: 'text-md',
+    icon: 'size-5'
+  }
+} as const
 
 const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
   const queryClient = useQueryClient()
@@ -131,7 +146,7 @@ const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
 }
 
 export const MemeListItem = React.memo(
-  ({ meme, onPlayClick, layoutContext }: MemeListItemProps) => {
+  ({ meme, onPlayClick, layoutContext, size = 'md' }: MemeListItemProps) => {
     const isVideoInitialPlayable = matchIsVideoPlayable(meme.video.bunnyStatus)
 
     const downloadMutation = useDownloadMeme()
@@ -201,17 +216,20 @@ export const MemeListItem = React.memo(
           )}
         </motion.div>
         <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-y-1">
             <Link
               to="/memes/$memeId"
               params={{ memeId: meme.id }}
               title={meme.title}
-              className="line-clamp-1 font-medium leading-none text-gray-100"
+              className={cn(
+                'line-clamp-1 leading-none text-gray-100',
+                sizes[size].title
+              )}
             >
               {meme.title}
             </Link>
             <div className="flex flex-row items-center gap-1.5 text-gray-500">
-              <span className="text-[13px] leading-none">
+              <span className={cn('leading-none', sizes[size].views)}>
                 {meme.viewCount} vue{meme.viewCount > 1 ? 's' : ''}
               </span>
             </div>
@@ -219,7 +237,7 @@ export const MemeListItem = React.memo(
           <div className="flex items-center gap-1 shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <EllipsisVertical size={18} />
+                <EllipsisVertical className={cn(sizes[size].icon)} />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
