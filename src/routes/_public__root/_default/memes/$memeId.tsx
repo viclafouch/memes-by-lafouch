@@ -1,6 +1,7 @@
 import React from 'react'
-import { ShareMemeButton } from '@/components/Meme/share-meme-button'
-import { PageHeader } from '@/components/page-header'
+import { formatDate } from 'date-fns'
+import { Badge } from '@/components/ui/badge'
+import { Title } from '@/components/ui/title'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { buildMemeSeo } from '@/lib/seo'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -11,25 +12,50 @@ const RouteComponent = () => {
   const memeQuery = useSuspenseQuery(getMemeByIdQueryOpts(memeId))
   const meme = memeQuery.data
 
+  const allTags = React.useMemo(() => {
+    return [
+      ...new Set([
+        ...meme.categories.flatMap((category) => {
+          return [category.category.title, ...category.category.keywords]
+        }),
+        ...meme.keywords
+      ])
+    ]
+  }, [meme])
+
   return (
-    <div>
-      <PageHeader
-        title={meme.title}
-        description={`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`}
-        action={
-          <div className="flex gap-2 flex-wrap justify-end">
-            <ShareMemeButton meme={meme} />
+    <div className="flex flex-1 flex-col items-center gap-6 w-full justify-center">
+      <div className="flex flex-col gap-y-3">
+        <div className="flex flex-col gap-y-1">
+          <span className="text-muted-foreground text-sm text-center">
+            Ajouté le {formatDate(meme.createdAt, 'dd/MM/yyyy')}
+          </span>
+          <Title size="h2" className="max-w-2xl">
+            {meme.title}
+          </Title>
+        </div>
+        {allTags.length > 0 ? (
+          <div className="flex justify-center flex-wrap gap-1.5 max-w-[500px] mx-auto">
+            {allTags.map((tag) => {
+              return (
+                <Badge variant="secondary" key={tag}>
+                  {tag.toLowerCase()}
+                </Badge>
+              )
+            })}
           </div>
-        }
-      />
-      <div className="py-10">
-        <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
-          <iframe
-            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=true&preload=true&responsive=true`}
-            title={meme.title}
-            className="w-full h-full"
-            allow="autoplay; fullscreen"
-          />
+        ) : null}
+      </div>
+      <div className="max-w-[800px] mx-auto w-full">
+        <div className="flex justify-center w-full">
+          <div className="bg-muted relative aspect-video overflow-hidden rounded-lg text-sm border border-white/10 w-full">
+            <iframe
+              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=true&preload=true&responsive=true`}
+              title={meme.title}
+              className="w-full h-full"
+              allow="autoplay; fullscreen"
+            />
+          </div>
         </div>
       </div>
     </div>

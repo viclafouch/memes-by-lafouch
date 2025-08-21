@@ -4,7 +4,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   return (
-    <div className="py-20 pb-10 sm:pt-28">
+    <div className="pb-10 pt-10 sm:pt-12">
       <Container>
         <Outlet />
       </Container>
