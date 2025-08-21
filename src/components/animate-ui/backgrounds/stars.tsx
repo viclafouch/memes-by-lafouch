@@ -49,7 +49,10 @@ const StarLayer = ({
       data-slot="star-layer"
       animate={{ y: [0, -2000] }}
       transition={transition}
-      className={cn('absolute top-0 left-0 w-full h-[2000px]', className)}
+      className={cn(
+        'absolute top-0 left-0 w-full h-[2000px] will-change-transform',
+        className
+      )}
       {...props}
     >
       <div
