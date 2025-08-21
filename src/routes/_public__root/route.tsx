@@ -8,7 +8,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 const RouteComponent = () => {
   return (
     <StarsBackground>
-      <div className="z-10 relative min-h-screen flex flex-col">
+      <div className="z-10 relative min-h-dvh flex flex-col">
         <AnimatedBanner>
           This website is currently under construction.
         </AnimatedBanner>
