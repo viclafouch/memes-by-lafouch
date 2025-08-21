@@ -83,96 +83,100 @@ const LoginForm = ({ onOpenChange }: FormProps) => {
       noValidate
       className="flex flex-col items-center gap-y-4 w-full"
     >
-      <h1 className="text-xl font-semibold">Connexion</h1>
-      <form.Field
-        name="email"
-        children={(field) => {
-          const errorMessage = getFieldErrorMessage({ field })
+      <h1 className="text-xl font-semibold text-center text-balance max-w-sm mx-center">
+        Connexion
+      </h1>
+      <div className="flex flex-col items-center gap-y-2 w-full">
+        <form.Field
+          name="email"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
 
-          return (
-            <FormItem error={errorMessage}>
-              <FormControl>
-                <Input
-                  required
-                  type="email"
-                  id="email"
-                  autoComplete="email"
-                  placeholder="Email"
-                  name="email"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    return field.handleChange(event.target.value)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )
-        }}
-      />
-      <form.Field
-        name="password"
-        children={(field) => {
-          const errorMessage = getFieldErrorMessage({ field })
+            return (
+              <FormItem error={errorMessage}>
+                <FormControl>
+                  <Input
+                    required
+                    type="email"
+                    id="email"
+                    autoComplete="email"
+                    placeholder="Email"
+                    name="email"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Field
+          name="password"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
 
-          return (
-            <FormItem error={errorMessage}>
-              <FormControl>
-                <Input
-                  required
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  placeholder="Mot de passe"
-                  name="password"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    return field.handleChange(event.target.value)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )
-        }}
-      />
-      <form.Subscribe
-        selector={(state) => {
-          return state.isSubmitting
-        }}
-        children={(isSubmitting) => {
-          return (
-            <LoadingButton
-              isLoading={isSubmitting}
-              type="submit"
-              className="w-full"
-            >
-              Se connecter
-            </LoadingButton>
-          )
-        }}
-      />
-      <Link
-        to="/password/reset"
-        className="underline"
-        onClick={() => {
-          return onOpenChange(false)
-        }}
-      >
-        Mot de passe oublié ?
-      </Link>
-      {emailIsNotValid ? (
-        <Alert variant="destructive">
-          <CircleAlert />
-          <AlertTitle>Vous devez vérifier votre email !</AlertTitle>
-          <AlertDescription>
-            Votre compte n’est pas activé. Veuillez l’activer avant d’essayer de
-            vous connecter. Si vous avez besoin d’aide, contactez-nous.
-          </AlertDescription>
-        </Alert>
-      ) : null}
+            return (
+              <FormItem error={errorMessage}>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    placeholder="Mot de passe"
+                    name="password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Subscribe
+          selector={(state) => {
+            return state.isSubmitting
+          }}
+          children={(isSubmitting) => {
+            return (
+              <LoadingButton
+                isLoading={isSubmitting}
+                type="submit"
+                className="w-full"
+              >
+                Se connecter
+              </LoadingButton>
+            )
+          }}
+        />
+        <Link
+          to="/password/reset"
+          className="underline"
+          onClick={() => {
+            return onOpenChange(false)
+          }}
+        >
+          Mot de passe oublié ?
+        </Link>
+        {emailIsNotValid ? (
+          <Alert variant="destructive" className="mt-4">
+            <CircleAlert />
+            <AlertTitle>Vous devez vérifier votre email !</AlertTitle>
+            <AlertDescription>
+              Votre compte n’est pas activé. Veuillez l’activer avant d’essayer
+              de vous connecter. Si vous avez besoin d’aide, contactez-nous.
+            </AlertDescription>
+          </Alert>
+        ) : null}
+      </div>
     </form>
   )
 }
@@ -236,155 +240,159 @@ const SignupForm = () => {
         form.handleSubmit()
       }}
       noValidate
-      className="flex w-full flex-col items-center gap-y-4"
+      className="flex flex-col items-center gap-y-6 w-full"
     >
-      <h1 className="text-xl font-semibold">Inscription</h1>
-      <form.Field
-        name="name"
-        children={(field) => {
-          const errorMessage = getFieldErrorMessage({ field })
+      <h1 className="text-xl font-semibold text-center text-balance max-w-sm mx-center">
+        Inscription
+      </h1>
+      <div className="flex flex-col items-center gap-y-2 w-full">
+        <form.Field
+          name="name"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
 
-          return (
-            <FormItem error={errorMessage}>
-              <FormControl>
-                <Input
-                  required
-                  type="text"
-                  id="name"
-                  autoComplete="username"
-                  placeholder="Pseudo"
-                  name="name"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    return field.handleChange(event.target.value)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )
-        }}
-      />
-      <form.Field
-        name="email"
-        children={(field) => {
-          const errorMessage = getFieldErrorMessage({ field })
+            return (
+              <FormItem error={errorMessage}>
+                <FormControl>
+                  <Input
+                    required
+                    type="text"
+                    id="name"
+                    autoComplete="username"
+                    placeholder="Pseudo"
+                    name="name"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Field
+          name="email"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
 
-          return (
-            <FormItem error={errorMessage}>
-              <FormControl>
-                <Input
-                  required
-                  type="email"
-                  id="email"
-                  autoComplete="email"
-                  placeholder="Email"
-                  name="email"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    return field.handleChange(event.target.value)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )
-        }}
-      />
-      <form.Field
-        name="password"
-        children={(field) => {
-          const errorMessage = getFieldErrorMessage({ field })
+            return (
+              <FormItem error={errorMessage}>
+                <FormControl>
+                  <Input
+                    required
+                    type="email"
+                    id="email"
+                    autoComplete="email"
+                    placeholder="Email"
+                    name="email"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Field
+          name="password"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
 
-          return (
-            <FormItem error={errorMessage}>
-              <FormControl>
-                <Input
-                  required
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  placeholder="Mot de passe"
-                  name="password"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    return field.handleChange(event.target.value)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )
-        }}
-      />
-      <form.Field
-        name="confirmPassword"
-        children={(field) => {
-          const errorMessage = getFieldErrorMessage({ field })
+            return (
+              <FormItem error={errorMessage}>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    placeholder="Mot de passe"
+                    name="password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Field
+          name="confirmPassword"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
 
-          return (
-            <FormItem error={errorMessage}>
-              <FormControl>
-                <Input
-                  required
-                  type="password"
-                  id="confirmPassword"
-                  autoComplete="new-password"
-                  placeholder="Confirmer le mot de passe"
-                  name="confirmPassword"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    return field.handleChange(event.target.value)
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )
-        }}
-      />
-      <form.Subscribe
-        selector={(state) => {
-          return state.isSubmitting
-        }}
-        children={(isSubmitting) => {
-          return (
-            <LoadingButton
-              isLoading={isSubmitting}
-              type="submit"
-              className="w-full"
-            >
-              Créer un compte
-            </LoadingButton>
-          )
-        }}
-      />
-      <form.Subscribe
-        selector={(state) => {
-          return state.isSubmitted
-        }}
-        children={(isSubmitted) => {
-          return isSubmitted ? (
-            <Alert variant="success">
-              <CheckCircle />
-              <AlertTitle>
-                Parfait, plus qu&apos;à valider ton email !
-              </AlertTitle>
-              <AlertDescription>
-                Votre compte a été créé avec succès, mais il doit être activé
-                avant que vous puissiez vous connecter. Nous venons de vous
-                envoyer un e-mail pour l’activer. Si vous ne le recevez pas dans
-                quelques minutes, veuillez vérifier votre dossier spam ou
-                contactez-nous.
-              </AlertDescription>
-            </Alert>
-          ) : null
-        }}
-      />
+            return (
+              <FormItem error={errorMessage}>
+                <FormControl>
+                  <Input
+                    required
+                    type="password"
+                    id="confirmPassword"
+                    autoComplete="new-password"
+                    placeholder="Confirmer le mot de passe"
+                    name="confirmPassword"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Subscribe
+          selector={(state) => {
+            return state.isSubmitting
+          }}
+          children={(isSubmitting) => {
+            return (
+              <LoadingButton
+                isLoading={isSubmitting}
+                type="submit"
+                className="w-full"
+              >
+                Créer un compte
+              </LoadingButton>
+            )
+          }}
+        />
+        <form.Subscribe
+          selector={(state) => {
+            return state.isSubmitted
+          }}
+          children={(isSubmitted) => {
+            return isSubmitted ? (
+              <Alert variant="success" className="mt-4">
+                <CheckCircle />
+                <AlertTitle>
+                  Parfait, plus qu&apos;à valider ton email !
+                </AlertTitle>
+                <AlertDescription>
+                  Votre compte a été créé avec succès, mais il doit être activé
+                  avant que vous puissiez vous connecter. Nous venons de vous
+                  envoyer un e-mail pour l’activer. Si vous ne le recevez pas
+                  dans quelques minutes, veuillez vérifier votre dossier spam ou
+                  contactez-nous.
+                </AlertDescription>
+              </Alert>
+            ) : null
+          }}
+        />
+      </div>
     </form>
   )
 }
@@ -400,12 +408,12 @@ export const AuthDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle />
           <DialogDescription />
         </DialogHeader>
-        <div className="px-6 py-4">
+        <div>
           {authType === 'login' ? (
             <LoginForm onOpenChange={onOpenChange} />
           ) : (
