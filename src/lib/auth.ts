@@ -20,6 +20,14 @@ const getAuthConfig = serverOnly(() => {
       autoSignIn: true,
       minPasswordLength: 4,
       maxPasswordLength: 20,
+      sendResetPassword: async ({ user, url }) => {
+        await resendClient.emails.send({
+          from: 'Acme <onboarding@resend.dev>',
+          to: user.email,
+          subject: 'Reset your password',
+          html: `Click the link to reset your password: ${url}`
+        })
+      },
       requireEmailVerification: true
     },
     emailVerification: {

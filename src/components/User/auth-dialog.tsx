@@ -21,7 +21,7 @@ import { getAuthUserQueryOpts } from '@/lib/queries'
 import { getFieldErrorMessage } from '@/lib/utils'
 import { formOptions, useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 
 type FormProps = {
   onOpenChange: (open: boolean) => void
@@ -154,6 +154,15 @@ const LoginForm = ({ onOpenChange }: FormProps) => {
           )
         }}
       />
+      <Link
+        to="/password/reset"
+        className="underline"
+        onClick={() => {
+          return onOpenChange(false)
+        }}
+      >
+        Mot de passe oublié ?
+      </Link>
       {emailIsNotValid ? (
         <Alert variant="destructive">
           <CircleAlert />

@@ -28,6 +28,8 @@ import { Route as Public__rootDefaultRandomIndexRouteImport } from './routes/_pu
 import { Route as Public__rootDefaultMemesIndexRouteImport } from './routes/_public__root/_default/memes/index'
 import { Route as Public__rootDefaultStudioMemeIdRouteImport } from './routes/_public__root/_default/studio/$memeId'
 import { Route as Public__rootDefaultRandomMemeIdRouteImport } from './routes/_public__root/_default/random/$memeId'
+import { Route as Public__rootDefaultPasswordResetRouteImport } from './routes/_public__root/_default/password.reset'
+import { Route as Public__rootDefaultPasswordCreateNewRouteImport } from './routes/_public__root/_default/password.create-new'
 import { Route as Public__rootDefaultMemesMemeIdRouteImport } from './routes/_public__root/_default/memes/$memeId'
 import { ServerRoute as ApiBunnyServerRouteImport } from './routes/api/bunny'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
@@ -125,6 +127,18 @@ const Public__rootDefaultRandomMemeIdRoute =
     path: '/random/$memeId',
     getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
+const Public__rootDefaultPasswordResetRoute =
+  Public__rootDefaultPasswordResetRouteImport.update({
+    id: '/password/reset',
+    path: '/password/reset',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
+  } as any)
+const Public__rootDefaultPasswordCreateNewRoute =
+  Public__rootDefaultPasswordCreateNewRouteImport.update({
+    id: '/password/create-new',
+    path: '/password/create-new',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
+  } as any)
 const Public__rootDefaultMemesMemeIdRoute =
   Public__rootDefaultMemesMemeIdRouteImport.update({
     id: '/memes/$memeId',
@@ -154,6 +168,8 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
   '/memes/$memeId': typeof Public__rootDefaultMemesMemeIdRoute
+  '/password/create-new': typeof Public__rootDefaultPasswordCreateNewRoute
+  '/password/reset': typeof Public__rootDefaultPasswordResetRoute
   '/random/$memeId': typeof Public__rootDefaultRandomMemeIdRoute
   '/studio/$memeId': typeof Public__rootDefaultStudioMemeIdRoute
   '/memes': typeof Public__rootDefaultMemesIndexRoute
@@ -172,6 +188,8 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
   '/memes/$memeId': typeof Public__rootDefaultMemesMemeIdRoute
+  '/password/create-new': typeof Public__rootDefaultPasswordCreateNewRoute
+  '/password/reset': typeof Public__rootDefaultPasswordResetRoute
   '/random/$memeId': typeof Public__rootDefaultRandomMemeIdRoute
   '/studio/$memeId': typeof Public__rootDefaultStudioMemeIdRoute
   '/memes': typeof Public__rootDefaultMemesIndexRoute
@@ -193,6 +211,8 @@ export interface FileRoutesById {
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/library/': typeof AdminLibraryIndexRoute
   '/_public__root/_default/memes/$memeId': typeof Public__rootDefaultMemesMemeIdRoute
+  '/_public__root/_default/password/create-new': typeof Public__rootDefaultPasswordCreateNewRoute
+  '/_public__root/_default/password/reset': typeof Public__rootDefaultPasswordResetRoute
   '/_public__root/_default/random/$memeId': typeof Public__rootDefaultRandomMemeIdRoute
   '/_public__root/_default/studio/$memeId': typeof Public__rootDefaultStudioMemeIdRoute
   '/_public__root/_default/memes/': typeof Public__rootDefaultMemesIndexRoute
@@ -213,6 +233,8 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/library'
     | '/memes/$memeId'
+    | '/password/create-new'
+    | '/password/reset'
     | '/random/$memeId'
     | '/studio/$memeId'
     | '/memes'
@@ -231,6 +253,8 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/library'
     | '/memes/$memeId'
+    | '/password/create-new'
+    | '/password/reset'
     | '/random/$memeId'
     | '/studio/$memeId'
     | '/memes'
@@ -251,6 +275,8 @@ export interface FileRouteTypes {
     | '/admin/categories/'
     | '/admin/library/'
     | '/_public__root/_default/memes/$memeId'
+    | '/_public__root/_default/password/create-new'
+    | '/_public__root/_default/password/reset'
     | '/_public__root/_default/random/$memeId'
     | '/_public__root/_default/studio/$memeId'
     | '/_public__root/_default/memes/'
@@ -409,6 +435,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public__rootDefaultRandomMemeIdRouteImport
       parentRoute: typeof Public__rootDefaultRouteRoute
     }
+    '/_public__root/_default/password/reset': {
+      id: '/_public__root/_default/password/reset'
+      path: '/password/reset'
+      fullPath: '/password/reset'
+      preLoaderRoute: typeof Public__rootDefaultPasswordResetRouteImport
+      parentRoute: typeof Public__rootDefaultRouteRoute
+    }
+    '/_public__root/_default/password/create-new': {
+      id: '/_public__root/_default/password/create-new'
+      path: '/password/create-new'
+      fullPath: '/password/create-new'
+      preLoaderRoute: typeof Public__rootDefaultPasswordCreateNewRouteImport
+      parentRoute: typeof Public__rootDefaultRouteRoute
+    }
     '/_public__root/_default/memes/$memeId': {
       id: '/_public__root/_default/memes/$memeId'
       path: '/memes/$memeId'
@@ -441,6 +481,8 @@ interface Public__rootDefaultRouteRouteChildren {
   Public__rootDefaultDownloaderRoute: typeof Public__rootDefaultDownloaderRoute
   Public__rootDefaultFavoritesRoute: typeof Public__rootDefaultFavoritesRoute
   Public__rootDefaultMemesMemeIdRoute: typeof Public__rootDefaultMemesMemeIdRoute
+  Public__rootDefaultPasswordCreateNewRoute: typeof Public__rootDefaultPasswordCreateNewRoute
+  Public__rootDefaultPasswordResetRoute: typeof Public__rootDefaultPasswordResetRoute
   Public__rootDefaultRandomMemeIdRoute: typeof Public__rootDefaultRandomMemeIdRoute
   Public__rootDefaultStudioMemeIdRoute: typeof Public__rootDefaultStudioMemeIdRoute
   Public__rootDefaultMemesIndexRoute: typeof Public__rootDefaultMemesIndexRoute
@@ -453,6 +495,10 @@ const Public__rootDefaultRouteRouteChildren: Public__rootDefaultRouteRouteChildr
     Public__rootDefaultDownloaderRoute: Public__rootDefaultDownloaderRoute,
     Public__rootDefaultFavoritesRoute: Public__rootDefaultFavoritesRoute,
     Public__rootDefaultMemesMemeIdRoute: Public__rootDefaultMemesMemeIdRoute,
+    Public__rootDefaultPasswordCreateNewRoute:
+      Public__rootDefaultPasswordCreateNewRoute,
+    Public__rootDefaultPasswordResetRoute:
+      Public__rootDefaultPasswordResetRoute,
     Public__rootDefaultRandomMemeIdRoute: Public__rootDefaultRandomMemeIdRoute,
     Public__rootDefaultStudioMemeIdRoute: Public__rootDefaultStudioMemeIdRoute,
     Public__rootDefaultMemesIndexRoute: Public__rootDefaultMemesIndexRoute,
