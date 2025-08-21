@@ -44,8 +44,8 @@ const RouteComponent = () => {
           <ArrowLeft className="size-5" />
           <span>Retour aux memes</span>
         </Link>
-        <div className="w-full grid md:grid-cols-[auto_300px] gap-x-2.5 gap-y-8">
-          <div className="w-full flex flex-col gap-y-4 items-center md:items-start">
+        <div className="w-full grid md:grid-cols-[auto_300px] gap-x-2.5 gap-y-4">
+          <div className="w-full flex flex-col gap-y-2 md:gap-y-2 items-center md:items-start">
             <div className="aspect-video w-full flex relative isolate border rounded-lg border-input overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-full bg-muted/50">
                 <img
