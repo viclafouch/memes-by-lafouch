@@ -1,12 +1,12 @@
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model UserBookmark {
@@ -24,11 +24,11 @@ model UserBookmark {
 }
 
 model Category {
-  id        String         @id @default(cuid())
+  id        String   @id @default(cuid())
   title     String
-  keywords  String[]       @default([])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  keywords  String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   memes MemeCategory[]
 }
@@ -48,7 +48,7 @@ model Video {
   id          Int    @id @default(autoincrement())
   meme        Meme?
   bunnyId     String @unique
-  duration  Int
+  duration    Int
   bunnyStatus Int    @default(0)
 }
 
@@ -64,7 +64,7 @@ model Meme {
   video        Video          @relation(fields: [videoId], references: [id], onDelete: Cascade)
   embedding    Embedding[]
   bookmarkedBy UserBookmark[]
-  categories MemeCategory[]
+  categories   MemeCategory[]
 }
 
 model User {
