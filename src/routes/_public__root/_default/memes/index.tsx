@@ -80,16 +80,18 @@ const RouteComponent = () => {
       <PageDescription>A collection of memes from the internet</PageDescription>
       <div className="w-full mx-auto py-10">
         <div className="flex flex-col gap-y-4">
-          <div className="flex justify-between gap-x-3">
+          <div className="flex justify-between gap-x-2">
             <MemesQuery
               query={search.query ?? ''}
               onQueryChange={handleQueryChange}
             />
-            <div className="gap-x-3 hidden lg:flex">
-              <MemesToggleGrid
-                columnValue={columnGridCount}
-                onColumnValueChange={setColumnGridCount}
-              />
+            <div className="gap-x-3 flex shrink-0">
+              <div className="hidden lg:flex">
+                <MemesToggleGrid
+                  columnValue={columnGridCount}
+                  onColumnValueChange={setColumnGridCount}
+                />
+              </div>
               <Link
                 to="/random"
                 className={buttonVariants({ variant: 'outline' })}
