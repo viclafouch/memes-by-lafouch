@@ -71,7 +71,7 @@ const RouteComponent = () => {
       <div className="py-10 w-full max-w-4xl">
         <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
           <iframe
-            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?responsive=true&preload=false&autoplay=false`}
+            src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?responsive=true&preload=true&autoplay=true`}
             ref={handleRef}
             title={meme.title}
             className="w-full h-full"

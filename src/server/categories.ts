@@ -13,6 +13,9 @@ export const getCategories = createServerFn({ method: 'GET' }).handler(
     const categories = await prismaClient.category.findMany({
       orderBy: {
         createdAt: 'desc'
+      },
+      cacheStrategy: {
+        ttl: 24 * 60 * 60
       }
     })
 

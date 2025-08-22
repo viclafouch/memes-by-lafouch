@@ -26,6 +26,9 @@ export const getBestMemes = createServerFn({ method: 'GET' }).handler(
       include: {
         video: true,
         embedding: true
+      },
+      cacheStrategy: {
+        ttl: 24 * 60 * 60
       }
     })
 
