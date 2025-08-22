@@ -62,7 +62,7 @@ export const Hero = () => {
           speedSegment={h1Transition.speedSegment}
           delay={h1Transition.delay}
         >
-          <span className="text-foreground">Ta</span> banque de mèmes vidéo,
+          <span className="text-foreground">Ta</span> banque de mèmes vidéo,{' '}
           <span className="text-foreground">prête à faire</span> rire{' '}
           <span className="text-foreground">Internet</span>
         </TextEffect>

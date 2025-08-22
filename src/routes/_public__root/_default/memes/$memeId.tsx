@@ -1,22 +1,31 @@
 import React from 'react'
 import { formatDate } from 'date-fns'
-import { ArrowLeft, Clapperboard, Download, Share2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  Clapperboard,
+  Download,
+  Share2,
+  Shuffle
+} from 'lucide-react'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { Badge } from '@/components/ui/badge'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { LoadingButton } from '@/components/ui/loading-button'
-import { Title } from '@/components/ui/title'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 import { buildVideoImageUrl } from '@/lib/bunny'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { buildMemeSeo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
+import { getRandomMeme } from '@/server/meme'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
 const RouteComponent = () => {
+  const { nextRandomMeme } = Route.useLoaderData()
   const { memeId } = Route.useParams()
+  const navigate = Route.useNavigate()
+  const router = useRouter()
   const memeQuery = useSuspenseQuery(getMemeByIdQueryOpts(memeId))
   const meme = memeQuery.data
 
@@ -33,6 +42,35 @@ const RouteComponent = () => {
       ])
     ]
   }, [meme])
+
+  React.useEffect(() => {
+    async function preload() {
+      try {
+        const nextMeme = await nextRandomMeme
+        await router.preloadRoute({
+          to: '/memes/$memeId',
+          params: {
+            memeId: nextMeme.id
+          }
+        })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('Failed to preload route')
+      }
+    }
+
+    preload()
+  }, [router, nextRandomMeme])
+
+  const goToNextRandomMeme = async () => {
+    try {
+      const newMeme = await nextRandomMeme
+      navigate({ to: '/memes/$memeId', params: { memeId: newMeme.id } })
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    }
+  }
 
   return (
     <div>
@@ -56,10 +94,11 @@ const RouteComponent = () => {
                 />
               </div>
               <iframe
-                src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=true&preload=false&responsive=true`}
+                src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&muted=true&responsive=true`}
                 title={meme.title}
                 className="w-full h-full z-10"
                 allow="autoplay; fullscreen"
+                loading="eager"
               />
             </div>
             <div className="flex justify-center md:justify-start gap-x-2 items-center">
@@ -91,6 +130,10 @@ const RouteComponent = () => {
                 <Download />
                 Télécharger la vidéo
               </LoadingButton>
+              <Button onClick={goToNextRandomMeme}>
+                <Shuffle />
+                Aléatoire
+              </Button>
               <Link
                 to="/studio/$memeId"
                 params={{ memeId: meme.id }}
@@ -124,55 +167,21 @@ const RouteComponent = () => {
       </div>
     </div>
   )
-
-  return (
-    <div className="flex flex-1 flex-col items-center gap-6 w-full justify-center">
-      <div className="flex flex-col gap-y-3">
-        <div className="flex flex-col gap-y-1">
-          <span className="text-muted-foreground text-sm text-center">
-            Ajouté le {formatDate(meme.createdAt, 'dd/MM/yyyy')}
-          </span>
-          <Title size="h2" className="max-w-2xl">
-            {meme.title}
-          </Title>
-        </div>
-        {allTags.length > 0 ? (
-          <div className="flex justify-center flex-wrap gap-1.5 max-w-[500px] mx-auto">
-            {allTags.map((tag) => {
-              return (
-                <Badge variant="secondary" key={tag}>
-                  {tag.toLowerCase()}
-                </Badge>
-              )
-            })}
-          </div>
-        ) : null}
-      </div>
-      <div className="max-w-[800px] mx-auto w-full">
-        <div className="flex justify-center w-full">
-          <div className="bg-muted relative aspect-video overflow-hidden rounded-lg text-sm border border-white/10 w-full">
-            <iframe
-              src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=false&loop=false&muted=true&preload=true&responsive=true`}
-              title={meme.title}
-              className="w-full h-full"
-              allow="autoplay; fullscreen"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 export const Route = createFileRoute('/_public__root/_default/memes/$memeId')({
   component: RouteComponent,
+  pendingMs: 1000,
   loader: async ({ params, context }) => {
     const meme = await context.queryClient.ensureQueryData(
       getMemeByIdQueryOpts(params.memeId)
     )
 
+    const nextRandomMeme = getRandomMeme({ data: meme.id })
+
     return {
-      meme
+      meme,
+      nextRandomMeme
     }
   },
   head: ({ loaderData }) => {

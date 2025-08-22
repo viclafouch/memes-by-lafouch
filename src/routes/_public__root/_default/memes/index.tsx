@@ -1,17 +1,20 @@
 import React from 'react'
+import { Shuffle } from 'lucide-react'
 import { CategoriesList } from '@/components/categories/categories-list'
-import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
 import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
 import MemesToggleGrid from '@/components/Meme/Filters/memes-toggle-grid'
 import { MemesList } from '@/components/Meme/memes-list'
+import { buttonVariants } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/ui/spinner'
-import type { MemesFilters } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
-import { getMemesListQueryOpts } from '@/lib/queries'
+import {
+  getCategoriesListQueryOpts,
+  getMemesListQueryOpts
+} from '@/lib/queries'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { PageDescription, PageHeading } from '../../-components/page-headers'
 
 const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
@@ -55,22 +58,6 @@ const RouteComponent = () => {
   const navigate = Route.useNavigate()
   const search = Route.useSearch()
 
-  const handleOrderByChange = (value: string) => {
-    navigate({
-      to: '/memes',
-      search: (prevState) => {
-        return {
-          page: prevState.page,
-          query: prevState.query,
-          orderBy: value as MemesFilters['orderBy'],
-          categoryIds: prevState.categoryIds
-        }
-      },
-      viewTransition: false,
-      replace: true
-    })
-  }
-
   const handleQueryChange = (value: string) => {
     navigate({
       to: '/memes',
@@ -103,10 +90,13 @@ const RouteComponent = () => {
                 columnValue={columnGridCount}
                 onColumnValueChange={setColumnGridCount}
               />
-              <MemesOrderBy
-                orderBy={search.orderBy ?? 'most_recent'}
-                onOrderByChange={handleOrderByChange}
-              />
+              <Link
+                to="/random"
+                className={buttonVariants({ variant: 'outline' })}
+              >
+                <Shuffle />
+                Aléatoire
+              </Link>
             </div>
           </div>
           <div className="w-full py-2 border-y border-muted">
@@ -123,6 +113,9 @@ const RouteComponent = () => {
 
 export const Route = createFileRoute('/_public__root/_default/memes/')({
   component: RouteComponent,
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(getCategoriesListQueryOpts())
+  },
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)
   }
