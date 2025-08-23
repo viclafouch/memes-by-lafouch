@@ -45,9 +45,9 @@ export const MemesList = ({
     return <p className="text-muted-foreground">Aucun résultat</p>
   }
 
-  const handleSelect = React.useCallback((meme: MemeWithVideo) => {
+  const handleSelect = (meme: MemeWithVideo) => {
     setSelectedId(meme.id)
-  }, [])
+  }
 
   const handleUnSelect = () => {
     setSelectedId(null)
