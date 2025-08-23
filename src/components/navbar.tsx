@@ -19,7 +19,6 @@ const NAVIGATIONS_LINKS = [
     name: 'Menu',
     items: [
       { to: '/memes', label: 'Mèmes' },
-      { to: '/studio', label: 'Studio' },
       { to: '/', label: 'À propos' }
     ]
   }

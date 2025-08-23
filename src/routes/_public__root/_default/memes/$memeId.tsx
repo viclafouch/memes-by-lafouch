@@ -7,6 +7,7 @@ import {
   Share2,
   Shuffle
 } from 'lucide-react'
+import { StudioDialog } from '@/components/Meme/studio-dialog'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -19,7 +20,12 @@ import { buildMemeSeo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 import { getRandomMeme } from '@/server/meme'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import {
+  ClientOnly,
+  createFileRoute,
+  Link,
+  useRouter
+} from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { nextRandomMeme } = Route.useLoaderData()
@@ -28,6 +34,7 @@ const RouteComponent = () => {
   const router = useRouter()
   const memeQuery = useSuspenseQuery(getMemeByIdQueryOpts(memeId))
   const meme = memeQuery.data
+  const [isStudioDialogOpened, setIsStudioDialogOpened] = React.useState(false)
 
   const shareMutation = useShareMeme()
   const downloadMutation = useDownloadMeme()
@@ -134,14 +141,17 @@ const RouteComponent = () => {
                 <Shuffle />
                 Aléatoire
               </Button>
-              <Link
-                to="/studio/$memeId"
-                params={{ memeId: meme.id }}
-                className={cn(buttonVariants({ variant: 'default' }))}
+              <Button
+                variant="default"
+                onClick={(event) => {
+                  event.preventDefault()
+
+                  setIsStudioDialogOpened(true)
+                }}
               >
                 <Clapperboard />
                 Ouvrir dans Studio
-              </Link>
+              </Button>
             </div>
             {allTags.length > 0 ? (
               <div className="w-full flex justify-center md:justify-start flex-wrap gap-1.5 max-w-[500px] mx-auto">
@@ -165,6 +175,13 @@ const RouteComponent = () => {
           </div>
         </div>
       </div>
+      <ClientOnly>
+        <StudioDialog
+          meme={meme}
+          open={isStudioDialogOpened}
+          onOpenChange={setIsStudioDialogOpened}
+        />
+      </ClientOnly>
     </div>
   )
 }

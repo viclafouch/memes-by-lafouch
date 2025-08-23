@@ -2,7 +2,7 @@ import React from 'react'
 import type { User } from 'better-auth'
 import { motion } from 'framer-motion'
 import {
-  Clapperboard,
+  ArrowRight,
   Download,
   EllipsisVertical,
   PlaySquare,
@@ -238,9 +238,9 @@ export const MemeListItem = React.memo(
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <Link to="/studio/$memeId" params={{ memeId: meme.id }}>
-                    <Clapperboard />
-                    Ouvrir dans studio
+                  <Link to="/memes/$memeId" params={{ memeId: meme.id }}>
+                    <ArrowRight />
+                    Détails
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
