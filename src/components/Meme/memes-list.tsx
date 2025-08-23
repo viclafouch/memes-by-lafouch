@@ -122,7 +122,7 @@ export const MemesList = ({
                 </h3>
                 <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
                   <iframe
-                    src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}?autoplay=false`}
+                    src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}?autoplay=false&muted=true`}
                     loading="lazy"
                     ref={iframeRef}
                     title={selectedMeme.title}
