@@ -9,6 +9,7 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 type VideoProcessingOptions = {
   text: string
   bandHeight?: number
+  textPosition?: 'top' | 'bottom'
   fontSize?: number
   fontColor?: string
   maxCharsPerLine?: number
@@ -49,6 +50,7 @@ const addTextToVideo = async (
     text,
     bandHeight = 100,
     fontSize = 36,
+    textPosition = 'bottom',
     fontColor = 'black',
     maxCharsPerLine = 50
   }: VideoProcessingOptions
@@ -63,14 +65,20 @@ const addTextToVideo = async (
   const baselineOffset = Math.floor(fontSize * 0.2)
   const totalTextHeight = lineCount * fontSize + (lineCount - 1) * lineSpacing
 
-  const yPosition = `h-${Math.floor(bandHeight / 2)}-${Math.floor(totalTextHeight / 2)}+${baselineOffset}`
+  let padFilter = `pad=iw:ih+${bandHeight}:0:0:white`
+  let yPosition = `h-${Math.floor(bandHeight / 2)}-${Math.floor(totalTextHeight / 2)}+${baselineOffset}`
+
+  if (textPosition === 'top') {
+    padFilter = `pad=iw:ih+${bandHeight}:0:${bandHeight}:white`
+    yPosition = `${Math.floor(bandHeight / 2)}-${Math.floor(totalTextHeight / 2)}+${baselineOffset}`
+  }
 
   const result = await ffmpeg.exec([
     '-i',
     'input.mp4',
     '-vf',
     [
-      `pad=iw:ih+${bandHeight}:0:0:white`,
+      padFilter,
       `drawtext=fontfile=arial.ttf:textfile=text.txt:x=(w-text_w)/2:y=${yPosition}:fontsize=${fontSize}:fontcolor=${fontColor}:line_spacing=${lineSpacing}`
     ].join(','),
     '-c:a',
@@ -89,6 +97,7 @@ const addTextToVideo = async (
 
   const data = await ffmpeg.readFile('output.mp4')
 
+  // @ts-ignore
   return new Blob([data as Uint8Array], { type: 'video/mp4' })
 }
 
