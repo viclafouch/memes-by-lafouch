@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -49,7 +50,10 @@ export const AdminNavButton = ({ user }: { user: UserWithRole }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/memes">Application</Link>
+          <Link to="/">
+            <ArrowLeft />
+            Retour au site
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>
           Se déconnecter

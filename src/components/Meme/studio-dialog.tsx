@@ -19,6 +19,7 @@ import {
   useVideoInitializer,
   useVideoProcessor
 } from '@/hooks/use-video-processor'
+import { buildVideoImageUrl } from '@/lib/bunny'
 import { downloadBlob, shareBlob } from '@/utils/download'
 
 export const StudioDialog = ({
@@ -121,6 +122,7 @@ export const StudioDialog = ({
                 variant="secondary"
                 disabled={!data}
                 type="button"
+                className="md:hidden"
                 onClick={() => {
                   if (data) {
                     shareBlob(data.blob, data.title)
@@ -154,7 +156,14 @@ export const StudioDialog = ({
             <div className="group bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
               {isLoading ? (
                 <div className="w-full h-full flex items-center justify-center relative">
-                  <Skeleton className="w-full h-full bg-stone-700 absolute inset-0" />
+                  <Skeleton className="w-full h-full absolute inset-0">
+                    <img
+                      src={buildVideoImageUrl(meme.video.bunnyId)}
+                      className="blur-xl w-full h-full opacity-60 object-cover"
+                      alt={meme.title}
+                      loading="eager"
+                    />
+                  </Skeleton>
                   <div className="absolute flex flex-col gap-2 px-4 w-full text-center max-w-md items-center justify-center">
                     <Badge variant="outline">Traitement ({progress}%)</Badge>
                     <Progress value={progress} />
@@ -163,8 +172,13 @@ export const StudioDialog = ({
               ) : data ? (
                 <video src={data.url} autoPlay className="aspect-video" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center relative">
-                  <Button type="submit">Prévisualiser la vidéo</Button>
+                <div className="absolute top-0 left-0 w-full h-full bg-muted/50">
+                  <img
+                    src={buildVideoImageUrl(meme.video.bunnyId)}
+                    className="blur-2xl w-full h-full opacity-40 object-cover"
+                    alt={meme.title}
+                    loading="eager"
+                  />
                 </div>
               )}
             </div>

@@ -15,6 +15,7 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as Public__rootRouteRouteImport } from './routes/_public__root/route'
 import { Route as Public__rootIndexRouteImport } from './routes/_public__root/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminDownloaderRouteImport } from './routes/admin/downloader'
 import { Route as Public__rootSignupRouteImport } from './routes/_public__root/signup'
 import { Route as Public__rootLoginRouteImport } from './routes/_public__root/login'
 import { Route as Public__rootDefaultRouteRouteImport } from './routes/_public__root/_default/route'
@@ -22,7 +23,6 @@ import { Route as AdminLibraryIndexRouteImport } from './routes/admin/library/in
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
 import { Route as Public__rootDefaultFavoritesRouteImport } from './routes/_public__root/_default/favorites'
-import { Route as Public__rootDefaultDownloaderRouteImport } from './routes/_public__root/_default/downloader'
 import { Route as Public__rootDefaultRandomIndexRouteImport } from './routes/_public__root/_default/random/index'
 import { Route as Public__rootDefaultMemesIndexRouteImport } from './routes/_public__root/_default/memes/index'
 import { Route as Public__rootDefaultPasswordResetRouteImport } from './routes/_public__root/_default/password.reset'
@@ -50,6 +50,11 @@ const Public__rootIndexRoute = Public__rootIndexRouteImport.update({
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminDownloaderRoute = AdminDownloaderRouteImport.update({
+  id: '/downloader',
+  path: '/downloader',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const Public__rootSignupRoute = Public__rootSignupRouteImport.update({
@@ -86,12 +91,6 @@ const Public__rootDefaultFavoritesRoute =
   Public__rootDefaultFavoritesRouteImport.update({
     id: '/favorites',
     path: '/favorites',
-    getParentRoute: () => Public__rootDefaultRouteRoute,
-  } as any)
-const Public__rootDefaultDownloaderRoute =
-  Public__rootDefaultDownloaderRouteImport.update({
-    id: '/downloader',
-    path: '/downloader',
     getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
 const Public__rootDefaultRandomIndexRoute =
@@ -139,9 +138,9 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof Public__rootLoginRoute
   '/signup': typeof Public__rootSignupRoute
+  '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
-  '/downloader': typeof Public__rootDefaultDownloaderRoute
   '/favorites': typeof Public__rootDefaultFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -156,9 +155,9 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof Public__rootLoginRoute
   '/signup': typeof Public__rootSignupRoute
+  '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
-  '/downloader': typeof Public__rootDefaultDownloaderRoute
   '/favorites': typeof Public__rootDefaultFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -176,9 +175,9 @@ export interface FileRoutesById {
   '/_public__root/_default': typeof Public__rootDefaultRouteRouteWithChildren
   '/_public__root/login': typeof Public__rootLoginRoute
   '/_public__root/signup': typeof Public__rootSignupRoute
+  '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public__root/': typeof Public__rootIndexRoute
-  '/_public__root/_default/downloader': typeof Public__rootDefaultDownloaderRoute
   '/_public__root/_default/favorites': typeof Public__rootDefaultFavoritesRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
@@ -195,9 +194,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
+    | '/admin/downloader'
     | '/admin/users'
     | '/'
-    | '/downloader'
     | '/favorites'
     | '/admin/library/$memeId'
     | '/admin/categories'
@@ -212,9 +211,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/signup'
+    | '/admin/downloader'
     | '/admin/users'
     | '/'
-    | '/downloader'
     | '/favorites'
     | '/admin/library/$memeId'
     | '/admin/categories'
@@ -231,9 +230,9 @@ export interface FileRouteTypes {
     | '/_public__root/_default'
     | '/_public__root/login'
     | '/_public__root/signup'
+    | '/admin/downloader'
     | '/admin/users'
     | '/_public__root/'
-    | '/_public__root/_default/downloader'
     | '/_public__root/_default/favorites'
     | '/admin/library/$memeId'
     | '/admin/categories/'
@@ -305,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/downloader': {
+      id: '/admin/downloader'
+      path: '/downloader'
+      fullPath: '/admin/downloader'
+      preLoaderRoute: typeof AdminDownloaderRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_public__root/signup': {
       id: '/_public__root/signup'
       path: '/signup'
@@ -352,13 +358,6 @@ declare module '@tanstack/react-router' {
       path: '/favorites'
       fullPath: '/favorites'
       preLoaderRoute: typeof Public__rootDefaultFavoritesRouteImport
-      parentRoute: typeof Public__rootDefaultRouteRoute
-    }
-    '/_public__root/_default/downloader': {
-      id: '/_public__root/_default/downloader'
-      path: '/downloader'
-      fullPath: '/downloader'
-      preLoaderRoute: typeof Public__rootDefaultDownloaderRouteImport
       parentRoute: typeof Public__rootDefaultRouteRoute
     }
     '/_public__root/_default/random/': {
@@ -418,7 +417,6 @@ declare module '@tanstack/react-start/server' {
 }
 
 interface Public__rootDefaultRouteRouteChildren {
-  Public__rootDefaultDownloaderRoute: typeof Public__rootDefaultDownloaderRoute
   Public__rootDefaultFavoritesRoute: typeof Public__rootDefaultFavoritesRoute
   Public__rootDefaultMemesMemeIdRoute: typeof Public__rootDefaultMemesMemeIdRoute
   Public__rootDefaultPasswordCreateNewRoute: typeof Public__rootDefaultPasswordCreateNewRoute
@@ -429,7 +427,6 @@ interface Public__rootDefaultRouteRouteChildren {
 
 const Public__rootDefaultRouteRouteChildren: Public__rootDefaultRouteRouteChildren =
   {
-    Public__rootDefaultDownloaderRoute: Public__rootDefaultDownloaderRoute,
     Public__rootDefaultFavoritesRoute: Public__rootDefaultFavoritesRoute,
     Public__rootDefaultMemesMemeIdRoute: Public__rootDefaultMemesMemeIdRoute,
     Public__rootDefaultPasswordCreateNewRoute:
@@ -463,6 +460,7 @@ const Public__rootRouteRouteWithChildren =
   Public__rootRouteRoute._addFileChildren(Public__rootRouteRouteChildren)
 
 interface AdminRouteRouteChildren {
+  AdminDownloaderRoute: typeof AdminDownloaderRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminLibraryMemeIdRoute: typeof AdminLibraryMemeIdRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
@@ -470,6 +468,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminDownloaderRoute: AdminDownloaderRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminLibraryMemeIdRoute: AdminLibraryMemeIdRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,

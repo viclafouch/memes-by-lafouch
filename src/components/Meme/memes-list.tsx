@@ -1,12 +1,15 @@
 import React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Share2, X } from 'lucide-react'
+import { Clapperboard, Download, Share2, X } from 'lucide-react'
 import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
+import { StudioDialog } from '@/components/Meme/studio-dialog'
 import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
+import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
+import { ClientOnly } from '@tanstack/react-router'
 
 export type MemesListProps = {
   memes: MemeWithVideo[]
@@ -21,7 +24,11 @@ export const MemesList = ({
 }: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
+  const [studioMemeSelected, setStudioMemeSelected] =
+    React.useState<MemeWithVideo | null>(null)
+
   const shareMeme = useShareMeme()
+  const downloadMeme = useDownloadMeme()
 
   useHotkeys(
     'escape',
@@ -38,9 +45,9 @@ export const MemesList = ({
     return <p className="text-muted-foreground">Aucun résultat</p>
   }
 
-  const handleSelect = (meme: MemeWithVideo) => {
+  const handleSelect = React.useCallback((meme: MemeWithVideo) => {
     setSelectedId(meme.id)
-  }
+  }, [])
 
   const handleUnSelect = () => {
     setSelectedId(null)
@@ -78,6 +85,7 @@ export const MemesList = ({
               size={size}
               layoutContext={layoutContext}
               meme={meme}
+              onOpenStudioClick={setStudioMemeSelected}
             />
           )
         })}
@@ -122,10 +130,11 @@ export const MemesList = ({
                     allow="autoplay"
                   />
                 </div>
-                <div className="flex justify-center gap-x-2">
+                <div className="w-full flex sm:justify-center gap-2 flex-col sm:flex-row">
                   <Button
                     size="default"
                     disabled={shareMeme.isPending}
+                    className="md:hidden"
                     onClick={() => {
                       return shareMeme.mutate(selectedMeme)
                     }}
@@ -133,12 +142,45 @@ export const MemesList = ({
                     <Share2 />
                     Partager
                   </Button>
+                  <Button
+                    size="default"
+                    disabled={downloadMeme.isPending}
+                    onClick={() => {
+                      return downloadMeme.mutate(selectedMeme)
+                    }}
+                  >
+                    <Download />
+                    Télécharger
+                  </Button>
+                  <Button
+                    size="default"
+                    variant="secondary"
+                    onClick={() => {
+                      return setStudioMemeSelected(selectedMeme)
+                    }}
+                  >
+                    <Clapperboard />
+                    Ouvrir dans Studio
+                  </Button>
                 </div>
               </div>
             </motion.div>
           </div>
         ) : null}
       </AnimatePresence>
+      <ClientOnly>
+        {studioMemeSelected ? (
+          <React.Suspense fallback={null}>
+            <StudioDialog
+              meme={studioMemeSelected}
+              open
+              onOpenChange={() => {
+                setStudioMemeSelected(null)
+              }}
+            />
+          </React.Suspense>
+        ) : null}
+      </ClientOnly>
     </div>
   )
 }

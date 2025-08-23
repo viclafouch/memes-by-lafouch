@@ -1,10 +1,9 @@
 import React from 'react'
-import type { User } from 'better-auth'
+import type { UserWithRole } from 'better-auth/plugins'
 import {
-  BellIcon,
   ChevronDown,
-  CreditCardIcon,
   LogOutIcon,
+  Shield,
   SparklesIcon,
   Star
 } from 'lucide-react'
@@ -19,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { authClient } from '@/lib/auth-client'
+import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import {
   getAuthUserQueryOpts,
   getFavoritesMemesCountQueryOpts
@@ -27,7 +26,7 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useRouter } from '@tanstack/react-router'
 
-export const UserMenuSimple = ({ user }: { user: User }) => {
+export const UserMenuSimple = ({ user }: { user: UserWithRole }) => {
   const [open, setOpen] = React.useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -94,14 +93,14 @@ export const UserMenuSimple = ({ user }: { user: User }) => {
                 : ''}
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCardIcon />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <BellIcon />
-            Notifications
-          </DropdownMenuItem>
+          {matchIsUserAdmin(user) ? (
+            <DropdownMenuItem asChild>
+              <Link to="/admin">
+                <Shield />
+                Administration
+              </Link>
+            </DropdownMenuItem>
+          ) : null}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="text-red-600!">

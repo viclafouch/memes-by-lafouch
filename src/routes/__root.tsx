@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import React from 'react'
+import type { UserWithRole } from 'better-auth/plugins'
 import { OnlyPortrait } from '@/components/only-portrait'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
@@ -95,7 +96,7 @@ export const Route = createRootRouteWithContext<{
       context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
     }
 
-    return { user }
+    return { user: user as UserWithRole }
   },
   head: () => {
     return {

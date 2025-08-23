@@ -3,9 +3,11 @@ import type { User } from 'better-auth'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
+  Clapperboard,
   Download,
   EllipsisVertical,
   PlaySquare,
+  Share2,
   Star
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -19,6 +21,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { AuthDialog } from '@/components/User/auth-dialog'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
+import { useShareMeme } from '@/hooks/use-share-meme'
 import { authClient } from '@/lib/auth-client'
 import {
   getFavoritesMemesQueryOpts,
@@ -41,6 +44,7 @@ export type MemeListItemProps = {
   layoutContext: string
   size: keyof typeof sizes
   onPlayClick: (meme: MemeWithVideo) => void
+  onOpenStudioClick: (meme: MemeWithVideo) => void
 }
 
 const sizes = {
@@ -146,8 +150,15 @@ const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
 }
 
 export const MemeListItem = React.memo(
-  ({ meme, onPlayClick, layoutContext, size = 'md' }: MemeListItemProps) => {
+  ({
+    meme,
+    onPlayClick,
+    layoutContext,
+    onOpenStudioClick,
+    size = 'md'
+  }: MemeListItemProps) => {
     const isVideoInitialPlayable = matchIsVideoPlayable(meme.video.bunnyStatus)
+    const shareMeme = useShareMeme()
 
     const downloadMutation = useDownloadMeme()
 
@@ -242,6 +253,23 @@ export const MemeListItem = React.memo(
                     <ArrowRight />
                     Détails
                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    return onOpenStudioClick(meme)
+                  }}
+                >
+                  <Clapperboard />
+                  Ouvrir dans Studio
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    return shareMeme.mutate(meme)
+                  }}
+                  className="md:hidden"
+                >
+                  <Share2 />
+                  Partager
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {

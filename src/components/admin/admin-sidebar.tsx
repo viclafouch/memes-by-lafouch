@@ -1,4 +1,4 @@
-import { SquareLibrary, User2, Users2, Video } from 'lucide-react'
+import { ArrowLeft, SquareLibrary, Twitter, Users2, Video } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -20,17 +20,10 @@ export const AdminSidebar = ({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link to="/memes">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <User2 className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    Memes By Lafouch
-                  </span>
-                  <span className="truncate text-xs">Tableau de bord</span>
-                </div>
+            <SidebarMenuButton asChild>
+              <Link to="/">
+                <ArrowLeft />
+                Retour au site
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -58,6 +51,13 @@ export const AdminSidebar = ({
                   <Link to="/admin/users">
                     <Users2 />
                     <span>Utilisateurs</span>
+                  </Link>
+                </SidebarMenuButton>
+                <SidebarMenuButton asChild>
+                  <Link to="/admin/downloader">
+                    {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
+                    <Twitter />
+                    <span>Téléchargeur Twitter</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

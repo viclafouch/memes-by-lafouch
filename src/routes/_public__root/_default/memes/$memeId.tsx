@@ -120,6 +120,7 @@ const RouteComponent = () => {
               <LoadingButton
                 isLoading={shareMutation.isPending}
                 variant="outline"
+                className="md:hidden"
                 onClick={() => {
                   return shareMutation.mutate(meme)
                 }}
