@@ -39,6 +39,11 @@ export async function getTweetById(tweetId: string) {
     return Promise.reject(new Error('tweet invalid'))
   }
 
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.log(`Response for tweet : ${tweetId}`, tweet)
+  }
+
   const { poster } = tweet.video
   const video = tweet.video.variants.at(-1)!
   const videoUrl = video.src
