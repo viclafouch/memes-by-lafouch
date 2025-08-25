@@ -8,7 +8,7 @@ import {
   NavigationMenuList
 } from '@/components/ui/navigation-menu'
 import { AuthDialog } from '@/components/User/auth-dialog'
-import { UserMenuSimple } from '@/components/user-dropdown'
+import { UserDropdown } from '@/components/user-dropdown'
 import { cn } from '@/lib/utils'
 import type { LinkOptions } from '@tanstack/react-router'
 import { Link, useRouteContext } from '@tanstack/react-router'
@@ -78,7 +78,7 @@ export const Navbar = () => {
         </NavigationMenu>
         <div className="flex flex-1 items-center justify-end gap-2">
           {user ? (
-            <UserMenuSimple user={user} />
+            <UserDropdown user={user} />
           ) : (
             <Button
               onClick={(event) => {

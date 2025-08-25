@@ -26,7 +26,7 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useRouter } from '@tanstack/react-router'
 
-export const UserMenuSimple = ({ user }: { user: UserWithRole }) => {
+export const UserDropdown = ({ user }: { user: UserWithRole }) => {
   const [open, setOpen] = React.useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
