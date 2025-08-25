@@ -102,19 +102,51 @@ export const getVideoStatusById = createServerFn({ method: 'GET' })
 export const getMemes = createServerFn({ method: 'GET' })
   .validator(MEMES_FILTERS_SCHEMA)
   .handler(async ({ data }) => {
+    const THIRTY_DAYS_AGO = Date.now() - 30 * 24 * 60 * 60 * 1000
+
     const response = await algoliaClient.searchSingleIndex<MemeWithVideo>({
       indexName: algoliaIndexName,
       searchParams: {
         query: data.query,
         page: data.page ? data.page - 1 : 0,
         hitsPerPage: 30,
-        filters: data.categoryIds?.length
-          ? data.categoryIds
-              .map((id) => {
-                return `categoryIds:${id}`
-              })
-              .join(' OR ')
-          : undefined
+        filters: (() => {
+          if (!data.categories?.length) {
+            return undefined
+          }
+
+          const hasNews = data.categories.includes('news')
+
+          const otherCategories = data.categories.filter((slug) => {
+            return slug !== 'news'
+          })
+
+          const newsFilter = hasNews
+            ? `createdAtTime >= ${THIRTY_DAYS_AGO}`
+            : null
+
+          const categoryFilter = otherCategories.length
+            ? otherCategories
+                .map((slug) => {
+                  return `categorySlugs:${slug}`
+                })
+                .join(' AND ')
+            : null
+
+          if (newsFilter && categoryFilter) {
+            return `(${newsFilter}) AND (${categoryFilter})`
+          }
+
+          if (newsFilter) {
+            return newsFilter
+          }
+
+          if (categoryFilter) {
+            return categoryFilter
+          }
+
+          return undefined
+        })()
       }
     })
 
@@ -125,6 +157,22 @@ export const getMemes = createServerFn({ method: 'GET' })
       totalPages: response.nbPages
     }
   })
+
+export const getRecentCountMemes = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const THIRTY_DAYS_AGO = Date.now() - 30 * 24 * 60 * 60 * 1000
+
+    const countResult = await algoliaClient.searchSingleIndex({
+      indexName: algoliaIndexName,
+      searchParams: {
+        filters: `createdAtTime >= ${THIRTY_DAYS_AGO}`,
+        hitsPerPage: 0
+      }
+    })
+
+    return countResult.nbHits ?? 0
+  }
+)
 
 export const getRandomMeme = createServerFn({ method: 'GET' })
   .validator((data) => {

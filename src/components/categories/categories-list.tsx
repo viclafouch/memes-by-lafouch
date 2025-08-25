@@ -7,11 +7,12 @@ import { Link, useSearch } from '@tanstack/react-router'
 
 export const CategoriesList = () => {
   const categories = useSuspenseQuery(getCategoriesListQueryOpts())
-  const activeCategoryIds =
+
+  const activeCategorySlugs =
     useSearch({
       strict: false,
       select: (params) => {
-        return params.categoryIds
+        return params.categories
       }
     }) ?? []
 
@@ -19,7 +20,7 @@ export const CategoriesList = () => {
     <div className="w-full overflow-x-auto max-w-full">
       <ul className="flex items-center gap-x-2">
         {categories.data.map((category) => {
-          const isActive = activeCategoryIds.includes(category.id)
+          const isActive = activeCategorySlugs.includes(category.slug)
 
           return (
             <li key={category.id}>
@@ -29,13 +30,15 @@ export const CategoriesList = () => {
                 resetScroll={false}
                 aria-current={isActive}
                 search={(prevState) => {
-                  const categoryIds = toggleValue(
-                    category.id,
-                    prevState.categoryIds ?? []
+                  const categorySlugs = toggleValue(
+                    category.slug,
+                    prevState.categories ?? []
                   )
 
                   return {
-                    categoryIds: categoryIds.length ? categoryIds : undefined,
+                    categories: categorySlugs.length
+                      ? categorySlugs
+                      : undefined,
                     page: 1,
                     query: prevState.query,
                     orderBy: prevState.orderBy

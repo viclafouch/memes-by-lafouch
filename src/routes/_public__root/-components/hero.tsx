@@ -1,9 +1,12 @@
 /* eslint-disable id-length */
+import React from 'react'
 import type { Variants } from 'framer-motion'
 import { motion } from 'framer-motion'
 import { buttonVariants } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { getRecentCountMemesQueryOpts } from '@/lib/queries'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { FloatingLogos } from './floating-logo'
 import {
@@ -41,19 +44,32 @@ const variants = {
 
 const PageDescriptionMotion = motion.create(PageDescription)
 
+const AnnouncementQuery = () => {
+  const recentMemesCountQuery = useSuspenseQuery(getRecentCountMemesQueryOpts())
+
+  return recentMemesCountQuery.data > 0 ? (
+    <Announcement
+      linkOptions={{ to: '/memes', search: { categories: ['news'] } }}
+      text={`${recentMemesCountQuery.data} nouveaux mèmes ajoutés récemment !`}
+    />
+  ) : null
+}
+
 export const Hero = () => {
   const isMobile = useIsMobile()
 
   return (
     <PageHeader as="div">
-      <motion.div
-        variants={variants}
-        initial="hidden"
-        animate="visible"
-        custom={{ delay: 0.5 }}
-      >
-        <Announcement to="/" text="21 nouveaux mèmes ajoutés cette semaine !" />
-      </motion.div>
+      <React.Suspense fallback={null}>
+        <motion.div
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+          custom={{ delay: 0.5 }}
+        >
+          <AnnouncementQuery />
+        </motion.div>
+      </React.Suspense>
       <PageHeading className="text-foreground/70">
         <TextEffect
           as="span"

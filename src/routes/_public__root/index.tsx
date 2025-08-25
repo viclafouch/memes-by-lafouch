@@ -1,4 +1,5 @@
 import React from 'react'
+import { getRecentCountMemesQueryOpts } from '@/lib/queries'
 import { createFileRoute } from '@tanstack/react-router'
 import { Demo } from './-components/demo'
 import { Hero } from './-components/hero'
@@ -16,5 +17,10 @@ const RouteComponent = () => {
 }
 
 export const Route = createFileRoute('/_public__root/')({
-  component: RouteComponent
+  component: RouteComponent,
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(getRecentCountMemesQueryOpts())
+
+    return {}
+  }
 })

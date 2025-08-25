@@ -104,20 +104,20 @@ export const PageActions = ({
 
 type AnnouncementProps = {
   className?: string
-  to: LinkOptions['to']
+  linkOptions: LinkOptions
   text: string
   actionText?: string
 }
 
 export const Announcement = ({
   className,
-  to,
+  linkOptions,
   text,
   actionText
 }: AnnouncementProps) => {
   return (
     <Link
-      to={to}
+      {...linkOptions}
       className={cn(
         'bg-muted/50 border-border focus-ring relative flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold',
         className

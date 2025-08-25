@@ -17,8 +17,8 @@ export function memeToAlgoliaRecord(meme: MemeWithVideo & MemeWithCategories) {
     categoryKeywords: meme.categories.map(({ category }) => {
       return category.keywords
     }),
-    categoryIds: meme.categories.map(({ category }) => {
-      return category.id
+    categorySlugs: meme.categories.map(({ category }) => {
+      return category.slug
     }),
     createdAtTime: meme.createdAt.getTime()
   }

@@ -30,6 +30,12 @@ const columns = [
       return info.getValue()
     }
   }),
+  columnHelper.accessor('slug', {
+    header: 'Slug',
+    cell: (info) => {
+      return info.getValue()
+    }
+  }),
   columnHelper.accessor('keywords', {
     header: 'Mots clés',
     cell: (info) => {

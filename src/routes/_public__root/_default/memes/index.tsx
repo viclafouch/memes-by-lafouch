@@ -30,9 +30,9 @@ const MemesListWrapper = ({ columnGridCount }: { columnGridCount: number }) => {
       query: debouncedValue,
       page: search.page,
       orderBy: search.orderBy,
-      categoryIds: search.categoryIds
+      categories: search.categories
     }
-  }, [debouncedValue, search.page, search.orderBy, search.categoryIds])
+  }, [debouncedValue, search.page, search.orderBy, search.categories])
 
   const memesListQuery = useSuspenseQuery(getMemesListQueryOpts(filters))
 
@@ -66,7 +66,7 @@ const RouteComponent = () => {
           page: 1,
           query: value,
           orderBy: prevState.orderBy,
-          categoryIds: prevState.categoryIds
+          categories: prevState.categories
         }
       },
       viewTransition: false,

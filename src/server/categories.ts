@@ -1,10 +1,12 @@
 import { z } from 'zod'
+import { CACHE_KEYS } from '@/constants/db-cache'
 import { prismaClient } from '@/db'
 import { adminRequiredMiddleware } from '@/server/user-auth'
 import { createServerFn } from '@tanstack/react-start'
 
 export const CATEGORY_FORM_SCHEMA = z.object({
   title: z.string().min(3),
+  slug: z.string().min(3),
   keywords: z.array(z.string())
 })
 
@@ -15,7 +17,8 @@ export const getCategories = createServerFn({ method: 'GET' }).handler(
         createdAt: 'desc'
       },
       cacheStrategy: {
-        ttl: 24 * 60 * 60
+        ttl: process.env.NODE_ENV === 'production' ? 24 * 60 * 60 : 0,
+        tags: CACHE_KEYS.categories
       }
     })
 

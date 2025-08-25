@@ -81,11 +81,13 @@ export const CategoryForm = ({
       type === 'edit'
         ? {
             keywords: category.keywords,
-            title: category.title
+            title: category.title,
+            slug: category.slug
           }
         : {
             keywords: [] as string[],
-            title: ''
+            title: '',
+            slug: ''
           },
     validators: {
       onChange: CATEGORY_FORM_SCHEMA
@@ -159,6 +161,34 @@ export const CategoryForm = ({
                     onBlur={field.handleBlur}
                     onChange={(event) => {
                       return field.handleChange(event.target.value)
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Field
+          name="slug"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
+
+            return (
+              <FormItem error={errorMessage}>
+                <FormLabel>Slug</FormLabel>
+                <FormControl>
+                  <Input
+                    required
+                    type="text"
+                    id="slug"
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      return field.handleChange(
+                        event.target.value.toLowerCase()
+                      )
                     }}
                   />
                 </FormControl>

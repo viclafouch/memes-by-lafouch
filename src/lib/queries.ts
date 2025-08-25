@@ -1,7 +1,12 @@
 import type { MemesFilters } from '@/constants/meme'
 import { getBestMemes } from '@/server/ai'
 import { getCategories } from '@/server/categories'
-import { getMemeById, getMemes, getVideoStatusById } from '@/server/meme'
+import {
+  getMemeById,
+  getMemes,
+  getRecentCountMemes,
+  getVideoStatusById
+} from '@/server/meme'
 import { getFavoritesMemes, getFavoritesMemesCount } from '@/server/user'
 import { getAuthUser } from '@/server/user-auth'
 import type { Meme, Video } from '@prisma/client'
@@ -89,8 +94,33 @@ export const getCategoriesListQueryOpts = () => {
     queryKey: [...getCategoriesListQueryOpts.all],
     queryFn: async () => {
       return getCategories()
+    },
+    select: (categories) => {
+      return [...categories].sort((categoryA, categoryB) => {
+        if (categoryA.slug === 'news') {
+          return -1
+        }
+
+        if (categoryB.slug === 'news') {
+          return 1
+        }
+
+        return 0
+      })
     }
   })
 }
 
 getCategoriesListQueryOpts.all = ['categories-list'] as const
+
+export const getRecentCountMemesQueryOpts = () => {
+  return queryOptions({
+    queryKey: [...getRecentCountMemesQueryOpts.all],
+    queryFn: async () => {
+      return getRecentCountMemes()
+    },
+    staleTime: Infinity
+  })
+}
+
+getRecentCountMemesQueryOpts.all = ['recent-count-memes'] as const

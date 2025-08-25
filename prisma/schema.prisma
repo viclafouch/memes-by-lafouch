@@ -26,6 +26,7 @@ model UserBookmark {
 model Category {
   id        String   @id @default(cuid())
   title     String
+  slug      String  @unique
   keywords  String[] @default([])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
