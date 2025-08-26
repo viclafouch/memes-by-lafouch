@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Clapperboard,
   Download,
+  Pencil,
   Share2,
   Shuffle
 } from 'lucide-react'
@@ -14,6 +15,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
+import { matchIsUserAdmin } from '@/lib/auth-client'
 import { buildVideoImageUrl } from '@/lib/bunny'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { buildMemeSeo } from '@/lib/seo'
@@ -24,11 +26,13 @@ import {
   ClientOnly,
   createFileRoute,
   Link,
+  useRouteContext,
   useRouter
 } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { nextRandomMeme } = Route.useLoaderData()
+  const { user } = useRouteContext({ from: '__root__' })
   const { memeId } = Route.useParams()
   const navigate = Route.useNavigate()
   const router = useRouter()
@@ -113,6 +117,15 @@ const RouteComponent = () => {
                 {meme.title}
               </h1>
               <ToggleLikeButton meme={meme} />
+              {user && matchIsUserAdmin(user) ? (
+                <Link
+                  className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+                  to="/admin/library/$memeId"
+                  params={{ memeId: meme.id }}
+                >
+                  <Pencil />
+                </Link>
+              ) : null}
             </div>
           </div>
           <div className="w-full flex flex-col gap-y-4 max-w-md md:max-w-none mx-auto items-center md:items-start">
