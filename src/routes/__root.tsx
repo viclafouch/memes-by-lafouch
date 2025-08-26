@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{
       context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
     }
 
-    return { user: user as UserWithRole }
+    return { user: user as UserWithRole | null }
   },
   head: () => {
     return {

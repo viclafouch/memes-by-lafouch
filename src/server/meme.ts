@@ -174,6 +174,25 @@ export const getRecentCountMemes = createServerFn({ method: 'GET' }).handler(
   }
 )
 
+export const getBestMemes = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const memes = await prismaClient.meme.findMany({
+      take: 12,
+      include: {
+        video: true
+      },
+      orderBy: {
+        viewCount: 'desc'
+      },
+      cacheStrategy: {
+        ttl: 24 * 60 * 60
+      }
+    })
+
+    return memes
+  }
+)
+
 export const getRandomMeme = createServerFn({ method: 'GET' })
   .validator((data) => {
     return z.string().optional().parse(data)

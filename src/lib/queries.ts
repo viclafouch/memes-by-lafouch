@@ -1,7 +1,7 @@
 import type { MemesFilters } from '@/constants/meme'
-import { getBestMemes } from '@/server/ai'
 import { getCategories } from '@/server/categories'
 import {
+  getBestMemes,
   getMemeById,
   getMemes,
   getRecentCountMemes,
@@ -83,7 +83,8 @@ export const getFavoritesMemesQueryOpts = () => {
     queryKey: [...getFavoritesMemesQueryOpts.all],
     queryFn: async () => {
       return getFavoritesMemes()
-    }
+    },
+    staleTime: 1000 * 60 * 5
   })
 }
 

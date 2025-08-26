@@ -170,7 +170,11 @@ export const StudioDialog = ({
                   </div>
                 </div>
               ) : data ? (
-                <video src={data.url} autoPlay className="aspect-video" />
+                <video
+                  src={data.url}
+                  autoPlay
+                  className="aspect-video w-full"
+                />
               ) : (
                 <div className="absolute top-0 left-0 w-full h-full bg-muted/50">
                   <img

@@ -22,7 +22,6 @@ import { AuthDialog } from '@/components/User/auth-dialog'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
-import { authClient } from '@/lib/auth-client'
 import {
   getFavoritesMemesQueryOpts,
   getMemeByIdQueryOpts,
@@ -37,7 +36,7 @@ import {
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouteContext } from '@tanstack/react-router'
 
 export type MemeListItemProps = {
   meme: MemeWithVideo
@@ -119,10 +118,11 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
 }
 
 const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
-  const session = authClient.useSession()
+  const { user } = useRouteContext({ from: '__root__' })
+
   const [isLoginDialogOpened, setIsLoginDialogOpened] = React.useState(false)
 
-  if (!session.data) {
+  if (!user) {
     return (
       <>
         <AuthDialog
@@ -144,7 +144,7 @@ const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
 
   return (
     <React.Suspense fallback={<div />}>
-      <FavoriteItem user={session.data.user} meme={meme} />
+      <FavoriteItem user={user} meme={meme} />
     </React.Suspense>
   )
 }
