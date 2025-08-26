@@ -177,11 +177,13 @@ const RouteComponent = () => {
         </div>
       </div>
       <ClientOnly>
-        <StudioDialog
-          meme={meme}
-          open={isStudioDialogOpened}
-          onOpenChange={setIsStudioDialogOpened}
-        />
+        <React.Suspense fallback={null}>
+          <StudioDialog
+            meme={meme}
+            open={isStudioDialogOpened}
+            onOpenChange={setIsStudioDialogOpened}
+          />
+        </React.Suspense>
       </ClientOnly>
     </div>
   )
