@@ -23,7 +23,7 @@ export function createRouter() {
     mutationCache,
     defaultOptions: {
       queries: {
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: process.env.NODE_ENV === 'production',
         staleTime: 1000 * 60 * 2
       }
     }
