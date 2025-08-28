@@ -36,12 +36,16 @@ export const MemeForm = ({
 
   const categoriesOptions = React.useMemo(() => {
     return (
-      categoriesListQuery.data?.map((category) => {
-        return {
-          label: category.title,
-          value: category.id
-        }
-      }) ?? []
+      categoriesListQuery.data
+        ?.filter((category) => {
+          return category.slug !== 'news'
+        })
+        .map((category) => {
+          return {
+            label: category.title,
+            value: category.id
+          }
+        }) ?? []
     )
   }, [categoriesListQuery.data])
 
@@ -227,7 +231,9 @@ export const MemeForm = ({
                   <MultiAsyncSelect
                     loading={categoriesListQuery.isLoading}
                     error={categoriesListQuery.error}
-                    options={categoriesOptions}
+                    options={categoriesOptions.filter((category) => {
+                      return category.value !== 'news'
+                    })}
                     value={field.state.value}
                     onValueChange={(value) => {
                       return field.handleChange(value)
