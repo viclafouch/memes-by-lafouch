@@ -24,8 +24,7 @@ export const getMemeById = createServerFn({ method: 'GET' })
         categories: {
           include: { category: true }
         }
-      },
-      cacheStrategy: { ttl: 24 * 60 * 60 }
+      }
     })
 
     if (!meme) {
