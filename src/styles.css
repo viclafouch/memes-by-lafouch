@@ -153,3 +153,6 @@
     @apply mx-auto max-w-6xl px-4 xl:px-6;
   }
 }
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}

@@ -17,13 +17,13 @@ export const CategoriesList = () => {
     }) ?? []
 
   return (
-    <div className="w-full overflow-x-auto max-w-full">
+    <div className="w-full overflow-x-auto max-w-full no-scrollbar">
       <ul className="flex items-center gap-x-2">
         {categories.data.map((category) => {
           const isActive = activeCategorySlugs.includes(category.slug)
 
           return (
-            <li key={category.id}>
+            <li key={category.id} className="shrink-0">
               <Link
                 to="/memes"
                 replace
