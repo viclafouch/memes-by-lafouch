@@ -8,17 +8,21 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { getCategoriesListQueryOpts } from '@/lib/queries'
 import { CategoryForm } from '@/routes/admin/categories/-components/category-form'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 
 export const AddCategoryButton = ({
   ...restButtonProps
 }: Partial<React.ComponentProps<typeof Button>>) => {
   const [isOpen, setIsOpen] = React.useState(false)
+  const queryClient = useQueryClient()
   const router = useRouter()
 
   const handleSuccess = () => {
     setIsOpen(false)
+    queryClient.invalidateQueries(getCategoriesListQueryOpts())
     router.invalidate()
   }
 
