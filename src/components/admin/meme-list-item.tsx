@@ -2,14 +2,15 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { getVideoStatusByIdQueryOpts } from '@/lib/queries'
+import { cn } from '@/lib/utils'
 import { matchIsVideoPlayable } from '@/utils/video'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 export type MemeListItemProps = {
-  meme: MemeWithVideo
+  meme: MemeWithVideo & MemeWithCategories
 }
 
 export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
@@ -76,7 +77,12 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             to="/admin/library/$memeId"
             params={{ memeId: meme.id }}
             title={meme.title}
-            className="line-clamp-1 font-medium leading-none text-gray-100"
+            className={cn(
+              'line-clamp-1 font-medium leading-none text-gray-100',
+              meme.title === 'Titre inconnu' || meme.title === 'Sans titre'
+                ? 'text-destructive'
+                : undefined
+            )}
           >
             {meme.title}
           </Link>
@@ -84,6 +90,17 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             <span className="text-[13px] leading-none">
               {meme.viewCount} vue{meme.viewCount > 1 ? 's' : ''}
             </span>
+            {' • '}
+            {meme.categories.length > 0 ? (
+              <span className="text-gray-500 text-[13px]">
+                {meme.categories.length} catégorie
+                {meme.categories.length > 1 ? 's' : ''}
+              </span>
+            ) : (
+              <span className="text-destructive text-[13px]">
+                Aucune catégorie
+              </span>
+            )}
           </div>
         </div>
       </div>

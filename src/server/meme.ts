@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { z } from 'zod'
-import type { MemeWithVideo } from '@/constants/meme'
+import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
 import { prismaClient } from '@/db'
 import { algoliaClient, algoliaIndexName } from '@/lib/algolia'
@@ -103,7 +103,9 @@ export const getMemes = createServerFn({ method: 'GET' })
   .handler(async ({ data }) => {
     const THIRTY_DAYS_AGO = Date.now() - 30 * 24 * 60 * 60 * 1000
 
-    const response = await algoliaClient.searchSingleIndex<MemeWithVideo>({
+    const response = await algoliaClient.searchSingleIndex<
+      MemeWithVideo & MemeWithCategories
+    >({
       indexName: algoliaIndexName,
       searchParams: {
         query: data.query,
@@ -150,7 +152,7 @@ export const getMemes = createServerFn({ method: 'GET' })
     })
 
     return {
-      memes: response.hits as MemeWithVideo[],
+      memes: response.hits as (MemeWithVideo & MemeWithCategories)[],
       query: data.query,
       page: response.page,
       totalPages: response.nbPages
