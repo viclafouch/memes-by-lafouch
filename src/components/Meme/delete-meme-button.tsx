@@ -6,7 +6,7 @@ import { getMemesListQueryOpts } from '@/lib/queries'
 import { deleteMemeById } from '@/server/admin'
 import type { Meme } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
+import { useCanGoBack, useRouter } from '@tanstack/react-router'
 
 type DeleteMemeButtonProps = {
   meme: Meme
@@ -16,8 +16,9 @@ export const DeleteMemeButton = ({
   meme,
   ...restButtonProps
 }: DeleteMemeButtonProps) => {
-  const navigate = useNavigate()
+  const router = useRouter()
   const queryClient = useQueryClient()
+  const canGoBack = useCanGoBack()
 
   const deleteMutation = useMutation({
     mutationKey: ['delete-meme'],
@@ -37,7 +38,12 @@ export const DeleteMemeButton = ({
         queryKey: getMemesListQueryOpts.all,
         exact: false
       })
-      navigate({ to: '/memes' })
+
+      if (canGoBack) {
+        router.history.back()
+      } else {
+        router.navigate({ to: '/admin/library' })
+      }
     }
   })
 
