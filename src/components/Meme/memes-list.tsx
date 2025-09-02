@@ -41,6 +41,24 @@ export const MemesList = ({
     [selectedId]
   )
 
+  React.useEffect(() => {
+    if (selectedId) {
+      const handleMessage = (event: MessageEvent) => {
+        if (event.data?.type === 'escapeKey') {
+          setSelectedId(null)
+        }
+      }
+
+      window.addEventListener('message', handleMessage, false)
+
+      return () => {
+        window.removeEventListener('message', handleMessage, false)
+      }
+    }
+
+    return undefined
+  }, [selectedId])
+
   if (memes.length === 0) {
     return <p className="text-muted-foreground">Aucun résultat</p>
   }
