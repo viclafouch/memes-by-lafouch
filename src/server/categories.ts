@@ -6,7 +6,7 @@ import { createServerFn } from '@tanstack/react-start'
 
 export const CATEGORY_FORM_SCHEMA = z.object({
   title: z.string().min(3),
-  slug: z.string().min(3),
+  slug: z.string().min(2),
   keywords: z.array(z.string())
 })
 
