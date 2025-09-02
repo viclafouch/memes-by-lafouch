@@ -238,6 +238,7 @@ export const MemeForm = ({
                     onValueChange={(value) => {
                       return field.handleChange(value)
                     }}
+                    hideSelectAll
                     closeText="Fermer"
                     clearText="Effacer"
                     className="w-full"
