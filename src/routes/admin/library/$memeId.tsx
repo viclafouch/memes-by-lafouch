@@ -47,6 +47,15 @@ const RouteComponent = () => {
               {' Ajouté le '}
               {formatDate(meme.createdAt, 'dd/MM/yyyy')}
             </span>
+            <div className="flex gap-2">
+              {meme.categories.map(({ category }) => {
+                return (
+                  <Badge variant="secondary" key={category.id}>
+                    {category.title}
+                  </Badge>
+                )
+              })}
+            </div>
             <div className="flex flex-wrap gap-1">
               {meme.keywords.map((keyword, index) => {
                 return (
