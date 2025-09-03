@@ -12,6 +12,7 @@ import {
   getCategoriesListQueryOpts,
   getMemesListQueryOpts
 } from '@/lib/queries'
+import { seo } from '@/lib/seo'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -118,5 +119,15 @@ export const Route = createFileRoute('/_public__root/_default/memes/')({
   },
   validateSearch: (search) => {
     return MEMES_FILTERS_SCHEMA.parse(search)
+  },
+  head: () => {
+    return {
+      meta: [
+        ...seo({
+          title: 'Rechercher un mèmes',
+          description: 'A collection of memes from the internet'
+        })
+      ]
+    }
   }
 })
