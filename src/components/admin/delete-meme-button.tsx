@@ -2,7 +2,7 @@ import React from 'react'
 import { toast } from 'sonner'
 import ConfirmAlert from '@/components/confirm-alert'
 import { Button } from '@/components/ui/button'
-import { getMemesListQueryOpts } from '@/lib/queries'
+import { getAdminMemesListQueryOpts } from '@/lib/queries'
 import { deleteMemeById } from '@/server/admin'
 import type { Meme } from '@prisma/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -35,7 +35,7 @@ export const DeleteMemeButton = ({
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: getMemesListQueryOpts.all,
+        queryKey: getAdminMemesListQueryOpts.all,
         exact: false
       })
 

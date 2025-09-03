@@ -1,4 +1,5 @@
 import type { MemesFilters } from '@/constants/meme'
+import { getAdminMemes } from '@/server/admin'
 import { getCategories } from '@/server/categories'
 import {
   getBestMemes,
@@ -125,3 +126,14 @@ export const getRecentCountMemesQueryOpts = () => {
 }
 
 getRecentCountMemesQueryOpts.all = ['recent-count-memes'] as const
+
+export const getAdminMemesListQueryOpts = (filters: MemesFilters) => {
+  return queryOptions({
+    queryKey: [...getAdminMemesListQueryOpts.all, filters],
+    queryFn: async () => {
+      return getAdminMemes({ data: filters })
+    }
+  })
+}
+
+getAdminMemesListQueryOpts.all = ['admin-memes-list'] as const

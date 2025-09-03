@@ -40,8 +40,7 @@ export const CategoriesList = () => {
                       ? categorySlugs
                       : undefined,
                     page: 1,
-                    query: prevState.query,
-                    orderBy: prevState.orderBy
+                    query: prevState.query
                   }
                 }}
               >

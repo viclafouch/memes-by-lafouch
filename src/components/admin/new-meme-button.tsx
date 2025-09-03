@@ -11,6 +11,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getAdminMemesListQueryOpts } from '@/lib/queries'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -26,7 +27,10 @@ export const NewMemeButton = ({ ...restButtonProps }: NewMemeButtonProps) => {
   }
 
   const handleAddMeme = ({ memeId }: { memeId: string }) => {
-    queryClient.invalidateQueries({ queryKey: ['memes-list'], exact: false })
+    queryClient.invalidateQueries({
+      queryKey: getAdminMemesListQueryOpts.all,
+      exact: false
+    })
     navigate({ to: '/admin/library/$memeId', params: { memeId } })
     closeDialog()
   }

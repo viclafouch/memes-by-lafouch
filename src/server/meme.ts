@@ -112,41 +112,35 @@ export const getMemes = createServerFn({ method: 'GET' })
         page: data.page ? data.page - 1 : 0,
         hitsPerPage: 30,
         filters: (() => {
-          if (!data.categories?.length) {
-            return undefined
+          const filters: string[] = ['status:PUBLISHED']
+
+          if (data.categories?.length) {
+            const hasNews = data.categories.includes('news')
+            const otherCategories = data.categories.filter((slug) => {
+              return slug !== 'news'
+            })
+
+            const newsFilter = hasNews
+              ? `createdAtTime >= ${THIRTY_DAYS_AGO}`
+              : null
+            const categoryFilter = otherCategories.length
+              ? otherCategories
+                  .map((slug) => {
+                    return `categorySlugs:${slug}`
+                  })
+                  .join(' AND ')
+              : null
+
+            if (newsFilter && categoryFilter) {
+              filters.push(`(${newsFilter}) AND (${categoryFilter})`)
+            } else if (newsFilter) {
+              filters.push(newsFilter)
+            } else if (categoryFilter) {
+              filters.push(categoryFilter)
+            }
           }
 
-          const hasNews = data.categories.includes('news')
-
-          const otherCategories = data.categories.filter((slug) => {
-            return slug !== 'news'
-          })
-
-          const newsFilter = hasNews
-            ? `createdAtTime >= ${THIRTY_DAYS_AGO}`
-            : null
-
-          const categoryFilter = otherCategories.length
-            ? otherCategories
-                .map((slug) => {
-                  return `categorySlugs:${slug}`
-                })
-                .join(' AND ')
-            : null
-
-          if (newsFilter && categoryFilter) {
-            return `(${newsFilter}) AND (${categoryFilter})`
-          }
-
-          if (newsFilter) {
-            return newsFilter
-          }
-
-          if (categoryFilter) {
-            return categoryFilter
-          }
-
-          return undefined
+          return filters.length ? filters.join(' AND ') : undefined
         })()
       }
     })

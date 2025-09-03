@@ -1,8 +1,8 @@
 import React from 'react'
 import { formatDate } from 'date-fns'
 import { Pen, Trash } from 'lucide-react'
+import { DeleteMemeButton } from '@/components/admin/delete-meme-button'
 import { Dialog } from '@/components/animate-ui/radix/dialog'
-import { DeleteMemeButton } from '@/components/Meme/delete-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,8 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { getMemeByIdQueryOpts, getMemesListQueryOpts } from '@/lib/queries'
+import { MemeStatusMeta } from '@/constants/meme'
+import { getAdminMemesListQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
 import { MemeForm } from '@/routes/admin/library/-components/meme-form'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
@@ -29,7 +30,7 @@ const RouteComponent = () => {
   const handleEditSuccess = () => {
     setIsEditDialogOpen(false)
     queryClient.invalidateQueries({
-      queryKey: getMemesListQueryOpts.all,
+      queryKey: getAdminMemesListQueryOpts.all,
       exact: false
     })
     queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
@@ -46,6 +47,13 @@ const RouteComponent = () => {
               {`${meme.viewCount} vue${meme.viewCount > 1 ? 's' : ''}`} -
               {' Ajouté le '}
               {formatDate(meme.createdAt, 'dd/MM/yyyy')}
+              {' - '}
+              <Badge
+                variant={MemeStatusMeta[meme.status].badgeVariant}
+                size="sm"
+              >
+                {MemeStatusMeta[meme.status].label}
+              </Badge>
             </span>
             <div className="flex gap-2">
               {meme.categories.map(({ category }) => {

@@ -18,7 +18,6 @@ const MemesPagination = ({ currentPage, totalPages }: MemesPaginationProps) => {
             return {
               page,
               query: prevState.query,
-              orderBy: prevState.orderBy,
               categories: prevState.categories
             }
           }

@@ -13,7 +13,19 @@ import {
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { MultiAsyncSelect } from '@/components/ui/multi-select'
-import type { MemeWithCategories } from '@/constants/meme'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import {
+  type MemeStatus,
+  MemeStatusFixed,
+  MemeStatusMeta,
+  type MemeWithCategories
+} from '@/constants/meme'
 import { getCategoriesListQueryOpts } from '@/lib/queries'
 import { getFieldErrorMessage } from '@/lib/utils'
 import { editMeme, MEME_FORM_SCHEMA } from '@/server/admin'
@@ -72,6 +84,7 @@ export const MemeForm = ({
       keywords: meme.keywords,
       tweetUrl: meme.tweetUrl,
       title: meme.title,
+      status: meme.status,
       categoryIds: meme.categories.map((category) => {
         return category.categoryId
       })
@@ -88,6 +101,7 @@ export const MemeForm = ({
         title: value.title,
         keywords: value.keywords,
         tweetUrl: value.tweetUrl,
+        status: value.status,
         id: meme.id,
         categoryIds: value.categoryIds
       })
@@ -156,6 +170,45 @@ export const MemeForm = ({
                       return field.handleChange(event.target.value)
                     }}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+        <form.Field
+          name="status"
+          children={(field) => {
+            const errorMessage = getFieldErrorMessage({ field })
+
+            return (
+              <FormItem error={errorMessage}>
+                <FormLabel>Statut</FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value) => {
+                      return field.handleChange(value as MemeStatus)
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Sélectionnez un statut" />
+                    </SelectTrigger>
+                    <SelectContent className="w-full">
+                      <SelectItem value={MemeStatusFixed.PENDING}>
+                        {MemeStatusMeta.PENDING.label}
+                      </SelectItem>
+                      <SelectItem value={MemeStatusFixed.PUBLISHED}>
+                        {MemeStatusMeta.PUBLISHED.label}
+                      </SelectItem>
+                      <SelectItem value={MemeStatusFixed.ARCHIVED}>
+                        {MemeStatusMeta.ARCHIVED.label}
+                      </SelectItem>
+                      <SelectItem value={MemeStatusFixed.REJECTED}>
+                        {MemeStatusMeta.REJECTED.label}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

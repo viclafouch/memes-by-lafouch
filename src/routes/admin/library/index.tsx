@@ -1,16 +1,16 @@
 import React from 'react'
 import { Plus } from 'lucide-react'
 import { MemeListItem } from '@/components/admin/meme-list-item'
-import { MemesOrderBy } from '@/components/Meme/Filters/memes-order-by'
+import { NewMemeButton } from '@/components/admin/new-meme-button'
+import { MemesFilterStatus } from '@/components/Meme/Filters/memes-filter-status'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
-import { NewMemeButton } from '@/components/Meme/new-meme-button'
 import { PageHeader } from '@/components/page-header'
 import { Paginator } from '@/components/paginator'
 import { Container } from '@/components/ui/container'
 import { LoadingSpinner } from '@/components/ui/spinner'
-import type { MemesFilters } from '@/constants/meme'
-import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
-import { getMemesListQueryOpts } from '@/lib/queries'
+import type { MemeStatus } from '@/constants/meme'
+import { MEMES_FILTERS_SCHEMA, MemeStatusFixed } from '@/constants/meme'
+import { getAdminMemesListQueryOpts } from '@/lib/queries'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
@@ -27,11 +27,11 @@ const MemesListWrapper = () => {
     return {
       query: debouncedValue,
       page: search.page,
-      orderBy: search.orderBy
+      status: search.status
     }
-  }, [debouncedValue, search.page, search.orderBy])
+  }, [debouncedValue, search.page, search.status])
 
-  const memesListQuery = useSuspenseQuery(getMemesListQueryOpts(filters))
+  const memesListQuery = useSuspenseQuery(getAdminMemesListQueryOpts(filters))
 
   return (
     <div className="w-full flex flex-col gap-12">
@@ -51,7 +51,7 @@ const MemesListWrapper = () => {
                 return {
                   page,
                   query: prevState.query,
-                  orderBy: prevState.orderBy
+                  status: prevState.status
                 }
               }
             }
@@ -67,14 +67,14 @@ const RouteComponent = () => {
   const navigate = Route.useNavigate()
   const search = Route.useSearch()
 
-  const handleOrderByChange = (value: string) => {
+  const handleStatusChange = (status: MemeStatus) => {
     navigate({
       to: '/admin/library',
       search: (prevState) => {
         return {
-          page: prevState.page,
+          page: 1,
           query: prevState.query,
-          orderBy: value as MemesFilters['orderBy']
+          status
         }
       },
       viewTransition: false,
@@ -89,7 +89,7 @@ const RouteComponent = () => {
         return {
           page: 1,
           query: value,
-          orderBy: prevState.orderBy
+          status: prevState.status
         }
       },
       viewTransition: false,
@@ -115,9 +115,9 @@ const RouteComponent = () => {
               onQueryChange={handleQueryChange}
             />
             <div className="gap-x-3 hidden xl:flex">
-              <MemesOrderBy
-                orderBy={search.orderBy ?? 'most_recent'}
-                onOrderByChange={handleOrderByChange}
+              <MemesFilterStatus
+                status={search.status ?? MemeStatusFixed.PUBLISHED}
+                onStatusChange={handleStatusChange}
               />
             </div>
           </div>

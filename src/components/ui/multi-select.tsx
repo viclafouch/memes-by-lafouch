@@ -325,7 +325,7 @@ export const MultiAsyncSelect = React.forwardRef<MultiAsyncSelectRef, Props>(
             data-open={isPopoverOpen}
             aria-invalid={error !== null}
             className={cn(
-              'dark:bg-input/30 border-input flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base md:text-sm data-[open="true"]:border-ring data-[open="true"]:ring-ring/50 data-[open="true"]:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+              'dark:bg-input/30 border-input flex h-9 w-full rounded-md border bg-transparent px-1 py-1 text-base md:text-sm data-[open="true"]:border-ring data-[open="true"]:ring-ring/50 data-[open="true"]:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
               className
             )}
           >
@@ -345,14 +345,14 @@ export const MultiAsyncSelect = React.forwardRef<MultiAsyncSelectRef, Props>(
 
                     return (
                       <div
-                        className="h-[26px] flex items-center gap-1 rounded-md px-2 py-0.5 border border-zinc-200 text-zinc-600 hover:text-primary dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-primary hover:border-zinc-400 dark:hover:border-zinc-600"
+                        className="h-[22px] flex items-center gap-1 rounded-md px-1.5 py-0.5 border border-zinc-200 text-zinc-600 hover:text-primary dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-primary hover:border-zinc-400 dark:hover:border-zinc-600"
                         key={value}
                       >
-                        <div className="flex items-center gap-1 truncate text-xs max-w-[100px] ">
+                        <div className="flex items-center gap-1 truncate text-xs">
                           {option?.label}
                         </div>
                         <X
-                          className=" h-3 w-3 p-1 box-content shrink-0 cursor-pointer text-zinc-500 hover:bg-zinc-100 rounded-full dark:hover:bg-zinc-800"
+                          className="h-2 w-2 p-1 box-content shrink-0 cursor-pointer text-zinc-500 hover:bg-zinc-100 rounded-full dark:hover:bg-zinc-800"
                           onClick={(event) => {
                             event.stopPropagation()
                             toggleOption(value)
@@ -390,7 +390,7 @@ export const MultiAsyncSelect = React.forwardRef<MultiAsyncSelectRef, Props>(
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-between w-full mx-auto">
+              <div className="flex items-center justify-between w-full mx-auto px-2">
                 <span className="text-[12px] font-normal text-zinc-500">
                   {placeholder}
                 </span>

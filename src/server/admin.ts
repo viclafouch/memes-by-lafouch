@@ -1,6 +1,12 @@
 import { filesize } from 'filesize'
 import { z } from 'zod'
-import { MAX_SIZE_MEME_IN_BYTES, TWEET_LINK_SCHEMA } from '@/constants/meme'
+import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
+import {
+  MAX_SIZE_MEME_IN_BYTES,
+  MEMES_FILTERS_SCHEMA,
+  MemeStatusFixed,
+  TWEET_LINK_SCHEMA
+} from '@/constants/meme'
 import { prismaClient } from '@/db'
 import {
   algoliaClient,
@@ -39,6 +45,7 @@ export const MEME_FORM_SCHEMA = z.object({
   title: z.string().min(3),
   keywords: z.array(z.string()),
   categoryIds: z.array(z.string()),
+  status: z.enum(MemeStatusFixed),
   tweetUrl: TWEET_LINK_SCHEMA.nullable().or(
     z
       .string()
@@ -74,6 +81,7 @@ export const editMeme = createServerFn({ method: 'POST' })
       },
       data: {
         title: values.title,
+        status: values.status,
         categories: {
           deleteMany: {},
           create: values.categoryIds.map((categoryId) => {
@@ -174,6 +182,7 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
       data: {
         title,
         tweetUrl: tweet.url,
+        status: 'PENDING',
         video: {
           create: {
             duration: 0,
@@ -230,6 +239,7 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
       data: {
         title,
         tweetUrl: '',
+        status: 'PENDING',
         video: {
           create: {
             duration: 0,
@@ -259,5 +269,39 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
 
     return {
       id: meme.id
+    }
+  })
+
+export const getAdminMemes = createServerFn({ method: 'GET' })
+  .middleware([adminRequiredMiddleware])
+  .validator(MEMES_FILTERS_SCHEMA)
+  .handler(async ({ data }) => {
+    const response = await algoliaClient.searchSingleIndex<
+      MemeWithVideo & MemeWithCategories
+    >({
+      indexName: algoliaIndexName,
+      searchParams: {
+        query: data.query,
+        page: data.page ? data.page - 1 : 0,
+        hitsPerPage: 30,
+        filters: (() => {
+          const filters: string[] = []
+
+          if (data.status) {
+            filters.push(`status:${data.status}`)
+          } else {
+            filters.push('status:PUBLISHED')
+          }
+
+          return filters.length ? filters.join(' AND ') : undefined
+        })()
+      }
+    })
+
+    return {
+      memes: response.hits as (MemeWithVideo & MemeWithCategories)[],
+      query: data.query,
+      page: response.page,
+      totalPages: response.nbPages
     }
   })

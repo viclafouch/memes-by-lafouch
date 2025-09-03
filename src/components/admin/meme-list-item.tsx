@@ -2,7 +2,11 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
+import {
+  MemeStatusMeta,
+  type MemeWithCategories,
+  type MemeWithVideo
+} from '@/constants/meme'
 import { getVideoStatusByIdQueryOpts } from '@/lib/queries'
 import { cn } from '@/lib/utils'
 import { matchIsVideoPlayable } from '@/utils/video'
@@ -71,8 +75,8 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
           </div>
         )}
       </motion.div>
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-col gap-1.5">
+      <div className="flex items-start justify-between gap-3 w-full">
+        <div className="flex flex-col gap-1.5 w-full">
           <Link
             to="/admin/library/$memeId"
             params={{ memeId: meme.id }}
@@ -86,7 +90,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
           >
             {meme.title}
           </Link>
-          <div className="flex flex-row items-center gap-1.5 text-gray-500">
+          <div className="flex flex-row items-center gap-1.5 text-gray-500 w-full relative">
             <span className="text-[13px] leading-none">
               {meme.viewCount} vue{meme.viewCount > 1 ? 's' : ''}
             </span>
@@ -97,10 +101,14 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
                 {meme.categories.length > 1 ? 's' : ''}
               </span>
             ) : (
-              <span className="text-destructive text-[13px]">
+              <span className="text-destructive-foreground text-[13px]">
                 Aucune catégorie
               </span>
             )}
+            {' • '}
+            <Badge variant={MemeStatusMeta[meme.status].badgeVariant} size="sm">
+              <span>{MemeStatusMeta[meme.status].label}</span>
+            </Badge>
           </div>
         </div>
       </div>

@@ -1,13 +1,53 @@
+import type { VariantProps } from 'class-variance-authority'
 import { z } from 'zod'
-import type { Prisma } from '@prisma/client'
+import type { badgeVariants } from '@/components/ui/badge'
+import type { MemeStatus as PrismaMemeStatus, Prisma } from '@prisma/client'
 
-export const MEMES_ORDER_BY_OPTIONS = ['most_recent', 'most_old'] as const
+export const MemeStatusFixed = {
+  PENDING: 'PENDING',
+  PUBLISHED: 'PUBLISHED',
+  REJECTED: 'REJECTED',
+  ARCHIVED: 'ARCHIVED'
+} as const satisfies {
+  [key in PrismaMemeStatus]: key
+}
+
+export type MemeStatus = (typeof MemeStatusFixed)[keyof typeof MemeStatusFixed]
+
+export const MemeStatusMeta = {
+  PENDING: {
+    label: 'En attente',
+    className: 'text-destructive',
+    badgeVariant: 'info'
+  },
+  PUBLISHED: {
+    label: 'Publié',
+    className: 'text-primary',
+    badgeVariant: 'success'
+  },
+  REJECTED: {
+    label: 'Rejeté',
+    className: 'text-destructive',
+    badgeVariant: 'warning'
+  },
+  ARCHIVED: {
+    label: 'Archivé',
+    className: 'text-muted-foreground',
+    badgeVariant: 'destructive'
+  }
+} as const satisfies {
+  [key in MemeStatus]: {
+    label: string
+    className: string
+    badgeVariant: VariantProps<typeof badgeVariants>['variant']
+  }
+}
 
 export const MEMES_FILTERS_SCHEMA = z.object({
   query: z.string().optional().catch(undefined),
-  orderBy: z.enum(MEMES_ORDER_BY_OPTIONS).optional().catch('most_recent'),
   page: z.coerce.number().optional().catch(1),
-  categories: z.array(z.string()).optional().catch([])
+  categories: z.array(z.string()).optional().catch([]),
+  status: z.enum(MemeStatusFixed).optional()
 })
 
 export type MemeWithVideo = Prisma.MemeGetPayload<{

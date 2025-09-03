@@ -26,7 +26,7 @@ model UserBookmark {
 model Category {
   id        String   @id @default(cuid())
   title     String
-  slug      String  @unique
+  slug      String   @unique
   keywords  String[] @default([])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -53,6 +53,13 @@ model Video {
   bunnyStatus Int    @default(0)
 }
 
+enum MemeStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+  ARCHIVED
+}
+
 model Meme {
   id           String         @id @default(cuid())
   title        String
@@ -66,6 +73,9 @@ model Meme {
   embedding    Embedding[]
   bookmarkedBy UserBookmark[]
   categories   MemeCategory[]
+  status       MemeStatus     @default(PUBLISHED)
+  submittedBy String?
+  submitter   User?   @relation(fields: [submittedBy], references: [id])
 }
 
 model User {
@@ -84,6 +94,7 @@ model User {
   banned     Boolean?
   banReason  String?
   banExpires DateTime?
+  Meme       Meme[]
 
   @@map("user")
 }
