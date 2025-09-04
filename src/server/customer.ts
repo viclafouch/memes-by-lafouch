@@ -10,10 +10,14 @@ export const getActiveSubscription = createServerFn({ method: 'GET' }).handler(
       return null
     }
 
-    const state = await polarClient.customers.getStateExternal({
-      externalId: user.id
-    })
+    try {
+      const state = await polarClient.customers.getStateExternal({
+        externalId: user.id
+      })
 
-    return state.activeSubscriptions[0] ?? null
+      return state.activeSubscriptions[0] ?? null
+    } catch (error) {
+      return null
+    }
   }
 )
