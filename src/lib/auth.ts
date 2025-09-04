@@ -3,9 +3,17 @@ import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { admin } from 'better-auth/plugins'
 import { reactStartCookies } from 'better-auth/react-start'
 import { ENV } from '@/constants/env'
+import { PRODUCT_ID } from '@/constants/polar'
 import { prismaClient } from '@/db'
 import { resendClient } from '@/lib/resend'
+import { checkout, polar, portal } from '@polar-sh/better-auth'
+import { Polar } from '@polar-sh/sdk'
 import { serverOnly } from '@tanstack/react-start'
+
+export const polarClient = new Polar({
+  accessToken: ENV.POLAR_ACCESS_TOKEN,
+  server: 'sandbox'
+})
 
 const getAuthConfig = serverOnly(() => {
   return betterAuth({
@@ -35,12 +43,17 @@ const getAuthConfig = serverOnly(() => {
       autoSignInAfterVerification: true,
       expiresIn: 3600, // 1 hour
       sendVerificationEmail: async ({ user, url }) => {
-        await resendClient.emails.send({
-          from: 'Acme <onboarding@resend.dev>',
-          to: user.email,
-          subject: 'Email Verification',
-          html: `Click the link to verify your email: ${url}`
-        })
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.log('Sending verification email to:', user.email, url)
+        } else {
+          await resendClient.emails.send({
+            from: 'Acme <onboarding@resend.dev>',
+            to: user.email,
+            subject: 'Email Verification',
+            html: `Click the link to verify your email: ${url}`
+          })
+        }
       },
       async afterEmailVerification(user) {
         // eslint-disable-next-line no-console
@@ -53,7 +66,28 @@ const getAuthConfig = serverOnly(() => {
         clientSecret: ENV.AUTH_TWITTER_SECRET
       }
     },
-    plugins: [admin(), reactStartCookies()]
+    plugins: [
+      admin(),
+      reactStartCookies(),
+      polar({
+        client: polarClient,
+        createCustomerOnSignUp: true,
+        use: [
+          checkout({
+            products: [
+              {
+                productId: PRODUCT_ID,
+                slug: 'pro'
+              }
+            ],
+            theme: 'dark',
+            successUrl: ENV.POLAR_SUCCESS_URL,
+            authenticatedUsersOnly: true
+          }),
+          portal()
+        ]
+      })
+    ]
   })
 })
 

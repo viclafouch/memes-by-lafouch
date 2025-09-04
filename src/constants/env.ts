@@ -8,7 +8,9 @@ export const ENV = createEnv({
     BETTER_AUTH_SECRET: z.string(),
     BUNNY_ACCESS_KEY: z.string(),
     ALGOLIA_SECRET: z.string(),
-    RESEND_SECRET: z.string()
+    RESEND_SECRET: z.string(),
+    POLAR_ACCESS_TOKEN: z.string(),
+    POLAR_SUCCESS_URL: z.string()
   },
   clientPrefix: 'PUBLIC_',
   client: {},

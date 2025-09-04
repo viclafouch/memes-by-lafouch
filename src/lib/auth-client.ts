@@ -1,9 +1,10 @@
 import { adminClient } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
 import type { UserWithRole } from '@/constants/user'
+import { polarClient } from '@polar-sh/better-auth'
 
 export const authClient = createAuthClient({
-  plugins: [adminClient()]
+  plugins: [adminClient(), polarClient()]
 })
 
 export const matchIsUserAdmin = (user: UserWithRole) => {

@@ -2,6 +2,7 @@ import React from 'react'
 import type { UserWithRole } from 'better-auth/plugins'
 import {
   ChevronDown,
+  CreditCard,
   LogOutIcon,
   Shield,
   SparklesIcon,
@@ -20,6 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import {
+  getActiveSubscriptionQueryOpts,
   getAuthUserQueryOpts,
   getFavoritesMemesCountQueryOpts
 } from '@/lib/queries'
@@ -32,10 +34,16 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
   const router = useRouter()
 
   const favoritesMemesCountQuery = useQuery(getFavoritesMemesCountQueryOpts())
+  const activeSubscriptionQuery = useQuery(getActiveSubscriptionQueryOpts())
+
+  const manageSubscription = () => {
+    authClient.customer.portal()
+  }
 
   const handleLogout = async () => {
     await authClient.signOut()
     queryClient.removeQueries(getAuthUserQueryOpts())
+    queryClient.removeQueries(getActiveSubscriptionQueryOpts())
     await router.invalidate()
   }
 
@@ -77,20 +85,26 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <SparklesIcon />
-            Upgrade to Pro
-          </DropdownMenuItem>
+          {activeSubscriptionQuery.data === null ? (
+            <DropdownMenuItem asChild>
+              <Link to="/pricing">
+                <SparklesIcon />
+                Mettre à niveau
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={manageSubscription}>
+              <CreditCard />
+              Gérer mon abonnement
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link to="/favorites">
               <Star />
-              Favoris
-              {favoritesMemesCountQuery.data?.count
-                ? ` (${favoritesMemesCountQuery.data.count})`
-                : ''}
+              Favoris ({favoritesMemesCountQuery.data?.count ?? 0})
             </Link>
           </DropdownMenuItem>
           {matchIsUserAdmin(user) ? (

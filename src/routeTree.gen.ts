@@ -22,12 +22,14 @@ import { Route as Public__rootDefaultRouteRouteImport } from './routes/_public__
 import { Route as AdminLibraryIndexRouteImport } from './routes/admin/library/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
+import { Route as Public__rootDefaultPricingRouteImport } from './routes/_public__root/_default/pricing'
 import { Route as Public__rootDefaultFavoritesRouteImport } from './routes/_public__root/_default/favorites'
 import { Route as Public__rootDefaultRandomIndexRouteImport } from './routes/_public__root/_default/random/index'
 import { Route as Public__rootDefaultMemesIndexRouteImport } from './routes/_public__root/_default/memes/index'
 import { Route as Public__rootDefaultPasswordResetRouteImport } from './routes/_public__root/_default/password.reset'
 import { Route as Public__rootDefaultPasswordCreateNewRouteImport } from './routes/_public__root/_default/password.create-new'
 import { Route as Public__rootDefaultMemesMemeIdRouteImport } from './routes/_public__root/_default/memes/$memeId'
+import { Route as Public__rootDefaultCheckoutSuccessRouteImport } from './routes/_public__root/_default/checkout.success'
 import { ServerRoute as ApiBunnyServerRouteImport } from './routes/api/bunny'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
 
@@ -87,6 +89,12 @@ const AdminLibraryMemeIdRoute = AdminLibraryMemeIdRouteImport.update({
   path: '/library/$memeId',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const Public__rootDefaultPricingRoute =
+  Public__rootDefaultPricingRouteImport.update({
+    id: '/pricing',
+    path: '/pricing',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
+  } as any)
 const Public__rootDefaultFavoritesRoute =
   Public__rootDefaultFavoritesRouteImport.update({
     id: '/favorites',
@@ -123,6 +131,12 @@ const Public__rootDefaultMemesMemeIdRoute =
     path: '/memes/$memeId',
     getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
+const Public__rootDefaultCheckoutSuccessRoute =
+  Public__rootDefaultCheckoutSuccessRouteImport.update({
+    id: '/checkout/success',
+    path: '/checkout/success',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
+  } as any)
 const ApiBunnyServerRoute = ApiBunnyServerRouteImport.update({
   id: '/api/bunny',
   path: '/api/bunny',
@@ -142,9 +156,11 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
   '/favorites': typeof Public__rootDefaultFavoritesRoute
+  '/pricing': typeof Public__rootDefaultPricingRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
+  '/checkout/success': typeof Public__rootDefaultCheckoutSuccessRoute
   '/memes/$memeId': typeof Public__rootDefaultMemesMemeIdRoute
   '/password/create-new': typeof Public__rootDefaultPasswordCreateNewRoute
   '/password/reset': typeof Public__rootDefaultPasswordResetRoute
@@ -159,9 +175,11 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
   '/favorites': typeof Public__rootDefaultFavoritesRoute
+  '/pricing': typeof Public__rootDefaultPricingRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
+  '/checkout/success': typeof Public__rootDefaultCheckoutSuccessRoute
   '/memes/$memeId': typeof Public__rootDefaultMemesMemeIdRoute
   '/password/create-new': typeof Public__rootDefaultPasswordCreateNewRoute
   '/password/reset': typeof Public__rootDefaultPasswordResetRoute
@@ -179,9 +197,11 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/_public__root/': typeof Public__rootIndexRoute
   '/_public__root/_default/favorites': typeof Public__rootDefaultFavoritesRoute
+  '/_public__root/_default/pricing': typeof Public__rootDefaultPricingRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/library/': typeof AdminLibraryIndexRoute
+  '/_public__root/_default/checkout/success': typeof Public__rootDefaultCheckoutSuccessRoute
   '/_public__root/_default/memes/$memeId': typeof Public__rootDefaultMemesMemeIdRoute
   '/_public__root/_default/password/create-new': typeof Public__rootDefaultPasswordCreateNewRoute
   '/_public__root/_default/password/reset': typeof Public__rootDefaultPasswordResetRoute
@@ -198,9 +218,11 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/'
     | '/favorites'
+    | '/pricing'
     | '/admin/library/$memeId'
     | '/admin/categories'
     | '/admin/library'
+    | '/checkout/success'
     | '/memes/$memeId'
     | '/password/create-new'
     | '/password/reset'
@@ -215,9 +237,11 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/'
     | '/favorites'
+    | '/pricing'
     | '/admin/library/$memeId'
     | '/admin/categories'
     | '/admin/library'
+    | '/checkout/success'
     | '/memes/$memeId'
     | '/password/create-new'
     | '/password/reset'
@@ -234,9 +258,11 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/_public__root/'
     | '/_public__root/_default/favorites'
+    | '/_public__root/_default/pricing'
     | '/admin/library/$memeId'
     | '/admin/categories/'
     | '/admin/library/'
+    | '/_public__root/_default/checkout/success'
     | '/_public__root/_default/memes/$memeId'
     | '/_public__root/_default/password/create-new'
     | '/_public__root/_default/password/reset'
@@ -353,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLibraryMemeIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_public__root/_default/pricing': {
+      id: '/_public__root/_default/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof Public__rootDefaultPricingRouteImport
+      parentRoute: typeof Public__rootDefaultRouteRoute
+    }
     '/_public__root/_default/favorites': {
       id: '/_public__root/_default/favorites'
       path: '/favorites'
@@ -395,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public__rootDefaultMemesMemeIdRouteImport
       parentRoute: typeof Public__rootDefaultRouteRoute
     }
+    '/_public__root/_default/checkout/success': {
+      id: '/_public__root/_default/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof Public__rootDefaultCheckoutSuccessRouteImport
+      parentRoute: typeof Public__rootDefaultRouteRoute
+    }
   }
 }
 declare module '@tanstack/react-start/server' {
@@ -418,6 +458,8 @@ declare module '@tanstack/react-start/server' {
 
 interface Public__rootDefaultRouteRouteChildren {
   Public__rootDefaultFavoritesRoute: typeof Public__rootDefaultFavoritesRoute
+  Public__rootDefaultPricingRoute: typeof Public__rootDefaultPricingRoute
+  Public__rootDefaultCheckoutSuccessRoute: typeof Public__rootDefaultCheckoutSuccessRoute
   Public__rootDefaultMemesMemeIdRoute: typeof Public__rootDefaultMemesMemeIdRoute
   Public__rootDefaultPasswordCreateNewRoute: typeof Public__rootDefaultPasswordCreateNewRoute
   Public__rootDefaultPasswordResetRoute: typeof Public__rootDefaultPasswordResetRoute
@@ -428,6 +470,9 @@ interface Public__rootDefaultRouteRouteChildren {
 const Public__rootDefaultRouteRouteChildren: Public__rootDefaultRouteRouteChildren =
   {
     Public__rootDefaultFavoritesRoute: Public__rootDefaultFavoritesRoute,
+    Public__rootDefaultPricingRoute: Public__rootDefaultPricingRoute,
+    Public__rootDefaultCheckoutSuccessRoute:
+      Public__rootDefaultCheckoutSuccessRoute,
     Public__rootDefaultMemesMemeIdRoute: Public__rootDefaultMemesMemeIdRoute,
     Public__rootDefaultPasswordCreateNewRoute:
       Public__rootDefaultPasswordCreateNewRoute,

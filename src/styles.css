@@ -130,6 +130,17 @@
   --color-warning-foreground: hsl(0 0% 0%);
   --color-info: hsl(198 55% 47%);
   --color-info-foreground: hsl(0 0% 100%);
+
+  --animate-background-shine: background-shine 2s linear infinite;
+
+  @keyframes background-shine {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
 }
 
 @layer base {
@@ -169,8 +180,6 @@
     --color-info-foreground: hsl(187 55% 52%);
   }
 }
-
-
 
 @layer utilities {
   .container {

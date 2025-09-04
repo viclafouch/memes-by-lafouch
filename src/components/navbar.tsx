@@ -19,6 +19,7 @@ const NAVIGATIONS_LINKS = [
     name: 'Menu',
     items: [
       { to: '/memes', label: 'Mèmes' },
+      { to: '/pricing', label: 'Plans' },
       { to: '/', label: 'À propos' }
     ]
   }

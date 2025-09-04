@@ -4,7 +4,11 @@ import type { UserWithRole } from 'better-auth/plugins'
 import { OnlyPortrait } from '@/components/only-portrait'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
-import { getAuthUserQueryOpts, getFavoritesMemesQueryOpts } from '@/lib/queries'
+import {
+  getActiveSubscriptionQueryOpts,
+  getAuthUserQueryOpts,
+  getFavoritesMemesQueryOpts
+} from '@/lib/queries'
 import { seo } from '@/lib/seo'
 import type { getAuthUser } from '@/server/user-auth'
 import type { QueryClient } from '@tanstack/react-query'
@@ -94,6 +98,7 @@ export const Route = createRootRouteWithContext<{
 
     if (user) {
       context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
+      context.queryClient.fetchQuery(getActiveSubscriptionQueryOpts())
     }
 
     return { user: user as UserWithRole | null }

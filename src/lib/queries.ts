@@ -1,6 +1,7 @@
 import type { MemesFilters } from '@/constants/meme'
 import { getAdminMemes } from '@/server/admin'
 import { getCategories } from '@/server/categories'
+import { getActiveSubscription } from '@/server/customer'
 import {
   getBestMemes,
   getMemeById,
@@ -137,3 +138,14 @@ export const getAdminMemesListQueryOpts = (filters: MemesFilters) => {
 }
 
 getAdminMemesListQueryOpts.all = ['admin-memes-list'] as const
+
+export const getActiveSubscriptionQueryOpts = () => {
+  return queryOptions({
+    queryKey: [...getActiveSubscriptionQueryOpts.all],
+    queryFn: async () => {
+      return getActiveSubscription()
+    }
+  })
+}
+
+getActiveSubscriptionQueryOpts.all = ['active-subscription'] as const
