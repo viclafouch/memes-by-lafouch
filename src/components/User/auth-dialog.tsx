@@ -17,7 +17,10 @@ import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { Separator } from '@/components/ui/separator'
 import { authClient, getErrorMessage } from '@/lib/auth-client'
-import { getAuthUserQueryOpts } from '@/lib/queries'
+import {
+  getActiveSubscriptionQueryOpts,
+  getAuthUserQueryOpts
+} from '@/lib/queries'
 import { getFieldErrorMessage } from '@/lib/utils'
 import { formOptions, useForm } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
@@ -59,6 +62,9 @@ const LoginForm = ({ onOpenChange }: FormProps) => {
         {
           onSuccess: async () => {
             await queryClient.invalidateQueries(getAuthUserQueryOpts())
+            await queryClient.invalidateQueries(
+              getActiveSubscriptionQueryOpts()
+            )
             router.invalidate()
             onOpenChange(false)
           },

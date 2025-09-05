@@ -75,7 +75,7 @@ const RouteComponent = () => {
 
   return (
     <div>
-      <PageHeading title="Memes">Memes</PageHeading>
+      <PageHeading>Memes</PageHeading>
       <PageDescription>A collection of memes from the internet</PageDescription>
       <div className="w-full mx-auto py-10">
         <div className="flex flex-col gap-y-4">
