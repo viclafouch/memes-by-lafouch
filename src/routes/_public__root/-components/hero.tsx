@@ -49,7 +49,7 @@ const AnnouncementQuery = () => {
 
   return recentMemesCountQuery.data > 0 ? (
     <Announcement
-      linkOptions={{ to: '/memes', search: { categories: ['news'] } }}
+      linkOptions={{ to: '/memes', search: { category: 'news' } }}
       text={`${recentMemesCountQuery.data} nouveaux mèmes ajoutés récemment !`}
     />
   ) : null

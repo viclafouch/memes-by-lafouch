@@ -114,30 +114,10 @@ export const getMemes = createServerFn({ method: 'GET' })
         filters: (() => {
           const filters: string[] = ['status:PUBLISHED']
 
-          if (data.categories?.length) {
-            const hasNews = data.categories.includes('news')
-            const otherCategories = data.categories.filter((slug) => {
-              return slug !== 'news'
-            })
-
-            const newsFilter = hasNews
-              ? `createdAtTime >= ${THIRTY_DAYS_AGO}`
-              : null
-            const categoryFilter = otherCategories.length
-              ? otherCategories
-                  .map((slug) => {
-                    return `categorySlugs:${slug}`
-                  })
-                  .join(' AND ')
-              : null
-
-            if (newsFilter && categoryFilter) {
-              filters.push(`(${newsFilter}) AND (${categoryFilter})`)
-            } else if (newsFilter) {
-              filters.push(newsFilter)
-            } else if (categoryFilter) {
-              filters.push(categoryFilter)
-            }
+          if (data.category === 'news') {
+            filters.push(`createdAtTime >= ${THIRTY_DAYS_AGO}`)
+          } else if (data.category) {
+            filters.push(`categorySlugs:${data.category}`)
           }
 
           return filters.length ? filters.join(' AND ') : undefined
@@ -155,7 +135,7 @@ export const getMemes = createServerFn({ method: 'GET' })
 
 export const getRecentCountMemes = createServerFn({ method: 'GET' }).handler(
   async () => {
-    const THIRTY_DAYS_AGO = Date.now() - 30 * 24 * 60 * 60 * 1000
+    const THIRTY_DAYS_AGO = Date.now() - 30 * 24 * 60 * 60 * 1000 // 1 month ago
 
     const countResult = await algoliaClient.searchSingleIndex({
       indexName: algoliaIndexName,

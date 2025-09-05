@@ -46,7 +46,7 @@ export const MemeStatusMeta = {
 export const MEMES_FILTERS_SCHEMA = z.object({
   query: z.string().optional().catch(undefined),
   page: z.coerce.number().optional().catch(1),
-  categories: z.array(z.string()).optional().catch([]),
+  category: z.string().optional(),
   status: z.enum(MemeStatusFixed).optional()
 })
 
