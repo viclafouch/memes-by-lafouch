@@ -119,7 +119,6 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
 
 const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
   const { user } = useRouteContext({ from: '__root__' })
-
   const [isLoginDialogOpened, setIsLoginDialogOpened] = React.useState(false)
 
   if (!user) {

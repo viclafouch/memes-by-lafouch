@@ -1,4 +1,6 @@
+import React from 'react'
 import { CheckCircle2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -7,16 +9,15 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { LoadingButton } from '@/components/ui/loading-button'
 import { PRODUCT_ID } from '@/constants/polar'
-import { authClient } from '@/lib/auth-client'
+import { usePortal } from '@/hooks/use-portal'
 import { getActiveSubscriptionQueryOpts } from '@/lib/queries'
 import { cn } from '@/lib/utils'
 import {
   PageDescription,
   PageHeading
 } from '@/routes/_public__root/-components/page-headers'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouteContext } from '@tanstack/react-router'
 
 type Plan = {
@@ -43,13 +44,11 @@ const PricingCard = ({
   description,
   features,
   productId,
-  isLoading,
   isExclusive = false,
   isActive,
   onChangePlan
 }: Plan & {
   isActive: boolean
-  isLoading: boolean
   onChangePlan: (productId: string) => void
 }) => {
   return (
@@ -85,8 +84,7 @@ const PricingCard = ({
       </div>
       <CardFooter className="mt-2">
         {isActive ? (
-          <LoadingButton
-            isLoading={isLoading}
+          <Button
             onClick={(event) => {
               event.preventDefault()
               onChangePlan(productId)
@@ -96,10 +94,9 @@ const PricingCard = ({
             disabled={isActive}
           >
             Current plan
-          </LoadingButton>
+          </Button>
         ) : (
-          <LoadingButton
-            isLoading={isLoading}
+          <Button
             onClick={(event) => {
               event.preventDefault()
               onChangePlan(productId)
@@ -107,7 +104,7 @@ const PricingCard = ({
             className="w-full"
           >
             Mettre à niveau
-          </LoadingButton>
+          </Button>
         )}
       </CardFooter>
     </Card>
@@ -116,28 +113,11 @@ const PricingCard = ({
 
 const RouteComponent = () => {
   const { user } = useRouteContext({ from: '__root__' })
+  const { goToPortal, checkoutPortal } = usePortal()
 
   const activeSubscriptionQuery = useSuspenseQuery(
     getActiveSubscriptionQueryOpts()
   )
-
-  const movePlanMutation = useMutation({
-    mutationFn: async (productId: string) => {
-      if (productId === 'free') {
-        await authClient.customer.portal()
-      } else {
-        await authClient.checkout({ products: [PRODUCT_ID] })
-      }
-    }
-  })
-
-  const handleMovePlan = async (productId: string) => {
-    if (movePlanMutation.isPending) {
-      return
-    }
-
-    movePlanMutation.mutate(productId)
-  }
 
   return (
     <div>
@@ -148,12 +128,10 @@ const RouteComponent = () => {
           <PricingCard
             title="Free"
             monthlyPrice={0}
-            onChangePlan={handleMovePlan}
+            onChangePlan={() => {
+              return goToPortal()
+            }}
             productId="free"
-            isLoading={Boolean(
-              movePlanMutation.isPending &&
-                movePlanMutation.variables === 'free'
-            )}
             description="Essential features you need to get started"
             features={[
               'Example Feature Number 1',
@@ -167,11 +145,9 @@ const RouteComponent = () => {
           <PricingCard
             title="Pro"
             isExclusive
-            isLoading={Boolean(
-              movePlanMutation.isPending &&
-                movePlanMutation.variables === PRODUCT_ID
-            )}
-            onChangePlan={handleMovePlan}
+            onChangePlan={() => {
+              return checkoutPortal()
+            }}
             monthlyPrice={3.99}
             productId={PRODUCT_ID}
             description="Essential features you need to get started"

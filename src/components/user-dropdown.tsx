@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { usePortal } from '@/hooks/use-portal'
 import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import {
   getActiveSubscriptionQueryOpts,
@@ -32,13 +33,10 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
   const [open, setOpen] = React.useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
+  const { goToPortal, checkoutPortal } = usePortal()
 
   const favoritesMemesCountQuery = useQuery(getFavoritesMemesCountQueryOpts())
   const activeSubscriptionQuery = useQuery(getActiveSubscriptionQueryOpts())
-
-  const manageSubscription = () => {
-    authClient.customer.portal()
-  }
 
   const handleLogout = async () => {
     await authClient.signOut()
@@ -86,14 +84,20 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {activeSubscriptionQuery.data === null ? (
-            <DropdownMenuItem asChild>
-              <Link to="/pricing">
-                <SparklesIcon />
-                Mettre à niveau
-              </Link>
+            <DropdownMenuItem
+              onClick={() => {
+                return checkoutPortal()
+              }}
+            >
+              <SparklesIcon />
+              Mettre à niveau
             </DropdownMenuItem>
           ) : (
-            <DropdownMenuItem onClick={manageSubscription}>
+            <DropdownMenuItem
+              onClick={() => {
+                return goToPortal()
+              }}
+            >
               <CreditCard />
               Gérer mon abonnement
             </DropdownMenuItem>
