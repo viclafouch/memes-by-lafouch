@@ -86,7 +86,7 @@ export const getFavoritesMemesQueryOpts = () => {
     queryFn: async () => {
       return getFavoritesMemes()
     },
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5 // 5min
   })
 }
 
@@ -98,6 +98,7 @@ export const getCategoriesListQueryOpts = () => {
     queryFn: async () => {
       return getCategories()
     },
+    staleTime: 1000 * 60 * 10, // 10min
     select: (categories) => {
       return [...categories].sort((categoryA, categoryB) => {
         if (categoryA.slug === 'news') {

@@ -45,11 +45,7 @@ const RouteComponent = () => {
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   beforeLoad: async ({ location, context }) => {
-    if (!context.user) {
-      throw redirect({ to: '/login', search: { redirect: location.href } })
-    }
-
-    if (context.user.role !== 'admin') {
+    if (!context.user || context.user.role !== 'admin') {
       throw redirect({ to: '/' })
     }
 

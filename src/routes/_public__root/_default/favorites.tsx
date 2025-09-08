@@ -10,9 +10,9 @@ const RouteComponent = () => {
 
 export const Route = createFileRoute('/_public__root/_default/favorites')({
   component: RouteComponent,
-  loader: async ({ context, location }) => {
+  loader: async ({ context }) => {
     if (!context.user) {
-      throw redirect({ to: '/login', search: { redirect: location.href } })
+      throw redirect({ to: '/memes' })
     }
 
     const memes = await getFavoritesMemes()

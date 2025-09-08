@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AuthDialog } from '@/components/User/auth-dialog'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
@@ -29,6 +28,7 @@ import {
 } from '@/lib/queries'
 import { cn } from '@/lib/utils'
 import { toggleBookmarkByMemeId } from '@/server/meme'
+import { useShowDialog } from '@/stores/dialog.store'
 import { matchIsVideoPlayable } from '@/utils/video'
 import {
   useMutation,
@@ -119,25 +119,19 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
 
 const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
   const { user } = useRouteContext({ from: '__root__' })
-  const [isLoginDialogOpened, setIsLoginDialogOpened] = React.useState(false)
+  const showDialog = useShowDialog()
 
   if (!user) {
     return (
-      <>
-        <AuthDialog
-          open={isLoginDialogOpened}
-          onOpenChange={setIsLoginDialogOpened}
-        />
-        <DropdownMenuItem
-          onClick={(event) => {
-            event.preventDefault()
-            setIsLoginDialogOpened(true)
-          }}
-        >
-          <Star />
-          Ajouter aux favoris
-        </DropdownMenuItem>
-      </>
+      <DropdownMenuItem
+        onClick={(event) => {
+          event.preventDefault()
+          showDialog('auth', {})
+        }}
+      >
+        <Star />
+        Ajouter aux favoris
+      </DropdownMenuItem>
     )
   }
 

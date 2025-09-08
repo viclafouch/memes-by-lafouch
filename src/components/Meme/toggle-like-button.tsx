@@ -2,11 +2,11 @@ import React from 'react'
 import type { User } from 'better-auth'
 import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
-import { AuthDialog } from '@/components/User/auth-dialog'
 import type { MemeWithVideo } from '@/constants/meme'
 import { authClient } from '@/lib/auth-client'
 import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
 import { toggleBookmarkByMemeId } from '@/server/meme'
+import { useShowDialog } from '@/stores/dialog.store'
 import {
   useMutation,
   useQueryClient,
@@ -83,25 +83,19 @@ const AuthBookmarkButton = ({
 
 const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
   const session = authClient.useSession()
-  const [isLoginDialogOpened, setIsLoginDialogOpened] = React.useState(false)
+  const showDialog = useShowDialog()
 
   if (!session.data) {
     return (
-      <>
-        <AuthDialog
-          open={isLoginDialogOpened}
-          onOpenChange={setIsLoginDialogOpened}
-        />
-        <IconButton
-          icon={Star}
-          active={false}
-          className={className}
-          onClick={(event) => {
-            event.preventDefault()
-            setIsLoginDialogOpened(true)
-          }}
-        />
-      </>
+      <IconButton
+        icon={Star}
+        active={false}
+        className={className}
+        onClick={(event) => {
+          event.preventDefault()
+          showDialog('auth', {})
+        }}
+      />
     )
   }
 

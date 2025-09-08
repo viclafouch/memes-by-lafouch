@@ -16,8 +16,6 @@ import { Route as Public__rootRouteRouteImport } from './routes/_public__root/ro
 import { Route as Public__rootIndexRouteImport } from './routes/_public__root/index'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminDownloaderRouteImport } from './routes/admin/downloader'
-import { Route as Public__rootSignupRouteImport } from './routes/_public__root/signup'
-import { Route as Public__rootLoginRouteImport } from './routes/_public__root/login'
 import { Route as Public__rootDefaultRouteRouteImport } from './routes/_public__root/_default/route'
 import { Route as AdminLibraryIndexRouteImport } from './routes/admin/library/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
@@ -58,16 +56,6 @@ const AdminDownloaderRoute = AdminDownloaderRouteImport.update({
   id: '/downloader',
   path: '/downloader',
   getParentRoute: () => AdminRouteRoute,
-} as any)
-const Public__rootSignupRoute = Public__rootSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => Public__rootRouteRoute,
-} as any)
-const Public__rootLoginRoute = Public__rootLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => Public__rootRouteRoute,
 } as any)
 const Public__rootDefaultRouteRoute =
   Public__rootDefaultRouteRouteImport.update({
@@ -150,8 +138,6 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
-  '/login': typeof Public__rootLoginRoute
-  '/signup': typeof Public__rootSignupRoute
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
@@ -169,8 +155,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
-  '/login': typeof Public__rootLoginRoute
-  '/signup': typeof Public__rootSignupRoute
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
@@ -191,8 +175,6 @@ export interface FileRoutesById {
   '/_public__root': typeof Public__rootRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/_public__root/_default': typeof Public__rootDefaultRouteRouteWithChildren
-  '/_public__root/login': typeof Public__rootLoginRoute
-  '/_public__root/signup': typeof Public__rootSignupRoute
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public__root/': typeof Public__rootIndexRoute
@@ -212,8 +194,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/admin'
-    | '/login'
-    | '/signup'
     | '/admin/downloader'
     | '/admin/users'
     | '/'
@@ -231,8 +211,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
-    | '/login'
-    | '/signup'
     | '/admin/downloader'
     | '/admin/users'
     | '/'
@@ -252,8 +230,6 @@ export interface FileRouteTypes {
     | '/_public__root'
     | '/admin'
     | '/_public__root/_default'
-    | '/_public__root/login'
-    | '/_public__root/signup'
     | '/admin/downloader'
     | '/admin/users'
     | '/_public__root/'
@@ -336,20 +312,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/downloader'
       preLoaderRoute: typeof AdminDownloaderRouteImport
       parentRoute: typeof AdminRouteRoute
-    }
-    '/_public__root/signup': {
-      id: '/_public__root/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof Public__rootSignupRouteImport
-      parentRoute: typeof Public__rootRouteRoute
-    }
-    '/_public__root/login': {
-      id: '/_public__root/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof Public__rootLoginRouteImport
-      parentRoute: typeof Public__rootRouteRoute
     }
     '/_public__root/_default': {
       id: '/_public__root/_default'
@@ -489,15 +451,11 @@ const Public__rootDefaultRouteRouteWithChildren =
 
 interface Public__rootRouteRouteChildren {
   Public__rootDefaultRouteRoute: typeof Public__rootDefaultRouteRouteWithChildren
-  Public__rootLoginRoute: typeof Public__rootLoginRoute
-  Public__rootSignupRoute: typeof Public__rootSignupRoute
   Public__rootIndexRoute: typeof Public__rootIndexRoute
 }
 
 const Public__rootRouteRouteChildren: Public__rootRouteRouteChildren = {
   Public__rootDefaultRouteRoute: Public__rootDefaultRouteRouteWithChildren,
-  Public__rootLoginRoute: Public__rootLoginRoute,
-  Public__rootSignupRoute: Public__rootSignupRoute,
   Public__rootIndexRoute: Public__rootIndexRoute,
 }
 

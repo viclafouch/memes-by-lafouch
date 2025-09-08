@@ -2,17 +2,18 @@ import { toast } from 'sonner'
 import { PRODUCT_ID } from '@/constants/polar'
 import { authClient } from '@/lib/auth-client'
 import { getActiveSubscriptionQueryOpts } from '@/lib/queries'
+import { useShowDialog } from '@/stores/dialog.store'
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useRouteContext } from '@tanstack/react-router'
+import { useRouteContext } from '@tanstack/react-router'
 
 export const usePortal = () => {
   const { user } = useRouteContext({ from: '__root__' })
-  const navigate = useNavigate()
+  const showDialog = useShowDialog()
   const queryClient = useQueryClient()
 
   const goToPortal = async () => {
     if (!user) {
-      navigate({ to: '/login' })
+      showDialog('auth', {})
 
       return
     }
@@ -28,7 +29,7 @@ export const usePortal = () => {
 
   const checkoutPortal = async () => {
     if (!user) {
-      navigate({ to: '/login' })
+      showDialog('auth', {})
 
       return
     }

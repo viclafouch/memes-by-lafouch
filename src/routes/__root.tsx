@@ -7,10 +7,12 @@ import { Toaster } from '@/components/ui/sonner'
 import {
   getActiveSubscriptionQueryOpts,
   getAuthUserQueryOpts,
+  getCategoriesListQueryOpts,
   getFavoritesMemesQueryOpts
 } from '@/lib/queries'
 import { seo } from '@/lib/seo'
 import type { getAuthUser } from '@/server/user-auth'
+import { DialogProvider } from '@/stores/dialog.store'
 import type { QueryClient } from '@tanstack/react-query'
 import {
   createRootRouteWithContext,
@@ -67,7 +69,9 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
         />
       </head>
       <body className="dark">
-        <OnlyPortrait>{children}</OnlyPortrait>
+        <OnlyPortrait>
+          <DialogProvider>{children}</DialogProvider>
+        </OnlyPortrait>
         <Toaster richColors />
         <React.Suspense>
           <TanStackRouterDevtools position="bottom-left" />
@@ -100,6 +104,8 @@ export const Route = createRootRouteWithContext<{
       context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
       context.queryClient.fetchQuery(getActiveSubscriptionQueryOpts())
     }
+
+    context.queryClient.fetchQuery(getCategoriesListQueryOpts())
 
     return { user: user as UserWithRole | null }
   },
