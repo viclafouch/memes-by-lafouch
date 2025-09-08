@@ -5,7 +5,7 @@ import { ErrorComponent } from '@/components/error-component'
 import { NotFound } from '@/components/not-found'
 import { MutationCache, QueryClient } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
-import { routerWithQueryClient } from '@tanstack/react-router-with-query'
+import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { routeTree } from './routeTree.gen'
 
 const mutationCache = new MutationCache({
@@ -29,25 +29,29 @@ export function createRouter() {
     }
   })
 
-  return routerWithQueryClient(
-    createTanStackRouter({
-      routeTree,
-      context: { queryClient, user: null },
-      defaultPreloadStaleTime: 0,
-      defaultStaleTime: 0,
-      defaultPendingMs: 0,
-      defaultViewTransition: false,
-      notFoundMode: 'root',
-      defaultPendingComponent: DefaultLoading,
-      defaultNotFoundComponent: NotFound,
-      defaultErrorComponent: ({ error }) => {
-        return <ErrorComponent error={error} />
-      },
-      defaultPreload: 'intent',
-      scrollRestoration: true
-    }),
+  const router = createTanStackRouter({
+    routeTree,
+    context: { queryClient, user: null },
+    defaultPreloadStaleTime: 0,
+    defaultStaleTime: 0,
+    defaultPendingMs: 0,
+    defaultViewTransition: false,
+    notFoundMode: 'root',
+    defaultPendingComponent: DefaultLoading,
+    defaultNotFoundComponent: NotFound,
+    defaultErrorComponent: ({ error }) => {
+      return <ErrorComponent error={error} />
+    },
+    defaultPreload: 'intent',
+    scrollRestoration: true
+  })
+
+  setupRouterSsrQueryIntegration({
+    router,
     queryClient
-  )
+  })
+
+  return router
 }
 
 declare module '@tanstack/react-router' {
