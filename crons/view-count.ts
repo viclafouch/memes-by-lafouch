@@ -67,6 +67,8 @@ export async function GET() {
     }
   })
 
+  console.log('Found memes', memes.length)
+
   for (const meme of memes) {
     const { bunnyId } = meme.video
 
