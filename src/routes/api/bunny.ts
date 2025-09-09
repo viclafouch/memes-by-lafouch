@@ -59,9 +59,21 @@ export const ServerRoute = createServerFileRoute('/api/bunny').methods({
           })
       }
 
-      return Response.json({ success: true, message: 'Vidéo mise à jour !' })
+      // eslint-disable-next-line no-console
+      console.log('Vidéo mise à jour !', {
+        videoId: result.VideoGuid,
+        status: result.Status
+      })
+
+      return Response.json({ success: true })
     } catch (error) {
-      return Response.json({ success: true, message: 'Erreur !' })
+      // eslint-disable-next-line no-console
+      console.log('Mise à jour non effectuée', {
+        videoId: result.VideoGuid,
+        status: result.Status
+      })
+
+      return Response.json({ success: true })
     }
   }
 })
