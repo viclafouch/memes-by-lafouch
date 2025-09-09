@@ -1,7 +1,7 @@
 import React from 'react'
 
 type PageHeaderProps = {
-  title: string
+  title: React.ReactNode
   description?: React.ReactNode
   action?: React.ReactNode
 }

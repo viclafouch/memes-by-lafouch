@@ -1,18 +1,35 @@
 import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { buildVideoImageUrl } from '@/lib/bunny'
 
+const appOrigin =
+  process.env.NODE_ENV === 'production'
+    ? 'https://memes-by-lafouch.vercel.app'
+    : 'http://localhost:3000'
+
 export function seo({
   title,
   description,
   keywords,
-  image
+  image,
+  isAdmin = false,
+  pathname = '/'
 }: {
   title: string
   description?: string
   image?: string
   keywords?: string
+  isAdmin?: boolean
+  pathname?: string
 }) {
-  const titlePrefixed = `Studio - ${title}`
+  const titlePrefixed = isAdmin
+    ? `Admin Studio - ${title}`
+    : `Studio - ${title}`
+
+  let url = appOrigin
+
+  try {
+    url = new URL(pathname, appOrigin).href
+  } catch (error) {}
 
   const tags = [
     { title: titlePrefixed },
@@ -27,7 +44,7 @@ export function seo({
     { name: 'og:site_name', content: titlePrefixed },
     { name: 'og:title', content: titlePrefixed },
     { name: 'og:description', content: description },
-    { name: 'og:url', content: 'https://memes-by-lafouch.vercel.app' },
+    { name: 'og:url', content: url },
     { name: 'og:locale', content: 'fr_FR' },
     ...(image
       ? [
@@ -41,7 +58,10 @@ export function seo({
   return tags
 }
 
-export const buildMemeSeo = (meme: MemeWithVideo & MemeWithCategories) => {
+export const buildMemeSeo = (
+  meme: MemeWithVideo & MemeWithCategories,
+  overrideOptions: Partial<Parameters<typeof seo>[0]> = {}
+) => {
   const categoryKeywords = meme.categories.flatMap((category) => {
     return category.category.keywords
   })
@@ -50,6 +70,7 @@ export const buildMemeSeo = (meme: MemeWithVideo & MemeWithCategories) => {
     title: meme.title,
     description: `Découvrez et partagez ce mème de "${meme.title}" avec tous vos proches. Meme Studio vous permet de rechercher, partager et découvrir des mèmes...`,
     keywords: [...meme.keywords, ...categoryKeywords].join(', '),
-    image: buildVideoImageUrl(meme.video.bunnyId)
+    image: buildVideoImageUrl(meme.video.bunnyId),
+    ...overrideOptions
   })
 }

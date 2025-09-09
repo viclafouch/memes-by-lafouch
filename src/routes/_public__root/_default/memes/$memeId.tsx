@@ -217,10 +217,10 @@ export const Route = createFileRoute('/_public__root/_default/memes/$memeId')({
       nextRandomMeme
     }
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, match }) => {
     if (loaderData?.meme) {
       return {
-        meta: [...buildMemeSeo(loaderData.meme)]
+        meta: [...buildMemeSeo(loaderData.meme, { pathname: match.pathname })]
       }
     }
 

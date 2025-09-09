@@ -1,11 +1,11 @@
 import React from 'react'
 import { formatDate } from 'date-fns'
-import { Pen, Trash } from 'lucide-react'
+import { ExternalLink, Pen, Trash } from 'lucide-react'
 import { DeleteMemeButton } from '@/components/admin/delete-meme-button'
 import { Dialog } from '@/components/animate-ui/radix/dialog'
 import { PageHeader } from '@/components/page-header'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import {
   DialogContent,
@@ -15,9 +15,10 @@ import {
 } from '@/components/ui/dialog'
 import { MemeStatusMeta } from '@/constants/meme'
 import { getAdminMemesListQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
+import { buildMemeSeo } from '@/lib/seo'
 import { MemeForm } from '@/routes/admin/library/-components/meme-form'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { memeId } = Route.useParams()
@@ -40,7 +41,18 @@ const RouteComponent = () => {
   return (
     <Container>
       <PageHeader
-        title={meme.title}
+        title={
+          <>
+            {meme.title}{' '}
+            <Link
+              className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+              to="/memes/$memeId"
+              params={{ memeId: meme.id }}
+            >
+              <ExternalLink className="inline" />
+            </Link>
+          </>
+        }
         description={
           <div className="flex flex-col gap-y-2">
             <span className="text-sm text-gray-500">
@@ -135,16 +147,12 @@ export const Route = createFileRoute('/admin/library/$memeId')({
     }
   },
   head: ({ loaderData }) => {
-    return {
-      meta: [
-        {
-          name: 'description',
-          content: 'My App is a web application'
-        },
-        {
-          title: loaderData?.meme.title
-        }
-      ]
+    if (loaderData?.meme) {
+      return {
+        meta: [...buildMemeSeo(loaderData.meme, { isAdmin: true })]
+      }
     }
+
+    return {}
   }
 })
