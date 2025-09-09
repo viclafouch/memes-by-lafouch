@@ -1,5 +1,6 @@
 import { adminClient } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
+import type { StudioErrorCode } from '@/constants/error'
 import type { UserWithRole } from '@/constants/user'
 import { polarClient } from '@polar-sh/better-auth'
 
@@ -13,7 +14,7 @@ export const matchIsUserAdmin = (user: UserWithRole) => {
 
 type ErrorTypes = Partial<
   Record<
-    keyof typeof authClient.$ERROR_CODES,
+    StudioErrorCode | keyof typeof authClient.$ERROR_CODES,
     {
       en: string
       fr: string
@@ -33,6 +34,14 @@ export const ERROR_CODES = {
   PASSWORD_TOO_SHORT: {
     en: 'Password too short',
     fr: 'Mot de passe trop court'
+  },
+  PREMIUM_REQUIRED: {
+    en: 'Premium required',
+    fr: 'Premium requis'
+  },
+  UNAUTHORIZED: {
+    en: 'You must be logged in',
+    fr: 'Vous devez être connecté'
   }
 } satisfies ErrorTypes
 

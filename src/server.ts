@@ -3,10 +3,10 @@ import {
   createStartHandler,
   defaultStreamHandler
 } from '@tanstack/react-start/server'
-import { createRouter } from './router'
+import { createAppRouter } from './router'
 
 const handler = createStartHandler({
-  createRouter
+  createRouter: createAppRouter
 })(defaultStreamHandler)
 
 const withHeaders: RequestHandler = async (context) => {

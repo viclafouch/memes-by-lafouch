@@ -22,6 +22,7 @@ import type { MemeWithVideo } from '@/constants/meme'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 import {
+  getFavoritesMemesCountQueryOpts,
   getFavoritesMemesQueryOpts,
   getMemeByIdQueryOpts,
   getVideoStatusByIdQueryOpts
@@ -95,6 +96,7 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
     onSettled: () => {
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
       queryClient.invalidateQueries(getFavoritesMemesQueryOpts())
+      queryClient.invalidateQueries(getFavoritesMemesCountQueryOpts())
     }
   })
 

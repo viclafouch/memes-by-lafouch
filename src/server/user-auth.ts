@@ -1,3 +1,4 @@
+import { StudioError } from '@/constants/error'
 import { auth } from '@/lib/auth'
 import { createMiddleware, createServerFn } from '@tanstack/react-start'
 import { getWebRequest, setResponseStatus } from '@tanstack/react-start/server'
@@ -27,7 +28,7 @@ export const authUserRequiredMiddleware = createMiddleware({
 
   if (!session) {
     setResponseStatus(401)
-    throw new Error('Unauthorized')
+    throw new StudioError('UNAUTHORIZED')
   }
 
   return next({ context: { user: session.user } })
@@ -42,7 +43,7 @@ export const adminRequiredMiddleware = createMiddleware({
 
     if (user.role !== 'admin') {
       setResponseStatus(401)
-      throw new Error('Unauthorized')
+      throw new StudioError('UNAUTHORIZED')
     }
 
     return next({ context: { user } })

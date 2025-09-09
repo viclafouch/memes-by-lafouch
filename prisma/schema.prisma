@@ -89,6 +89,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   bookmarks     UserBookmark[]
+  generationCount  Int      @default(0)
 
   role       String?
   banned     Boolean?

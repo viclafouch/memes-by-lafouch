@@ -1,5 +1,8 @@
 import React from 'react'
+import { StudioError, wrapServerFn } from '@/constants/error'
 import { shareMeme } from '@/server/meme'
+import { checkGeneration, incrementGenerationCount } from '@/server/user'
+import { useShowDialog } from '@/stores/dialog.store'
 import type { ProgressEvent } from '@ffmpeg/ffmpeg'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile } from '@ffmpeg/util'
@@ -133,6 +136,7 @@ export const useVideoProcessor = (
   }
 ) => {
   const [progress, setProgress] = React.useState(0)
+  const showDialog = useShowDialog()
 
   const progressSubscription = React.useCallback(
     (progressEvent: ProgressEvent) => {
@@ -145,6 +149,15 @@ export const useVideoProcessor = (
     onMutate: async () => {
       setProgress(0)
       options?.onMutate?.()
+
+      await wrapServerFn(checkGeneration()).catch((error) => {
+        if (error instanceof StudioError && error.code === 'UNAUTHORIZED') {
+          showDialog('auth', {})
+        }
+
+        throw error
+      })
+
       await ffmpeg.load()
       ffmpeg.on('progress', progressSubscription)
     },
@@ -161,6 +174,7 @@ export const useVideoProcessor = (
     },
     onSuccess: ({ blob }) => {
       options?.onSuccess?.(blob)
+      incrementGenerationCount()
     },
     onError: (error) => {
       options?.onError?.(error)

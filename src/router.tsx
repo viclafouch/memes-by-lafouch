@@ -3,8 +3,9 @@ import { toast } from 'sonner'
 import { DefaultLoading } from '@/components/default-loading'
 import { ErrorComponent } from '@/components/error-component'
 import { NotFound } from '@/components/not-found'
+import { getErrorMessage } from '@/lib/auth-client'
 import { MutationCache, QueryClient } from '@tanstack/react-query'
-import { createRouter as createTanStackRouter } from '@tanstack/react-router'
+import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { routeTree } from './routeTree.gen'
 
@@ -13,12 +14,12 @@ const mutationCache = new MutationCache({
     if (isNetworkError(error)) {
       toast.error('Veuillez vérifier votre connexion internet')
     } else if (error instanceof Error) {
-      toast.error(error.message)
+      toast.error(getErrorMessage(error, 'fr'))
     }
   }
 })
 
-export function createRouter() {
+export function createAppRouter() {
   const queryClient = new QueryClient({
     mutationCache,
     defaultOptions: {
@@ -29,7 +30,7 @@ export function createRouter() {
     }
   })
 
-  const router = createTanStackRouter({
+  const router = createRouter({
     routeTree,
     context: { queryClient, user: null },
     defaultPreloadStaleTime: 0,
@@ -56,6 +57,6 @@ export function createRouter() {
 
 declare module '@tanstack/react-router' {
   interface Register {
-    router: ReturnType<typeof createRouter>
+    router: ReturnType<typeof createAppRouter>
   }
 }

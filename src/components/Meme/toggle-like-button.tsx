@@ -4,7 +4,11 @@ import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
 import { authClient } from '@/lib/auth-client'
-import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
+import {
+  getFavoritesMemesCountQueryOpts,
+  getFavoritesMemesQueryOpts,
+  getMemeByIdQueryOpts
+} from '@/lib/queries'
 import { toggleBookmarkByMemeId } from '@/server/meme'
 import { useShowDialog } from '@/stores/dialog.store'
 import {
@@ -60,6 +64,7 @@ const AuthBookmarkButton = ({
     onSettled: () => {
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
       queryClient.invalidateQueries(getFavoritesMemesQueryOpts())
+      queryClient.invalidateQueries(getFavoritesMemesCountQueryOpts())
     }
   })
 
