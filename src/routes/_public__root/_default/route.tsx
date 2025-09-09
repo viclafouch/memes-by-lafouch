@@ -1,5 +1,9 @@
 import { Container } from '@/components/ui/container'
-import { getFavoritesMemesQueryOpts } from '@/lib/queries'
+import {
+  getActiveSubscriptionQueryOpts,
+  getCategoriesListQueryOpts,
+  getFavoritesMemesQueryOpts
+} from '@/lib/queries'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 const RouteComponent = () => {
@@ -17,6 +21,9 @@ export const Route = createFileRoute('/_public__root/_default')({
   loader: async ({ context }) => {
     if (context.user) {
       context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
+      context.queryClient.fetchQuery(getActiveSubscriptionQueryOpts())
     }
+
+    context.queryClient.fetchQuery(getCategoriesListQueryOpts())
   }
 })

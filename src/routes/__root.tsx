@@ -1,15 +1,9 @@
 /// <reference types="vite/client" />
 import React from 'react'
-import type { UserWithRole } from 'better-auth/plugins'
 import { OnlyPortrait } from '@/components/only-portrait'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
-import {
-  getActiveSubscriptionQueryOpts,
-  getAuthUserQueryOpts,
-  getCategoriesListQueryOpts,
-  getFavoritesMemesQueryOpts
-} from '@/lib/queries'
+import { getAuthUserQueryOpts } from '@/lib/queries'
 import { seo } from '@/lib/seo'
 import type { getAuthUser } from '@/server/user-auth'
 import { DialogProvider } from '@/stores/dialog.store'
@@ -36,7 +30,7 @@ const TanStackQueryDevtools =
       })
 
 const SpeedInsights =
-  process.env.NODE_ENV === 'production'
+  process.env.NODE_ENV !== 'production'
     ? () => {
         return null
       }
@@ -100,14 +94,7 @@ export const Route = createRootRouteWithContext<{
   beforeLoad: async ({ context }) => {
     const user = await context.queryClient.fetchQuery(getAuthUserQueryOpts())
 
-    if (user) {
-      context.queryClient.fetchQuery(getFavoritesMemesQueryOpts())
-      context.queryClient.fetchQuery(getActiveSubscriptionQueryOpts())
-    }
-
-    context.queryClient.fetchQuery(getCategoriesListQueryOpts())
-
-    return { user: user as UserWithRole | null }
+    return { user }
   },
   head: () => {
     return {

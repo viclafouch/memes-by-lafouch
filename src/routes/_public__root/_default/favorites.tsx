@@ -1,26 +1,27 @@
 import { MemesList } from '@/components/Meme/memes-list'
-import { getFavoritesMemes } from '@/server/user'
+import { getFavoritesMemesQueryOpts } from '@/lib/queries'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 const RouteComponent = () => {
-  const loaderData = Route.useLoaderData()
+  const favoritesMemeQuery = useSuspenseQuery(getFavoritesMemesQueryOpts())
 
   return (
-    <MemesList layoutContext="favorites" memes={loaderData.memes.bookmarks} />
+    <MemesList
+      layoutContext="favorites"
+      memes={favoritesMemeQuery.data.bookmarks}
+    />
   )
 }
 
 export const Route = createFileRoute('/_public__root/_default/favorites')({
   component: RouteComponent,
-  loader: async ({ context }) => {
+  beforeLoad: ({ context }) => {
     if (!context.user) {
       throw redirect({ to: '/memes' })
     }
-
-    const memes = await getFavoritesMemes()
-
-    return {
-      memes
-    }
+  },
+  loader: async ({ context }) => {
+    context.queryClient.ensureQueryData(getFavoritesMemesQueryOpts())
   }
 })
