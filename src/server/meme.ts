@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { z } from 'zod'
 import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
@@ -6,9 +5,8 @@ import { prismaClient } from '@/db'
 import { algoliaClient, algoliaIndexName } from '@/lib/algolia'
 import { getVideoPlayData } from '@/lib/bunny'
 import { authUserRequiredMiddleware } from '@/server/user-auth'
-import type { Meme, User } from '@prisma/client'
 import { notFound } from '@tanstack/react-router'
-import { createServerFn, serverOnly } from '@tanstack/react-start'
+import { createServerFn } from '@tanstack/react-start'
 
 export const getMemeById = createServerFn({ method: 'GET' })
   .validator((data) => {
@@ -32,49 +30,6 @@ export const getMemeById = createServerFn({ method: 'GET' })
     }
 
     return meme
-  })
-
-const toggleBookmark = serverOnly(
-  async (userId: User['id'], memeId: Meme['id']) => {
-    const bookmark = await prismaClient.userBookmark.findUnique({
-      where: { userId_memeId: { userId, memeId } }
-    })
-
-    if (bookmark) {
-      await prismaClient.userBookmark.delete({
-        where: { userId_memeId: { userId, memeId } }
-      })
-
-      return { bookmarked: false }
-    }
-
-    await prismaClient.userBookmark.create({
-      data: { userId, memeId }
-    })
-
-    return { bookmarked: true }
-  }
-)
-
-export const toggleBookmarkByMemeId = createServerFn({ method: 'POST' })
-  .validator((data) => {
-    return z.string().parse(data)
-  })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ data: memeId, context }) => {
-    const meme = await prismaClient.meme.findUnique({
-      where: {
-        id: memeId
-      }
-    })
-
-    if (!meme) {
-      throw notFound()
-    }
-
-    const { bookmarked } = await toggleBookmark(context.user.id, memeId)
-
-    return { bookmarked }
   })
 
 export const getVideoStatusById = createServerFn({ method: 'GET' })

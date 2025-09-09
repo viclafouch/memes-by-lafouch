@@ -5,7 +5,7 @@ import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
 import { authClient } from '@/lib/auth-client'
 import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
-import { toggleBookmarkByMemeId } from '@/server/meme'
+import { toggleBookmarkByMemeId } from '@/server/user'
 import { useShowDialog } from '@/stores/dialog.store'
 import {
   useMutation,

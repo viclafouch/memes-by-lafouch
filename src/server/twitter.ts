@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { TWEET_LINK_SCHEMA } from '@/constants/meme'
+import { extractTweetIdFromUrl, getTweetById } from '@/lib/react-tweet'
 import { authUserRequiredMiddleware } from '@/server/user-auth'
-import { extractTweetIdFromUrl, getTweetById } from '@/utils/tweet'
 import { createServerFn } from '@tanstack/react-start'
 
 export const getTweetFromUrl = createServerFn({ method: 'GET' })

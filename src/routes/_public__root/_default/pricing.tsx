@@ -9,7 +9,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { PRODUCT_ID } from '@/constants/polar'
+import { FREE_PLAN, type Plan, PREMIUM_PLAN } from '@/constants/plan'
+import { formatCentsToEuros } from '@/helpers/number'
 import { usePortal } from '@/hooks/use-portal'
 import { getActiveSubscriptionQueryOpts } from '@/lib/queries'
 import { cn } from '@/lib/utils'
@@ -19,15 +20,6 @@ import {
 } from '@/routes/_public__root/-components/page-headers'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouteContext } from '@tanstack/react-router'
-
-type Plan = {
-  title: string
-  productId: string
-  monthlyPrice: number
-  description: string
-  features: string[]
-  isExclusive?: boolean
-}
 
 const CheckItem = ({ text }: { text: string }) => {
   return (
@@ -40,7 +32,7 @@ const CheckItem = ({ text }: { text: string }) => {
 
 const PricingCard = ({
   title,
-  monthlyPrice,
+  monthlyPriceInCents,
   description,
   features,
   productId,
@@ -67,9 +59,11 @@ const PricingCard = ({
             {title}
           </CardTitle>
           <div className="flex gap-0.5">
-            <h3 className="text-3xl font-bold">{`€${monthlyPrice}`}</h3>
+            <h3 className="text-3xl font-bold">
+              {formatCentsToEuros(monthlyPriceInCents)}
+            </h3>
             <span className="flex flex-col justify-end text-sm mb-1">
-              /month
+              /mois
             </span>
           </div>
           <CardDescription className="pt-1.5 h-12">
@@ -126,36 +120,19 @@ const RouteComponent = () => {
       <div className="w-full mx-auto py-10">
         <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 sm:max-w-2xl mx-auto max-w-md">
           <PricingCard
-            title="Free"
-            monthlyPrice={0}
+            {...FREE_PLAN}
             onChangePlan={() => {
               return goToPortal()
             }}
-            productId="free"
-            description="Essential features you need to get started"
-            features={[
-              'Example Feature Number 1',
-              'Example Feature Number 2',
-              'Example Feature Number 3'
-            ]}
             isActive={Boolean(
               user !== null && activeSubscriptionQuery.data === null
             )}
           />
           <PricingCard
-            title="Pro"
-            isExclusive
+            {...PREMIUM_PLAN}
             onChangePlan={() => {
               return checkoutPortal()
             }}
-            monthlyPrice={3.99}
-            productId={PRODUCT_ID}
-            description="Essential features you need to get started"
-            features={[
-              'Example Feature Number 1',
-              'Example Feature Number 2',
-              'Example Feature Number 3'
-            ]}
             isActive={Boolean(
               user !== null && activeSubscriptionQuery.data !== null
             )}

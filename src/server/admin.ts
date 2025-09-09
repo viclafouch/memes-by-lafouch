@@ -15,12 +15,12 @@ import {
 } from '@/lib/algolia'
 import { auth } from '@/lib/auth'
 import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
-import { adminRequiredMiddleware } from '@/server/user-auth'
 import {
   extractTweetIdFromUrl,
   getTweetById,
   getTweetMedia
-} from '@/utils/tweet'
+} from '@/lib/react-tweet'
+import { adminRequiredMiddleware } from '@/server/user-auth'
 import { createServerFn } from '@tanstack/react-start'
 import { getWebRequest } from '@tanstack/react-start/server'
 

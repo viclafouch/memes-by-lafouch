@@ -19,10 +19,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { TWEET_LINK_SCHEMA } from '@/constants/meme'
+import { getTweetMedia } from '@/lib/react-tweet'
 import { getFieldErrorMessage } from '@/lib/utils'
 import { getTweetFromUrl } from '@/server/twitter'
 import { downloadBlob } from '@/utils/download'
-import { getTweetMedia } from '@/utils/tweet'
 import { formOptions, useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 

@@ -27,7 +27,7 @@ import {
   getVideoStatusByIdQueryOpts
 } from '@/lib/queries'
 import { cn } from '@/lib/utils'
-import { toggleBookmarkByMemeId } from '@/server/meme'
+import { toggleBookmarkByMemeId } from '@/server/user'
 import { useShowDialog } from '@/stores/dialog.store'
 import { matchIsVideoPlayable } from '@/utils/video'
 import {
