@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
-import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
+import { MEMES_FILTERS_SCHEMA, MemeStatusFixed } from '@/constants/meme'
 import { prismaClient } from '@/db'
 import { algoliaClient, algoliaIndexName } from '@/lib/algolia'
 import { getVideoPlayData } from '@/lib/bunny'
@@ -67,7 +67,7 @@ export const getMemes = createServerFn({ method: 'GET' })
         page: data.page ? data.page - 1 : 0,
         hitsPerPage: 30,
         filters: (() => {
-          const filters: string[] = ['status:PUBLISHED']
+          const filters: string[] = [`status:${MemeStatusFixed.PUBLISHED}`]
 
           if (data.category === 'news') {
             filters.push(`createdAtTime >= ${THIRTY_DAYS_AGO}`)
@@ -95,7 +95,10 @@ export const getRecentCountMemes = createServerFn({ method: 'GET' }).handler(
     const countResult = await algoliaClient.searchSingleIndex({
       indexName: algoliaIndexName,
       searchParams: {
-        filters: `createdAtTime >= ${THIRTY_DAYS_AGO}`,
+        filters: [
+          `status:${MemeStatusFixed.PUBLISHED}`,
+          `createdAtTime >= ${THIRTY_DAYS_AGO}`
+        ].join(' AND '),
         hitsPerPage: 0
       }
     })
@@ -113,6 +116,9 @@ export const getBestMemes = createServerFn({ method: 'GET' }).handler(
       },
       orderBy: {
         viewCount: 'desc'
+      },
+      where: {
+        status: MemeStatusFixed.PUBLISHED
       },
       cacheStrategy: {
         ttl: 24 * 60 * 60
