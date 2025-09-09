@@ -58,7 +58,11 @@ const getVideo = async (videoId: string) => {
   )
 }
 
-export default async function handler() {
+export default async function handler(
+  request: unknown,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: any
+) {
   const prisma = new PrismaClient()
 
   const memes = await prisma.meme.findMany({
@@ -86,5 +90,5 @@ export default async function handler() {
     console.log(`Updated meme (${meme.id}) viewCount column to `, views)
   }
 
-  return Response.json({ success: true })
+  response.status(200).json({ success: true })
 }
