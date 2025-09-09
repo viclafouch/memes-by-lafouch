@@ -1,3 +1,4 @@
+import type { UserWithRole } from 'better-auth/plugins'
 import { ArrowLeft } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import type { UserWithRole } from '@/constants/user'
 import { authClient } from '@/lib/auth-client'
 import { getAuthUserQueryOpts } from '@/lib/queries'
 import { useQueryClient } from '@tanstack/react-query'

@@ -12,6 +12,7 @@ import { Progress } from '@/components/animate-ui/radix/progress'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LoadingButton } from '@/components/ui/loading-button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { MemeWithVideo } from '@/constants/meme'
@@ -114,7 +115,9 @@ export const StudioDialog = ({
                   </label>
                 </div>
               </div>
-              <Button type="submit">Prévisualiser</Button>
+              <LoadingButton type="submit" isLoading={isLoading}>
+                Prévisualiser
+              </LoadingButton>
             </div>
             <Separator />
             <div className="flex flex-col gap-2 w-full">

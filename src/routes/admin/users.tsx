@@ -1,4 +1,4 @@
-import type { User } from 'better-auth'
+import type { UserWithRole } from 'better-auth/plugins'
 import { formatDate } from 'date-fns'
 import { EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
@@ -21,13 +21,6 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-
-type UserWithRole = User & {
-  role?: string
-  banned?: boolean | null
-  banReason?: string | null
-  banExpires?: Date | null
-}
 
 const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
   const router = useRouter()
