@@ -30,12 +30,7 @@ import { cn } from '@/lib/utils'
 import { toggleBookmarkByMemeId } from '@/server/user'
 import { useShowDialog } from '@/stores/dialog.store'
 import { matchIsVideoPlayable } from '@/utils/video'
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  useSuspenseQuery
-} from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useRouteContext } from '@tanstack/react-router'
 
 export type MemeListItemProps = {
@@ -61,9 +56,13 @@ const sizes = {
 
 const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
   const queryClient = useQueryClient()
-  const query = useSuspenseQuery(getFavoritesMemesQueryOpts())
+  const query = useQuery(getFavoritesMemesQueryOpts())
 
   const isMemeBookmarked = React.useMemo(() => {
+    if (!query.data) {
+      return false
+    }
+
     return query.data.bookmarks.some((bookmark) => {
       return bookmark.id === meme.id
     })
@@ -141,11 +140,7 @@ const FavoriteItemGuard = ({ meme }: { meme: MemeWithVideo }) => {
     )
   }
 
-  return (
-    <React.Suspense fallback={<div />}>
-      <FavoriteItem user={user} meme={meme} />
-    </React.Suspense>
-  )
+  return <FavoriteItem user={user} meme={meme} />
 }
 
 export const MemeListItem = React.memo(

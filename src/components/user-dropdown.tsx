@@ -42,6 +42,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
     await authClient.signOut()
     queryClient.removeQueries(getAuthUserQueryOpts())
     queryClient.removeQueries(getActiveSubscriptionQueryOpts())
+    queryClient.removeQueries(getFavoritesMemesQueryOpts())
     await router.invalidate()
   }
 

@@ -33,8 +33,8 @@ export function createAppRouter() {
   const router = createRouter({
     routeTree,
     context: { queryClient, user: null },
-    defaultPreloadStaleTime: 0,
-    defaultStaleTime: 0,
+    defaultPreloadStaleTime: 30_000, // 30s,
+    defaultStaleTime: 30_000, // 30s,
     defaultPendingMs: 0,
     defaultViewTransition: false,
     notFoundMode: 'root',
