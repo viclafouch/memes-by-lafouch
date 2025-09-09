@@ -25,6 +25,9 @@ const buttonVariants = cva(
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline'
       },
+      active: {
+        true: 'border-ring ring-primary/50 ring-[3px]'
+      },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
         sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
@@ -43,6 +46,7 @@ const Button = ({
   className,
   variant,
   size,
+  active,
   asChild = false,
   ...props
 }: React.ComponentProps<'button'> &
@@ -54,7 +58,7 @@ const Button = ({
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, className, active }))}
       {...props}
     />
   )

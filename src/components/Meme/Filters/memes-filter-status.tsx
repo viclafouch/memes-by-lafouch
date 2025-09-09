@@ -25,7 +25,9 @@ export const MemesFilterStatus = React.memo(
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">Filtrer par statut</Button>
+          <Button active={status !== null} variant="outline">
+            Filtrer par statut
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-36">
           <DropdownMenuRadioGroup

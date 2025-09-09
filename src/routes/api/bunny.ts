@@ -22,42 +22,46 @@ export const ServerRoute = createServerFileRoute('/api/bunny').methods({
 
     const videoPlayData = await getVideoPlayData(result.VideoGuid)
 
-    const { meme } = await prismaClient.video.update({
-      where: {
-        bunnyId: result.VideoGuid,
-        bunnyStatus: { lt: result.Status }
-      },
-      data: {
-        bunnyStatus: result.Status,
-        duration: videoPlayData.video.length
-      },
-      include: {
-        meme: {
-          include: {
-            video: true,
-            categories: {
-              include: {
-                category: true
+    try {
+      const { meme } = await prismaClient.video.update({
+        where: {
+          bunnyId: result.VideoGuid,
+          bunnyStatus: { lt: result.Status }
+        },
+        data: {
+          bunnyStatus: result.Status,
+          duration: videoPlayData.video.length
+        },
+        include: {
+          meme: {
+            include: {
+              video: true,
+              categories: {
+                include: {
+                  category: true
+                }
               }
             }
           }
         }
+      })
+
+      if (meme) {
+        await algoliaClient
+          .partialUpdateObject({
+            indexName: algoliaIndexName,
+            objectID: meme.id,
+            attributesToUpdate: memeToAlgoliaRecord(meme)
+          })
+          .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.error(error)
+          })
       }
-    })
 
-    if (meme) {
-      await algoliaClient
-        .partialUpdateObject({
-          indexName: algoliaIndexName,
-          objectID: meme.id,
-          attributesToUpdate: memeToAlgoliaRecord(meme)
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error(error)
-        })
+      return Response.json({ success: true, message: 'Vidéo mise à jour !' })
+    } catch (error) {
+      return Response.json({ success: true, message: 'Erreur !' })
     }
-
-    return Response.json({ success: true })
   }
 })

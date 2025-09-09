@@ -114,12 +114,10 @@ const RouteComponent = () => {
               query={search.query ?? ''}
               onQueryChange={handleQueryChange}
             />
-            <div className="gap-x-3 hidden xl:flex">
-              <MemesFilterStatus
-                status={search.status ?? null}
-                onStatusChange={handleStatusChange}
-              />
-            </div>
+            <MemesFilterStatus
+              status={search.status ?? null}
+              onStatusChange={handleStatusChange}
+            />
           </div>
           <React.Suspense fallback={<LoadingSpinner />}>
             <MemesListWrapper />
