@@ -22,7 +22,6 @@ import type { MemeWithVideo } from '@/constants/meme'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 import {
-  getFavoritesMemesCountQueryOpts,
   getFavoritesMemesQueryOpts,
   getMemeByIdQueryOpts,
   getVideoStatusByIdQueryOpts
@@ -65,7 +64,7 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
   const query = useSuspenseQuery(getFavoritesMemesQueryOpts())
 
   const isMemeBookmarked = React.useMemo(() => {
-    return query.data.some((bookmark) => {
+    return query.data.bookmarks.some((bookmark) => {
       return bookmark.id === meme.id
     })
   }, [user, query.data])
@@ -82,12 +81,18 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
       queryClient.setQueryData(getFavoritesMemesQueryOpts().queryKey, (old) => {
         if (old) {
           if (!newValue) {
-            return old.filter((bookmark) => {
-              return bookmark.id !== meme.id
-            })
+            return {
+              bookmarks: old.bookmarks.filter((bookmark) => {
+                return bookmark.id !== meme.id
+              }),
+              count: old.count - 1
+            }
           }
 
-          return [meme, ...old]
+          return {
+            bookmarks: [meme, ...old.bookmarks],
+            count: old.count + 1
+          }
         }
 
         return undefined
@@ -96,7 +101,6 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
     onSettled: () => {
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
       queryClient.invalidateQueries(getFavoritesMemesQueryOpts())
-      queryClient.invalidateQueries(getFavoritesMemesCountQueryOpts())
     }
   })
 

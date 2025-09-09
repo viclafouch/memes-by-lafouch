@@ -9,7 +9,7 @@ import {
   getRecentCountMemes,
   getVideoStatusById
 } from '@/server/meme'
-import { getFavoritesMemes, getFavoritesMemesCount } from '@/server/user'
+import { getFavoritesMemes } from '@/server/user'
 import { getAuthUser } from '@/server/user-auth'
 import type { Meme, Video } from '@prisma/client'
 import { queryOptions } from '@tanstack/react-query'
@@ -68,17 +68,6 @@ export const getAuthUserQueryOpts = () => {
 }
 
 getAuthUserQueryOpts.all = ['auth-user'] as const
-
-export const getFavoritesMemesCountQueryOpts = () => {
-  return queryOptions({
-    queryKey: [...getFavoritesMemesCountQueryOpts.all],
-    queryFn: async () => {
-      return getFavoritesMemesCount()
-    }
-  })
-}
-
-getFavoritesMemesCountQueryOpts.all = ['favorites-memes-count'] as const
 
 export const getFavoritesMemesQueryOpts = () => {
   return queryOptions({

@@ -4,11 +4,7 @@ import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
 import { authClient } from '@/lib/auth-client'
-import {
-  getFavoritesMemesCountQueryOpts,
-  getFavoritesMemesQueryOpts,
-  getMemeByIdQueryOpts
-} from '@/lib/queries'
+import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
 import { toggleBookmarkByMemeId } from '@/server/meme'
 import { useShowDialog } from '@/stores/dialog.store'
 import {
@@ -33,7 +29,7 @@ const AuthBookmarkButton = ({
   const query = useSuspenseQuery(getFavoritesMemesQueryOpts())
 
   const isMemeBookmarked = React.useMemo(() => {
-    return query.data.some((bookmark) => {
+    return query.data.bookmarks.some((bookmark) => {
       return bookmark.id === meme.id
     })
   }, [user, query.data])
@@ -50,12 +46,18 @@ const AuthBookmarkButton = ({
       queryClient.setQueryData(getFavoritesMemesQueryOpts().queryKey, (old) => {
         if (old) {
           if (!newValue) {
-            return old.filter((bookmark) => {
-              return bookmark.id !== meme.id
-            })
+            return {
+              bookmarks: old.bookmarks.filter((bookmark) => {
+                return bookmark.id !== meme.id
+              }),
+              count: old.count - 1
+            }
           }
 
-          return [meme, ...old]
+          return {
+            bookmarks: [meme, ...old.bookmarks],
+            count: old.count + 1
+          }
         }
 
         return undefined
@@ -64,7 +66,6 @@ const AuthBookmarkButton = ({
     onSettled: () => {
       queryClient.invalidateQueries(getMemeByIdQueryOpts(meme.id))
       queryClient.invalidateQueries(getFavoritesMemesQueryOpts())
-      queryClient.invalidateQueries(getFavoritesMemesCountQueryOpts())
     }
   })
 

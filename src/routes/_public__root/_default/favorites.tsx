@@ -5,7 +5,9 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 const RouteComponent = () => {
   const loaderData = Route.useLoaderData()
 
-  return <MemesList layoutContext="favorites" memes={loaderData.memes} />
+  return (
+    <MemesList layoutContext="favorites" memes={loaderData.memes.bookmarks} />
+  )
 }
 
 export const Route = createFileRoute('/_public__root/_default/favorites')({

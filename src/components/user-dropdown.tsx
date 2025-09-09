@@ -24,7 +24,7 @@ import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import {
   getActiveSubscriptionQueryOpts,
   getAuthUserQueryOpts,
-  getFavoritesMemesCountQueryOpts
+  getFavoritesMemesQueryOpts
 } from '@/lib/queries'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useRouter } from '@tanstack/react-router'
@@ -35,7 +35,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
   const router = useRouter()
   const { goToPortal, checkoutPortal } = usePortal()
 
-  const favoritesMemesCountQuery = useQuery(getFavoritesMemesCountQueryOpts())
+  const favoritesMemesCountQuery = useQuery(getFavoritesMemesQueryOpts())
   const activeSubscriptionQuery = useQuery(getActiveSubscriptionQueryOpts())
 
   const handleLogout = async () => {

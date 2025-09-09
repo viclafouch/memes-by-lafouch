@@ -5,18 +5,6 @@ import { authUserRequiredMiddleware } from '@/server/user-auth'
 import { createServerFn } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
 
-export const getFavoritesMemesCount = createServerFn({ method: 'GET' })
-  .middleware([authUserRequiredMiddleware])
-  .handler(async ({ context }) => {
-    const count = await prismaClient.userBookmark.count({
-      where: {
-        userId: context.user.id
-      }
-    })
-
-    return { count }
-  })
-
 export const getFavoritesMemes = createServerFn({ method: 'GET' })
   .middleware([authUserRequiredMiddleware])
   .handler(async ({ context }) => {
@@ -36,9 +24,12 @@ export const getFavoritesMemes = createServerFn({ method: 'GET' })
       }
     })
 
-    return bookmarks.map((bookmark) => {
-      return bookmark.meme
-    })
+    return {
+      bookmarks: bookmarks.map((bookmark) => {
+        return bookmark.meme
+      }),
+      count: bookmarks.length
+    }
   })
 
 export const checkGeneration = createServerFn({ method: 'POST' })
