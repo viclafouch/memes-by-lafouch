@@ -1,5 +1,10 @@
 import { z } from 'zod'
 import { prismaClient } from '@/db'
+import {
+  algoliaClient,
+  algoliaIndexName,
+  memeToAlgoliaRecord
+} from '@/lib/algolia'
 import { getVideoPlayData } from '@/lib/bunny'
 import { createServerFileRoute } from '@tanstack/react-start/server'
 
@@ -17,18 +22,41 @@ export const ServerRoute = createServerFileRoute('/api/bunny').methods({
 
     const videoPlayData = await getVideoPlayData(result.VideoGuid)
 
-    await prismaClient.video
-      .update({
-        where: {
-          bunnyId: result.VideoGuid,
-          bunnyStatus: { lt: result.Status }
-        },
-        data: {
-          bunnyStatus: result.Status,
-          duration: videoPlayData.video.length
+    const { meme } = await prismaClient.video.update({
+      where: {
+        bunnyId: result.VideoGuid,
+        bunnyStatus: { lt: result.Status }
+      },
+      data: {
+        bunnyStatus: result.Status,
+        duration: videoPlayData.video.length
+      },
+      include: {
+        meme: {
+          include: {
+            video: true,
+            categories: {
+              include: {
+                category: true
+              }
+            }
+          }
         }
-      })
-      .catch(() => {})
+      }
+    })
+
+    if (meme) {
+      await algoliaClient
+        .partialUpdateObject({
+          indexName: algoliaIndexName,
+          objectID: meme.id,
+          attributesToUpdate: memeToAlgoliaRecord(meme)
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error)
+        })
+    }
 
     return Response.json({ success: true })
   }

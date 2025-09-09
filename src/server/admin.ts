@@ -289,8 +289,6 @@ export const getAdminMemes = createServerFn({ method: 'GET' })
 
           if (data.status) {
             filters.push(`status:${data.status}`)
-          } else {
-            filters.push('status:PUBLISHED')
           }
 
           return filters.length ? filters.join(' AND ') : undefined

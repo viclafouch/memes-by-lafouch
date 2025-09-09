@@ -15,11 +15,11 @@ export const MemesFilterStatus = React.memo(
     status,
     onStatusChange
   }: {
-    status: MemeStatus
-    onStatusChange: (status: MemeStatus) => void
+    status: MemeStatus | null
+    onStatusChange: (status: MemeStatus | null) => void
   }) => {
     const handleChange = (value: string) => {
-      onStatusChange(value as MemeStatus)
+      onStatusChange(value === 'all' ? null : (value as MemeStatus))
     }
 
     return (
@@ -28,7 +28,13 @@ export const MemesFilterStatus = React.memo(
           <Button variant="outline">Filtrer par statut</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-36">
-          <DropdownMenuRadioGroup value={status} onValueChange={handleChange}>
+          <DropdownMenuRadioGroup
+            value={status || 'all'}
+            onValueChange={handleChange}
+          >
+            <DropdownMenuRadioItem value="all" key="all">
+              Tous
+            </DropdownMenuRadioItem>
             <DropdownMenuRadioItem
               value={MemeStatusFixed.PUBLISHED}
               key="published"

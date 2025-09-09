@@ -9,7 +9,7 @@ import { Paginator } from '@/components/paginator'
 import { Container } from '@/components/ui/container'
 import { LoadingSpinner } from '@/components/ui/spinner'
 import type { MemeStatus } from '@/constants/meme'
-import { MEMES_FILTERS_SCHEMA, MemeStatusFixed } from '@/constants/meme'
+import { MEMES_FILTERS_SCHEMA } from '@/constants/meme'
 import { getAdminMemesListQueryOpts } from '@/lib/queries'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -67,14 +67,14 @@ const RouteComponent = () => {
   const navigate = Route.useNavigate()
   const search = Route.useSearch()
 
-  const handleStatusChange = (status: MemeStatus) => {
+  const handleStatusChange = (status: MemeStatus | null) => {
     navigate({
       to: '/admin/library',
       search: (prevState) => {
         return {
           page: 1,
           query: prevState.query,
-          status
+          status: status ?? undefined
         }
       },
       viewTransition: false,
@@ -116,7 +116,7 @@ const RouteComponent = () => {
             />
             <div className="gap-x-3 hidden xl:flex">
               <MemesFilterStatus
-                status={search.status ?? MemeStatusFixed.PUBLISHED}
+                status={search.status ?? null}
                 onStatusChange={handleStatusChange}
               />
             </div>

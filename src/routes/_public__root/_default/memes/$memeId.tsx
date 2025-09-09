@@ -26,6 +26,7 @@ import {
   ClientOnly,
   createFileRoute,
   Link,
+  notFound,
   useRouteContext,
   useRouter
 } from '@tanstack/react-router'
@@ -209,6 +210,10 @@ export const Route = createFileRoute('/_public__root/_default/memes/$memeId')({
     const meme = await context.queryClient.ensureQueryData(
       getMemeByIdQueryOpts(params.memeId)
     )
+
+    if (meme.status !== 'PUBLISHED') {
+      throw notFound()
+    }
 
     const nextRandomMeme = getRandomMeme({ data: meme.id })
 

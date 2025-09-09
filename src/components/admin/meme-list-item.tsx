@@ -84,7 +84,7 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             className={cn(
               'line-clamp-1 font-medium leading-none text-gray-100',
               meme.title === 'Titre inconnu' || meme.title === 'Sans titre'
-                ? 'text-destructive'
+                ? 'text-destructive-foreground'
                 : undefined
             )}
           >
