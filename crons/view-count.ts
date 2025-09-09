@@ -58,7 +58,7 @@ const getVideo = async (videoId: string) => {
   )
 }
 
-export async function GET() {
+export default async function handler() {
   const prisma = new PrismaClient()
 
   const memes = await prisma.meme.findMany({
