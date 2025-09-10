@@ -21,11 +21,26 @@ import {
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouteContext } from '@tanstack/react-router'
 
-const CheckItem = ({ text }: { text: string }) => {
+const StatusColorByFeatureStatus = {
+  included: 'text-green-400',
+  limited: 'text-yellow-400',
+  // eslint-disable-next-line camelcase
+  not_included: 'text-red-400'
+} satisfies Record<Plan['features'][number]['status'], string>
+
+const CheckItem = ({ feature }: { feature: Plan['features'][number] }) => {
   return (
     <div className="flex gap-2">
-      <CheckCircle2 size={18} className="my-auto text-green-400" />
-      <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">{text}</p>
+      <CheckCircle2
+        size={18}
+        className={cn('my-auto', StatusColorByFeatureStatus[feature.status])}
+      />
+      <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">
+        {feature.label}{' '}
+        {feature.note ? (
+          <span className="text-muted-foreground text-xs">{`(${feature.note})`}</span>
+        ) : null}
+      </p>
     </div>
   )
 }
@@ -66,13 +81,11 @@ const PricingCard = ({
               /mois
             </span>
           </div>
-          <CardDescription className="pt-1.5 h-12">
-            {description}
-          </CardDescription>
+          <CardDescription className="pt-1.5">{description}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
-          {features.map((feature: string) => {
-            return <CheckItem key={feature} text={feature} />
+          {features.map((feature) => {
+            return <CheckItem key={feature.label} feature={feature} />
           })}
         </CardContent>
       </div>
