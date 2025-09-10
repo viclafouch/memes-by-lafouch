@@ -63,6 +63,9 @@ export default async function handler(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: any
 ) {
+  response.status(200).json({ success: true })
+
+  return
   const prisma = new PrismaClient()
 
   const memes = await prisma.meme.findMany({
