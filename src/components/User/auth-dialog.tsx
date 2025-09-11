@@ -86,15 +86,11 @@ export const LoginForm = ({ onOpenChange, onSuccess }: FormProps) => {
       router.invalidate()
       onSuccess?.()
     },
-    onError: (context: Error | ErrorContext) => {
-      if ('error' in context) {
-        if (context.error.code === 'EMAIL_NOT_VERIFIED') {
-          setEmailIsNotValid(true)
-        } else {
-          toast.error(getErrorMessage(context.error, 'fr'))
-        }
+    onError: (context: ErrorContext) => {
+      if (context.error.code === 'EMAIL_NOT_VERIFIED') {
+        setEmailIsNotValid(true)
       } else {
-        toast.error(getErrorMessage(context, 'fr'))
+        toast.error(getErrorMessage(context.error, 'fr'))
       }
     }
   })

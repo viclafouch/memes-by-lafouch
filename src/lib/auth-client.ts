@@ -44,6 +44,10 @@ export const ERROR_CODES = {
     en: 'Premium required',
     fr: 'Premium requis'
   },
+  INVALID_PASSWORD: {
+    en: 'Invalid password',
+    fr: 'Mot de passe invalide'
+  },
   UNAUTHORIZED: {
     en: 'You must be logged in',
     fr: 'Vous devez être connecté'

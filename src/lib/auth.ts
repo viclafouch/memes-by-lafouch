@@ -31,11 +31,21 @@ const getAuthConfig = serverOnly(() => {
         maxAge: 5 * 60 // Cache duration in seconds
       }
     },
+    user: {
+      deleteUser: {
+        enabled: true,
+        afterDelete: async (user) => {
+          await polarClient.customers.deleteExternal({
+            externalId: user.id
+          })
+        }
+      }
+    },
     emailAndPassword: {
       enabled: true,
       autoSignIn: true,
       minPasswordLength: 4,
-      maxPasswordLength: 20,
+      maxPasswordLength: 100,
       sendResetPassword: async ({ user, url }) => {
         await resendClient.emails.send({
           from: 'Acme <onboarding@resend.dev>',

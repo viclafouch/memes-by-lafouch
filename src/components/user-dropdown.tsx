@@ -7,7 +7,8 @@ import {
   LogOutIcon,
   Shield,
   SparklesIcon,
-  Star
+  Star,
+  User
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -89,12 +90,13 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         <DropdownMenuGroup>
           {!subcription ? (
             <DropdownMenuItem
+              variant="info"
               onClick={() => {
                 return checkoutPortal()
               }}
             >
               <SparklesIcon />
-              Mettre à niveau
+              Passer à Premium
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem
@@ -103,14 +105,16 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
               }}
               className="flex-col items-start gap-0.5"
             >
-              <div className="flex gap-2 items-center">
-                <CreditCard />
-                Gérer mon abonnement
-              </div>
-              <div className="text-destructive-foreground text-xs">
-                {subcription.cancelAtPeriodEnd
-                  ? `Fin le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`
-                  : `Renouvellement le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`}
+              <div className="flex gap-2 items-start">
+                <CreditCard className="mt-0.5" />
+                <div className="flex flex-col">
+                  Gérer mon abonnement
+                  <div className="text-destructive-foreground text-xs">
+                    {subcription.cancelAtPeriodEnd
+                      ? `Fin le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`
+                      : `Renouvellement le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`}
+                  </div>
+                </div>
               </div>
             </DropdownMenuItem>
           )}
@@ -121,6 +125,12 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
             <Link to="/favorites">
               <Star />
               Favoris ({favoritesMemesCountQuery.data?.count ?? 0})
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/settings">
+              <User />
+              Mon compte
             </Link>
           </DropdownMenuItem>
           {matchIsUserAdmin(user) ? (

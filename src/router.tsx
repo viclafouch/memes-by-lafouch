@@ -1,27 +1,13 @@
-import isNetworkError from 'is-network-error'
-import { toast } from 'sonner'
 import { DefaultLoading } from '@/components/default-loading'
 import { ErrorComponent } from '@/components/error-component'
 import { NotFound } from '@/components/not-found'
-import { getErrorMessage } from '@/lib/auth-client'
-import { MutationCache, QueryClient } from '@tanstack/react-query'
+import { QueryClient } from '@tanstack/react-query'
 import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { routeTree } from './routeTree.gen'
 
-const mutationCache = new MutationCache({
-  onError: (error: unknown) => {
-    if (isNetworkError(error)) {
-      toast.error('Veuillez vérifier votre connexion internet')
-    } else if (error instanceof Error) {
-      toast.error(getErrorMessage(error, 'fr'))
-    }
-  }
-})
-
 export function createAppRouter() {
   const queryClient = new QueryClient({
-    mutationCache,
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: process.env.NODE_ENV === 'production',

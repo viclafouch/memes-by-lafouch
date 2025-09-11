@@ -22,6 +22,8 @@ import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categor
 import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
 import { Route as Public__rootDefaultPricingRouteImport } from './routes/_public__root/_default/pricing'
 import { Route as Public__rootDefaultFavoritesRouteImport } from './routes/_public__root/_default/favorites'
+import { Route as Public__rootDefaultSettingsRouteRouteImport } from './routes/_public__root/_default/settings/route'
+import { Route as Public__rootDefaultSettingsIndexRouteImport } from './routes/_public__root/_default/settings/index'
 import { Route as Public__rootDefaultRandomIndexRouteImport } from './routes/_public__root/_default/random/index'
 import { Route as Public__rootDefaultMemesIndexRouteImport } from './routes/_public__root/_default/memes/index'
 import { Route as Public__rootDefaultPasswordResetRouteImport } from './routes/_public__root/_default/password.reset'
@@ -89,6 +91,18 @@ const Public__rootDefaultFavoritesRoute =
     path: '/favorites',
     getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
+const Public__rootDefaultSettingsRouteRoute =
+  Public__rootDefaultSettingsRouteRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
+  } as any)
+const Public__rootDefaultSettingsIndexRoute =
+  Public__rootDefaultSettingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => Public__rootDefaultSettingsRouteRoute,
+  } as any)
 const Public__rootDefaultRandomIndexRoute =
   Public__rootDefaultRandomIndexRouteImport.update({
     id: '/random/',
@@ -141,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
+  '/settings': typeof Public__rootDefaultSettingsRouteRouteWithChildren
   '/favorites': typeof Public__rootDefaultFavoritesRoute
   '/pricing': typeof Public__rootDefaultPricingRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
@@ -152,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/password/reset': typeof Public__rootDefaultPasswordResetRoute
   '/memes': typeof Public__rootDefaultMemesIndexRoute
   '/random': typeof Public__rootDefaultRandomIndexRoute
+  '/settings/': typeof Public__rootDefaultSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
@@ -169,6 +185,7 @@ export interface FileRoutesByTo {
   '/password/reset': typeof Public__rootDefaultPasswordResetRoute
   '/memes': typeof Public__rootDefaultMemesIndexRoute
   '/random': typeof Public__rootDefaultRandomIndexRoute
+  '/settings': typeof Public__rootDefaultSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -178,6 +195,7 @@ export interface FileRoutesById {
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/_public__root/': typeof Public__rootIndexRoute
+  '/_public__root/_default/settings': typeof Public__rootDefaultSettingsRouteRouteWithChildren
   '/_public__root/_default/favorites': typeof Public__rootDefaultFavoritesRoute
   '/_public__root/_default/pricing': typeof Public__rootDefaultPricingRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
@@ -189,6 +207,7 @@ export interface FileRoutesById {
   '/_public__root/_default/password/reset': typeof Public__rootDefaultPasswordResetRoute
   '/_public__root/_default/memes/': typeof Public__rootDefaultMemesIndexRoute
   '/_public__root/_default/random/': typeof Public__rootDefaultRandomIndexRoute
+  '/_public__root/_default/settings/': typeof Public__rootDefaultSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -197,6 +216,7 @@ export interface FileRouteTypes {
     | '/admin/downloader'
     | '/admin/users'
     | '/'
+    | '/settings'
     | '/favorites'
     | '/pricing'
     | '/admin/library/$memeId'
@@ -208,6 +228,7 @@ export interface FileRouteTypes {
     | '/password/reset'
     | '/memes'
     | '/random'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
@@ -225,6 +246,7 @@ export interface FileRouteTypes {
     | '/password/reset'
     | '/memes'
     | '/random'
+    | '/settings'
   id:
     | '__root__'
     | '/_public__root'
@@ -233,6 +255,7 @@ export interface FileRouteTypes {
     | '/admin/downloader'
     | '/admin/users'
     | '/_public__root/'
+    | '/_public__root/_default/settings'
     | '/_public__root/_default/favorites'
     | '/_public__root/_default/pricing'
     | '/admin/library/$memeId'
@@ -244,6 +267,7 @@ export interface FileRouteTypes {
     | '/_public__root/_default/password/reset'
     | '/_public__root/_default/memes/'
     | '/_public__root/_default/random/'
+    | '/_public__root/_default/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -355,6 +379,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Public__rootDefaultFavoritesRouteImport
       parentRoute: typeof Public__rootDefaultRouteRoute
     }
+    '/_public__root/_default/settings': {
+      id: '/_public__root/_default/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof Public__rootDefaultSettingsRouteRouteImport
+      parentRoute: typeof Public__rootDefaultRouteRoute
+    }
+    '/_public__root/_default/settings/': {
+      id: '/_public__root/_default/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof Public__rootDefaultSettingsIndexRouteImport
+      parentRoute: typeof Public__rootDefaultSettingsRouteRoute
+    }
     '/_public__root/_default/random/': {
       id: '/_public__root/_default/random/'
       path: '/random'
@@ -418,7 +456,23 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
+interface Public__rootDefaultSettingsRouteRouteChildren {
+  Public__rootDefaultSettingsIndexRoute: typeof Public__rootDefaultSettingsIndexRoute
+}
+
+const Public__rootDefaultSettingsRouteRouteChildren: Public__rootDefaultSettingsRouteRouteChildren =
+  {
+    Public__rootDefaultSettingsIndexRoute:
+      Public__rootDefaultSettingsIndexRoute,
+  }
+
+const Public__rootDefaultSettingsRouteRouteWithChildren =
+  Public__rootDefaultSettingsRouteRoute._addFileChildren(
+    Public__rootDefaultSettingsRouteRouteChildren,
+  )
+
 interface Public__rootDefaultRouteRouteChildren {
+  Public__rootDefaultSettingsRouteRoute: typeof Public__rootDefaultSettingsRouteRouteWithChildren
   Public__rootDefaultFavoritesRoute: typeof Public__rootDefaultFavoritesRoute
   Public__rootDefaultPricingRoute: typeof Public__rootDefaultPricingRoute
   Public__rootDefaultCheckoutSuccessRoute: typeof Public__rootDefaultCheckoutSuccessRoute
@@ -431,6 +485,8 @@ interface Public__rootDefaultRouteRouteChildren {
 
 const Public__rootDefaultRouteRouteChildren: Public__rootDefaultRouteRouteChildren =
   {
+    Public__rootDefaultSettingsRouteRoute:
+      Public__rootDefaultSettingsRouteRouteWithChildren,
     Public__rootDefaultFavoritesRoute: Public__rootDefaultFavoritesRoute,
     Public__rootDefaultPricingRoute: Public__rootDefaultPricingRoute,
     Public__rootDefaultCheckoutSuccessRoute:
