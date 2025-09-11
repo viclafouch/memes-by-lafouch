@@ -53,5 +53,9 @@ export const getErrorMessage = (
     return ERROR_CODES[error.code as keyof typeof ERROR_CODES][lang]
   }
 
-  return error.message
+  if (process.env.NODE_ENV === 'development') {
+    return error.message
+  }
+
+  return 'Une erreur inattendue s’est produite'
 }

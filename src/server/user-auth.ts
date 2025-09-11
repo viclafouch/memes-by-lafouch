@@ -18,14 +18,7 @@ export const authUserRequiredMiddleware = createMiddleware({
 }).server(async ({ next }) => {
   const { headers } = getWebRequest()
 
-  const session = await auth.api.getSession({
-    headers,
-    query: {
-      // ensure session is fresh
-      // https://www.better-auth.com/docs/concepts/session-management#session-caching
-      disableCookieCache: true
-    }
-  })
+  const session = await auth.api.getSession({ headers })
 
   if (!session) {
     setResponseStatus(401)

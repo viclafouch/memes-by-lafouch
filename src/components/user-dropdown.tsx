@@ -1,5 +1,6 @@
 import React from 'react'
 import type { UserWithRole } from 'better-auth/plugins'
+import { formatDate } from 'date-fns'
 import {
   ChevronDown,
   CreditCard,
@@ -46,6 +47,8 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
     await router.invalidate()
   }
 
+  const subcription = activeSubscriptionQuery.data
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
@@ -84,7 +87,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {activeSubscriptionQuery.data === null ? (
+          {!subcription ? (
             <DropdownMenuItem
               onClick={() => {
                 return checkoutPortal()
@@ -98,9 +101,17 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
               onClick={() => {
                 return goToPortal()
               }}
+              className="flex-col items-start gap-0.5"
             >
-              <CreditCard />
-              Gérer mon abonnement
+              <div className="flex gap-2 items-center">
+                <CreditCard />
+                Gérer mon abonnement
+              </div>
+              <div className="text-destructive-foreground text-xs">
+                {subcription.cancelAtPeriodEnd
+                  ? `Fin le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`
+                  : `Renouvellement le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`}
+              </div>
             </DropdownMenuItem>
           )}
         </DropdownMenuGroup>

@@ -100,7 +100,7 @@ const PricingCard = ({
             variant="secondary"
             disabled={isActive}
           >
-            Current plan
+            Actif
           </Button>
         ) : (
           <Button
@@ -129,7 +129,10 @@ const RouteComponent = () => {
   return (
     <div>
       <PageHeading>Plans</PageHeading>
-      <PageDescription>A collection of memes from the internet</PageDescription>
+      <PageDescription>
+        Choisissez l’offre qui correspond à vos besoins, du gratuit à
+        l’illimité.
+      </PageDescription>
       <div className="w-full mx-auto py-10">
         <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 sm:max-w-2xl mx-auto max-w-md">
           <PricingCard

@@ -112,7 +112,7 @@ export const getRecentCountMemesQueryOpts = () => {
     queryFn: async () => {
       return getRecentCountMemes()
     },
-    staleTime: Infinity
+    staleTime: 1000 * 60 * 10 // 10min
   })
 }
 
