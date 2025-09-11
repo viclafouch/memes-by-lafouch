@@ -3,7 +3,6 @@ import type { User } from 'better-auth'
 import { Star } from 'lucide-react'
 import { IconButton } from '@/components/animate-ui/buttons/icon'
 import type { MemeWithVideo } from '@/constants/meme'
-import { authClient } from '@/lib/auth-client'
 import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
 import { toggleBookmarkByMemeId } from '@/server/user'
 import { useShowDialog } from '@/stores/dialog.store'
@@ -12,6 +11,7 @@ import {
   useQueryClient,
   useSuspenseQuery
 } from '@tanstack/react-query'
+import { useRouteContext } from '@tanstack/react-router'
 
 type ToggleLikeButtonProps = {
   meme: MemeWithVideo
@@ -80,6 +80,7 @@ const AuthBookmarkButton = ({
   return (
     <IconButton
       icon={Star}
+      disabled={toggleLikeMutation.isPending}
       active={isMemeBookmarked}
       className={className}
       onClick={handleToggleLike}
@@ -88,10 +89,10 @@ const AuthBookmarkButton = ({
 }
 
 const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
-  const session = authClient.useSession()
+  const { user } = useRouteContext({ from: '__root__' })
   const showDialog = useShowDialog()
 
-  if (!session.data) {
+  if (!user) {
     return (
       <IconButton
         icon={Star}
@@ -107,11 +108,7 @@ const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
 
   return (
     <React.Suspense fallback={<div />}>
-      <AuthBookmarkButton
-        user={session.data.user}
-        meme={meme}
-        className={className}
-      />
+      <AuthBookmarkButton user={user} meme={meme} className={className} />
     </React.Suspense>
   )
 }

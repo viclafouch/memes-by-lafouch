@@ -112,7 +112,10 @@ const FavoriteItem = ({ user, meme }: { user: User; meme: MemeWithVideo }) => {
   }
 
   return (
-    <DropdownMenuItem onClick={handleToggleFavorite}>
+    <DropdownMenuItem
+      onClick={handleToggleFavorite}
+      disabled={toggleFavorite.isPending}
+    >
       <Star
         data-active={isMemeBookmarked}
         className="data-[active=true]:fill-muted-foreground"
