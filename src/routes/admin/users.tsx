@@ -12,8 +12,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { wrapServerFn } from '@/constants/error'
 import { authClient } from '@/lib/auth-client'
-import { getListUsers } from '@/server/admin'
+import { getListUsers, removeUser } from '@/server/admin'
 import { useMutation } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import {
@@ -45,9 +46,6 @@ const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
         userId: user.id
       })
     },
-    onError: (error) => {
-      toast.error(error.message)
-    },
     onSuccess: () => {
       router.invalidate()
     }
@@ -55,19 +53,13 @@ const DropdownMenuUser = ({ user }: { user: UserWithRole }) => {
 
   const deleteUserMutation = useMutation({
     mutationFn: async () => {
-      const promise = authClient.admin.removeUser({
-        userId: user.id
-      })
+      const promise = wrapServerFn(removeUser({ data: user.id }))
       toast.promise(promise, {
         loading: 'Suppression en cours...',
-        success: 'Utilisateur supprimé avec succès',
-        error: 'Erreur lors de la suppression'
+        success: 'Utilisateur supprimé avec succès'
       })
 
       return promise
-    },
-    onError: (error) => {
-      toast.error(error.message)
     },
     onSuccess: () => {
       router.invalidate()

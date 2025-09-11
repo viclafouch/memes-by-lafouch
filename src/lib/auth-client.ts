@@ -31,6 +31,11 @@ export const ERROR_CODES = {
     en: 'Invalid email or password',
     fr: 'Email ou mot de passe invalide'
   },
+  // @ts-expect-error: https://github.com/better-auth/better-auth/issues/4386
+  USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: {
+    en: 'User already exists, use another email',
+    fr: 'Utilisateur déjà inscrit, utilisez un autre email'
+  },
   PASSWORD_TOO_SHORT: {
     en: 'Password too short',
     fr: 'Mot de passe trop court'

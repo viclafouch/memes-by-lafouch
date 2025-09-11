@@ -1,4 +1,5 @@
 import React from 'react'
+import type { ErrorContext } from 'better-auth/react'
 import { CheckCircle, CircleAlert } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -29,7 +30,7 @@ import {
 } from '@/lib/queries'
 import { getFieldErrorMessage } from '@/lib/utils'
 import { formOptions, useForm } from '@tanstack/react-form'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useRouter } from '@tanstack/react-router'
 
 type FormProps = {
@@ -57,33 +58,54 @@ export const LoginForm = ({ onOpenChange, onSuccess }: FormProps) => {
   const queryClient = useQueryClient()
   const [emailIsNotValid, setEmailIsNotValid] = React.useState(false)
 
+  const signInMutation = useMutation({
+    mutationFn: async ({
+      email,
+      password
+    }: {
+      email: string
+      password: string
+    }) => {
+      return new Promise((resolve, reject) => {
+        authClient.signIn.email(
+          {
+            email,
+            password,
+            rememberMe: true
+          },
+          {
+            onError: reject,
+            onSuccess: resolve
+          }
+        )
+      })
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(getAuthUserQueryOpts())
+      await queryClient.invalidateQueries(getActiveSubscriptionQueryOpts())
+      router.invalidate()
+      onSuccess?.()
+    },
+    onError: (context: Error | ErrorContext) => {
+      if ('error' in context) {
+        if (context.error.code === 'EMAIL_NOT_VERIFIED') {
+          setEmailIsNotValid(true)
+        } else {
+          toast.error(getErrorMessage(context.error, 'fr'))
+        }
+      } else {
+        toast.error(getErrorMessage(context, 'fr'))
+      }
+    }
+  })
+
   const form = useForm({
     ...loginFormOpts,
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email(
-        {
-          email: value.email,
-          password: value.password,
-          rememberMe: true
-        },
-        {
-          onSuccess: async () => {
-            await queryClient.invalidateQueries(getAuthUserQueryOpts())
-            await queryClient.invalidateQueries(
-              getActiveSubscriptionQueryOpts()
-            )
-            router.invalidate()
-            onSuccess?.()
-          },
-          onError: (context) => {
-            if (context.error.code === 'EMAIL_NOT_VERIFIED') {
-              setEmailIsNotValid(true)
-            } else {
-              toast.error(getErrorMessage(context.error, 'fr'))
-            }
-          }
-        }
-      )
+      return signInMutation.mutateAsync({
+        email: value.email,
+        password: value.password
+      })
     }
   })
 
@@ -221,25 +243,47 @@ const signupFormOpts = formOptions({
 })
 
 const SignupForm = () => {
+  const signupMutation = useMutation({
+    mutationFn: async ({
+      email,
+      password,
+      name
+    }: {
+      email: string
+      password: string
+      name: string
+    }) => {
+      return new Promise((resolve, reject) => {
+        authClient.signUp.email(
+          {
+            email,
+            password,
+            name,
+            callbackURL: '/'
+          },
+          {
+            onError: reject,
+            onSuccess: resolve
+          }
+        )
+      })
+    },
+    onSuccess: async () => {
+      form.reset()
+    },
+    onError: (context: ErrorContext) => {
+      toast.error(getErrorMessage(context.error, 'fr'))
+    }
+  })
+
   const form = useForm({
     ...signupFormOpts,
     onSubmit: async ({ value }) => {
-      await authClient.signUp.email(
-        {
-          email: value.email,
-          password: value.password,
-          name: value.name,
-          callbackURL: '/'
-        },
-        {
-          onError: (context) => {
-            toast.error(getErrorMessage(context.error, 'fr'))
-          },
-          onSuccess: () => {
-            form.reset()
-          }
-        }
-      )
+      return signupMutation.mutateAsync({
+        email: value.email,
+        password: value.password,
+        name: value.name
+      })
     }
   })
 
@@ -381,7 +425,7 @@ const SignupForm = () => {
           return state.isSubmitted
         }}
         children={(isSubmitted) => {
-          return isSubmitted ? (
+          return isSubmitted && signupMutation.isSuccess ? (
             <Alert variant="success" className="mt-4">
               <CheckCircle />
               <AlertTitle>

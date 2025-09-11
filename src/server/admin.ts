@@ -13,7 +13,7 @@ import {
   algoliaIndexName,
   memeToAlgoliaRecord
 } from '@/lib/algolia'
-import { auth } from '@/lib/auth'
+import { auth, polarClient } from '@/lib/auth'
 import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
 import {
   extractTweetIdFromUrl,
@@ -302,4 +302,32 @@ export const getAdminMemes = createServerFn({ method: 'GET' })
       page: response.page,
       totalPages: response.nbPages
     }
+  })
+
+export const removeUser = createServerFn({ method: 'POST' })
+  .middleware([adminRequiredMiddleware])
+  .validator(z.string())
+  .handler(async ({ data: userId }) => {
+    const user = await prismaClient.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    await auth.api.removeUser({
+      body: {
+        userId: user.id
+      },
+      headers: await getWebRequest().headers
+    })
+
+    await polarClient.customers.deleteExternal({
+      externalId: user.id
+    })
+
+    return { success: true }
   })
