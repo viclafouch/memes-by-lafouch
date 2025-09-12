@@ -32,7 +32,7 @@ const AuthBookmarkButton = ({
     return query.data.bookmarks.some((bookmark) => {
       return bookmark.id === meme.id
     })
-  }, [user, query.data])
+  }, [user, query.data, meme])
 
   const toggleLikeMutation = useMutation({
     mutationFn: toggleBookmarkByMemeId,

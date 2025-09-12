@@ -11,6 +11,7 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as Public__rootRouteRouteImport } from './routes/_public__root/route'
 import { Route as Public__rootIndexRouteImport } from './routes/_public__root/index'
@@ -35,6 +36,11 @@ import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.
 
 const rootServerRouteImport = createServerRootRoute()
 
+const ReelsRoute = ReelsRouteImport.update({
+  id: '/reels',
+  path: '/reels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -152,6 +158,7 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
+  '/reels': typeof ReelsRoute
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
+  '/reels': typeof ReelsRoute
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
   '/': typeof Public__rootIndexRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public__root': typeof Public__rootRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
+  '/reels': typeof ReelsRoute
   '/_public__root/_default': typeof Public__rootDefaultRouteRouteWithChildren
   '/admin/downloader': typeof AdminDownloaderRoute
   '/admin/users': typeof AdminUsersRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/admin'
+    | '/reels'
     | '/admin/downloader'
     | '/admin/users'
     | '/'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
+    | '/reels'
     | '/admin/downloader'
     | '/admin/users'
     | '/'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_public__root'
     | '/admin'
+    | '/reels'
     | '/_public__root/_default'
     | '/admin/downloader'
     | '/admin/users'
@@ -273,6 +285,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   Public__rootRouteRoute: typeof Public__rootRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  ReelsRoute: typeof ReelsRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/bunny': typeof ApiBunnyServerRoute
@@ -302,6 +315,13 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reels': {
+      id: '/reels'
+      path: '/reels'
+      fullPath: '/reels'
+      preLoaderRoute: typeof ReelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -541,6 +561,7 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   Public__rootRouteRoute: Public__rootRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  ReelsRoute: ReelsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Shuffle } from 'lucide-react'
+import { Shuffle, Smartphone } from 'lucide-react'
 import { CategoriesList } from '@/components/categories/categories-list'
 import MemesPagination from '@/components/Meme/Filters/memes-pagination'
 import { MemesQuery } from '@/components/Meme/Filters/memes-query'
@@ -99,6 +99,13 @@ const RouteComponent = () => {
               >
                 <Shuffle />
                 Aléatoire
+              </Link>
+              <Link
+                to="/reels"
+                className={buttonVariants({ variant: 'outline' })}
+              >
+                <Smartphone />
+                Mode stories
               </Link>
             </div>
           </div>

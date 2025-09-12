@@ -40,7 +40,7 @@ export const Navbar = () => {
           to="/"
           className={cn(
             buttonVariants({ variant: 'ghost', size: 'icon' }),
-            "dark:hover:bg-accent text-accent-foreground [&_svg:not([class*='size-'])]:size-6"
+            "dark:hover:bg-accent text-accent-foreground [&_svg:not([class*='size-'])]:size-6 p-1"
           )}
         >
           <img src="/logo.png" alt="Logo" className="w-full" />
