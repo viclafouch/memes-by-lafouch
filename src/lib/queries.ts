@@ -9,10 +9,11 @@ import {
   getRecentCountMemes,
   getVideoStatusById
 } from '@/server/meme'
+import { getInfiniteReels } from '@/server/reels'
 import { getFavoritesMemes } from '@/server/user'
 import { getAuthUser } from '@/server/user-auth'
 import type { Meme, Video } from '@prisma/client'
-import { queryOptions } from '@tanstack/react-query'
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query'
 
 export const getMemesListQueryOpts = (filters: MemesFilters) => {
   return queryOptions({
@@ -139,3 +140,22 @@ export const getActiveSubscriptionQueryOpts = () => {
 }
 
 getActiveSubscriptionQueryOpts.all = ['active-subscription'] as const
+
+export const getInfiniteReelsQueryOpts = () => {
+  return infiniteQueryOptions({
+    queryKey: [...getInfiniteReelsQueryOpts.all],
+    queryFn: ({ pageParam }) => {
+      return getInfiniteReels({
+        data: {
+          page: pageParam
+        }
+      })
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.nextPage
+    }
+  })
+}
+
+getInfiniteReelsQueryOpts.all = ['infinite-reels'] as const

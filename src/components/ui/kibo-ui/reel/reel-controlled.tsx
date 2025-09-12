@@ -1,123 +1,273 @@
 import React from 'react'
-import { Clapperboard } from 'lucide-react'
-import { IconButton } from '@/components/animate-ui/buttons/icon'
+import { Pause, Play, Volume2, VolumeX } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
-import { StudioDialog } from '@/components/Meme/studio-dialog'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
-import { buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
-import { cn } from '@/lib/utils'
-import { ClientOnly, Link } from '@tanstack/react-router'
-import {
-  Reel,
-  type ReelItem,
-  ReelMuteButton,
-  ReelNavigation,
-  ReelPlayButton,
-  ReelProgress,
-  ReelVideo
-} from './index'
+import { buildVideoImageUrl } from '@/lib/bunny'
+import { getInfiniteReelsQueryOpts } from '@/lib/queries'
+import { useDebouncer } from '@tanstack/react-pacer'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
-type MemeReelsProps = {
-  memes: MemeWithVideo[]
-}
+export const Reel = React.memo(
+  ({
+    meme,
+    isMuted,
+    isPlaying,
+    setIsPlaying,
+    setIsMuted,
+    onEnded,
+    isActive
+  }: {
+    meme: MemeWithVideo
+    isMuted: boolean
+    setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMuted: React.Dispatch<React.SetStateAction<boolean>>
+    onEnded?: () => void
+    isPlaying: boolean
+    isActive: boolean
+  }) => {
+    const videoRef = React.useRef<HTMLVideoElement>(null)
 
-export const MemeReels = ({ memes }: MemeReelsProps) => {
-  const [currentIndex, setCurrentIndex] = React.useState(0)
-  const [isPlaying, setIsPlaying] = React.useState(true)
-  const [isMuted, setIsMuted] = React.useState(true)
-  const [isStudioDialogOpened, setIsStudioDialogOpened] = React.useState(false)
+    React.useEffect(() => {
+      const video = videoRef.current
 
-  const items = React.useMemo(() => {
-    return memes.map((meme) => {
-      return {
-        title: meme.title,
-        duration: meme.video.duration,
-        id: meme.id,
-        type: 'video',
-        alt: '',
-        src: meme.video.bunnyId
-      } satisfies ReelItem
-    })
-  }, [memes])
+      if (!video) {
+        return
+      }
 
-  const currentMeme = memes[currentIndex]
+      video.muted = isMuted
+    }, [isMuted])
 
-  return (
-    <Reel
-      data={items}
-      index={currentIndex}
-      muted={isMuted}
-      onIndexChange={setCurrentIndex}
-      onMutedChange={setIsMuted}
-      onPlayingChange={setIsPlaying}
-      playing={isPlaying}
-    >
-      <div className="flex flex-col gap-6 h-dvh relative">
-        <div className="w-full h-full md:aspect-[9/16] bg-muted lg:border-x border-muted md:max-w-md mx-auto flex flex-col justify-center relative">
-          <div className="flex-1 bg-black relative">
-            <img
-              src={`https://vz-eb732fb9-3bc.b-cdn.net/${currentMeme.video.bunnyId}/thumbnail.jpg`}
-              alt={currentMeme.title}
-              className="absolute w-full h-full inset-0 object-cover -z-10 blur-xl opacity-20"
-            />
-            <ReelProgress />
-            <div className="absolute top-0 right-0 left-0 z-20 p-4 pt-6 bg-gradient-to-b from-black/60 to-transparent">
-              <div className="text-white">
-                <h2 className="font-bold text-xl">{currentMeme.title}</h2>
-              </div>
-            </div>
-            <ReelVideo src={currentMeme.video.bunnyId} />
-            <ReelNavigation />
-            <div className="flex items-center absolute bottom-0 right-0 z-30 py-2 px-3">
-              <ReelMuteButton />
-              <ReelPlayButton />
-            </div>
-          </div>
-          <div className="bg-black py-2 px-3 border-t border-muted z-20 flex justify-between">
-            <div className="flex items-center gap-2">
-              <Link
-                to="/"
-                aria-label="Retour au site"
-                className={cn(
-                  buttonVariants({ variant: 'outline', size: 'sm' })
-                )}
-              >
-                <img src="/logo.png" alt="Logo" className="h-5" />
-              </Link>
-              <Link
-                to="/memes"
-                className={cn(
-                  buttonVariants({ variant: 'outline', size: 'sm' })
-                )}
-              >
-                Chercher un mème
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-              <IconButton
-                icon={Clapperboard}
-                active={false}
-                onClick={(event) => {
-                  event.preventDefault()
-                  setIsStudioDialogOpened(true)
-                }}
-              />
-              <ShareMemeButton meme={currentMeme} />
-              <ToggleLikeButton meme={currentMeme} />
-              <ClientOnly>
-                <React.Suspense fallback={null}>
-                  <StudioDialog
-                    meme={currentMeme}
-                    open={isStudioDialogOpened}
-                    onOpenChange={setIsStudioDialogOpened}
-                  />
-                </React.Suspense>
-              </ClientOnly>
-            </div>
+    React.useEffect(() => {
+      const video = videoRef.current
+
+      if (video) {
+        if (!isActive) {
+          video.currentTime = 0
+        }
+
+        if (isActive && isPlaying) {
+          video.play().catch(() => {
+            // Ignore autoplay errors
+          })
+        } else {
+          video.pause()
+        }
+      }
+    }, [isActive, isPlaying])
+
+    return (
+      <div className="size-full relative">
+        <div className="absolute top-0 right-0 left-0 z-20 p-4 pt-6 bg-gradient-to-b from-black/60 to-transparent">
+          <Link
+            to="/memes/$memeId"
+            params={{ memeId: meme.id }}
+            className="text-white"
+          >
+            <h2 className="font-bold text-xl">{meme.title}</h2>
+          </Link>
+        </div>
+        <img
+          src={buildVideoImageUrl(meme.video.bunnyId)}
+          alt={meme.title}
+          className="absolute size-full inset-0 object-cover blur-xl opacity-80"
+        />
+        <video
+          className="absolute inset-0 size-full"
+          muted={isMuted}
+          playsInline
+          onEnded={onEnded}
+          ref={videoRef}
+          preload="none"
+          poster={buildVideoImageUrl(meme.video.bunnyId)}
+          src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`}
+        />
+        <div className="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-b to-black/60 from-transparent p-4">
+          <div className="w-full flex justify-end">
+            <ShareMemeButton meme={meme} />
+            <ToggleLikeButton meme={meme} />
+            <Button
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+              onClick={() => {
+                return setIsPlaying((prevState) => {
+                  return !prevState
+                })
+              }}
+              size="icon"
+              variant="ghost"
+            >
+              {isPlaying ? (
+                <Pause className="size-4" />
+              ) : (
+                <Play className="size-4" />
+              )}
+            </Button>
+            <Button
+              aria-label={isMuted ? 'Unmute' : 'Mute'}
+              onClick={() => {
+                return setIsMuted((prevState) => {
+                  return !prevState
+                })
+              }}
+              size="icon"
+              variant="ghost"
+            >
+              {isMuted ? (
+                <VolumeX className="size-4" />
+              ) : (
+                <Volume2 className="size-4" />
+              )}
+            </Button>
           </div>
         </div>
       </div>
-    </Reel>
+    )
+  }
+)
+
+export const MemeReels = () => {
+  const [currentIndex, setCurrentIndex] = React.useState(0)
+  const [isPlaying, setIsPlaying] = React.useState(true)
+  const [isMuted, setIsMuted] = React.useState(true)
+  const parentRef = React.useRef<HTMLDivElement>(null)
+
+  const infiniteReels = useInfiniteQuery(getInfiniteReelsQueryOpts())
+
+  const observerRef = React.useRef(
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index')!, 10)
+            setActiveDebouncer.maybeExecute(index)
+          }
+        })
+      },
+      { threshold: 0.7 }
+    )
+  )
+
+  const setActiveDebouncer = useDebouncer(
+    (index: number) => {
+      setCurrentIndex(index)
+      setIsPlaying(true)
+    },
+    { wait: 300 }
+  )
+
+  const memesRefs = React.useMemo(() => {
+    return (
+      infiniteReels.data?.pages
+        .flatMap(({ memes }) => {
+          return memes
+        })
+        .map((meme, index) => {
+          return {
+            data: meme,
+            ref: React.createRef<HTMLDivElement | null>(),
+            index
+          }
+        }) ?? []
+    )
+  }, [infiniteReels.data])
+
+  const rowVirtualizer = useVirtualizer({
+    count: memesRefs.length,
+    getScrollElement: () => {
+      return parentRef.current
+    },
+    estimateSize: () => {
+      return window.innerHeight
+    },
+    overscan: 2 // buffer avant/après
+  })
+
+  const virtualItems = rowVirtualizer.getVirtualItems()
+
+  React.useEffect(() => {
+    virtualItems.forEach((virtualRow) => {
+      const { ref } = memesRefs[virtualRow.index]
+
+      if (ref.current) {
+        observerRef.current.observe(ref.current)
+      }
+    })
+
+    return () => {
+      return observerRef.current.disconnect()
+    }
+  }, [memesRefs, virtualItems])
+
+  React.useEffect(() => {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse()
+
+    if (!lastItem) {
+      return
+    }
+
+    if (
+      lastItem.index >= memesRefs.length - 1 &&
+      infiniteReels.hasNextPage &&
+      !infiniteReels.isFetchingNextPage
+    ) {
+      infiniteReels.fetchNextPage()
+    }
+  }, [
+    infiniteReels.hasNextPage,
+    infiniteReels.fetchNextPage,
+    memesRefs.length,
+    infiniteReels.isFetchingNextPage,
+    rowVirtualizer.getVirtualItems()
+  ])
+
+  // const handleEnded = React.useCallback(() => {
+  //   setCurrentIndex(currentIndex + 1)
+  //   setIsPlaying(document.visibilityState === 'visible')
+  // }, [currentIndex])
+
+  return (
+    <div className="flex flex-col h-dvh overflow-hidden">
+      <div
+        className="size-full md:aspect-[9/16] bg-muted lg:border-x border-muted md:max-w-md mx-auto flex flex-col overflow-auto snap-y snap-mandatory no-scrollbar"
+        ref={parentRef}
+      >
+        <div
+          style={{
+            height: rowVirtualizer.getTotalSize(),
+            position: 'relative',
+            width: '100%'
+          }}
+        >
+          {virtualItems.map((virtualRow) => {
+            const { data, ref, index } = memesRefs[virtualRow.index]
+
+            return (
+              <div
+                className="snap-start absolute top-0 left-0 w-full h-dvh"
+                style={{
+                  transform: `translateY(${virtualRow.start}px)`
+                }}
+                data-index={index}
+                ref={ref}
+                key={data.id}
+              >
+                <Reel
+                  meme={data}
+                  setIsPlaying={setIsPlaying}
+                  setIsMuted={setIsMuted}
+                  isPlaying={isPlaying}
+                  isActive={currentIndex === index}
+                  isMuted={isMuted}
+                  // onEnded={currentIndex === index ? handleEnded : undefined}
+                />
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
   )
 }
