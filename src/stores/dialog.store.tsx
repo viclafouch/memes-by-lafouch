@@ -1,7 +1,7 @@
 import React from 'react'
 import { create } from 'zustand'
 import type { WithDialog } from '@/@types/dialog'
-import { LoadingSpinner } from '@/components/ui/spinner'
+import { OverlaySpinner } from '@/components/ui/overlay-spinner'
 import { ClientOnly } from '@tanstack/react-router'
 
 export const DIALOGS = {
@@ -120,15 +120,11 @@ export const DialogProvider = ({ children }: { children: React.ReactNode }) => {
         {Component && componentProps ? (
           <React.Suspense
             fallback={
-              <div
-                aria-hidden="true"
-                className="animate-in fade-in fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
+              <OverlaySpinner
                 onClick={() => {
                   return forceCloseDialog()
                 }}
-              >
-                <LoadingSpinner />
-              </div>
+              />
             }
           >
             <Component {...componentProps} />

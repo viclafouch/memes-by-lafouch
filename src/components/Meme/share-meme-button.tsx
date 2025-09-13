@@ -1,6 +1,7 @@
 import React from 'react'
 import { Share2 } from 'lucide-react'
 import { IconButtonStars } from '@/components/animate-ui/buttons/icon-button-stars'
+import { OverlaySpinner } from '@/components/ui/overlay-spinner'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 
@@ -23,12 +24,15 @@ export const ShareMemeButton = ({
   }
 
   return (
-    <IconButtonStars
-      active={shareMutation.isPending}
-      onClick={handleShare}
-      {...restProps}
-    >
-      <Share2 />
-    </IconButtonStars>
+    <>
+      {shareMutation.isPending ? <OverlaySpinner /> : null}
+      <IconButtonStars
+        active={shareMutation.isPending}
+        onClick={handleShare}
+        {...restProps}
+      >
+        <Share2 />
+      </IconButtonStars>
+    </>
   )
 }
