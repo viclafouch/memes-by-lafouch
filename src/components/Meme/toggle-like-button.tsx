@@ -1,7 +1,7 @@
 import React from 'react'
 import type { User } from 'better-auth'
 import { Star } from 'lucide-react'
-import { IconButton } from '@/components/animate-ui/buttons/icon'
+import { IconButtonStars } from '@/components/animate-ui/buttons/icon-button-stars'
 import type { MemeWithVideo } from '@/constants/meme'
 import { getFavoritesMemesQueryOpts, getMemeByIdQueryOpts } from '@/lib/queries'
 import { toggleBookmarkByMemeId } from '@/server/user'
@@ -15,13 +15,12 @@ import { useRouteContext } from '@tanstack/react-router'
 
 type ToggleLikeButtonProps = {
   meme: MemeWithVideo
-  className?: string
-}
+} & Partial<React.ComponentProps<typeof IconButtonStars>>
 
 const AuthBookmarkButton = ({
   user,
   meme,
-  className
+  ...restProps
 }: {
   user: User
 } & ToggleLikeButtonProps) => {
@@ -78,26 +77,25 @@ const AuthBookmarkButton = ({
   }
 
   return (
-    <IconButton
+    <IconButtonStars
+      {...restProps}
       icon={Star}
-      disabled={toggleLikeMutation.isPending}
       active={isMemeBookmarked}
-      className={className}
       onClick={handleToggleLike}
     />
   )
 }
 
-const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
+const ToggleLikeButton = ({ meme, ...restProps }: ToggleLikeButtonProps) => {
   const { user } = useRouteContext({ from: '__root__' })
   const showDialog = useShowDialog()
 
   if (!user) {
     return (
-      <IconButton
+      <IconButtonStars
         icon={Star}
         active={false}
-        className={className}
+        {...restProps}
         onClick={(event) => {
           event.preventDefault()
           showDialog('auth', {})
@@ -108,7 +106,7 @@ const ToggleLikeButton = ({ meme, className }: ToggleLikeButtonProps) => {
 
   return (
     <React.Suspense fallback={<div />}>
-      <AuthBookmarkButton user={user} meme={meme} className={className} />
+      <AuthBookmarkButton user={user} meme={meme} {...restProps} />
     </React.Suspense>
   )
 }

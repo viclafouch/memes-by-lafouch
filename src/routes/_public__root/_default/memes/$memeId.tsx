@@ -117,16 +117,21 @@ const RouteComponent = () => {
               <h1 className="font-bricolage text-foreground max-w-4xl text-left font-semibold md:text-balance text-lg leading-[1.2] sm:text-xl lg:text-2xl">
                 {meme.title}
               </h1>
-              <ToggleLikeButton meme={meme} />
-              {user && matchIsUserAdmin(user) ? (
-                <Link
-                  className={buttonVariants({ size: 'icon', variant: 'ghost' })}
-                  to="/admin/library/$memeId"
-                  params={{ memeId: meme.id }}
-                >
-                  <Pencil />
-                </Link>
-              ) : null}
+              <div className="flex">
+                <ToggleLikeButton meme={meme} />
+                {user && matchIsUserAdmin(user) ? (
+                  <Link
+                    className={buttonVariants({
+                      size: 'icon',
+                      variant: 'ghost'
+                    })}
+                    to="/admin/library/$memeId"
+                    params={{ memeId: meme.id }}
+                  >
+                    <Pencil />
+                  </Link>
+                ) : null}
+              </div>
             </div>
           </div>
           <div className="w-full flex flex-col gap-y-4 max-w-md md:max-w-none mx-auto items-center md:items-start">

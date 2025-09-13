@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemeReels } from '@/components/ui/kibo-ui/reel/reel-controlled'
+import { MemeReels } from '@/components/Meme/meme-reels'
 import { getInfiniteReelsQueryOpts } from '@/lib/queries'
 import { createFileRoute } from '@tanstack/react-router'
 

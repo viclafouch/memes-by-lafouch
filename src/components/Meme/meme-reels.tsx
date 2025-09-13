@@ -1,8 +1,9 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
 import { buildVideoImageUrl } from '@/lib/bunny'
 import { getInfiniteReelsQueryOpts } from '@/lib/queries'
@@ -67,7 +68,7 @@ export const Reel = React.memo(
             params={{ memeId: meme.id }}
             className="text-white"
           >
-            <h2 className="font-bold text-xl">{meme.title}</h2>
+            <h2 className="font-bold text-lg">{meme.title}</h2>
           </Link>
         </div>
         <img
@@ -75,52 +76,70 @@ export const Reel = React.memo(
           alt={meme.title}
           className="absolute size-full inset-0 object-cover blur-xl opacity-80"
         />
-        <video
+        <motion.video
           className="absolute inset-0 size-full"
           muted={isMuted}
           playsInline
+          loop
+          onTouchStart={() => {
+            return setIsPlaying(false)
+          }}
+          onTouchEnd={() => {
+            return setIsPlaying(true)
+          }}
           onEnded={onEnded}
           ref={videoRef}
           preload="none"
           poster={buildVideoImageUrl(meme.video.bunnyId)}
           src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`}
         />
-        <div className="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-b to-black/60 from-transparent p-4">
-          <div className="w-full flex justify-end">
-            <ShareMemeButton meme={meme} />
-            <ToggleLikeButton meme={meme} />
-            <Button
-              aria-label={isPlaying ? 'Pause' : 'Play'}
-              onClick={() => {
-                return setIsPlaying((prevState) => {
-                  return !prevState
-                })
-              }}
-              size="icon"
-              variant="ghost"
-            >
-              {isPlaying ? (
-                <Pause className="size-4" />
-              ) : (
-                <Play className="size-4" />
-              )}
-            </Button>
-            <Button
-              aria-label={isMuted ? 'Unmute' : 'Mute'}
-              onClick={() => {
-                return setIsMuted((prevState) => {
-                  return !prevState
-                })
-              }}
-              size="icon"
-              variant="ghost"
-            >
-              {isMuted ? (
-                <VolumeX className="size-4" />
-              ) : (
-                <Volume2 className="size-4" />
-              )}
-            </Button>
+        <div className="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-b to-black/60 from-transparent p-3">
+          <div className="w-full flex justify-between items-end">
+            <div>
+              <Link
+                to="/"
+                className={buttonVariants({ variant: 'outline', size: 'sm' })}
+              >
+                <img src="/logo.png" alt="Logo" className="w-5" />
+                Retour au site
+              </Link>
+            </div>
+            <div className="flex flex-col gap-1">
+              <ShareMemeButton className="flex md:hidden" meme={meme} />
+              <ToggleLikeButton meme={meme} />
+              <Button
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+                onClick={() => {
+                  return setIsPlaying((prevState) => {
+                    return !prevState
+                  })
+                }}
+                size="icon"
+                variant="ghost"
+              >
+                {isPlaying ? (
+                  <Pause className="size-4" />
+                ) : (
+                  <Play className="size-4" />
+                )}
+              </Button>
+              <Button
+                aria-label={isMuted ? 'Unmute' : 'Mute'}
+                onClick={() => {
+                  return setIsMuted((prevState) => {
+                    return !prevState
+                  })
+                }}
+                size="icon"
+                variant="ghost"
+              >
+                {isMuted ? (
+                  <VolumeX className="size-4" />
+                ) : (
+                  <Volume2 className="size-4" />
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -182,7 +201,7 @@ export const MemeReels = () => {
     estimateSize: () => {
       return window.innerHeight
     },
-    overscan: 2 // buffer avant/après
+    overscan: 1
   })
 
   const virtualItems = rowVirtualizer.getVirtualItems()
@@ -223,11 +242,6 @@ export const MemeReels = () => {
     rowVirtualizer.getVirtualItems()
   ])
 
-  // const handleEnded = React.useCallback(() => {
-  //   setCurrentIndex(currentIndex + 1)
-  //   setIsPlaying(document.visibilityState === 'visible')
-  // }, [currentIndex])
-
   return (
     <div className="flex flex-col h-dvh overflow-hidden">
       <div
@@ -261,7 +275,6 @@ export const MemeReels = () => {
                   isPlaying={isPlaying}
                   isActive={currentIndex === index}
                   isMuted={isMuted}
-                  // onEnded={currentIndex === index ? handleEnded : undefined}
                 />
               </div>
             )

@@ -2,7 +2,7 @@ import React from 'react'
 import { ClipboardPaste } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { IconButton } from '@/components/animate-ui/buttons/icon'
+import { IconButtonStars } from '@/components/animate-ui/buttons/icon-button-stars'
 import { Button } from '@/components/ui/button'
 import {
   FormControl,
@@ -117,7 +117,7 @@ export const TwitterForm = ({ onSuccess, closeDialog }: TwitterFormProps) => {
                       }}
                     />
                   </FormControl>
-                  <IconButton
+                  <IconButtonStars
                     icon={ClipboardPaste}
                     active={
                       clipboardMutation.isPending || clipboardMutation.isSuccess

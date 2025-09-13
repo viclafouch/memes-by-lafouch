@@ -1,15 +1,17 @@
 import React from 'react'
 import { Share2 } from 'lucide-react'
-import { IconButton } from '@/components/animate-ui/buttons/icon'
+import { IconButtonStars } from '@/components/animate-ui/buttons/icon-button-stars'
 import type { MemeWithVideo } from '@/constants/meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 
 type ShareMemeButtonProps = {
   meme: MemeWithVideo
-  className?: string
-}
+} & Partial<React.ComponentProps<typeof IconButtonStars>>
 
-export const ShareMemeButton = ({ meme, className }: ShareMemeButtonProps) => {
+export const ShareMemeButton = ({
+  meme,
+  ...restProps
+}: ShareMemeButtonProps) => {
   const shareMutation = useShareMeme()
 
   const handleShare = () => {
@@ -21,11 +23,11 @@ export const ShareMemeButton = ({ meme, className }: ShareMemeButtonProps) => {
   }
 
   return (
-    <IconButton
-      icon={Share2}
+    <IconButtonStars
       active={shareMutation.isPending}
       onClick={handleShare}
-      className={className}
+      {...restProps}
+      icon={Share2}
     />
   )
 }

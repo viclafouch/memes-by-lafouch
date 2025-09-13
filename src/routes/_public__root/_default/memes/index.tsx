@@ -105,7 +105,7 @@ const RouteComponent = () => {
                 className={buttonVariants({ variant: 'outline' })}
               >
                 <Smartphone />
-                Mode stories
+                Mode Reels
               </Link>
             </div>
           </div>
