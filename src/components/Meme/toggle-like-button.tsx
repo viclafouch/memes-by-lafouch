@@ -79,10 +79,11 @@ const AuthBookmarkButton = ({
   return (
     <IconButtonStars
       {...restProps}
-      icon={Star}
       active={isMemeBookmarked}
       onClick={handleToggleLike}
-    />
+    >
+      <Star />
+    </IconButtonStars>
   )
 }
 
@@ -93,14 +94,15 @@ const ToggleLikeButton = ({ meme, ...restProps }: ToggleLikeButtonProps) => {
   if (!user) {
     return (
       <IconButtonStars
-        icon={Star}
         active={false}
         {...restProps}
         onClick={(event) => {
           event.preventDefault()
           showDialog('auth', {})
         }}
-      />
+      >
+        <Star />
+      </IconButtonStars>
     )
   }
 

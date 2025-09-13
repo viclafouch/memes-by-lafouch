@@ -119,7 +119,6 @@ export const DownloadFromTwitterForm = () => {
                         />
                       </FormControl>
                       <IconButtonStars
-                        icon={ClipboardPaste}
                         active={
                           clipboardMutation.isPending ||
                           clipboardMutation.isSuccess
@@ -128,7 +127,9 @@ export const DownloadFromTwitterForm = () => {
                         onClick={handlePasteFromClipboard}
                         type="button"
                         onlyStars
-                      />
+                      >
+                        <ClipboardPaste />
+                      </IconButtonStars>
                     </div>
                     <FormMessage />
                   </FormItem>

@@ -118,7 +118,6 @@ export const TwitterForm = ({ onSuccess, closeDialog }: TwitterFormProps) => {
                     />
                   </FormControl>
                   <IconButtonStars
-                    icon={ClipboardPaste}
                     active={
                       clipboardMutation.isPending || clipboardMutation.isSuccess
                     }
@@ -126,7 +125,9 @@ export const TwitterForm = ({ onSuccess, closeDialog }: TwitterFormProps) => {
                     onClick={handlePasteFromClipboard}
                     type="button"
                     onlyStars
-                  />
+                  >
+                    <ClipboardPaste />
+                  </IconButtonStars>
                 </div>
                 <FormMessage />
               </FormItem>

@@ -105,8 +105,12 @@ export const Reel = React.memo(
               </Link>
             </div>
             <div className="flex flex-col gap-1">
-              <ShareMemeButton className="flex md:hidden" meme={meme} />
-              <ToggleLikeButton meme={meme} />
+              <ShareMemeButton
+                className="flex md:hidden"
+                meme={meme}
+                size="iconLg"
+              />
+              <ToggleLikeButton meme={meme} size="iconLg" />
               <Button
                 aria-label={isPlaying ? 'Pause' : 'Play'}
                 onClick={() => {
@@ -114,14 +118,10 @@ export const Reel = React.memo(
                     return !prevState
                   })
                 }}
-                size="icon"
+                size="iconLg"
                 variant="ghost"
               >
-                {isPlaying ? (
-                  <Pause className="size-4" />
-                ) : (
-                  <Play className="size-4" />
-                )}
+                {isPlaying ? <Pause /> : <Play />}
               </Button>
               <Button
                 aria-label={isMuted ? 'Unmute' : 'Mute'}
@@ -130,14 +130,10 @@ export const Reel = React.memo(
                     return !prevState
                   })
                 }}
-                size="icon"
+                size="iconLg"
                 variant="ghost"
               >
-                {isMuted ? (
-                  <VolumeX className="size-4" />
-                ) : (
-                  <Volume2 className="size-4" />
-                )}
+                {isMuted ? <VolumeX /> : <Volume2 />}
               </Button>
             </div>
           </div>

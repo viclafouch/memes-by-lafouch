@@ -27,7 +27,8 @@ export const ShareMemeButton = ({
       active={shareMutation.isPending}
       onClick={handleShare}
       {...restProps}
-      icon={Share2}
-    />
+    >
+      <Share2 />
+    </IconButtonStars>
   )
 }

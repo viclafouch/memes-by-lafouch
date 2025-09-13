@@ -118,11 +118,11 @@ const RouteComponent = () => {
                 {meme.title}
               </h1>
               <div className="flex">
-                <ToggleLikeButton meme={meme} />
+                <ToggleLikeButton size="iconLg" meme={meme} />
                 {user && matchIsUserAdmin(user) ? (
                   <Link
                     className={buttonVariants({
-                      size: 'icon',
+                      size: 'iconLg',
                       variant: 'ghost'
                     })}
                     to="/admin/library/$memeId"

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 type IconButtonStarsProps = React.ComponentProps<typeof Button> & {
-  icon: React.ElementType
   active?: boolean
   className?: string
   onlyStars?: boolean
@@ -14,16 +13,22 @@ type IconButtonStarsProps = React.ComponentProps<typeof Button> & {
 const color = [255, 255, 255] as const
 
 const IconButtonStars = ({
-  icon: Icon,
   className,
   active = false,
   onlyStars = false,
+  children,
   ...props
 }: IconButtonStarsProps) => {
   return (
     <Button
       data-slot="icon-button"
-      className={cn(`group/icon-button relative`, className)}
+      className={cn(
+        `group/icon-button relative`,
+        className,
+        active && !onlyStars
+          ? '[&>svg]:fill-[var(--icon-button-color)]'
+          : '[&>svg]:fill-transparent'
+      )}
       size="icon"
       variant="ghost"
       style={
@@ -33,13 +38,7 @@ const IconButtonStars = ({
       }
       {...props}
     >
-      <Icon
-        className={
-          active && !onlyStars
-            ? 'fill-[var(--icon-button-color)]'
-            : 'fill-transparent'
-        }
-      />
+      {children}
       <AnimatePresence initial={false}>
         {active ? (
           <>
