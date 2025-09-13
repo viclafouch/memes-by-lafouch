@@ -98,7 +98,7 @@ export const Reel = React.memo(
           disablePictureInPicture
           disableRemotePlayback
           ref={videoRef}
-          preload="none"
+          preload="auto"
         />
         <div
           className="absolute inset-0 bg-transparent"
