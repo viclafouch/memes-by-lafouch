@@ -20,12 +20,18 @@ const NAVIGATIONS_LINKS = [
     items: [
       { to: '/memes', label: 'Mèmes' },
       { to: '/pricing', label: 'Plans' },
+      { to: '/reels', label: 'Reels', className: 'md:hidden' },
       { to: '/', label: 'À propos' }
     ]
   }
 ] as const satisfies {
   name: string
-  items: { to: LinkOptions['to']; label: string; active?: boolean }[]
+  items: {
+    to: LinkOptions['to']
+    label: string
+    active?: boolean
+    className?: string
+  }[]
 }[]
 
 export const Navbar = () => {
@@ -54,7 +60,10 @@ export const Navbar = () => {
                 <NavigationMenuLink
                   asChild
                   data-active={false}
-                  className="rounded-md px-3 py-1.5 font-medium"
+                  className={cn(
+                    'rounded-md px-3 py-1.5 font-medium',
+                    'className' in link && link.className
+                  )}
                 >
                   <Link to={link.to}>{link.label}</Link>
                 </NavigationMenuLink>

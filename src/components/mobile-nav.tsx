@@ -15,6 +15,7 @@ type MobileNavProps = {
     items: {
       label: string
       to: LinkOptions['to']
+      className?: string
     }[]
   }[]
 }
@@ -69,7 +70,10 @@ export const MobileNav = ({ nav }: MobileNavProps) => {
                       <Link
                         key={itemIndex}
                         to={item.to}
-                        className="text-2xl font-medium"
+                        className={cn(
+                          'text-2xl font-medium',
+                          'className' in item && item.className
+                        )}
                         onClick={() => {
                           return setOpen(false)
                         }}
