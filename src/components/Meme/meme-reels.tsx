@@ -217,14 +217,14 @@ export const MemeReels = () => {
   }, [memesRefs, virtualItems])
 
   React.useEffect(() => {
-    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse()
+    const [item] = [...virtualItems].reverse()
 
-    if (!lastItem) {
+    if (!item) {
       return
     }
 
     if (
-      lastItem.index >= memesRefs.length - 1 &&
+      memesRefs.length - 3 < item.index &&
       infiniteReels.hasNextPage &&
       !infiniteReels.isFetchingNextPage
     ) {
@@ -235,13 +235,13 @@ export const MemeReels = () => {
     infiniteReels.fetchNextPage,
     memesRefs.length,
     infiniteReels.isFetchingNextPage,
-    rowVirtualizer.getVirtualItems()
+    virtualItems
   ])
 
   return (
     <div className="flex flex-col h-dvh overflow-hidden">
       <div
-        className="size-full md:aspect-[9/16] bg-muted lg:border-x border-muted md:max-w-md mx-auto flex flex-col overflow-auto snap-y snap-mandatory no-scrollbar"
+        className="size-full md:aspect-[9/16] bg-muted lg:border-x border-muted md:max-w-md mx-auto flex flex-col overflow-auto snap-y snap-mandatory no-scrollbar overscroll-contain"
         ref={parentRef}
       >
         <div
@@ -256,9 +256,14 @@ export const MemeReels = () => {
 
             return (
               <div
-                className="snap-start absolute top-0 left-0 w-full h-dvh"
+                className="snap-start absolute top-0 left-0 w-full h-dvh overflow-hidden"
                 style={{
-                  transform: `translateY(${virtualRow.start}px)`
+                  transform: `translateY(${virtualRow.start}px)`,
+                  display:
+                    rowVirtualizer.isScrolling &&
+                    (index > currentIndex + 1 || index < currentIndex - 1)
+                      ? 'none'
+                      : 'block'
                 }}
                 data-index={index}
                 ref={ref}
