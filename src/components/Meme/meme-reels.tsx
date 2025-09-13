@@ -60,7 +60,7 @@ export const Reel = React.memo(
 
     React.useLayoutEffect(() => {
       if (!videoRef.current) {
-        return
+        return () => {}
       }
 
       const videoSrc = buildVideoStreamUrl(meme.video.bunnyId)
@@ -71,7 +71,13 @@ export const Reel = React.memo(
         const hls = new Hls()
         hls.loadSource(videoSrc)
         hls.attachMedia(videoRef.current)
+
+        return () => {
+          hls.destroy()
+        }
       }
+
+      return () => {}
     }, [meme.video.id])
 
     return (
