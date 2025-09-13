@@ -19,14 +19,12 @@ export const Reel = React.memo(
     isPlaying,
     setIsPlaying,
     setIsMuted,
-    onEnded,
     isActive
   }: {
     meme: MemeWithVideo
     isMuted: boolean
     setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
     setIsMuted: React.Dispatch<React.SetStateAction<boolean>>
-    onEnded?: () => void
     isPlaying: boolean
     isActive: boolean
   }) => {
@@ -61,7 +59,7 @@ export const Reel = React.memo(
     }, [isActive, isPlaying])
 
     return (
-      <div className="size-full relative">
+      <div className="size-full relative select-none">
         <div className="absolute top-0 right-0 left-0 z-20 p-4 pt-6 bg-gradient-to-b from-black/60 to-transparent">
           <Link
             to="/memes/$memeId"
@@ -81,17 +79,20 @@ export const Reel = React.memo(
           muted={isMuted}
           playsInline
           loop
+          ref={videoRef}
+          preload="none"
+          poster={buildVideoImageUrl(meme.video.bunnyId)}
+          src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`}
+        />
+        <div
+          className="absolute inset-0 bg-transparent"
+          aria-hidden="true"
           onTouchStart={() => {
             return setIsPlaying(false)
           }}
           onTouchEnd={() => {
             return setIsPlaying(true)
           }}
-          onEnded={onEnded}
-          ref={videoRef}
-          preload="none"
-          poster={buildVideoImageUrl(meme.video.bunnyId)}
-          src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`}
         />
         <div className="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-b to-black/60 from-transparent p-3">
           <div className="w-full flex justify-between items-end">
