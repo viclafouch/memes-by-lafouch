@@ -1,11 +1,11 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import Hls from 'hls.js'
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react'
 import { ShareMemeButton } from '@/components/Meme/share-meme-button'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { Button, buttonVariants } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
-import { buildVideoImageUrl } from '@/lib/bunny'
+import { buildVideoImageUrl, buildVideoStreamUrl } from '@/lib/bunny'
 import { getInfiniteReelsQueryOpts } from '@/lib/queries'
 import { useDebouncer } from '@tanstack/react-pacer'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -58,6 +58,22 @@ export const Reel = React.memo(
       }
     }, [isActive, isPlaying])
 
+    React.useLayoutEffect(() => {
+      if (!videoRef.current) {
+        return
+      }
+
+      const videoSrc = buildVideoStreamUrl(meme.video.bunnyId)
+
+      if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+        videoRef.current.src = videoSrc
+      } else if (Hls.isSupported()) {
+        const hls = new Hls()
+        hls.loadSource(videoSrc)
+        hls.attachMedia(videoRef.current)
+      }
+    }, [meme.video.id])
+
     return (
       <div className="size-full relative select-none">
         <div className="absolute top-0 right-0 left-0 z-20 p-4 pt-6 bg-gradient-to-b from-black/60 to-transparent">
@@ -74,15 +90,15 @@ export const Reel = React.memo(
           alt={meme.title}
           className="absolute size-full inset-0 object-cover blur-xl opacity-80"
         />
-        <motion.video
+        <video
           className="absolute inset-0 size-full"
           muted={isMuted}
           playsInline
           loop
+          disablePictureInPicture
+          disableRemotePlayback
           ref={videoRef}
           preload="none"
-          poster={buildVideoImageUrl(meme.video.bunnyId)}
-          src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/original`}
         />
         <div
           className="absolute inset-0 bg-transparent"

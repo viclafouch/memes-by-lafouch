@@ -9,7 +9,7 @@ export default defineConfig({
     port: 3000
   },
   optimizeDeps: {
-    exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
+    exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util', 'hls.js']
   },
   ssr: {
     // https://github.com/polarsource/polar/issues/6617

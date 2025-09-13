@@ -23,6 +23,10 @@ export const buildVideoImageUrl = (videoId: string) => {
   return `https://vz-eb732fb9-3bc.b-cdn.net/${videoId}/thumbnail.jpg`
 }
 
+export const buildVideoStreamUrl = (videoId: string) => {
+  return `https://vz-eb732fb9-3bc.b-cdn.net/${videoId}/playlist.m3u8`
+}
+
 export const deleteVideo = serverOnly(async (videoId: string) => {
   return fetchWithZod(
     DEFAULT_RESPONSE_SCHEMA,
