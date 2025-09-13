@@ -141,19 +141,19 @@ export const getActiveSubscriptionQueryOpts = () => {
 
 getActiveSubscriptionQueryOpts.all = ['active-subscription'] as const
 
-export const getInfiniteReelsQueryOpts = () => {
+export const getInfiniteReelsQueryOpts = (excludedIds: string[] = []) => {
   return infiniteQueryOptions({
     queryKey: [...getInfiniteReelsQueryOpts.all],
     queryFn: ({ pageParam }) => {
       return getInfiniteReels({
         data: {
-          page: pageParam
+          excludedIds: pageParam
         }
       })
     },
-    initialPageParam: 0,
+    initialPageParam: excludedIds,
     getNextPageParam: (lastPage) => {
-      return lastPage.nextPage
+      return lastPage.excludedIds
     }
   })
 }

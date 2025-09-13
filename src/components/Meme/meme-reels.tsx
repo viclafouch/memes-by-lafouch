@@ -182,6 +182,7 @@ export const MemeReels = () => {
         .map((meme, index) => {
           return {
             data: meme,
+            id: meme.id,
             ref: React.createRef<HTMLDivElement | null>(),
             index
           }

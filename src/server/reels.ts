@@ -1,41 +1,64 @@
+import * as R from 'remeda'
 import { z } from 'zod'
+import type { MemeWithVideo } from '@/constants/meme'
 import { prismaClient } from '@/db'
 import { createServerFn } from '@tanstack/react-start'
 
-export const getInfiniteReels = createServerFn({ method: 'GET' })
+export const getInfiniteReels = createServerFn({ method: 'POST' })
   .validator((data) => {
     return z
       .object({
-        page: z.number()
+        excludedIds: z.array(z.string()).default([])
       })
       .parse(data)
   })
   .handler(async ({ data }) => {
-    const { page } = data
+    const { excludedIds } = data
 
-    const memes = await prismaClient.meme.findMany({
-      where: {
-        status: 'PUBLISHED'
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      skip: page * 20,
-      take: 20,
-      include: {
-        video: true
+    const memes = await prismaClient
+      .$queryRawUnsafe<{ meme: MemeWithVideo }[]>(
+        `
+      SELECT json_build_object(
+        'id', m."id",
+        'title', m."title",
+        'viewCount', m."viewCount",
+        'tweetUrl', m."tweetUrl",
+        'keywords', m."keywords",
+        'createdAt', m."createdAt",
+        'updatedAt', m."updatedAt",
+        'status', m."status",
+        'submittedBy', m."submittedBy",
+        'video', row_to_json(v)
+      ) AS meme
+      FROM "Meme" m
+      JOIN "Video" v ON m."videoId" = v."id"
+      WHERE m."status" = 'PUBLISHED'
+      ${
+        excludedIds.length
+          ? `AND m."id" NOT IN (${excludedIds
+              .map((id) => {
+                return `'${id}'`
+              })
+              .join(',')})`
+          : ''
       }
-    })
+      ORDER BY RANDOM()
+      LIMIT 20
+    `
+      )
+      .then((result) => {
+        return result.map(({ meme }) => {
+          return meme
+        })
+      })
 
-    if (memes.length === 0) {
-      return {
-        memes: [],
-        nextPage: null
-      }
-    }
+    const newExcludedIds = [
+      ...R.takeLast(excludedIds, excludedIds.length / 2),
+      ...memes.map(R.prop('id'))
+    ]
 
     return {
       memes,
-      nextPage: page + 1
+      excludedIds: newExcludedIds
     }
   })
