@@ -2,7 +2,12 @@ import React from 'react'
 import { CircleAlert } from 'lucide-react'
 import { z } from 'zod'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { FormControl, FormItem, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { authClient } from '@/lib/auth-client'
@@ -54,13 +59,13 @@ export const ResetPasswordForm = () => {
 
             return (
               <FormItem error={errorMessage}>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     required
                     type="email"
-                    id="email"
                     autoComplete="email"
-                    placeholder="Email"
+                    placeholder="jean@dupont.fr"
                     name="email"
                     value={field.state.value}
                     onBlur={field.handleBlur}

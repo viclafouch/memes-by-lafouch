@@ -109,7 +109,6 @@ export const DownloadFromTwitterForm = () => {
                         <Input
                           required
                           type="text"
-                          id="twitter-link"
                           name="twitter-link"
                           value={field.state.value}
                           onBlur={field.handleBlur}

@@ -1,10 +1,20 @@
 import { Loader2Icon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-export const DefaultLoading = () => {
+export const DefaultLoading = ({
+  className,
+  ...restProps
+}: React.ComponentProps<'div'>) => {
   return (
-    <div className="mx-auto mt-8 flex flex-col items-center justify-center">
-      <Loader2Icon className="animate-spin" />
-      <p className="mt-2 text-muted-foreground text-sm">Loading...</p>
+    <div
+      className={cn(
+        'mx-auto flex flex-col items-center justify-center',
+        className
+      )}
+      {...restProps}
+    >
+      <Loader2Icon className="animate-spin text-primary" />
+      <p className="mt-2 text-muted-foreground text-sm">Chargement...</p>
     </div>
   )
 }

@@ -6,10 +6,10 @@ import {
   Clapperboard,
   Download,
   EllipsisVertical,
-  PlaySquare,
   Share2,
   Star
 } from 'lucide-react'
+import { BunnyPlayIcon } from '@/components/icon/Play'
 import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
@@ -203,7 +203,7 @@ export const MemeListItem = React.memo(
                 </Badge>
               </div>
               <button
-                className="absolute inset-0 md:opacity-0 group-hover:opacity-100 transition-all z-40 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 outline-none grid"
+                className="absolute inset-0 md:opacity-0 group-hover:opacity-100 transition-all z-40 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 outline-none grid duration-300 md:scale-0 group-hover:scale-100"
                 type="button"
                 onClick={(event) => {
                   event.preventDefault()
@@ -211,7 +211,10 @@ export const MemeListItem = React.memo(
                   return onPlayClick(meme)
                 }}
               >
-                <PlaySquare size={42} />
+                <div className="sr-only">Play</div>
+                <div className="rounded-full text-white w-10 h-10 aspect-square flex justify-center items-center bg-black opacity-90 border border-muted-foreground">
+                  <BunnyPlayIcon className="fill-white w-[18px]" />
+                </div>
               </button>
             </motion.div>
           ) : (
@@ -229,7 +232,7 @@ export const MemeListItem = React.memo(
               to="/memes/$memeId"
               params={{ memeId: meme.id }}
               title={meme.title}
-              className={cn('line-clamp-1 text-gray-100', sizes[size].title)}
+              className={cn('line-clamp-1 text-primary', sizes[size].title)}
             >
               {meme.title}
             </Link>

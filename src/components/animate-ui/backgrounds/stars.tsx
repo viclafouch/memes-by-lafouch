@@ -100,7 +100,7 @@ export const StarsBackground = ({
     <div
       data-slot="stars-background"
       className={cn(
-        'relative size-full overflow-hidden bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)]',
+        'relative size-full overflow-hidden dark:bg-[radial-gradient(ellipse_at_bottom,_#262626_0%,_#000_100%)] bg-white',
         className
       )}
       {...props}

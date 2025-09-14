@@ -1,7 +1,12 @@
 import React from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { FormControl, FormItem, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { authClient, getErrorMessage } from '@/lib/auth-client'
@@ -74,13 +79,13 @@ export const CreateNewPasswordForm = ({ token }: { token: string }) => {
 
           return (
             <FormItem error={errorMessage}>
+              <FormLabel>Mot de passe</FormLabel>
               <FormControl>
                 <Input
                   required
                   type="password"
-                  id="password"
                   autoComplete="new-password"
-                  placeholder="Mot de passe"
+                  placeholder="******"
                   name="password"
                   value={field.state.value}
                   onBlur={field.handleBlur}
@@ -101,13 +106,13 @@ export const CreateNewPasswordForm = ({ token }: { token: string }) => {
 
           return (
             <FormItem error={errorMessage}>
+              <FormLabel>Confirmer le mot de passe</FormLabel>
               <FormControl>
                 <Input
                   required
                   type="password"
-                  id="confirmPassword"
                   autoComplete="new-password"
-                  placeholder="Confirmer le mot de passe"
+                  placeholder="******"
                   name="confirmPassword"
                   value={field.state.value}
                   onBlur={field.handleBlur}

@@ -121,7 +121,6 @@ const UpdatePasswordForm = () => {
                   <Input
                     required
                     type="password"
-                    id="current-password"
                     autoComplete="current-password"
                     placeholder="******"
                     name="current-password"
@@ -149,7 +148,6 @@ const UpdatePasswordForm = () => {
                   <Input
                     required
                     type="password"
-                    id="password"
                     autoComplete="new-password"
                     placeholder="*******"
                     name="password"
@@ -177,7 +175,6 @@ const UpdatePasswordForm = () => {
                   <Input
                     required
                     type="password"
-                    id="confirmPassword"
                     autoComplete="new-password"
                     placeholder="******"
                     name="confirmPassword"

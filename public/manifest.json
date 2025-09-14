@@ -1,0 +1,30 @@
+{
+  "name": "Meme Studio",
+  "short_name": "Meme Studio",
+  "start_url": "/reels?utm_medium=PWA&utm_source=launcher",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "lang": "fr",
+  "description": "Explore, crée et partage des mèmes légendaires sur Meme Studio !",
+  "categories": ["Divertissement", "Humour", "Mèmes", "Création", "Social"],
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ]
+}

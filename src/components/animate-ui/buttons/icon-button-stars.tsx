@@ -10,8 +10,6 @@ type IconButtonStarsProps = React.ComponentProps<typeof Button> & {
   onlyStars?: boolean
 }
 
-const color = [255, 255, 255] as const
-
 const IconButtonStars = ({
   className,
   active = false,
@@ -23,19 +21,14 @@ const IconButtonStars = ({
     <Button
       data-slot="icon-button"
       className={cn(
-        `group/icon-button relative`,
+        `group/icon-button relative [&>svg]:text-black dark:[&>svg]:text-white`,
         className,
         active && !onlyStars
-          ? '[&>svg]:fill-[var(--icon-button-color)]'
+          ? '[&>svg]:fill-black dark:[&>svg]:fill-white'
           : '[&>svg]:fill-transparent'
       )}
       size="icon"
       variant="ghost"
-      style={
-        {
-          '--icon-button-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`
-        } as React.CSSProperties
-      }
       {...props}
     >
       {children}
@@ -46,7 +39,7 @@ const IconButtonStars = ({
               return (
                 <motion.div
                   key={index}
-                  className="absolute w-1 h-1 rounded-full bg-[var(--icon-button-color)]"
+                  className="absolute w-1 h-1 rounded-full dark:bg-white bg-black"
                   initial={{ x: '50%', y: '50%', scale: 0, opacity: 0 }}
                   animate={{
                     x: `calc(50% + ${Math.cos((index * Math.PI) / 3) * 30}px)`,

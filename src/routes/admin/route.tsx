@@ -1,3 +1,4 @@
+import React from 'react'
 import { AdminNavButton } from '@/components/admin/admin-nav-button'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { PathBreadcrumbs } from '@/components/path-breadcrumbs'
@@ -7,11 +8,17 @@ import {
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar'
+import { useTheme } from '@/lib/theme'
 import { Separator } from '@radix-ui/react-separator'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   const { user } = Route.useRouteContext()
+  const { setTheme } = useTheme()
+
+  React.useLayoutEffect(() => {
+    setTheme('dark')
+  }, [])
 
   return (
     <SidebarProvider

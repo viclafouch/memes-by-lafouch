@@ -162,7 +162,6 @@ export const MemeForm = ({
                   <Input
                     required
                     type="text"
-                    id="title"
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
@@ -227,7 +226,6 @@ export const MemeForm = ({
                   <Input
                     required
                     type="text"
-                    id="keywords"
                     name={field.name}
                     onBlur={field.handleBlur}
                     value={keywordValue}
@@ -317,7 +315,6 @@ export const MemeForm = ({
                   <Input
                     required
                     type="text"
-                    id="tweet-url"
                     name={field.name}
                     value={field.state.value ?? ''}
                     onBlur={field.handleBlur}

@@ -109,7 +109,7 @@ const RouteComponent = () => {
               </Link>
             </div>
           </div>
-          <div className="w-full py-2 border-y border-muted">
+          <div className="w-full border-y border-muted">
             <CategoriesList />
           </div>
           <React.Suspense fallback={<LoadingSpinner />}>
@@ -133,8 +133,9 @@ export const Route = createFileRoute('/_public__root/_default/memes/')({
     return {
       meta: [
         ...seo({
-          title: 'Rechercher un mèmes',
-          description: 'A collection of memes from the internet'
+          title: 'Bibliothèque de mèmes en ligne',
+          description:
+            'Découvre la plus grande bibliothèque de mèmes : crée, explore et partage des mèmes légendaires sur Meme Studio. Gratuit et accessible à tous !'
         })
       ]
     }

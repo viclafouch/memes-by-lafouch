@@ -107,7 +107,6 @@ export const TwitterForm = ({ onSuccess, closeDialog }: TwitterFormProps) => {
                     <Input
                       required
                       type="text"
-                      id="twitter-link"
                       className="pr-9"
                       name="twitter-link"
                       value={field.state.value}

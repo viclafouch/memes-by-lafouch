@@ -126,7 +126,6 @@ export const LoginForm = ({ onOpenChange, onSuccess }: FormProps) => {
                 <Input
                   required
                   type="email"
-                  id="email"
                   autoComplete="email"
                   placeholder="jean@dupont.fr"
                   name="email"
@@ -154,7 +153,6 @@ export const LoginForm = ({ onOpenChange, onSuccess }: FormProps) => {
                 <Input
                   required
                   type="password"
-                  id="password"
                   autoComplete="current-password"
                   placeholder="******"
                   name="password"
@@ -299,13 +297,13 @@ const SignupForm = () => {
 
           return (
             <FormItem error={errorMessage}>
+              <FormLabel>Pseudo</FormLabel>
               <FormControl>
                 <Input
                   required
                   type="text"
-                  id="name"
                   autoComplete="username"
-                  placeholder="Pseudo"
+                  placeholder="Jean"
                   name="name"
                   value={field.state.value}
                   onBlur={field.handleBlur}
@@ -326,13 +324,13 @@ const SignupForm = () => {
 
           return (
             <FormItem error={errorMessage}>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
                   required
                   type="email"
-                  id="email"
                   autoComplete="email"
-                  placeholder="Email"
+                  placeholder="jean@dupont.fr"
                   name="email"
                   value={field.state.value}
                   onBlur={field.handleBlur}
@@ -353,13 +351,13 @@ const SignupForm = () => {
 
           return (
             <FormItem error={errorMessage}>
+              <FormLabel>Mot de passe</FormLabel>
               <FormControl>
                 <Input
                   required
                   type="password"
-                  id="password"
                   autoComplete="new-password"
-                  placeholder="Mot de passe"
+                  placeholder="******"
                   name="password"
                   value={field.state.value}
                   onBlur={field.handleBlur}
@@ -380,13 +378,13 @@ const SignupForm = () => {
 
           return (
             <FormItem error={errorMessage}>
+              <FormLabel>Confirmer le mot de passe</FormLabel>
               <FormControl>
                 <Input
                   required
                   type="password"
-                  id="confirmPassword"
                   autoComplete="new-password"
-                  placeholder="Confirmer le mot de passe"
+                  placeholder="******"
                   name="confirmPassword"
                   value={field.state.value}
                   onBlur={field.handleBlur}
@@ -469,7 +467,7 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
         </div>
         <Separator />
         <div>
-          <div className="text-gray-300 flex flex-col items-center justify-center gap-2 text-sm">
+          <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 text-sm">
             {authType === 'login' ? (
               <p>Pas de compte ?</p>
             ) : (
@@ -477,7 +475,7 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
             )}
             {authType === 'login' ? (
               <Button
-                variant="secondary"
+                variant="default"
                 onClick={(event) => {
                   event.preventDefault()
                   setAuthType('signup')
@@ -487,7 +485,7 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
               </Button>
             ) : (
               <Button
-                variant="secondary"
+                variant="default"
                 onClick={(event) => {
                   event.preventDefault()
                   setAuthType('login')

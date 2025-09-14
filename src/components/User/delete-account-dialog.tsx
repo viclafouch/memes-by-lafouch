@@ -149,7 +149,6 @@ const DeleteAccountForm = ({ onCancel }: { onCancel: () => void }) => {
                           <Input
                             required
                             type="password"
-                            id="current-password"
                             autoComplete="current-password"
                             placeholder="******"
                             name="current-password"
