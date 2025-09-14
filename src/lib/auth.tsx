@@ -9,6 +9,7 @@ import { resendClient } from '@/lib/resend'
 import { checkout, polar, portal } from '@polar-sh/better-auth'
 import { Polar } from '@polar-sh/sdk'
 import { serverOnly } from '@tanstack/react-start'
+import EmailVerification from '../../emails/email-verification'
 
 export const polarClient = new Polar({
   accessToken: ENV.POLAR_ACCESS_TOKEN,
@@ -61,16 +62,19 @@ const getAuthConfig = serverOnly(() => {
       autoSignInAfterVerification: true,
       expiresIn: 3600, // 1 hour
       sendVerificationEmail: async ({ user, url }) => {
+        await resendClient.emails.send({
+          from: 'Acme <onboarding@resend.dev>',
+          // to: user.email,
+          to: 'victor.dlf@outlook.fr',
+          subject: 'Email Verification',
+          react: (
+            <EmailVerification username={user.name} verificationUrl={url} />
+          )
+        })
+
         if (process.env.NODE_ENV !== 'production') {
           // eslint-disable-next-line no-console
           console.log('Sending verification email to:', user.email, url)
-        } else {
-          await resendClient.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
-            to: user.email,
-            subject: 'Email Verification',
-            html: `Click the link to verify your email: ${url}`
-          })
         }
       },
       async afterEmailVerification(user) {

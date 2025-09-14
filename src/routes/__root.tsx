@@ -100,6 +100,8 @@ export const Route = createRootRouteWithContext<{
     return {
       meta: [
         { charSet: 'utf-8' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         ...seo({
           title: 'Memes By Lafouch',

@@ -10,6 +10,9 @@
     "postinstall": "prisma generate",
     "lint": "npx tsc && eslint",
     "lint:fix": "npm run lint -- --fix",
+    "email:dev": "email dev",
+    "email:build": "email build",
+    "email:export": "email export",
     "deps": "npx taze@latest -Ilw",
     "deps:major": "npx taze@latest major -Ilw",
     "prepare": "husky"
@@ -39,6 +42,7 @@
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
+    "@react-email/components": "0.5.3",
     "@t3-oss/env-core": "^0.13.8",
     "@tanstack/react-form": "^1.20.0",
     "@tanstack/react-pacer": "^0.16.2",
@@ -80,6 +84,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@react-email/preview-server": "4.2.11",
     "@tailwindcss/vite": "^4.1.13",
     "@tanstack/react-router-devtools": "^1.131.42",
     "@tanstack/react-router-ssr-query": "^1.131.41",
@@ -90,6 +95,7 @@
     "eslint": "^9",
     "husky": "^9.1.7",
     "prisma": "^6.16.1",
+    "react-email": "4.2.11",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4"
   }
