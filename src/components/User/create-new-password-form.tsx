@@ -105,10 +105,10 @@ export const CreateNewPasswordForm = ({ token }: { token: string }) => {
                 <Input
                   required
                   type="password"
-                  id="password"
+                  id="confirmPassword"
                   autoComplete="new-password"
                   placeholder="Confirmer le mot de passe"
-                  name="password"
+                  name="confirmPassword"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(event) => {

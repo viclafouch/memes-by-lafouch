@@ -53,7 +53,7 @@ export const ProfileContent = ({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex md:items-center justify-between gap-6 flex-col md:flex-row">
               <div className="space-y-1">
                 <Label className="text-base">Abonnement en cours</Label>
                 {activeSubscription ? (
@@ -97,7 +97,7 @@ export const ProfileContent = ({
               )}
             </div>
             <Separator />
-            <div className="flex items-center justify-between">
+            <div className="flex md:items-center justify-between gap-6 flex-col md:flex-row">
               <div className="space-y-1">
                 <Label className="text-base">Mot de passe</Label>
                 <p className="text-muted-foreground text-sm">
@@ -126,7 +126,7 @@ export const ProfileContent = ({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between">
+            <div className="flex md:items-center justify-between gap-6 flex-col md:flex-row">
               <div className="space-y-1">
                 <Label className="text-base">Supprimer mon compte</Label>
                 <p className="text-muted-foreground text-sm">

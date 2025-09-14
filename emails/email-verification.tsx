@@ -5,20 +5,16 @@ import {
   Head,
   Html,
   Img,
-  Link,
   Preview,
   Section,
   Text
 } from '@react-email/components'
+import { baseUrl, styles } from './_utils'
 
 interface EmailVerificationProps {
   username: string
   verificationUrl: string
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : ''
 
 export const EmailVerification = ({
   username,
@@ -27,36 +23,35 @@ export const EmailVerification = ({
   return (
     <Html>
       <Head />
-      <Body style={main}>
-        <Preview>Dropbox reset your password</Preview>
-        <Container style={container}>
+      <Body style={styles.main}>
+        <Preview>Confirme ton inscription à Meme Studio</Preview>
+        <Container style={styles.container}>
           <Img
-            src={`${baseUrl}/static/logo.png`}
+            src={`${baseUrl}/logo.png`}
             width="40"
             height="40"
             alt="Meme Studio"
           />
           <Section>
-            <Text style={text}>Hi {username},</Text>
-            <Text style={text}>
-              Someone recently requested a password change for your Dropbox
-              account. If this was you, you can set a new password here:
+            <Text style={styles.text}>Salut {username},</Text>
+            <Text style={styles.text}>
+              Bienvenue sur <b>Meme Studio</b> ! Avant de commencer à explorer
+              et créer tes mèmes, tu dois <b>confirmer ton adresse e-mail</b>.
             </Text>
-            <Button style={button} href={verificationUrl}>
-              Reset password
+            <Button style={styles.button} href={verificationUrl}>
+              Confirmer mon inscription
             </Button>
-            <Text style={text}>
-              If you don&apos;t want to change your password or didn&apos;t
-              request this, just ignore and delete this message.
+            <Text style={styles.text}>
+              Si tu n’as pas créé de compte sur Meme Studio, ignore simplement
+              ce message.
             </Text>
-            <Text style={text}>
-              To keep your account secure, please don&apos;t forward this email
-              to anyone. See our Help Center for{' '}
-              <Link style={anchor} href={verificationUrl}>
-                more security tips.
-              </Link>
+            <Text style={styles.text}>
+              Cette étape nous permet de vérifier que tu es bien à l’origine de
+              cette inscription et de sécuriser ton compte.
             </Text>
-            <Text style={text}>Happy Dropboxing!</Text>
+            <Text style={styles.text}>
+              À très vite pour des mèmes légendaires !
+            </Text>
           </Section>
         </Container>
       </Body>
@@ -66,44 +61,7 @@ export const EmailVerification = ({
 
 EmailVerification.PreviewProps = {
   username: 'Alan',
-  verificationUrl: '/'
+  verificationUrl: 'https://memes-by-lafouch.vercel.app'
 } as EmailVerificationProps
 
 export default EmailVerification
-
-const main = {
-  backgroundColor: '#f6f9fc',
-  padding: '10px 0'
-}
-
-const container = {
-  backgroundColor: '#ffffff',
-  border: '1px solid #f0f0f0',
-  padding: '45px'
-}
-
-const text = {
-  fontSize: '16px',
-  fontFamily:
-    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-  fontWeight: '300',
-  color: '#404040',
-  lineHeight: '26px'
-}
-
-const button = {
-  backgroundColor: '#007ee6',
-  borderRadius: '4px',
-  color: '#fff',
-  fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
-  fontSize: '15px',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'block',
-  width: '210px',
-  padding: '14px 7px'
-}
-
-const anchor = {
-  textDecoration: 'underline'
-}

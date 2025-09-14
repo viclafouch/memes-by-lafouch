@@ -1,10 +1,10 @@
 import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { buildVideoImageUrl } from '@/lib/bunny'
 
-const appOrigin =
-  process.env.NODE_ENV === 'production'
-    ? 'https://memes-by-lafouch.vercel.app'
-    : 'http://localhost:3000'
+export const appProdUrl = 'https://memes-by-lafouch.vercel.app'
+
+export const websiteOrigin =
+  process.env.NODE_ENV === 'production' ? appProdUrl : 'http://localhost:3000'
 
 export function seo({
   title,
@@ -25,10 +25,10 @@ export function seo({
     ? `Admin Studio - ${title}`
     : `Studio - ${title}`
 
-  let url = appOrigin
+  let url = websiteOrigin
 
   try {
-    url = new URL(pathname, appOrigin).href
+    url = new URL(pathname, websiteOrigin).href
   } catch (error) {}
 
   const tags = [

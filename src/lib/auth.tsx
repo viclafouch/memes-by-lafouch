@@ -10,6 +10,7 @@ import { checkout, polar, portal } from '@polar-sh/better-auth'
 import { Polar } from '@polar-sh/sdk'
 import { serverOnly } from '@tanstack/react-start'
 import EmailVerification from '../../emails/email-verification'
+import ResetPassword from '../../emails/reset-password'
 
 export const polarClient = new Polar({
   accessToken: ENV.POLAR_ACCESS_TOKEN,
@@ -50,10 +51,15 @@ const getAuthConfig = serverOnly(() => {
       sendResetPassword: async ({ user, url }) => {
         await resendClient.emails.send({
           from: 'Acme <onboarding@resend.dev>',
-          to: user.email,
-          subject: 'Reset your password',
-          html: `Click the link to reset your password: ${url}`
+          to: ENV.RESEND_EMAIL_FROM ?? user.email,
+          subject: 'Réinitialise ton mot de passe Meme Studio',
+          react: <ResetPassword username={user.name} resetUrl={url} />
         })
+
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.log('Sending reset password email to:', user.email, url)
+        }
       },
       requireEmailVerification: true
     },
@@ -64,9 +70,8 @@ const getAuthConfig = serverOnly(() => {
       sendVerificationEmail: async ({ user, url }) => {
         await resendClient.emails.send({
           from: 'Acme <onboarding@resend.dev>',
-          // to: user.email,
-          to: 'victor.dlf@outlook.fr',
-          subject: 'Email Verification',
+          to: ENV.RESEND_EMAIL_FROM ?? user.email,
+          subject: 'Confirme ton inscription à Meme Studio',
           react: (
             <EmailVerification username={user.name} verificationUrl={url} />
           )

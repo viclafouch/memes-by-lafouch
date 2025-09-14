@@ -10,7 +10,8 @@ export const ENV = createEnv({
     ALGOLIA_SECRET: z.string(),
     RESEND_SECRET: z.string(),
     POLAR_ACCESS_TOKEN: z.string(),
-    POLAR_SUCCESS_URL: z.string()
+    POLAR_SUCCESS_URL: z.string(),
+    RESEND_EMAIL_FROM: z.string().optional()
   },
   clientPrefix: 'PUBLIC_',
   client: {},
