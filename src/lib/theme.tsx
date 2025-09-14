@@ -85,7 +85,8 @@ export const ThemeProvider = ({
     return () => {}
   }, [userTheme])
 
-  const appTheme = userTheme === 'system' ? getSystemTheme() : userTheme
+  const appTheme: AppTheme =
+    userTheme === 'system' ? getSystemTheme() : userTheme
 
   const setTheme = React.useCallback((newUserTheme: UserTheme) => {
     setUserTheme(newUserTheme)

@@ -68,7 +68,7 @@ export const buildMemeSeo = (
 
   return seo({
     title: meme.title,
-    description: `Découvrez et partagez ce mème de "${meme.title}" avec tous vos proches. Meme Studio vous permet de rechercher, partager et découvrir des mèmes...`,
+    description: `Découvrez et partagez ce mème de "${meme.title}" avec tous vos proches. Petit Meme vous permet de rechercher, partager et découvrir des mèmes...`,
     keywords: [...meme.keywords, ...categoryKeywords].join(', '),
     image: buildVideoImageUrl(meme.video.bunnyId),
     ...overrideOptions

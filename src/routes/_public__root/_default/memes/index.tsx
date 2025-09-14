@@ -135,7 +135,7 @@ export const Route = createFileRoute('/_public__root/_default/memes/')({
         ...seo({
           title: 'Bibliothèque de mèmes en ligne',
           description:
-            'Découvre la plus grande bibliothèque de mèmes : crée, explore et partage des mèmes légendaires sur Meme Studio. Gratuit et accessible à tous !'
+            'Découvre la plus grande bibliothèque de mèmes : crée, explore et partage des mèmes légendaires sur Petit Meme. Gratuit et accessible à tous !'
         })
       ]
     }

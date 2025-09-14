@@ -24,26 +24,26 @@ export const EmailVerification = ({
     <Html>
       <Head />
       <Body style={styles.main}>
-        <Preview>Confirme ton inscription à Meme Studio</Preview>
+        <Preview>Confirme ton inscription à Petit Meme</Preview>
         <Container style={styles.container}>
           <Img
             src={`${baseUrl}/logo.png`}
             width="40"
             height="40"
-            alt="Meme Studio"
+            alt="Petit Meme"
           />
           <Section>
             <Text style={styles.text}>Salut {username},</Text>
             <Text style={styles.text}>
-              Bienvenue sur <b>Meme Studio</b> ! Avant de commencer à explorer
-              et créer tes mèmes, tu dois <b>confirmer ton adresse e-mail</b>.
+              Bienvenue sur <b>Petit Meme</b> ! Avant de commencer à explorer et
+              créer tes mèmes, tu dois <b>confirmer ton adresse e-mail</b>.
             </Text>
             <Button style={styles.button} href={verificationUrl}>
               Confirmer mon inscription
             </Button>
             <Text style={styles.text}>
-              Si tu n’as pas créé de compte sur Meme Studio, ignore simplement
-              ce message.
+              Si tu n’as pas créé de compte sur Petit Meme, ignore simplement ce
+              message.
             </Text>
             <Text style={styles.text}>
               Cette étape nous permet de vérifier que tu es bien à l’origine de

@@ -145,9 +145,9 @@ export const Route = createRootRouteWithContext<{
         { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         ...seo({
-          title: 'Meme Studio',
+          title: 'Petit Meme',
           description:
-            'Meme Studio est un site web qui contient des mèmes générés aléatoirement par l’utilisateur. De plus, il permet de télécharger des mèmes vidéo depuis des tweets.'
+            'Petit Meme est un site web qui contient des mèmes générés aléatoirement par l’utilisateur. De plus, il permet de télécharger des mèmes vidéo depuis des tweets.'
         })
       ],
       links: [

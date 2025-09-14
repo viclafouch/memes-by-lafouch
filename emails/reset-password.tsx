@@ -21,19 +21,19 @@ export const ResetPassword = ({ username, resetUrl }: ResetPasswordProps) => {
     <Html>
       <Head />
       <Body style={styles.main}>
-        <Preview>Réinitialise ton mot de passe Meme Studio</Preview>
+        <Preview>Réinitialise ton mot de passe Petit Meme</Preview>
         <Container style={styles.container}>
           <Img
             src={`${baseUrl}/logo.png`}
             width="40"
             height="40"
-            alt="Meme Studio"
+            alt="Petit Meme"
           />
           <Section>
             <Text style={styles.text}>Salut {username},</Text>
             <Text style={styles.text}>
               Tu as demandé à <b>réinitialiser ton mot de passe</b> sur{' '}
-              <b>Meme Studio</b>. Clique sur le bouton ci-dessous pour en créer
+              <b>Petit Meme</b>. Clique sur le bouton ci-dessous pour en créer
               un nouveau.
             </Text>
             <Button style={styles.button} href={resetUrl}>

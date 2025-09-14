@@ -1,14 +1,14 @@
 {
-  "name": "Meme Studio",
-  "short_name": "Meme Studio",
+  "name": "Petit Meme",
+  "short_name": "Petit Meme",
   "start_url": "/reels?utm_medium=PWA&utm_source=launcher",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#ffffff",
+  "background_color": "#000000",
   "theme_color": "#000000",
   "lang": "fr",
-  "description": "Explore, crée et partage des mèmes légendaires sur Meme Studio !",
+  "description": "Explore, crée et partage des mèmes légendaires sur Petit Meme !",
   "categories": ["Divertissement", "Humour", "Mèmes", "Création", "Social"],
   "icons": [
     {

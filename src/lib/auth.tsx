@@ -19,7 +19,7 @@ export const polarClient = new Polar({
 
 const getAuthConfig = serverOnly(() => {
   return betterAuth({
-    appName: 'Meme By Lafouch',
+    appName: 'Petit Meme',
     basePath: '/api/auth',
     secret: ENV.BETTER_AUTH_SECRET,
     database: prismaAdapter(prismaClient, {
@@ -52,7 +52,7 @@ const getAuthConfig = serverOnly(() => {
         await resendClient.emails.send({
           from: 'Acme <onboarding@resend.dev>',
           to: ENV.RESEND_EMAIL_FROM ?? user.email,
-          subject: 'Réinitialise ton mot de passe Meme Studio',
+          subject: 'Réinitialise ton mot de passe Petit Mème',
           react: <ResetPassword username={user.name} resetUrl={url} />
         })
 
@@ -71,7 +71,7 @@ const getAuthConfig = serverOnly(() => {
         await resendClient.emails.send({
           from: 'Acme <onboarding@resend.dev>',
           to: ENV.RESEND_EMAIL_FROM ?? user.email,
-          subject: 'Confirme ton inscription à Meme Studio',
+          subject: 'Confirme ton inscription à Petit Mème',
           react: (
             <EmailVerification username={user.name} verificationUrl={url} />
           )

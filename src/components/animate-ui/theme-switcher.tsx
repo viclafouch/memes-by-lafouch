@@ -4,6 +4,7 @@ import { type HTMLMotionProps, motion } from 'motion/react'
 import { Switch as SwitchPrimitives } from 'radix-ui'
 import { useTheme } from '@/lib/theme'
 import { cn } from '@/lib/utils'
+import { ClientOnly } from '@tanstack/react-router'
 
 type SwitchProps = React.ComponentProps<typeof SwitchPrimitives.Root> &
   HTMLMotionProps<'button'> & {
@@ -117,17 +118,19 @@ const Switch = ({
 }
 
 export const ThemeSwitcher = ({ className }: { className?: string }) => {
-  const { setTheme, userTheme } = useTheme()
+  const { setTheme, appTheme } = useTheme()
 
   return (
-    <Switch
-      className={className}
-      leftIcon={<Sun />}
-      rightIcon={<Moon />}
-      checked={userTheme === 'dark'}
-      onCheckedChange={(checked) => {
-        return setTheme(checked ? 'dark' : 'light')
-      }}
-    />
+    <ClientOnly>
+      <Switch
+        className={className}
+        leftIcon={<Sun />}
+        rightIcon={<Moon />}
+        checked={appTheme === 'dark'}
+        onCheckedChange={(checked) => {
+          return setTheme(checked ? 'dark' : 'light')
+        }}
+      />
+    </ClientOnly>
   )
 }
