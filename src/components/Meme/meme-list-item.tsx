@@ -205,7 +205,7 @@ export const MemeListItem = React.memo(
                 </Badge>
               </div>
               <button
-                className="absolute inset-0 md:opacity-0 group-hover:opacity-100 transition-all z-40 delay-75 cursor-pointer text-white/80 place-items-center group-focus-within:opacity-100 outline-none grid duration-300 md:scale-0 group-hover:scale-100"
+                className="absolute inset-0 z-40 delay-75 cursor-pointer text-white/80 place-items-center outline-none grid"
                 type="button"
                 onClick={(event) => {
                   event.preventDefault()
@@ -214,7 +214,7 @@ export const MemeListItem = React.memo(
                 }}
               >
                 <div className="sr-only">Play</div>
-                <div className="rounded-full text-white w-10 h-10 aspect-square flex justify-center items-center bg-black opacity-90 border border-muted-foreground">
+                <div className="rounded-full text-white w-10 h-10 aspect-square flex justify-center items-center bg-black opacity-90 border border-muted-foreground md:scale-0 group-hover:scale-100 duration-300 md:opacity-0 group-hover:opacity-100 transition-all group-focus-within:opacity-100">
                   <BunnyPlayIcon className="fill-white w-[18px]" />
                 </div>
               </button>
