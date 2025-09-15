@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import { MemesList } from '@/components/Meme/memes-list'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
 import { Link } from '@tanstack/react-router'
 
@@ -19,7 +19,7 @@ export const Demo = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.6 }}
-        className="flex flex-col gap-y-4 mt-12 container"
+        className="flex flex-col gap-y-4 mt-12"
       >
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -36,11 +36,14 @@ export const Demo = ({
             Les meilleurs mèmes du moment.
           </p>
         </div>
-        <section className="flex flex-col items-center gap-y-12">
+        <section className="flex flex-col items-center gap-y-6">
           <MemesList layoutContext="index" memes={bestMemesQuery} />
-          <Button asChild variant="outline" size="lg">
-            <Link to="/memes">Voir tous les mèmes</Link>
-          </Button>
+          <Link
+            to="/memes"
+            className={buttonVariants({ variant: 'default', size: 'lg' })}
+          >
+            Voir tous les mèmes
+          </Link>
         </section>
       </motion.div>
     </div>

@@ -166,7 +166,7 @@ const RouteComponent = () => {
         Choisissez l’offre qui correspond à vos besoins, du gratuit à
         l’illimité.
       </PageDescription>
-      <div className="w-full mx-auto py-10">
+      <div className="w-full mx-auto py-12">
         <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 sm:max-w-2xl mx-auto max-w-md">
           <PricingCard
             {...FREE_PLAN}

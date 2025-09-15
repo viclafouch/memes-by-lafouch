@@ -54,7 +54,7 @@ export const StudioDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl">
+      <DialogContent className="max-w-6xl dark">
         <DialogHeader>
           <DialogTitle>Studio - {meme.title}</DialogTitle>
           <DialogDescription>

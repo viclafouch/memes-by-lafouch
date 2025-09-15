@@ -60,7 +60,7 @@ export const ProfileContent = ({
                   <p className="text-muted-foreground text-sm">
                     {PREMIUM_PLAN.title} -{' '}
                     {formatCentsToEuros(activeSubscription?.amount)}/mois -{' '}
-                    <span className="text-destructive-foreground">
+                    <span className="text-info">
                       {activeSubscription.cancelAtPeriodEnd
                         ? `Fin le ${formatDate(activeSubscription.currentPeriodEnd!, 'dd/MM/yyyy')}`
                         : `Renouvellement le ${formatDate(activeSubscription.currentPeriodEnd!, 'dd/MM/yyyy')}`}
@@ -101,7 +101,7 @@ export const ProfileContent = ({
               <div className="space-y-1">
                 <Label className="text-base">Mot de passe</Label>
                 <p className="text-muted-foreground text-sm">
-                  Last changed 3 months ago
+                  Modifier votre mot de passe
                 </p>
               </div>
               <Button
@@ -118,9 +118,7 @@ export const ProfileContent = ({
         </Card>
         <Card className="border-destructive/50">
           <CardHeader>
-            <CardTitle className="text-destructive-foreground">
-              Zone de danger
-            </CardTitle>
+            <CardTitle className="text-destructive">Zone de danger</CardTitle>
             <CardDescription>
               Actions irréversibles et destructrices
             </CardDescription>

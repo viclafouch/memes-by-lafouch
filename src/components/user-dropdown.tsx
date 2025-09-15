@@ -1,6 +1,5 @@
 import React from 'react'
 import type { UserWithRole } from 'better-auth/plugins'
-import { formatDate } from 'date-fns'
 import {
   ChevronDown,
   CreditCard,
@@ -105,14 +104,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
             >
               <div className="flex gap-2 items-start">
                 <CreditCard className="mt-0.5" />
-                <div className="flex flex-col">
-                  Gérer mon abonnement
-                  <div className="text-destructive-foreground text-xs">
-                    {subcription.cancelAtPeriodEnd
-                      ? `Fin le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`
-                      : `Renouvellement le ${formatDate(subcription.currentPeriodEnd!, 'dd/MM/yyyy')}`}
-                  </div>
-                </div>
+                <div className="flex flex-col">Gérer mon abonnement</div>
               </div>
             </DropdownMenuItem>
           )}

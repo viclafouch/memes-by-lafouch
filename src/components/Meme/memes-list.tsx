@@ -110,7 +110,7 @@ export const MemesList = ({
       </div>
       <AnimatePresence>
         {selectedMeme ? (
-          <div className="fixed inset-0 flex items-center justify-center z-50 overflow-hidden">
+          <div className="fixed inset-0 flex items-center justify-center z-50 overflow-hidden dark">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -135,7 +135,7 @@ export const MemesList = ({
               className="relative w-[800px] max-w-[90vw]"
             >
               <div className="w-full h-full flex flex-col items-center gap-y-4">
-                <h3 className="text-center w-full text-balance text-lg font-bold">
+                <h3 className="text-center w-full text-balance text-lg font-bold text-primary">
                   {selectedMeme.title}
                 </h3>
                 <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
@@ -148,31 +148,10 @@ export const MemesList = ({
                     allow="autoplay"
                   />
                 </div>
-                <div className="w-full flex sm:justify-center gap-2 flex-col sm:flex-row">
+                <div className="w-full flex sm:justify-center gap-2 flex-col sm:max-w-sm">
                   <Button
-                    size="default"
-                    disabled={shareMeme.isPending}
-                    className="md:hidden"
-                    onClick={() => {
-                      return shareMeme.mutate(selectedMeme)
-                    }}
-                  >
-                    <Share2 />
-                    Partager
-                  </Button>
-                  <Button
-                    size="default"
-                    disabled={downloadMeme.isPending}
-                    onClick={() => {
-                      return downloadMeme.mutate(selectedMeme)
-                    }}
-                  >
-                    <Download />
-                    Télécharger
-                  </Button>
-                  <Button
-                    size="default"
-                    variant="secondary"
+                    size="lg"
+                    variant="default"
                     onClick={() => {
                       return setStudioMemeSelected(selectedMeme)
                     }}
@@ -180,6 +159,32 @@ export const MemesList = ({
                     <Clapperboard />
                     Ouvrir dans Studio
                   </Button>
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      size="lg"
+                      variant="secondary"
+                      disabled={shareMeme.isPending}
+                      className="md:hidden flex-1"
+                      onClick={() => {
+                        return shareMeme.mutate(selectedMeme)
+                      }}
+                    >
+                      <Share2 />
+                      Partager
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="secondary"
+                      className="flex-1"
+                      disabled={downloadMeme.isPending}
+                      onClick={() => {
+                        return downloadMeme.mutate(selectedMeme)
+                      }}
+                    >
+                      <Download />
+                      Télécharger
+                    </Button>
+                  </div>
                 </div>
               </div>
             </motion.div>

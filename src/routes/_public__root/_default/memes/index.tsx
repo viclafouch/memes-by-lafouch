@@ -79,7 +79,7 @@ const RouteComponent = () => {
       <PageDescription>
         Tape, clique, rigole : découvre tous les mèmes en un seul endroit.
       </PageDescription>
-      <div className="w-full mx-auto py-10">
+      <div className="w-full mx-auto py-12">
         <div className="flex flex-col gap-y-4">
           <div className="flex justify-between gap-x-2">
             <MemesQuery

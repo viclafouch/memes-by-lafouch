@@ -136,31 +136,6 @@ const RouteComponent = () => {
           </div>
           <div className="w-full flex flex-col gap-y-4 max-w-md md:max-w-none mx-auto items-center md:items-start">
             <div className="flex flex-col gap-y-2.5 w-full">
-              <LoadingButton
-                isLoading={shareMutation.isPending}
-                variant="outline"
-                className="md:hidden"
-                onClick={() => {
-                  return shareMutation.mutate(meme)
-                }}
-              >
-                <Share2 />
-                Partager la vidéo
-              </LoadingButton>
-              <LoadingButton
-                isLoading={downloadMutation.isPending}
-                variant="outline"
-                onClick={() => {
-                  return downloadMutation.mutate(meme)
-                }}
-              >
-                <Download />
-                Télécharger la vidéo
-              </LoadingButton>
-              <Button onClick={goToNextRandomMeme}>
-                <Shuffle />
-                Aléatoire
-              </Button>
               <Button
                 variant="default"
                 onClick={(event) => {
@@ -171,6 +146,34 @@ const RouteComponent = () => {
               >
                 <Clapperboard />
                 Ouvrir dans Studio
+              </Button>
+              <div className="flex gap-2 flex-wrap">
+                <LoadingButton
+                  isLoading={shareMutation.isPending}
+                  variant="outline"
+                  className="md:hidden shrink-0 flex-1"
+                  onClick={() => {
+                    return shareMutation.mutate(meme)
+                  }}
+                >
+                  <Share2 />
+                  Partager la vidéo
+                </LoadingButton>
+                <LoadingButton
+                  isLoading={downloadMutation.isPending}
+                  variant="outline"
+                  className="flex-1 shrink-0"
+                  onClick={() => {
+                    return downloadMutation.mutate(meme)
+                  }}
+                >
+                  <Download />
+                  Télécharger la vidéo
+                </LoadingButton>
+              </div>
+              <Button variant="outline" onClick={goToNextRandomMeme}>
+                <Shuffle />
+                Aléatoire
               </Button>
             </div>
             {allTags.length > 0 ? (
