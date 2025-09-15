@@ -31,6 +31,7 @@ import { Route as Public__rootDefaultPasswordResetRouteImport } from './routes/_
 import { Route as Public__rootDefaultPasswordCreateNewRouteImport } from './routes/_public__root/_default/password.create-new'
 import { Route as Public__rootDefaultMemesMemeIdRouteImport } from './routes/_public__root/_default/memes/$memeId'
 import { Route as Public__rootDefaultCheckoutSuccessRouteImport } from './routes/_public__root/_default/checkout.success'
+import { ServerRoute as HealthServerRouteImport } from './routes/health'
 import { ServerRoute as ApiBunnyServerRouteImport } from './routes/api/bunny'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
 
@@ -145,6 +146,11 @@ const Public__rootDefaultCheckoutSuccessRoute =
     path: '/checkout/success',
     getParentRoute: () => Public__rootDefaultRouteRoute,
   } as any)
+const HealthServerRoute = HealthServerRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
 const ApiBunnyServerRoute = ApiBunnyServerRouteImport.update({
   id: '/api/bunny',
   path: '/api/bunny',
@@ -288,27 +294,31 @@ export interface RootRouteChildren {
   ReelsRoute: typeof ReelsRoute
 }
 export interface FileServerRoutesByFullPath {
+  '/health': typeof HealthServerRoute
   '/api/bunny': typeof ApiBunnyServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRoutesByTo {
+  '/health': typeof HealthServerRoute
   '/api/bunny': typeof ApiBunnyServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
+  '/health': typeof HealthServerRoute
   '/api/bunny': typeof ApiBunnyServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/bunny' | '/api/auth/$'
+  fullPaths: '/health' | '/api/bunny' | '/api/auth/$'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/bunny' | '/api/auth/$'
-  id: '__root__' | '/api/bunny' | '/api/auth/$'
+  to: '/health' | '/api/bunny' | '/api/auth/$'
+  id: '__root__' | '/health' | '/api/bunny' | '/api/auth/$'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
+  HealthServerRoute: typeof HealthServerRoute
   ApiBunnyServerRoute: typeof ApiBunnyServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
 }
@@ -459,6 +469,13 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/bunny': {
       id: '/api/bunny'
       path: '/api/bunny'
@@ -567,6 +584,7 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
+  HealthServerRoute: HealthServerRoute,
   ApiBunnyServerRoute: ApiBunnyServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
 }
