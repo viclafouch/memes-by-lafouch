@@ -61,25 +61,26 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
       <head>
         <meta name="algolia-site-verification" content="57C07DF31C29F6D0" />
         <HeadContent />
-        <ScriptOnce
-          children={`
-          (function() {
-            const storedTheme = ${JSON.stringify(_storedTheme)};
-            if (storedTheme === 'system') {
-              const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-              document.documentElement.className = systemTheme;
-            } else {
-              document.documentElement.className = storedTheme;
-            }
-          })();
-        `}
-        />
         <script
           type="text/javascript"
           src="//cdn.embed.ly/player-0.1.0.min.js"
         />
       </head>
       <body>
+        <ScriptOnce>
+          {`window.$ujq=window.$ujq||[];window.uj=window.uj||new Proxy({},{get:(_,p)=>(...a)=>window.$ujq.push([p,...a])});document.head.appendChild(Object.assign(document.createElement('script'),{src:'https://cdn.userjot.com/sdk/v1/uj.js',async:!0}));`}
+        </ScriptOnce>
+        <ScriptOnce>
+          {`(function() {
+          const storedTheme = ${JSON.stringify(_storedTheme)};
+          if (storedTheme === 'system') {
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.className = systemTheme;
+          } else {
+            document.documentElement.className = storedTheme;
+          }
+        })();`}
+        </ScriptOnce>
         <ThemeProvider initialTheme={_storedTheme}>
           <OnlyPortrait>
             <DialogProvider>{children}</DialogProvider>

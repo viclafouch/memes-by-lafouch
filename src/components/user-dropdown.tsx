@@ -55,10 +55,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="gap-2 px-2">
           <Avatar className="size-6 rounded-lg">
-            <AvatarImage
-              src="https://bundui-images.netlify.app/avatars/01.png"
-              alt={user.name}
-            />
+            <AvatarImage src="/images/avatar.png" alt={user.name} />
             <AvatarFallback className="rounded-lg">TB</AvatarFallback>
           </Avatar>
           <div className="truncate">{user.name}</div>

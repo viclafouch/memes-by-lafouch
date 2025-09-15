@@ -11,12 +11,14 @@ export const Footer = () => {
           >
             À propos
           </Link>
-          <Link
-            to="/"
+          <a
+            href="https://petit-meme.userjot.com"
+            target="_blank"
+            rel="noreferrer"
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            Contact
-          </Link>
+            Contact & Support
+          </a>
           <Link
             to="/"
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"

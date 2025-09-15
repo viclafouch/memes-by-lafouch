@@ -1,9 +1,10 @@
 import React from 'react'
 import { StarsBackground } from '@/components/animate-ui/backgrounds/stars'
 import { AnimatedBanner } from '@/components/custom/animated-banner'
+import { FeedbackButton } from '@/components/feedback-button'
 import { Footer } from '@/components/footer'
 import { Navbar } from '@/components/navbar'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { ClientOnly, createFileRoute, Outlet } from '@tanstack/react-router'
 
 const RouteComponent = () => {
   return (
@@ -18,6 +19,9 @@ const RouteComponent = () => {
         </main>
         <Footer />
       </div>
+      <ClientOnly>
+        <FeedbackButton />
+      </ClientOnly>
     </StarsBackground>
   )
 }

@@ -134,6 +134,8 @@
   --color-info-foreground: hsl(0 0% 100%);
 
   --animate-background-shine: background-shine 2s linear infinite;
+  --animate-ping-slow: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-bounce-subtle: bounce-subtle 3s ease-in-out infinite;
 
   @keyframes background-shine {
     from {
@@ -141,6 +143,24 @@
     }
     to {
       background-position: -200% 0;
+    }
+  }
+
+  @keyframes ping {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes bounce-subtle {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-4px);
     }
   }
 }
