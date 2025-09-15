@@ -190,11 +190,13 @@ export const MemeListItem = React.memo(
               <img
                 src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/thumbnail.jpg`}
                 alt={meme.title}
+                loading="lazy"
                 className="absolute w-full h-full inset-0 object-cover"
               />
               <img
                 src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/preview.webp`}
                 alt={meme.title}
+                loading="lazy"
                 className="absolute w-full h-full inset-0 hidden duration-600 group-hover:block transition-discrete z-10 object-cover opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus-within:block"
               />
               <div className="absolute bottom-1 left-1 z-30">

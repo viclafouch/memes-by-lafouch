@@ -18,11 +18,10 @@ export const ProfileHeader = ({
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
           <div className="relative">
             <Avatar className="h-24 w-24">
-              <AvatarImage
-                src="https://bundui-images.netlify.app/avatars/01.png"
-                alt={user.name}
-              />
-              <AvatarFallback className="rounded-lg">TB</AvatarFallback>
+              <AvatarImage src="/images/avatar.png" alt={user.name} />
+              <AvatarFallback className="rounded-lg">
+                {(user.name[0] + user.name[1]).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </div>
           <div className="flex-1 space-y-2">

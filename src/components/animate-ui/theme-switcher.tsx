@@ -65,6 +65,9 @@ const Switch = ({
         }}
         {...props}
       >
+        <span className="sr-only">
+          Activer thème {isChecked ? 'clair' : 'sombre'}
+        </span>
         {leftIcon ? (
           <motion.div
             data-slot="switch-left-icon"
@@ -77,7 +80,6 @@ const Switch = ({
             <>{leftIcon}</>
           </motion.div>
         ) : null}
-
         {rightIcon ? (
           <motion.div
             data-slot="switch-right-icon"

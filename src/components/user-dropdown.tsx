@@ -55,8 +55,10 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="gap-2 px-2">
           <Avatar className="size-6 rounded-lg">
-            <AvatarImage src="/images/avatar.png" alt={user.name} />
-            <AvatarFallback className="rounded-lg">TB</AvatarFallback>
+            <AvatarImage src="/images/avatar.png" alt="Avatar" />
+            <AvatarFallback className="rounded-lg">
+              {(user.name[0] + user.name[1]).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div className="truncate">{user.name}</div>
           <ChevronDown />
@@ -69,11 +71,10 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="size-8 rounded-lg">
-              <AvatarImage
-                src="https://bundui-images.netlify.app/avatars/01.png"
-                alt={user.name}
-              />
-              <AvatarFallback className="rounded-lg">TB</AvatarFallback>
+              <AvatarImage src="/images/avatar.png" alt="Avatar" />
+              <AvatarFallback className="rounded-lg">
+                {(user.name[0] + user.name[1]).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-semibold">{user.name}</span>

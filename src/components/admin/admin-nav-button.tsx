@@ -35,7 +35,9 @@ export const AdminNavButton = ({ user }: { user: UserWithRole }) => {
               alt={user.name}
               referrerPolicy="no-referrer"
             />
-            <AvatarFallback>ER</AvatarFallback>
+            <AvatarFallback className="rounded-lg">
+              {(user.name[0] + user.name[1]).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
