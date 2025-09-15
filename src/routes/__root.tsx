@@ -31,17 +31,6 @@ const TanStackQueryDevtools =
         return { default: result.ReactQueryDevtools }
       })
 
-const SpeedInsights =
-  process.env.NODE_ENV !== 'production'
-    ? () => {
-        return null
-      }
-    : React.lazy(async () => {
-        const result = await import('@vercel/speed-insights/react')
-
-        return { default: result.SpeedInsights }
-      })
-
 const TanStackRouterDevtools =
   process.env.NODE_ENV === 'production'
     ? () => {
@@ -89,7 +78,6 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
           <React.Suspense>
             <TanStackRouterDevtools position="bottom-left" />
             <TanStackQueryDevtools buttonPosition="bottom-right" />
-            <SpeedInsights />
           </React.Suspense>
           <TailwindIndicator />
         </ThemeProvider>
