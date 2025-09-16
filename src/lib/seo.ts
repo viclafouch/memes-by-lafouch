@@ -1,7 +1,7 @@
 import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { buildVideoImageUrl } from '@/lib/bunny'
 
-export const appProdUrl = 'https://memes-by-lafouch.vercel.app'
+export const appProdUrl = 'https://www.petit-meme.io'
 
 export const websiteOrigin =
   process.env.NODE_ENV === 'production' ? appProdUrl : 'http://localhost:3000'

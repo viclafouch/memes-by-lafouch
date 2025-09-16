@@ -1,6 +1,6 @@
 export const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? `https://${process.env.VERCEL_URL}`
+    ? 'https://www.petit-meme.io'
     : '/static'
 
 export const styles = {

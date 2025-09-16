@@ -11,7 +11,7 @@ export const ENV = createEnv({
     RESEND_SECRET: z.string(),
     POLAR_ACCESS_TOKEN: z.string(),
     POLAR_SUCCESS_URL: z.string(),
-    RESEND_EMAIL_FROM: z.string().optional()
+    RESEND_EMAIL_TO: z.string().optional()
   },
   clientPrefix: 'PUBLIC_',
   client: {},

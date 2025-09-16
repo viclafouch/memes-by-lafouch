@@ -61,7 +61,7 @@ export const EmailVerification = ({
 
 EmailVerification.PreviewProps = {
   username: 'Alan',
-  verificationUrl: 'https://memes-by-lafouch.vercel.app'
+  verificationUrl: 'https://www.petit-meme.io'
 } as EmailVerificationProps
 
 export default EmailVerification

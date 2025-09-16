@@ -50,8 +50,8 @@ const getAuthConfig = serverOnly(() => {
       maxPasswordLength: 100,
       sendResetPassword: async ({ user, url }) => {
         await resendClient.emails.send({
-          from: 'Acme <onboarding@resend.dev>',
-          to: ENV.RESEND_EMAIL_FROM ?? user.email,
+          from: 'Petit Meme <hello@petit-meme.io>',
+          to: ENV.RESEND_EMAIL_TO ?? user.email,
           subject: 'Réinitialise ton mot de passe Petit Mème',
           react: <ResetPassword username={user.name} resetUrl={url} />
         })
@@ -69,8 +69,8 @@ const getAuthConfig = serverOnly(() => {
       expiresIn: 3600, // 1 hour
       sendVerificationEmail: async ({ user, url }) => {
         await resendClient.emails.send({
-          from: 'Acme <onboarding@resend.dev>',
-          to: ENV.RESEND_EMAIL_FROM ?? user.email,
+          from: 'Petit Meme <hello@petit-meme.io>',
+          to: ENV.RESEND_EMAIL_TO ?? user.email,
           subject: 'Confirme ton inscription à Petit Mème',
           react: (
             <EmailVerification username={user.name} verificationUrl={url} />
