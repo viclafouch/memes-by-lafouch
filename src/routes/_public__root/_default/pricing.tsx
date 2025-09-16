@@ -13,6 +13,7 @@ import { FREE_PLAN, type Plan, PREMIUM_PLAN } from '@/constants/plan'
 import { formatCentsToEuros } from '@/helpers/number'
 import { usePortal } from '@/hooks/use-portal'
 import { getActiveSubscriptionQueryOpts } from '@/lib/queries'
+import { seo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 import {
   PageDescription,
@@ -193,5 +194,16 @@ const RouteComponent = () => {
 }
 
 export const Route = createFileRoute('/_public__root/_default/pricing')({
-  component: RouteComponent
+  component: RouteComponent,
+  head: () => {
+    return {
+      meta: [
+        ...seo({
+          title: 'Plans et Tarifs',
+          description:
+            'Découvre les plans de Petit Meme : gratuit ou Premium avec accès illimité aux mèmes, favoris et générations de vidéos. Choisis le plan qui te permet de créer et partager des mèmes sans limites !'
+        })
+      ]
+    }
+  }
 })
