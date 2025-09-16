@@ -214,8 +214,8 @@ export const MemeListItem = React.memo(
                 }}
               >
                 <div className="sr-only">Play</div>
-                <div className="rounded-full text-white w-10 h-10 aspect-square flex justify-center items-center bg-black opacity-90 border border-muted-foreground md:scale-0 group-hover:scale-100 duration-300 md:opacity-0 group-hover:opacity-100 transition-all group-focus-within:opacity-100">
-                  <BunnyPlayIcon className="fill-white w-[18px]" />
+                <div className="rounded-full text-white w-8 h-8 md:w-10 md:h-10 aspect-square flex justify-center items-center bg-black/70 opacity-90 border border-muted-foreground md:scale-0 group-hover:scale-100 duration-300 md:opacity-0 group-hover:opacity-100 transition-all group-focus-within:opacity-100 group-focus-within:scale-0 md:group-focus-within:scale-100">
+                  <BunnyPlayIcon className="fill-white w-[14px] md:w-[18px]" />
                 </div>
               </button>
             </motion.div>

@@ -19,7 +19,7 @@ export const MemesQuery = React.memo(
           value={query}
           onChange={handleChange}
           type="search"
-          placeholder="Rechercher"
+          placeholder="Rechercher par mots-clés, tags..."
         />
       </div>
     )

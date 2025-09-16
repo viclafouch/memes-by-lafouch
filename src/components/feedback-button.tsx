@@ -45,7 +45,7 @@ export const FeedbackButton = () => {
 
   return (
     <motion.div
-      className="fixed bottom-2 right-2 z-50 sm:bottom-6 sm:right-6"
+      className="fixed bottom-2 right-4 z-50 sm:bottom-6 sm:right-6"
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       style={{ transformOrigin: 'bottom right' }}
@@ -55,9 +55,9 @@ export const FeedbackButton = () => {
         variant="default"
         size="default"
         onClick={handleClick}
-        className="shadow-lg hover:shadow-xl transition-shadow animate-bounce-subtle cursor-pointer max-sm:rounded-full max-sm:aspect-square"
+        className="shadow-lg hover:shadow-xl transition-shadow animate-bounce-subtle cursor-pointer max-sm:rounded-full max-sm:aspect-square max-sm:size-12"
       >
-        <Lightbulb className="fill-amber-300" />
+        <Lightbulb className="fill-amber-300 size-5" />
         <span className="hidden sm:inline">Feedback ?</span>
       </Button>
     </motion.div>
