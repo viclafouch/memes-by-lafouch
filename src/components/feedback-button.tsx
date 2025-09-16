@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare } from 'lucide-react'
+import { Lightbulb } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/lib/theme'
 import { useRouteContext } from '@tanstack/react-router'
@@ -45,7 +45,7 @@ export const FeedbackButton = () => {
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 z-50"
+      className="fixed bottom-2 right-2 z-50 sm:bottom-6 sm:right-6"
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       style={{ transformOrigin: 'bottom right' }}
@@ -55,10 +55,10 @@ export const FeedbackButton = () => {
         variant="default"
         size="default"
         onClick={handleClick}
-        className="shadow-lg hover:shadow-xl transition-shadow animate-bounce-subtle cursor-pointer"
+        className="shadow-lg hover:shadow-xl transition-shadow animate-bounce-subtle cursor-pointer max-sm:rounded-full max-sm:aspect-square"
       >
-        <MessageSquare />
-        Petit feedback ?
+        <Lightbulb className="fill-amber-300" />
+        <span className="hidden sm:inline">Feedback ?</span>
       </Button>
     </motion.div>
   )

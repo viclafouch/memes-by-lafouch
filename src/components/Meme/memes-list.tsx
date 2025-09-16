@@ -93,7 +93,7 @@ export const MemesList = ({
             '--cols': `repeat(${columnGridCount}, 1fr)`
           } as React.CSSProperties
         }
-        className="grid gap-5 md:grid-cols-2 lg:[grid-template-columns:var(--cols)]"
+        className="grid gap-5 grid-cols-2 lg:[grid-template-columns:var(--cols)]"
       >
         {memes.map((meme) => {
           return (

@@ -13,6 +13,7 @@ import {
   getMemesListQueryOpts
 } from '@/lib/queries'
 import { seo } from '@/lib/seo'
+import { cn } from '@/lib/utils'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -81,12 +82,12 @@ const RouteComponent = () => {
       </PageDescription>
       <div className="w-full mx-auto py-12">
         <div className="flex flex-col gap-y-4">
-          <div className="flex justify-between gap-x-2">
+          <div className="flex justify-between flex-col sm:flex-row gap-2">
             <MemesQuery
               query={search.query ?? ''}
               onQueryChange={handleQueryChange}
             />
-            <div className="gap-x-3 flex shrink-0">
+            <div className="gap-x-2 flex shrink-0">
               <div className="hidden lg:flex">
                 <MemesToggleGrid
                   columnValue={columnGridCount}
@@ -95,14 +96,14 @@ const RouteComponent = () => {
               </div>
               <Link
                 to="/random"
-                className={buttonVariants({ variant: 'outline' })}
+                className={cn('flex-1', buttonVariants({ variant: 'outline' }))}
               >
                 <Shuffle />
                 Aléatoire
               </Link>
               <Link
                 to="/reels"
-                className={buttonVariants({ variant: 'outline' })}
+                className={cn('flex-1', buttonVariants({ variant: 'outline' }))}
               >
                 <Smartphone />
                 Mode Reels

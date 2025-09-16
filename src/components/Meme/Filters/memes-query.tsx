@@ -14,7 +14,7 @@ export const MemesQuery = React.memo(
     }
 
     return (
-      <div className="flex w-full max-w-xs items-center gap-2">
+      <div className="flex w-full sm:max-w-xs items-center gap-2">
         <Input
           value={query}
           onChange={handleChange}
