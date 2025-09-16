@@ -1,7 +1,5 @@
 export const baseUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://www.petit-meme.io'
-    : '/static'
+  process.env.NODE_ENV === 'production' ? 'https://petit-meme.io' : '/static'
 
 export const styles = {
   main: {

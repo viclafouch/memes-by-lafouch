@@ -134,9 +134,9 @@ export const Route = createRootRouteWithContext<{
         { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         ...seo({
-          title: 'Petit Meme',
+          title: 'Ta banque de mèmes vidéo, prête à faire rire Internet',
           description:
-            'Petit Meme est un site web qui contient des mèmes générés aléatoirement par l’utilisateur. De plus, il permet de télécharger des mèmes vidéo depuis des tweets.'
+            'Découvre Petit Meme, la plateforme où tu peux parcourir, créer et partager des mèmes gratuitement. Explore notre bibliothèque de vidéos et images humoristiques, sauvegarde tes favoris et amuse-toi avec des contenus toujours à jour.'
         })
       ],
       links: [

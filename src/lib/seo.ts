@@ -1,7 +1,7 @@
 import type { MemeWithCategories, MemeWithVideo } from '@/constants/meme'
 import { buildVideoImageUrl } from '@/lib/bunny'
 
-export const appProdUrl = 'https://www.petit-meme.io'
+export const appProdUrl = 'https://petit-meme.io'
 
 export const websiteOrigin =
   process.env.NODE_ENV === 'production' ? appProdUrl : 'http://localhost:3000'
@@ -22,8 +22,8 @@ export function seo({
   pathname?: string
 }) {
   const titlePrefixed = isAdmin
-    ? `Admin Studio - ${title}`
-    : `Studio - ${title}`
+    ? `Admin Petit Meme - ${title}`
+    : `Petit Meme - ${title}`
 
   let url = websiteOrigin
 

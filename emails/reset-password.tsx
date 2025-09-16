@@ -59,7 +59,7 @@ export const ResetPassword = ({ username, resetUrl }: ResetPasswordProps) => {
 
 ResetPassword.PreviewProps = {
   username: 'Alan',
-  resetUrl: 'https://www.petit-meme.io'
+  resetUrl: 'https://petit-meme.io'
 } as ResetPasswordProps
 
 export default ResetPassword
