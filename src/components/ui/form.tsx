@@ -45,7 +45,7 @@ const FormItem = ({
     <FormItemContext.Provider value={value}>
       <div
         data-slot="form-item"
-        className={cn('grid gap-2 w-full', className)}
+        className={cn('grid gap-1 w-full', className)}
         {...props}
       />
     </FormItemContext.Provider>
@@ -115,7 +115,7 @@ const FormMessage = ({ className, ...props }: React.ComponentProps<'p'>) => {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn('text-destructive-foreground text-sm', className)}
+      className={cn('text-destructive text-sm', className)}
       {...props}
     >
       {body}

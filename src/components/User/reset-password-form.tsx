@@ -51,7 +51,7 @@ export const ResetPasswordForm = () => {
       <h1 className="text-xl font-semibold text-center text-balance max-w-sm mx-center">
         Demande de réinitialisation de mot de passe
       </h1>
-      <div className="flex flex-col items-center gap-y-2 w-full">
+      <div className="flex flex-col items-center gap-y-4 w-full">
         <form.Field
           name="email"
           children={(field) => {

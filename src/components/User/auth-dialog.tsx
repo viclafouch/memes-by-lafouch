@@ -288,7 +288,7 @@ const SignupForm = () => {
         form.handleSubmit()
       }}
       noValidate
-      className="flex flex-col items-center gap-y-2 w-full"
+      className="flex flex-col items-center gap-y-4 w-full"
     >
       <form.Field
         name="name"
