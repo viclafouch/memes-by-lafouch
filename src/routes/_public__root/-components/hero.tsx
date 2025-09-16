@@ -60,7 +60,7 @@ export const Hero = () => {
 
   return (
     <PageHeader as="div">
-      <React.Suspense fallback={null}>
+      <React.Suspense fallback={<div />}>
         <motion.div
           variants={variants}
           initial="hidden"

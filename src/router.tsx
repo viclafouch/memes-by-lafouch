@@ -24,7 +24,7 @@ export function createAppRouter() {
     context: { queryClient, user: null },
     defaultPreloadStaleTime: 30_000, // 30s,
     defaultStaleTime: 30_000, // 30s,
-    defaultPendingMs: 0,
+    defaultPendingMs: 1000,
     defaultViewTransition: false,
     notFoundMode: 'root',
     defaultPendingComponent: DefaultLoading,

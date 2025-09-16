@@ -16,7 +16,7 @@ const RouteComponent = () => {
     <PageContainer>
       <section className="flex w-full flex-col gap-16 py-30 pb-10 sm:pt-42">
         <Hero />
-        <React.Suspense fallback={null}>
+        <React.Suspense fallback={<div />}>
           <Demo bestMemesPromise={bestMemesPromise} />
         </React.Suspense>
       </section>
@@ -26,6 +26,7 @@ const RouteComponent = () => {
 
 export const Route = createFileRoute('/_public__root/')({
   component: RouteComponent,
+  pendingMs: 3000,
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(getRecentCountMemesQueryOpts())
     const bestMemesPromise = context.queryClient.ensureQueryData(
