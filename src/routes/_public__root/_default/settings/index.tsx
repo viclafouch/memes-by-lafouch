@@ -8,7 +8,7 @@ const RouteComponent = () => {
   })
 
   return (
-    <div className="container mx-auto space-y-6 px-4 py-10">
+    <div className="mx-auto space-y-6 py-10">
       <ProfileHeader user={user} activeSubscription={activeSubscription} />
       <ProfileContent user={user} activeSubscription={activeSubscription} />
     </div>
