@@ -1,6 +1,6 @@
 import React from 'react'
 import type { ErrorContext } from 'better-auth/react'
-import { CheckCircle, CircleAlert } from 'lucide-react'
+import { CheckCircle, CircleAlert, Twitter } from 'lucide-react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import type { WithDialog } from '@/@types/dialog'
@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoadingButton } from '@/components/ui/loading-button'
-import { Separator } from '@/components/ui/separator'
 import { authClient, getErrorMessage } from '@/lib/auth-client'
 import {
   getActiveSubscriptionQueryOpts,
@@ -36,6 +35,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 type FormProps = {
   onOpenChange?: (open: boolean) => void
   onSuccess?: () => void
+  onAuthTypeChange: (authType: 'login' | 'signup') => void
 }
 
 const loginSchema = z.object({
@@ -53,7 +53,11 @@ const loginFormOpts = formOptions({
   }
 })
 
-export const LoginForm = ({ onOpenChange, onSuccess }: FormProps) => {
+export const LoginForm = ({
+  onOpenChange,
+  onSuccess,
+  onAuthTypeChange
+}: FormProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [emailIsNotValid, setEmailIsNotValid] = React.useState(false)
@@ -184,15 +188,30 @@ export const LoginForm = ({ onOpenChange, onSuccess }: FormProps) => {
           )
         }}
       />
-      <Link
-        to="/password/reset"
-        className="underline"
-        onClick={() => {
-          return onOpenChange?.(false)
-        }}
-      >
-        Mot de passe oublié ?
-      </Link>
+      <div className="w-full flex flex-col gap-1 justify-center items-center">
+        <Link
+          to="/password/reset"
+          className="underline text-xs text-primary"
+          onClick={() => {
+            return onOpenChange?.(false)
+          }}
+        >
+          Mot de passe oublié ?
+        </Link>
+        <div className="text-center text-sm gap-x-1 inline-flex justify-center w-full text-primary">
+          Pas de compte ?
+          <button
+            onClick={(event) => {
+              event.preventDefault()
+              onAuthTypeChange('signup')
+            }}
+            type="button"
+            className="underline underline-offset-4 cursor-pointer"
+          >
+            S&apos;inscrire
+          </button>
+        </div>
+      </div>
       {emailIsNotValid ? (
         <Alert variant="destructive" className="mt-4">
           <CircleAlert />
@@ -236,7 +255,9 @@ const signupFormOpts = formOptions({
   }
 })
 
-const SignupForm = () => {
+const SignupForm = ({
+  onAuthTypeChange
+}: Pick<FormProps, 'onAuthTypeChange'>) => {
   const signupMutation = useMutation({
     mutationFn: async ({
       email,
@@ -436,12 +457,34 @@ const SignupForm = () => {
           ) : null
         }}
       />
+      <div className="text-center text-sm gap-x-1 inline-flex justify-center w-full text-primary">
+        Déjà un compte ?
+        <button
+          onClick={(event) => {
+            event.preventDefault()
+            onAuthTypeChange('login')
+          }}
+          type="button"
+          className="underline underline-offset-4 cursor-pointer"
+        >
+          Se connecter
+        </button>
+      </div>
     </form>
   )
 }
 
 export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
   const [authType, setAuthType] = React.useState<'login' | 'signup'>('login')
+
+  const handleSignInWithTwitter = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+    await authClient.signIn.social({
+      provider: 'twitter'
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -456,46 +499,30 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
           </h1>
           {authType === 'login' ? (
             <LoginForm
+              onAuthTypeChange={setAuthType}
               onOpenChange={onOpenChange}
               onSuccess={() => {
                 return onOpenChange(false)
               }}
             />
           ) : (
-            <SignupForm />
+            <SignupForm onAuthTypeChange={setAuthType} />
           )}
         </div>
-        <Separator />
-        <div>
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 text-sm">
-            {authType === 'login' ? (
-              <p>Pas de compte ?</p>
-            ) : (
-              <p>Déjà un utilisateur ?</p>
-            )}
-            {authType === 'login' ? (
-              <Button
-                variant="default"
-                onClick={(event) => {
-                  event.preventDefault()
-                  setAuthType('signup')
-                }}
-              >
-                Créer un compte
-              </Button>
-            ) : (
-              <Button
-                variant="default"
-                onClick={(event) => {
-                  event.preventDefault()
-                  setAuthType('login')
-                }}
-              >
-                Se connecter
-              </Button>
-            )}
-          </div>
+        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t w-full">
+          <span className="bg-background text-muted-foreground relative z-10 px-2">
+            Ou continuer avec
+          </span>
         </div>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleSignInWithTwitter}
+        >
+          {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
+          <Twitter />
+          Connexion avec Twitter
+        </Button>
         <DialogFooter />
       </DialogContent>
     </Dialog>

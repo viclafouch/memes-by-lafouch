@@ -54,7 +54,10 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="gap-2 px-2">
           <Avatar className="size-6 rounded-lg">
-            <AvatarImage src="/images/avatar.png" alt="Avatar" />
+            <AvatarImage
+              src={user.image ?? '/images/avatar.png'}
+              alt="Avatar"
+            />
             <AvatarFallback className="rounded-lg">
               {(user.name[0] + user.name[1]).toUpperCase()}
             </AvatarFallback>
@@ -70,7 +73,10 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="size-8 rounded-lg">
-              <AvatarImage src="/images/avatar.png" alt="Avatar" />
+              <AvatarImage
+                src={user.image ?? '/images/avatar.png'}
+                alt="Avatar"
+              />
               <AvatarFallback className="rounded-lg">
                 {(user.name[0] + user.name[1]).toUpperCase()}
               </AvatarFallback>
