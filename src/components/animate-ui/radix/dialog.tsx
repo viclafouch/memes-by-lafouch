@@ -130,7 +130,12 @@ const DialogContent = ({
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             />
           </DialogOverlay>
-          <DialogPrimitive.Content asChild forceMount {...props}>
+          <DialogPrimitive.Content
+            asChild
+            forceMount
+            {...props}
+            tabIndex={undefined}
+          >
             <motion.div
               key="dialog-content"
               data-slot="dialog-content"

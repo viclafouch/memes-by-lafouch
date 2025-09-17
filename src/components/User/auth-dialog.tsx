@@ -35,6 +35,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 type FormProps = {
   onOpenChange?: (open: boolean) => void
   onSuccess?: () => void
+  onTwitterSignIn: (event: React.MouseEvent<HTMLButtonElement>) => void
   onAuthTypeChange: (authType: 'login' | 'signup') => void
 }
 
@@ -56,7 +57,8 @@ const loginFormOpts = formOptions({
 export const LoginForm = ({
   onOpenChange,
   onSuccess,
-  onAuthTypeChange
+  onAuthTypeChange,
+  onTwitterSignIn
 }: FormProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
@@ -188,6 +190,16 @@ export const LoginForm = ({
           )
         }}
       />
+      <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t w-full">
+        <span className="bg-background text-muted-foreground relative z-10 px-2">
+          Ou continuer avec
+        </span>
+      </div>
+      <Button variant="outline" className="w-full" onClick={onTwitterSignIn}>
+        {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
+        <Twitter />
+        Connexion avec Twitter
+      </Button>
       <div className="w-full flex flex-col gap-1 justify-center items-center">
         <Link
           to="/password/reset"
@@ -488,7 +500,12 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent
+        className="max-w-md"
+        onOpenAutoFocus={(event) => {
+          return event.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle />
           <DialogDescription />
@@ -501,6 +518,7 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
             <LoginForm
               onAuthTypeChange={setAuthType}
               onOpenChange={onOpenChange}
+              onTwitterSignIn={handleSignInWithTwitter}
               onSuccess={() => {
                 return onOpenChange(false)
               }}
@@ -509,20 +527,6 @@ export const AuthDialog = ({ open, onOpenChange }: WithDialog<unknown>) => {
             <SignupForm onAuthTypeChange={setAuthType} />
           )}
         </div>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t w-full">
-          <span className="bg-background text-muted-foreground relative z-10 px-2">
-            Ou continuer avec
-          </span>
-        </div>
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={handleSignInWithTwitter}
-        >
-          {/* eslint-disable-next-line @typescript-eslint/no-deprecated */}
-          <Twitter />
-          Connexion avec Twitter
-        </Button>
         <DialogFooter />
       </DialogContent>
     </Dialog>
