@@ -98,7 +98,7 @@ export const PlayerDialog = ({
           <h3 className="text-center w-full text-balance text-lg font-bold text-primary">
             {meme.title}
           </h3>
-          <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
+          <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10 z-[1]">
             <VideoPlayer className="overflow-hidden w-full h-full max-h-full">
               <VideoPlayerContent
                 crossOrigin=""
@@ -139,6 +139,11 @@ export const PlayerDialog = ({
               </VideoPlayerControlBar>
             </VideoPlayer>
           </div>
+          <div
+            className="absolute bg-transparent inset-0 -z-[1]"
+            onClick={close}
+            role="presentation"
+          />
           <div className="w-full flex sm:justify-center gap-2 flex-col sm:max-w-sm">
             <Button
               size="lg"

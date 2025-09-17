@@ -49,7 +49,7 @@ export const ProfileContent = ({
           <CardHeader>
             <CardTitle>Compte et abonnement</CardTitle>
             <CardDescription>
-              Manage your account preferences and subscription.
+              Gérez les préférences de votre compte et votre abonnement.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
