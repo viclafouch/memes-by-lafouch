@@ -1,14 +1,11 @@
 import React from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Clapperboard, Download, Share2, X } from 'lucide-react'
+import { AnimatePresence } from 'framer-motion'
 import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
+import { PlayerDialog } from '@/components/Meme/player-dialog'
 import { StudioDialog } from '@/components/Meme/studio-dialog'
-import { Button } from '@/components/ui/button'
 import type { MemeWithVideo } from '@/constants/meme'
-import { useDownloadMeme } from '@/hooks/use-download-meme'
-import { useShareMeme } from '@/hooks/use-share-meme'
 import { ClientOnly } from '@tanstack/react-router'
 
 export type MemesListProps = {
@@ -23,12 +20,8 @@ export const MemesList = ({
   columnGridCount = 4
 }: MemesListProps) => {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
-  const iframeRef = React.useRef<HTMLIFrameElement>(null)
   const [studioMemeSelected, setStudioMemeSelected] =
     React.useState<MemeWithVideo | null>(null)
-
-  const shareMeme = useShareMeme()
-  const downloadMeme = useDownloadMeme()
 
   useHotkeys(
     'escape',
@@ -75,14 +68,6 @@ export const MemesList = ({
     return meme.id === selectedId
   })
 
-  const handleLayoutAnimationComplete = async () => {
-    if (iframeRef.current) {
-      const player = new window.playerjs.Player(iframeRef.current)
-
-      player.on('ready', player.play)
-    }
-  }
-
   const size: MemeListItemProps['size'] = columnGridCount < 5 ? 'md' : 'sm'
 
   return (
@@ -110,85 +95,12 @@ export const MemesList = ({
       </div>
       <AnimatePresence>
         {selectedMeme ? (
-          <div className="fixed inset-0 flex items-center justify-center z-50 overflow-hidden dark">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={handleUnSelect}
-              role="presentation"
-              className="bg-black/90 absolute inset-0"
-            />
-            <motion.div
-              className="absolute top-4 right-4"
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              exit={{ opacity: 0 }}
-            >
-              <Button size="icon" onClick={handleUnSelect}>
-                <X />
-              </Button>
-            </motion.div>
-            <motion.div
-              layoutId={`${layoutContext}-item-${selectedId}`}
-              onLayoutAnimationComplete={handleLayoutAnimationComplete}
-              className="relative w-[800px] max-w-[90vw]"
-            >
-              <div className="w-full h-full flex flex-col items-center gap-y-4">
-                <h3 className="text-center w-full text-balance text-lg font-bold text-primary">
-                  {selectedMeme.title}
-                </h3>
-                <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-lg text-sm border border-white/10">
-                  <iframe
-                    src={`https://iframe.mediadelivery.net/embed/471900/${selectedMeme.video.bunnyId}?autoplay=false&muted=true`}
-                    loading="lazy"
-                    ref={iframeRef}
-                    title={selectedMeme.title}
-                    className="w-full h-full"
-                    allow="autoplay"
-                  />
-                </div>
-                <div className="w-full flex sm:justify-center gap-2 flex-col sm:max-w-sm">
-                  <Button
-                    size="lg"
-                    variant="default"
-                    onClick={() => {
-                      return setStudioMemeSelected(selectedMeme)
-                    }}
-                  >
-                    <Clapperboard />
-                    Ouvrir dans Studio
-                  </Button>
-                  <div className="flex gap-2 flex-wrap">
-                    <Button
-                      size="lg"
-                      variant="secondary"
-                      disabled={shareMeme.isPending}
-                      className="md:hidden flex-1"
-                      onClick={() => {
-                        return shareMeme.mutate(selectedMeme)
-                      }}
-                    >
-                      <Share2 />
-                      Partager
-                    </Button>
-                    <Button
-                      size="lg"
-                      variant="secondary"
-                      className="flex-1"
-                      disabled={downloadMeme.isPending}
-                      onClick={() => {
-                        return downloadMeme.mutate(selectedMeme)
-                      }}
-                    >
-                      <Download />
-                      Télécharger
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          <PlayerDialog
+            meme={selectedMeme}
+            layoutContext={layoutContext}
+            onClose={handleUnSelect}
+            onOpenStudio={setStudioMemeSelected}
+          />
         ) : null}
       </AnimatePresence>
       <ClientOnly>

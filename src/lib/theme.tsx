@@ -101,7 +101,7 @@ export const ThemeProvider = ({
 }
 
 export const useTheme = () => {
-  const context = React.use(ThemeContext)
+  const context = React.useContext(ThemeContext)
 
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider')

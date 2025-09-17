@@ -61,6 +61,7 @@
     "hls.js": "^1.6.12",
     "is-network-error": "^1.1.0",
     "lucide-react": "^0.544.0",
+    "media-chrome": "^4.13.1",
     "motion": "^12.23.12",
     "radix-ui": "^1.4.3",
     "react": "^19",
