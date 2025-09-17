@@ -62,7 +62,7 @@ const PricingCard = ({
   return (
     <Card
       className={cn(
-        `flex flex-col justify-between py-1 border-zinc-700 flex-1`,
+        `flex flex-col justify-between py-1 border-zinc-300 flex-1`,
         {
           'animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors':
             isExclusive && !isActive
@@ -75,7 +75,7 @@ const PricingCard = ({
             {title}
             {isExclusive ? (
               <svg
-                className="animate-ping-slow h-5 w-5 text-gray-500 dark:hidden"
+                className="animate-ping-slow h-5 w-5 text-amber-400 dark:hidden"
                 viewBox="0 0 50 50"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -130,9 +130,10 @@ const PricingCard = ({
               event.preventDefault()
               onChangePlan(productId)
             }}
-            className="w-full"
-            variant="secondary"
+            className="w-full text-green-500"
+            size="xl"
             disabled={isActive}
+            variant="outline"
           >
             Actif
           </Button>
@@ -142,7 +143,9 @@ const PricingCard = ({
               event.preventDefault()
               onChangePlan(productId)
             }}
+            size="xl"
             className="w-full"
+            variant={isExclusive ? 'default' : 'secondary'}
           >
             Mettre à niveau
           </Button>
@@ -168,7 +171,7 @@ const RouteComponent = () => {
         l’illimité.
       </PageDescription>
       <div className="w-full mx-auto py-12">
-        <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 sm:max-w-2xl mx-auto max-w-md">
+        <section className="flex flex-col-reverse sm:flex-row sm:flex-wrap justify-center gap-8 sm:max-w-2xl mx-auto max-w-md">
           <PricingCard
             {...FREE_PLAN}
             onChangePlan={() => {

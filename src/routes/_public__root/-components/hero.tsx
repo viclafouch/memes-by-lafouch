@@ -6,6 +6,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { getRecentCountMemesQueryOpts } from '@/lib/queries'
+import { cn } from '@/lib/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { FloatingLogos } from './floating-logo'
@@ -103,14 +104,38 @@ export const Hero = () => {
           variants={variants}
           initial="hidden"
           animate="visible"
+          className="flex gap-x-4"
           custom={{ delay: 1.1 }}
         >
           <Link
             viewTransition
-            className={buttonVariants({ size: 'lg' })}
+            className={cn(
+              buttonVariants({
+                size: 'xl',
+                variant: 'defaultWithOutline'
+              }),
+              'rounded-full before:rounded-full'
+            )}
             to="/memes"
           >
-            Découvrir les mèmes
+            Découvrir —{' '}
+            <span className="font-normal italic">c&apos;est gratuit</span>
+          </Link>
+          <Link
+            viewTransition
+            className={cn(
+              buttonVariants({
+                size: 'xl',
+                variant: 'secondaryWithOutline'
+              }),
+              'rounded-full before:rounded-full'
+            )}
+            to="/pricing"
+          >
+            Mode premium{' '}
+            <span aria-hidden="true" className="text-[16px]">
+              🎉
+            </span>
           </Link>
         </motion.div>
       </PageActions>
