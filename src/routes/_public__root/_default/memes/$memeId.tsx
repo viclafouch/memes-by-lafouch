@@ -1,5 +1,6 @@
 import React from 'react'
 import { formatDate } from 'date-fns'
+import Hls from 'hls.js'
 import {
   ArrowLeft,
   Clapperboard,
@@ -12,11 +13,21 @@ import { StudioDialog } from '@/components/Meme/studio-dialog'
 import ToggleLikeButton from '@/components/Meme/toggle-like-button'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
+import {
+  VideoPlayer,
+  VideoPlayerContent,
+  VideoPlayerControlBar,
+  VideoPlayerMuteButton,
+  VideoPlayerPlayButton,
+  VideoPlayerTimeDisplay,
+  VideoPlayerTimeRange,
+  VideoPlayerVolumeRange
+} from '@/components/ui/kibo-ui/video-player'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 import { matchIsUserAdmin } from '@/lib/auth-client'
-import { buildVideoImageUrl } from '@/lib/bunny'
+import { buildVideoImageUrl, buildVideoStreamUrl } from '@/lib/bunny'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
 import { buildMemeSeo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
@@ -34,6 +45,8 @@ import {
 const RouteComponent = () => {
   const { nextRandomMeme } = Route.useLoaderData()
   const { user } = useRouteContext({ from: '__root__' })
+  const hls = React.useRef<Hls>(null)
+  const videoRef = React.useRef<HTMLVideoElement>(null)
   const { memeId } = Route.useParams()
   const navigate = Route.useNavigate()
   const router = useRouter()
@@ -74,8 +87,31 @@ const RouteComponent = () => {
     preload()
   }, [router, nextRandomMeme])
 
+  React.useEffect(() => {
+    const video = videoRef.current
+
+    if (!video) {
+      return () => {}
+    }
+
+    const videoSrc = buildVideoStreamUrl(meme.video.bunnyId)
+
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc
+    } else if (Hls.isSupported()) {
+      hls.current = new Hls()
+      hls.current.loadSource(videoSrc)
+      hls.current.attachMedia(video)
+    }
+
+    return () => {
+      hls.current?.destroy()
+    }
+  }, [meme.id])
+
   const goToNextRandomMeme = async () => {
     try {
+      videoRef.current?.pause()
       const newMeme = await nextRandomMeme
       navigate({ to: '/memes/$memeId', params: { memeId: newMeme.id } })
     } catch (error) {
@@ -105,13 +141,29 @@ const RouteComponent = () => {
                   loading="eager"
                 />
               </div>
-              <iframe
-                src={`https://iframe.mediadelivery.net/embed/471900/${meme.video.bunnyId}?autoplay=true&muted=true&responsive=true`}
-                title={meme.title}
-                className="w-full h-full z-10"
-                allow="autoplay; fullscreen"
-                loading="eager"
-              />
+              <VideoPlayer className="overflow-hidden w-full h-full max-h-full">
+                <VideoPlayerContent
+                  crossOrigin=""
+                  poster={buildVideoImageUrl(meme.video.bunnyId)}
+                  className="w-full h-full"
+                  playsInline
+                  autoPlay
+                  loop
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  preload="auto"
+                  slot="media"
+                  tabIndex={-1}
+                  ref={videoRef}
+                />
+                <VideoPlayerControlBar>
+                  <VideoPlayerPlayButton />
+                  <VideoPlayerTimeRange />
+                  <VideoPlayerTimeDisplay showDuration />
+                  <VideoPlayerMuteButton />
+                  <VideoPlayerVolumeRange />
+                </VideoPlayerControlBar>
+              </VideoPlayer>
             </div>
             <div className="flex justify-center md:justify-start gap-x-2 items-center">
               <h1 className="font-bricolage text-foreground max-w-4xl text-left font-semibold md:text-balance text-lg leading-[1.2] sm:text-xl lg:text-2xl">
@@ -140,6 +192,7 @@ const RouteComponent = () => {
                 variant="default"
                 onClick={(event) => {
                   event.preventDefault()
+                  videoRef.current?.pause()
 
                   setIsStudioDialogOpened(true)
                 }}

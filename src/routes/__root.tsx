@@ -50,10 +50,6 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
       <head>
         <meta name="algolia-site-verification" content="57C07DF31C29F6D0" />
         <HeadContent />
-        <script
-          type="text/javascript"
-          src="//cdn.embed.ly/player-0.1.0.min.js"
-        />
       </head>
       <body>
         <ScriptOnce>
