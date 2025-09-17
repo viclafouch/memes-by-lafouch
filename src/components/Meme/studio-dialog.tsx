@@ -54,7 +54,12 @@ export const StudioDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl dark">
+      <DialogContent
+        className="max-w-6xl dark"
+        onOpenAutoFocus={(event) => {
+          return event.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Studio - {meme.title}</DialogTitle>
           <DialogDescription>
