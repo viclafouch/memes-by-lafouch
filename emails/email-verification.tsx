@@ -27,7 +27,7 @@ export const EmailVerification = ({
         <Preview>Confirme ton inscription à Petit Meme</Preview>
         <Container style={styles.container}>
           <Img
-            src={`${baseUrl}/logo.png`}
+            src={`${baseUrl}/images/logo.png`}
             width="40"
             height="40"
             alt="Petit Meme"

@@ -123,7 +123,7 @@ export const Reel = React.memo(
                 to="/"
                 className={buttonVariants({ variant: 'outline', size: 'sm' })}
               >
-                <img src="/logo.png" alt="Logo" className="w-5" />
+                <img src="/images/logo.png" alt="Logo" className="w-5" />
                 Retour au site
               </Link>
             </div>

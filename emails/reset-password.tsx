@@ -24,7 +24,7 @@ export const ResetPassword = ({ username, resetUrl }: ResetPasswordProps) => {
         <Preview>Réinitialise ton mot de passe Petit Meme</Preview>
         <Container style={styles.container}>
           <Img
-            src={`${baseUrl}/logo.png`}
+            src={`${baseUrl}/images/logo.png`}
             width="40"
             height="40"
             alt="Petit Meme"

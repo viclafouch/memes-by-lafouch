@@ -50,7 +50,7 @@ export const Navbar = () => {
             'dark:hover:bg-accent text-accent-foreground p-1'
           )}
         >
-          <img src="/logo.png" alt="Logo" width={28} height={28} />
+          <img src="/images/logo.png" alt="Logo" width={28} height={28} />
         </Link>
       </div>
       <NavigationMenu className="max-md:hidden">
