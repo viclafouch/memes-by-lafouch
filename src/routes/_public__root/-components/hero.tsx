@@ -99,12 +99,12 @@ export const Hero = () => {
         <span className="text-foreground font-bold">du texte</span> pour les
         rendre <span className="text-foreground font-bold">uniques</span>.
       </PageDescriptionMotion>
-      <PageActions>
+      <PageActions className="w-full max-w-sm md:max-w-none justify-center">
         <motion.div
           variants={variants}
           initial="hidden"
           animate="visible"
-          className="flex gap-x-4"
+          className="flex gap-2 flex-col md:flex-row w-full justify-center"
           custom={{ delay: 1.1 }}
         >
           <Link
