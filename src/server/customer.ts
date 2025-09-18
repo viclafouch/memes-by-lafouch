@@ -14,11 +14,18 @@ export const getActiveSubscription = createServerFn({ method: 'GET' }).handler(
     const request = getWebRequest()
 
     try {
-      const state = await auth.api.listActiveSubscriptions({
-        headers: request.headers
+      const subscriptions = await auth.api.listActiveSubscriptions({
+        headers: request.headers,
+        query: {
+          referenceId: user.id
+        }
       })
 
-      return state
+      const activeSubscription = subscriptions.find((sub) => {
+        return sub.status === 'active' || sub.status === 'trialing'
+      })
+
+      return activeSubscription ?? null
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)
@@ -27,3 +34,7 @@ export const getActiveSubscription = createServerFn({ method: 'GET' }).handler(
     }
   }
 )
+
+export type ActiveSubscription = NonNullable<
+  Awaited<ReturnType<typeof getActiveSubscription>>
+>

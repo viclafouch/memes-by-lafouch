@@ -3,15 +3,14 @@ import { Calendar, Mail } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import type { ActiveSubscription } from '@/server/customer'
 
 export const ProfileHeader = ({
   user,
   activeSubscription
 }: {
   user: User
-  // TODO:
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  activeSubscription: any
+  activeSubscription: ActiveSubscription | null
 }) => {
   return (
     <Card>

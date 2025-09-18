@@ -119,6 +119,23 @@ model Session {
   @@map("session")
 }
 
+model Subscription {
+  id                  String   @id
+  plan                String
+  referenceId         String   @map("reference_id")
+  stripeCustomerId    String?  @map("stripe_customer_id")
+  stripeSubscriptionId String? @map("stripe_subscription_id")
+  status              String
+  periodStart         DateTime? @map("period_start")
+  periodEnd           DateTime? @map("period_end")
+  cancelAtPeriodEnd   Boolean?  @map("cancel_at_period_end")
+  seats               Int?
+  trialStart          DateTime? @map("trial_start")
+  trialEnd            DateTime? @map("trial_end")
+
+  @@map("subscription")
+}
+
 model Account {
   id                    String    @id
   accountId             String

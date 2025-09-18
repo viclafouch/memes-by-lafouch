@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useStripeCheckout } from '@/hooks/use-stripe-checkout'
 import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import {
   getActiveSubscriptionQueryOpts,
@@ -33,6 +34,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
   const [open, setOpen] = React.useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
+  const { goToBillingPortal, checkoutPremium } = useStripeCheckout()
 
   const favoritesMemesCountQuery = useQuery(getFavoritesMemesQueryOpts())
   const activeSubscriptionQuery = useQuery(getActiveSubscriptionQueryOpts())
@@ -45,7 +47,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
     await router.invalidate()
   }
 
-  const subcription = activeSubscriptionQuery.data
+  const subscription = activeSubscriptionQuery.data
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -89,11 +91,11 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {!subcription ? (
+          {!subscription ? (
             <DropdownMenuItem
               variant="info"
               onClick={() => {
-                console.log('open stripe checkout')
+                checkoutPremium()
               }}
             >
               <SparklesIcon />
@@ -102,7 +104,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
           ) : (
             <DropdownMenuItem
               onClick={() => {
-                console.log('go to portal')
+                goToBillingPortal()
               }}
               className="flex-col items-start gap-0.5"
             >

@@ -2,6 +2,7 @@ import React from 'react'
 import type { User } from 'better-auth'
 import { formatDate } from 'date-fns'
 import { CreditCard, Key, Stars, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -16,20 +17,22 @@ import { DeleteAccountDialog } from '@/components/User/delete-account-dialog'
 import { UpdatePasswordDialog } from '@/components/User/update-password-dialog'
 import { FREE_PLAN, PREMIUM_PLAN } from '@/constants/plan'
 import { formatCentsToEuros } from '@/helpers/number'
+import { useStripeCheckout } from '@/hooks/use-stripe-checkout'
+import type { ActiveSubscription } from '@/server/customer'
 
 export const ProfileContent = ({
   user,
   activeSubscription
 }: {
   user: User
-  // TODO:
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  activeSubscription: any
+  activeSubscription: ActiveSubscription | null
 }) => {
   const [isUpdatePasswordOpened, setIsUpdatePasswordOpened] =
     React.useState(false)
   const [isDeleteAccountOpened, setIsDeleteAccountOpened] =
     React.useState(false)
+
+  const { goToBillingPortal, checkoutPremium } = useStripeCheckout()
 
   return (
     <div>
@@ -57,12 +60,11 @@ export const ProfileContent = ({
                 <Label className="text-base">Abonnement en cours</Label>
                 {activeSubscription ? (
                   <p className="text-muted-foreground text-sm">
-                    {PREMIUM_PLAN.title} -{' '}
-                    {formatCentsToEuros(activeSubscription?.amount)}/mois -{' '}
+                    {PREMIUM_PLAN.title} - {formatCentsToEuros(399)}/mois -{' '}
                     <span className="text-info">
                       {activeSubscription.cancelAtPeriodEnd
-                        ? `Fin le ${formatDate(activeSubscription.currentPeriodEnd!, 'dd/MM/yyyy')}`
-                        : `Renouvellement le ${formatDate(activeSubscription.currentPeriodEnd!, 'dd/MM/yyyy')}`}
+                        ? `Fin le ${formatDate(activeSubscription.periodEnd!, 'dd/MM/yyyy')}`
+                        : `Renouvellement le ${formatDate(activeSubscription.periodEnd!, 'dd/MM/yyyy')}`}
                     </span>
                   </p>
                 ) : (
@@ -76,7 +78,7 @@ export const ProfileContent = ({
                   variant="outline"
                   onClick={(event) => {
                     event.preventDefault()
-                    console.log('go to portal')
+                    goToBillingPortal()
                   }}
                 >
                   <CreditCard />
@@ -87,7 +89,7 @@ export const ProfileContent = ({
                   variant="info"
                   onClick={(event) => {
                     event.preventDefault()
-                    console.log('open stripe checkout')
+                    checkoutPremium()
                   }}
                 >
                   <Stars />
@@ -133,6 +135,15 @@ export const ProfileContent = ({
               <Button
                 variant="destructive"
                 onClick={() => {
+                  if (
+                    activeSubscription &&
+                    !activeSubscription.cancelAtPeriodEnd
+                  ) {
+                    toast.error("Vous devez d'abord annuler votre abonnement")
+
+                    return
+                  }
+
                   setIsDeleteAccountOpened(true)
                 }}
               >

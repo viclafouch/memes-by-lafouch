@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { FREE_PLAN, type Plan, PREMIUM_PLAN } from '@/constants/plan'
 import { formatCentsToEuros } from '@/helpers/number'
+import { useStripeCheckout } from '@/hooks/use-stripe-checkout'
 import { getActiveSubscriptionQueryOpts } from '@/lib/queries'
 import { seo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
@@ -156,12 +157,11 @@ const PricingCard = ({
 
 const RouteComponent = () => {
   const { user } = useRouteContext({ from: '__root__' })
+  const { goToBillingPortal, checkoutPremium } = useStripeCheckout()
 
   const activeSubscriptionQuery = useSuspenseQuery(
     getActiveSubscriptionQueryOpts()
   )
-
-  console.log(activeSubscriptionQuery.data)
 
   return (
     <div>
@@ -175,7 +175,7 @@ const RouteComponent = () => {
           <PricingCard
             {...FREE_PLAN}
             onChangePlan={() => {
-              console.log('go to portal')
+              goToBillingPortal()
             }}
             isActive={Boolean(
               user !== null && activeSubscriptionQuery.data === null
@@ -184,7 +184,7 @@ const RouteComponent = () => {
           <PricingCard
             {...PREMIUM_PLAN}
             onChangePlan={() => {
-              console.log('open stripe checkout')
+              checkoutPremium()
             }}
             isActive={Boolean(
               user !== null && activeSubscriptionQuery.data !== null

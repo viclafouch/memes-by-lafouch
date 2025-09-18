@@ -325,7 +325,5 @@ export const removeUser = createServerFn({ method: 'POST' })
       headers: await getWebRequest().headers
     })
 
-    // TODO:
-
     return { success: true }
   })
