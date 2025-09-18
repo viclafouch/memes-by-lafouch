@@ -2,19 +2,17 @@ import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { admin } from 'better-auth/plugins'
 import { reactStartCookies } from 'better-auth/react-start'
+import Stripe from 'stripe'
 import { ENV } from '@/constants/env'
-import { PRODUCT_ID } from '@/constants/polar'
 import { prismaClient } from '@/db'
 import { resendClient } from '@/lib/resend'
-import { checkout, polar, portal } from '@polar-sh/better-auth'
-import { Polar } from '@polar-sh/sdk'
+import { stripe } from '@better-auth/stripe'
 import { serverOnly } from '@tanstack/react-start'
 import EmailVerification from '../../emails/email-verification'
 import ResetPassword from '../../emails/reset-password'
 
-export const polarClient = new Polar({
-  accessToken: ENV.POLAR_ACCESS_TOKEN,
-  server: 'sandbox'
+const stripeClient = new Stripe(ENV.STRIPE_SECRET_KEY, {
+  apiVersion: '2025-08-27.basil'
 })
 
 const getAuthConfig = serverOnly(() => {
@@ -35,12 +33,7 @@ const getAuthConfig = serverOnly(() => {
     },
     user: {
       deleteUser: {
-        enabled: true,
-        afterDelete: async (user) => {
-          await polarClient.customers.deleteExternal({
-            externalId: user.id
-          })
-        }
+        enabled: true
       }
     },
     emailAndPassword: {
@@ -96,23 +89,19 @@ const getAuthConfig = serverOnly(() => {
     plugins: [
       admin(),
       reactStartCookies(),
-      polar({
-        client: polarClient,
+      stripe({
+        stripeClient,
+        stripeWebhookSecret: ENV.STRIPE_WEBHOOK_SECRET,
         createCustomerOnSignUp: true,
-        use: [
-          checkout({
-            products: [
-              {
-                productId: PRODUCT_ID,
-                slug: 'pro'
-              }
-            ],
-            theme: 'dark',
-            successUrl: ENV.POLAR_SUCCESS_URL,
-            authenticatedUsersOnly: true
-          }),
-          portal()
-        ]
+        subscription: {
+          enabled: true,
+          plans: [
+            {
+              name: 'premium',
+              priceId: 'price_1S8cc10e6MoMDhyQiHSOvnm4'
+            }
+          ]
+        }
       })
     ]
   })

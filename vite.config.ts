@@ -11,10 +11,6 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util', 'hls.js']
   },
-  ssr: {
-    // https://github.com/polarsource/polar/issues/6617
-    noExternal: ['@polar-sh/better-auth']
-  },
   plugins: [
     tailwindcss(),
     tsconfigPaths({

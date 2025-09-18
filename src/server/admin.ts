@@ -13,7 +13,7 @@ import {
   algoliaIndexName,
   memeToAlgoliaRecord
 } from '@/lib/algolia'
-import { auth, polarClient } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import { createVideo, deleteVideo, uploadVideo } from '@/lib/bunny'
 import {
   extractTweetIdFromUrl,
@@ -325,9 +325,7 @@ export const removeUser = createServerFn({ method: 'POST' })
       headers: await getWebRequest().headers
     })
 
-    await polarClient.customers.deleteExternal({
-      externalId: user.id
-    })
+    // TODO:
 
     return { success: true }
   })

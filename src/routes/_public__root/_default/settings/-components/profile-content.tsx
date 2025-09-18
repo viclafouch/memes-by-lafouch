@@ -16,17 +16,16 @@ import { DeleteAccountDialog } from '@/components/User/delete-account-dialog'
 import { UpdatePasswordDialog } from '@/components/User/update-password-dialog'
 import { FREE_PLAN, PREMIUM_PLAN } from '@/constants/plan'
 import { formatCentsToEuros } from '@/helpers/number'
-import { usePortal } from '@/hooks/use-portal'
-import type { CustomerStateSubscription } from '@polar-sh/sdk/models/components/customerstatesubscription.js'
 
 export const ProfileContent = ({
   user,
   activeSubscription
 }: {
   user: User
-  activeSubscription: CustomerStateSubscription | null
+  // TODO:
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  activeSubscription: any
 }) => {
-  const { goToPortal, checkoutPortal } = usePortal()
   const [isUpdatePasswordOpened, setIsUpdatePasswordOpened] =
     React.useState(false)
   const [isDeleteAccountOpened, setIsDeleteAccountOpened] =
@@ -77,7 +76,7 @@ export const ProfileContent = ({
                   variant="outline"
                   onClick={(event) => {
                     event.preventDefault()
-                    goToPortal()
+                    console.log('go to portal')
                   }}
                 >
                   <CreditCard />
@@ -88,7 +87,7 @@ export const ProfileContent = ({
                   variant="info"
                   onClick={(event) => {
                     event.preventDefault()
-                    checkoutPortal()
+                    console.log('open stripe checkout')
                   }}
                 >
                   <Stars />

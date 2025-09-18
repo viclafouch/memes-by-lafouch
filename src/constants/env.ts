@@ -9,8 +9,8 @@ export const ENV = createEnv({
     BUNNY_ACCESS_KEY: z.string(),
     ALGOLIA_SECRET: z.string(),
     RESEND_SECRET: z.string(),
-    POLAR_ACCESS_TOKEN: z.string(),
-    POLAR_SUCCESS_URL: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
     RESEND_EMAIL_TO: z.string().optional()
   },
   clientPrefix: 'PUBLIC_',

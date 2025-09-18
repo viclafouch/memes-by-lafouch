@@ -1,6 +1,7 @@
-import { polarClient } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import { getAuthUser } from '@/server/user-auth'
 import { createServerFn } from '@tanstack/react-start'
+import { getWebRequest } from '@tanstack/react-start/server'
 
 export const getActiveSubscription = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -10,13 +11,18 @@ export const getActiveSubscription = createServerFn({ method: 'GET' }).handler(
       return null
     }
 
+    const request = getWebRequest()
+
     try {
-      const state = await polarClient.customers.getStateExternal({
-        externalId: user.id
+      const state = await auth.api.listActiveSubscriptions({
+        headers: request.headers
       })
 
-      return state.activeSubscriptions[0] ?? null
+      return state
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+
       return null
     }
   }

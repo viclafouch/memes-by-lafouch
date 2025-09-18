@@ -88,6 +88,7 @@ export const uploadVideo = serverOnly(
       {
         method: 'PUT',
         headers,
+        // @ts-ignore
         body: videoBuffer
       }
     )

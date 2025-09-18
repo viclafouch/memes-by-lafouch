@@ -20,7 +20,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { usePortal } from '@/hooks/use-portal'
 import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
 import {
   getActiveSubscriptionQueryOpts,
@@ -34,7 +33,6 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
   const [open, setOpen] = React.useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
-  const { goToPortal, checkoutPortal } = usePortal()
 
   const favoritesMemesCountQuery = useQuery(getFavoritesMemesQueryOpts())
   const activeSubscriptionQuery = useQuery(getActiveSubscriptionQueryOpts())
@@ -95,7 +93,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
             <DropdownMenuItem
               variant="info"
               onClick={() => {
-                return checkoutPortal()
+                console.log('open stripe checkout')
               }}
             >
               <SparklesIcon />
@@ -104,7 +102,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
           ) : (
             <DropdownMenuItem
               onClick={() => {
-                return goToPortal()
+                console.log('go to portal')
               }}
               className="flex-col items-start gap-0.5"
             >

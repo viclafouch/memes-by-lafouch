@@ -1,12 +1,10 @@
 import { toast } from 'sonner'
-import { PRODUCT_ID } from '@/constants/polar'
-import { authClient } from '@/lib/auth-client'
 import { getActiveSubscriptionQueryOpts } from '@/lib/queries'
 import { useShowDialog } from '@/stores/dialog.store'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouteContext } from '@tanstack/react-router'
 
-export const usePortal = () => {
+export const useStripeCheckout = () => {
   const { user } = useRouteContext({ from: '__root__' })
   const showDialog = useShowDialog()
   const queryClient = useQueryClient()
@@ -14,17 +12,15 @@ export const usePortal = () => {
   const goToPortal = async () => {
     if (!user) {
       showDialog('auth', {})
-
-      return
     }
 
-    try {
-      const promise = authClient.customer.portal()
-      toast.promise(promise, { loading: 'Chargement...' })
-      await promise
-    } catch (error) {
-      toast.error('Une erreur est survenue')
-    }
+    // try {
+    //   const promise = authClient.customer.portal()
+    //   toast.promise(promise, { loading: 'Chargement...' })
+    //   await promise
+    // } catch (error) {
+    //   toast.error('Une erreur est survenue')
+    // }
   }
 
   const checkoutPortal = async () => {
@@ -38,19 +34,23 @@ export const usePortal = () => {
       const promise = new Promise((resolve) => {
         // We force the toast to be a promise
         setTimeout(resolve, 1)
+      }).then(() => {
+        return queryClient.fetchQuery(getActiveSubscriptionQueryOpts())
       })
-        .then(() => {
-          return queryClient.fetchQuery(getActiveSubscriptionQueryOpts())
-        })
-        .then(async (activeSubscription) => {
-          if (!activeSubscription) {
-            return authClient.checkout({ products: [PRODUCT_ID] })
-          }
+      // .then(async (activeSubscription) => {
+      //   if (!activeSubscription) {
+      //     return authClient.subscription.upgrade({
+      //       plan: 'premium',
+      //       successUrl: `${window.location.origin}/checkout/toto`, // required
+      //       cancelUrl: `${window.location.origin}/checkout/tata`, // required,
+      //       disableRedirect: true
+      //     })
+      //   }
 
-          return Promise.resolve(
-            toast.success('Vous avez déjà un abonnement en cours !')
-          )
-        })
+      //   return Promise.resolve(
+      //     toast.success('Vous avez déjà un abonnement en cours !')
+      //   )
+      // })
 
       toast.promise(promise, { loading: 'Chargement...' })
 

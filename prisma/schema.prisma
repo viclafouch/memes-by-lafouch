@@ -1,3 +1,4 @@
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres"]
@@ -74,28 +75,30 @@ model Meme {
   bookmarkedBy UserBookmark[]
   categories   MemeCategory[]
   status       MemeStatus     @default(PUBLISHED)
-  submittedBy String?
-  submitter   User?   @relation(fields: [submittedBy], references: [id])
+  submittedBy  String?
+  submitter    User?          @relation(fields: [submittedBy], references: [id])
 }
 
 model User {
-  id            String         @id
-  name          String
-  email         String         @unique
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  accounts      Account[]
-  sessions      Session[]
-  bookmarks     UserBookmark[]
-  generationCount  Int      @default(0)
+  id              String         @id
+  name            String
+  email           String         @unique
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  accounts        Account[]
+  sessions        Session[]
+  bookmarks       UserBookmark[]
+  generationCount Int            @default(0)
 
   role       String?
   banned     Boolean?
   banReason  String?
   banExpires DateTime?
   Meme       Meme[]
+
+  stripeCustomerId String?
 
   @@map("user")
 }
