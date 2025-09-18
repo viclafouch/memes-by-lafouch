@@ -119,9 +119,6 @@ export const getBestMemes = createServerFn({ method: 'GET' }).handler(
       },
       where: {
         status: MemeStatusFixed.PUBLISHED
-      },
-      cacheStrategy: {
-        ttl: 24 * 60 * 60
       }
     })
 
@@ -137,8 +134,7 @@ export const getRandomMeme = createServerFn({ method: 'GET' })
     const memes = await prismaClient.meme.findMany({
       include: {
         video: true
-      },
-      cacheStrategy: { ttl: 24 * 60 * 60 }
+      }
     })
 
     const withoutCurrentMeme = memes.filter((meme) => {
@@ -161,8 +157,7 @@ export const shareMeme = createServerFn({ method: 'GET', response: 'raw' })
       },
       include: {
         video: true
-      },
-      cacheStrategy: { ttl: 24 * 60 * 60 }
+      }
     })
 
     if (!meme) {

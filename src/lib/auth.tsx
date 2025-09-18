@@ -83,7 +83,18 @@ const getAuthConfig = serverOnly(() => {
     socialProviders: {
       twitter: {
         clientId: ENV.AUTH_TWITTER_ID,
-        clientSecret: ENV.AUTH_TWITTER_SECRET
+        clientSecret: ENV.AUTH_TWITTER_SECRET,
+        mapProfileToUser: async (profile) => {
+          const user = {
+            name: profile.displayName,
+            email: profile.email,
+            image: profile.imageUrl
+          }
+          // eslint-disable-next-line no-console
+          console.log("Connecting to Twitter's API with profile", user)
+
+          return user
+        }
       }
     },
     plugins: [

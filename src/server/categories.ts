@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { CACHE_KEYS } from '@/constants/db-cache'
 import { prismaClient } from '@/db'
 import { adminRequiredMiddleware } from '@/server/user-auth'
 import { createServerFn } from '@tanstack/react-start'
@@ -15,10 +14,6 @@ export const getCategories = createServerFn({ method: 'GET' }).handler(
     const categories = await prismaClient.category.findMany({
       orderBy: {
         createdAt: 'desc'
-      },
-      cacheStrategy: {
-        ttl: process.env.NODE_ENV === 'production' ? 24 * 60 * 60 : 0,
-        tags: CACHE_KEYS.categories
       }
     })
 
