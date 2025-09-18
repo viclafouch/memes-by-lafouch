@@ -1,5 +1,7 @@
 import React from 'react'
+import { toast } from 'sonner'
 import { StudioError, wrapServerFn } from '@/constants/error'
+import { getErrorMessage } from '@/lib/auth-client'
 import { shareMeme } from '@/server/meme'
 import { checkGeneration, incrementGenerationCount } from '@/server/user'
 import { useShowDialog } from '@/stores/dialog.store'
@@ -149,19 +151,11 @@ export const useVideoProcessor = (
     onMutate: async () => {
       setProgress(0)
       options?.onMutate?.()
-
-      await wrapServerFn(checkGeneration()).catch((error) => {
-        if (error instanceof StudioError && error.code === 'UNAUTHORIZED') {
-          showDialog('auth', {})
-        }
-
-        throw error
-      })
-
       await ffmpeg.load()
       ffmpeg.on('progress', progressSubscription)
     },
     mutationFn: async ({ meme, ...restOptions }: MutationBody) => {
+      await wrapServerFn(checkGeneration())
       const response = await shareMeme({ data: meme.id })
       const videoBlob = await response.blob()
       const blob = await addTextToVideo(ffmpeg, videoBlob, restOptions)
@@ -177,6 +171,18 @@ export const useVideoProcessor = (
       incrementGenerationCount()
     },
     onError: (error) => {
+      if (error instanceof StudioError && error.code === 'UNAUTHORIZED') {
+        showDialog('auth', {})
+
+        return
+      }
+
+      if (error instanceof StudioError && error.code === 'PREMIUM_REQUIRED') {
+        toast.error(getErrorMessage(error, 'fr'))
+
+        return
+      }
+
       options?.onError?.(error)
     },
     onSettled: () => {

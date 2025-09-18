@@ -10,6 +10,7 @@ import type { getAuthUser } from '@/server/user-auth'
 import { DialogProvider } from '@/stores/dialog.store'
 import type { QueryClient } from '@tanstack/react-query'
 import {
+  ClientOnly,
   createRootRouteWithContext,
   HeadContent,
   Outlet,
@@ -70,7 +71,9 @@ const RootDocument = ({ children }: { children: React.ReactNode }) => {
           <OnlyPortrait>
             <DialogProvider>{children}</DialogProvider>
           </OnlyPortrait>
-          <Toaster richColors />
+          <ClientOnly>
+            <Toaster richColors />
+          </ClientOnly>
           <React.Suspense>
             <TanStackRouterDevtools position="bottom-left" />
             <TanStackQueryDevtools buttonPosition="bottom-right" />

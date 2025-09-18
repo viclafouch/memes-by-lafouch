@@ -24,6 +24,7 @@ import {
   VideoPlayerVolumeRange
 } from '@/components/ui/kibo-ui/video-player'
 import { LoadingButton } from '@/components/ui/loading-button'
+import { OverlaySpinner } from '@/components/ui/overlay-spinner'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
 import { matchIsUserAdmin } from '@/lib/auth-client'
@@ -252,7 +253,7 @@ const RouteComponent = () => {
         </div>
       </div>
       <ClientOnly>
-        <React.Suspense fallback={null}>
+        <React.Suspense fallback={<OverlaySpinner />}>
           <StudioDialog
             meme={meme}
             open={isStudioDialogOpened}

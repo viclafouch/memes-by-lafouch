@@ -5,6 +5,7 @@ import type { MemeListItemProps } from '@/components/Meme/meme-list-item'
 import { MemeListItem } from '@/components/Meme/meme-list-item'
 import { PlayerDialog } from '@/components/Meme/player-dialog'
 import { StudioDialog } from '@/components/Meme/studio-dialog'
+import { OverlaySpinner } from '@/components/ui/overlay-spinner'
 import type { MemeWithVideo } from '@/constants/meme'
 import { ClientOnly } from '@tanstack/react-router'
 
@@ -105,7 +106,7 @@ export const MemesList = ({
       </AnimatePresence>
       <ClientOnly>
         {studioMemeSelected ? (
-          <React.Suspense fallback={null}>
+          <React.Suspense fallback={<OverlaySpinner />}>
             <StudioDialog
               meme={studioMemeSelected}
               open

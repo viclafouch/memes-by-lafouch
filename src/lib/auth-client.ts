@@ -51,6 +51,10 @@ export const ERROR_CODES = {
   UNAUTHORIZED: {
     en: 'You must be logged in',
     fr: 'Vous devez être connecté'
+  },
+  INVALID_EMAIL: {
+    en: 'Invalid email',
+    fr: 'Email invalide'
   }
 } satisfies ErrorTypes
 
