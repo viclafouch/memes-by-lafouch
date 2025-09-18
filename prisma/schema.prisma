@@ -70,7 +70,6 @@ model Meme {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   video        Video          @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  embedding    Embedding[]
   bookmarkedBy UserBookmark[]
   categories   MemeCategory[]
   status       MemeStatus     @default(PUBLISHED)
@@ -163,17 +162,4 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
-}
-
-model Embedding {
-  id     String  @id @default(cuid())
-  meme   Meme    @relation(fields: [memeId], references: [id], onDelete: Cascade)
-  memeId String
-  type   String // Ex: 'keyword', 'description', etc.
-  vector Float[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([memeId, type])
 }
