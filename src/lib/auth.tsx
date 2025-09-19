@@ -82,9 +82,9 @@ const getAuthConfig = serverOnly(() => {
         clientSecret: ENV.AUTH_TWITTER_SECRET,
         mapProfileToUser: async (profile) => {
           const user = {
-            name: profile.displayName,
-            email: profile.email,
-            image: profile.imageUrl
+            name: profile.data.username,
+            email: profile.data.email,
+            image: profile.data.profile_image_url
           }
           // eslint-disable-next-line no-console
           console.log("Connecting to Twitter's API with profile", user)
