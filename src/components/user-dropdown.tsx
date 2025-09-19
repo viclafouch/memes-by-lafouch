@@ -59,7 +59,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
               alt="Avatar"
             />
             <AvatarFallback className="rounded-lg">
-              {(user.name[0] + user.name[1]).toUpperCase()}
+              {(user.name[0]! + user.name[1]!).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="truncate">{user.name}</div>
@@ -78,7 +78,7 @@ export const UserDropdown = ({ user }: { user: UserWithRole }) => {
                 alt="Avatar"
               />
               <AvatarFallback className="rounded-lg">
-                {(user.name[0] + user.name[1]).toUpperCase()}
+                {(user.name[0]! + user.name[1]!).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">

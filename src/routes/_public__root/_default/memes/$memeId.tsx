@@ -73,12 +73,15 @@ const RouteComponent = () => {
     async function preload() {
       try {
         const nextMeme = await nextRandomMeme
-        await router.preloadRoute({
-          to: '/memes/$memeId',
-          params: {
-            memeId: nextMeme.id
-          }
-        })
+
+        if (nextMeme) {
+          await router.preloadRoute({
+            to: '/memes/$memeId',
+            params: {
+              memeId: nextMeme.id
+            }
+          })
+        }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('Failed to preload route')
@@ -114,7 +117,12 @@ const RouteComponent = () => {
     try {
       videoRef.current?.pause()
       const newMeme = await nextRandomMeme
-      navigate({ to: '/memes/$memeId', params: { memeId: newMeme.id } })
+
+      if (newMeme) {
+        navigate({ to: '/memes/$memeId', params: { memeId: newMeme.id } })
+      } else {
+        navigate({ to: '/memes' })
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)
@@ -253,13 +261,15 @@ const RouteComponent = () => {
         </div>
       </div>
       <ClientOnly>
-        <React.Suspense fallback={<OverlaySpinner />}>
-          <StudioDialog
-            meme={meme}
-            open={isStudioDialogOpened}
-            onOpenChange={setIsStudioDialogOpened}
-          />
-        </React.Suspense>
+        {isStudioDialogOpened ? (
+          <React.Suspense fallback={<OverlaySpinner />}>
+            <StudioDialog
+              meme={meme}
+              open
+              onOpenChange={setIsStudioDialogOpened}
+            />
+          </React.Suspense>
+        ) : null}
       </ClientOnly>
     </div>
   )

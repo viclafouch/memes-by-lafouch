@@ -2,18 +2,14 @@ import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { admin } from 'better-auth/plugins'
 import { reactStartCookies } from 'better-auth/react-start'
-import Stripe from 'stripe'
 import { ENV } from '@/constants/env'
 import { prismaClient } from '@/db'
 import { resendClient } from '@/lib/resend'
+import { stripeClient } from '@/lib/stripe'
 import { stripe } from '@better-auth/stripe'
 import { serverOnly } from '@tanstack/react-start'
 import EmailVerification from '../../emails/email-verification'
 import ResetPassword from '../../emails/reset-password'
-
-const stripeClient = new Stripe(ENV.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-08-27.basil'
-})
 
 const getAuthConfig = serverOnly(() => {
   return betterAuth({

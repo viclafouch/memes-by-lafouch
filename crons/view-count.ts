@@ -5,9 +5,9 @@ import { z } from 'zod'
 import { PrismaClient } from '@prisma/client'
 
 const BUNNY_CONFIG = {
-  collectionId: '3d12803f-7837-4586-87c7-7e8cb2789761',
-  libraryId: 471900
-} as const
+  collectionId: z.string().parse(process.env.PUBLIC_BUNNY_COLLECTION_ID),
+  libraryId: z.string().parse(process.env.PUBLIC_BUNNY_LIBRARY_ID)
+}
 
 async function fetchWithZod<T>(
   schema: ZodType<T>,

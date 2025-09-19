@@ -97,7 +97,7 @@ export const FileForm = ({ onSuccess, closeDialog }: FileFormProps) => {
               <FileUpload
                 value={field.state.value ? [field.state.value] : []}
                 onValueChange={(files) => {
-                  return field.handleChange(files[0])
+                  return field.handleChange(files[0]!)
                 }}
                 onFileReject={onFileReject}
                 accept="video/*"

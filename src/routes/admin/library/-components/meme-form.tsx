@@ -333,7 +333,7 @@ export const MemeForm = ({
         selector={(state) => {
           return [state.canSubmit, state.isSubmitting]
         }}
-        children={([canSubmit, isSubmitting]) => {
+        children={([canSubmit, isSubmitting = false]) => {
           return (
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Button onClick={onCancel} type="button" variant="outline">

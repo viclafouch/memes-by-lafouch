@@ -36,7 +36,7 @@ export const AdminNavButton = ({ user }: { user: UserWithRole }) => {
               referrerPolicy="no-referrer"
             />
             <AvatarFallback className="rounded-lg">
-              {(user.name[0] + user.name[1]).toUpperCase()}
+              {(user.name[0]! + user.name[1]!).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </Button>

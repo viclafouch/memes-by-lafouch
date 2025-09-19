@@ -17,7 +17,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   // eslint-disable-next-line no-plusplus
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    ;[shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!]
   }
 
   return shuffled
@@ -33,7 +33,7 @@ const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
 
   // Distribute logos evenly across columns
   shuffled.forEach((logo, index) => {
-    columns[index % columnCount].push(logo)
+    columns[index % columnCount]!.push(logo)
   })
 
   // Ensure all columns have the same number of logos by filling shorter columns
@@ -44,7 +44,7 @@ const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
   )
   columns.forEach((col) => {
     while (col.length < maxLength) {
-      col.push(shuffled[Math.floor(Math.random() * shuffled.length)])
+      col.push(shuffled[Math.floor(Math.random() * shuffled.length)]!)
     }
   })
 
@@ -75,7 +75,7 @@ const LogoColumn: React.FC<LogoColumnProps> = React.memo(
         <AnimatePresence mode="wait">
           {/* Framer Motion component for each logo */}
           <motion.div
-            key={`${logos[currentIndex].id}-${currentIndex}`}
+            key={`${logos[currentIndex]!.id}-${currentIndex}`}
             className="absolute inset-0 flex items-center justify-center"
             // Animation for when the logo enters
             initial={{ y: '10%', opacity: 0, filter: 'blur(8px)' }}
@@ -106,9 +106,9 @@ const LogoColumn: React.FC<LogoColumnProps> = React.memo(
             }}
           >
             <img
-              src={logos[currentIndex].img}
+              src={logos[currentIndex]!.img}
               className="object-contain w-full h-full"
-              alt={logos[currentIndex].name}
+              alt={logos[currentIndex]!.name}
             />
           </motion.div>
         </AnimatePresence>

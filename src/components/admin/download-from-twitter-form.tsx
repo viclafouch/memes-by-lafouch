@@ -142,7 +142,7 @@ export const DownloadFromTwitterForm = () => {
             selector={(state) => {
               return [state.canSubmit, state.isSubmitting]
             }}
-            children={([canSubmit, isSubmitting]) => {
+            children={([canSubmit, isSubmitting = false]) => {
               return (
                 <LoadingButton isLoading={isSubmitting} disabled={!canSubmit}>
                   Extraire et télécharger

@@ -228,10 +228,12 @@ export const MemeReels = () => {
 
   React.useEffect(() => {
     virtualItems.forEach((virtualRow) => {
-      const { ref } = memesRefs[virtualRow.index]
+      const item = memesRefs[virtualRow.index]
 
-      if (ref.current) {
-        observerRef.current.observe(ref.current)
+      if (item) {
+        if (item.ref.current) {
+          observerRef.current.observe(item.ref.current)
+        }
       }
     })
 
@@ -276,7 +278,13 @@ export const MemeReels = () => {
           }}
         >
           {virtualItems.map((virtualRow) => {
-            const { data, ref, index } = memesRefs[virtualRow.index]
+            const item = memesRefs[virtualRow.index]
+
+            if (!item) {
+              return null
+            }
+
+            const { data, ref, index } = item
 
             return (
               <div

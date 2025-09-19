@@ -6,12 +6,18 @@ export const Route = createFileRoute('/_public__root/_default/random/')({
   loader: async () => {
     const meme = await getRandomMeme()
 
+    if (meme) {
+      return redirect({
+        to: '/memes/$memeId',
+        params: {
+          memeId: meme.id
+        },
+        replace: true
+      })
+    }
+
     return redirect({
-      to: '/memes/$memeId',
-      params: {
-        memeId: meme.id
-      },
-      replace: true
+      to: '/memes'
     })
   }
 })

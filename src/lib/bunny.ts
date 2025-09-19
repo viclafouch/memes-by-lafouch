@@ -1,39 +1,44 @@
 import { z } from 'zod'
 import { ENV } from '@/constants/env'
 import { serverOnly } from '@tanstack/react-start'
-import { BUNNY_CONFIG } from '../constants/bunny'
 import { fetchWithZod } from './utils'
 
-const { collectionId: COLLECTION_ID, libraryId: LIBRARY_ID } = BUNNY_CONFIG
+export const buildBunnyUrl = (pathname: `/${string}`) => {
+  return new URL(pathname, `https://${ENV.VITE_BUNNY_HOSTNAME}`).toString()
+}
 
-const getHeaders = () => {
+export const getBunnyHeaders = serverOnly(() => {
   const headers = new Headers()
   headers.set('AccessKey', ENV.BUNNY_ACCESS_KEY)
   headers.set('accept', 'application/json')
   headers.set('Content-Type', 'application/json')
 
   return headers
-}
+})
 
 const DEFAULT_RESPONSE_SCHEMA = z.object({
   success: z.literal(true)
 })
 
 export const buildVideoImageUrl = (videoId: string) => {
-  return `https://vz-eb732fb9-3bc.b-cdn.net/${videoId}/thumbnail.jpg`
+  return buildBunnyUrl(`/${videoId}/thumbnail.jpg`)
+}
+
+export const buildVideoPreviewUrl = (videoId: string) => {
+  return buildBunnyUrl(`/${videoId}/preview.webp`)
 }
 
 export const buildVideoStreamUrl = (videoId: string) => {
-  return `https://vz-eb732fb9-3bc.b-cdn.net/${videoId}/playlist.m3u8`
+  return buildBunnyUrl(`/${videoId}/playlist.m3u8`)
 }
 
 export const deleteVideo = serverOnly(async (videoId: string) => {
   return fetchWithZod(
     DEFAULT_RESPONSE_SCHEMA,
-    `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}`,
+    `https://video.bunnycdn.com/library/${ENV.BUNNY_LIBRARY_ID}/videos/${videoId}`,
     {
       method: 'DELETE',
-      headers: getHeaders()
+      headers: getBunnyHeaders()
     }
   )
 })
@@ -48,10 +53,10 @@ const VIDEO_PLAY_DATA_SCHEMA = z.object({
 export const getVideoPlayData = serverOnly(async (videoId: string) => {
   return fetchWithZod(
     VIDEO_PLAY_DATA_SCHEMA,
-    `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}/play`,
+    `https://video.bunnycdn.com/library/${ENV.BUNNY_LIBRARY_ID}/videos/${videoId}/play`,
     {
       method: 'GET',
-      headers: getHeaders()
+      headers: getBunnyHeaders()
     }
   )
 })
@@ -63,13 +68,13 @@ const UPLOAD_RESPONSE_SCHEMA = z.object({
 export const createVideo = serverOnly(async (title: string) => {
   const { guid: videoId } = await fetchWithZod(
     UPLOAD_RESPONSE_SCHEMA,
-    `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos`,
+    `https://video.bunnycdn.com/library/${ENV.BUNNY_LIBRARY_ID}/videos`,
     {
       method: 'POST',
-      headers: getHeaders(),
+      headers: getBunnyHeaders(),
       body: JSON.stringify({
         title,
-        collectionId: COLLECTION_ID
+        collectionId: ENV.BUNNY_COLLECTION_ID
       })
     }
   )
@@ -79,12 +84,12 @@ export const createVideo = serverOnly(async (title: string) => {
 
 export const uploadVideo = serverOnly(
   async (videoId: string, videoBuffer: Buffer) => {
-    const headers = getHeaders()
+    const headers = getBunnyHeaders()
     headers.set('Content-Type', 'video/mp4')
 
     await fetchWithZod(
       DEFAULT_RESPONSE_SCHEMA,
-      `https://video.bunnycdn.com/library/${LIBRARY_ID}/videos/${videoId}`,
+      `https://video.bunnycdn.com/library/${ENV.BUNNY_LIBRARY_ID}/videos/${videoId}`,
       {
         method: 'PUT',
         headers,

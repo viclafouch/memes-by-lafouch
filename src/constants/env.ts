@@ -8,13 +8,20 @@ export const ENV = createEnv({
     BETTER_AUTH_SECRET: z.string(),
     BUNNY_ACCESS_KEY: z.string(),
     ALGOLIA_SECRET: z.string(),
+    ALGOLIA_INDEX: z.string(),
     RESEND_SECRET: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
+    BUNNY_LIBRARY_ID: z.string(),
+    BUNNY_COLLECTION_ID: z.string(),
     RESEND_EMAIL_TO: z.string().optional()
   },
-  clientPrefix: 'PUBLIC_',
-  client: {},
-  runtimeEnv: process.env,
-  emptyStringAsUndefined: true
+  clientPrefix: 'VITE_',
+  client: {
+    VITE_BUNNY_HOSTNAME: z.string()
+  },
+  runtimeEnv: {
+    ...process.env,
+    ...import.meta.env
+  }
 })

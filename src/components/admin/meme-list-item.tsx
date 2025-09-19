@@ -7,6 +7,7 @@ import {
   type MemeWithCategories,
   type MemeWithVideo
 } from '@/constants/meme'
+import { buildVideoImageUrl, buildVideoPreviewUrl } from '@/lib/bunny'
 import { getVideoStatusByIdQueryOpts } from '@/lib/queries'
 import { cn } from '@/lib/utils'
 import { matchIsVideoPlayable } from '@/utils/video'
@@ -46,12 +47,12 @@ export const MemeListItem = React.memo(({ meme }: MemeListItemProps) => {
             className="relative w-full h-full isolate"
           >
             <img
-              src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/thumbnail.jpg`}
+              src={buildVideoImageUrl(meme.video.bunnyId)}
               alt={meme.title}
               className="absolute w-full h-full inset-0 object-cover"
             />
             <img
-              src={`https://vz-eb732fb9-3bc.b-cdn.net/${meme.video.bunnyId}/preview.webp`}
+              src={buildVideoPreviewUrl(meme.video.bunnyId)}
               alt={meme.title}
               className="absolute w-full h-full inset-0 hidden duration-600 group-hover:block transition-discrete z-10 object-cover opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus-within:block"
             />
