@@ -238,7 +238,6 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
     const meme = await prismaClient.meme.create({
       data: {
         title,
-        tweetUrl: '',
         status: 'PENDING',
         video: {
           create: {

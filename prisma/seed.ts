@@ -53,6 +53,7 @@ const createMemeFromTwitterUrl = async (url: string, title: string) => {
       video: {
         create: {
           duration: 0,
+          bunnyStatus: 4,
           bunnyId: videoId
         }
       }
