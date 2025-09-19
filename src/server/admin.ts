@@ -186,6 +186,8 @@ export const createMemeFromTwitterUrl = createServerFn({ method: 'POST' })
         video: {
           create: {
             duration: 0,
+            // Webhooks are not working in local env
+            bunnyStatus: process.env.NODE_ENV !== 'production' ? 4 : undefined,
             bunnyId: videoId
           }
         }
@@ -242,6 +244,8 @@ export const createMemeFromFile = createServerFn({ method: 'POST' })
         video: {
           create: {
             duration: 0,
+            // Webhooks are not working in local env
+            bunnyStatus: process.env.NODE_ENV !== 'production' ? 4 : undefined,
             bunnyId: videoId
           }
         }
