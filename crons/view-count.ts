@@ -5,8 +5,8 @@ import { z } from 'zod'
 import { PrismaClient } from '@prisma/client'
 
 const BUNNY_CONFIG = {
-  collectionId: z.string().parse(process.env.PUBLIC_BUNNY_COLLECTION_ID),
-  libraryId: z.string().parse(process.env.PUBLIC_BUNNY_LIBRARY_ID)
+  collectionId: z.string().parse(process.env.BUNNY_COLLECTION_ID),
+  libraryId: z.string().parse(process.env.BUNNY_LIBRARY_ID)
 }
 
 async function fetchWithZod<T>(
@@ -58,14 +58,7 @@ const getVideo = async (videoId: string) => {
   )
 }
 
-export default async function handler(
-  request: unknown,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  response: any
-) {
-  response.status(200).json({ success: true })
-
-  return
+const task = async () => {
   const prisma = new PrismaClient()
 
   const memes = await prisma.meme.findMany({
@@ -92,6 +85,6 @@ export default async function handler(
 
     console.log(`Updated meme (${meme.id}) viewCount column to `, views)
   }
-
-  response.status(200).json({ success: true })
 }
+
+task()
