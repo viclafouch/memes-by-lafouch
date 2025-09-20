@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { StudioError } from '@/constants/error'
 import { FREE_PLAN } from '@/constants/plan'
 import { prismaClient } from '@/db'
+import { matchIsUserAdmin } from '@/lib/role'
 import { getActiveSubscription } from '@/server/customer'
 import { authUserRequiredMiddleware } from '@/server/user-auth'
 import type { Meme } from '@prisma/client'
@@ -22,7 +23,11 @@ export const getFavoritesMemes = createServerFn({ method: 'GET' })
       orderBy: {
         createdAt: 'desc'
       },
-      take: activeSubscription ? undefined : FREE_PLAN.maxFavoritesCount,
+      take:
+        // @ts-expect-error
+        activeSubscription || matchIsUserAdmin(context.user)
+          ? undefined
+          : FREE_PLAN.maxFavoritesCount,
       include: {
         meme: {
           include: {
@@ -56,7 +61,9 @@ export const checkGeneration = createServerFn({ method: 'POST' })
 
     if (
       generationCount >= FREE_PLAN.maxGenerationsCount &&
-      !activeSubscription
+      !activeSubscription &&
+      // @ts-expect-error
+      !matchIsUserAdmin(context.user)
     ) {
       setResponseStatus(403)
       throw new StudioError('PREMIUM_REQUIRED')

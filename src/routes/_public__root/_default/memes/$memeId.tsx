@@ -27,9 +27,9 @@ import { LoadingButton } from '@/components/ui/loading-button'
 import { OverlaySpinner } from '@/components/ui/overlay-spinner'
 import { useDownloadMeme } from '@/hooks/use-download-meme'
 import { useShareMeme } from '@/hooks/use-share-meme'
-import { matchIsUserAdmin } from '@/lib/auth-client'
 import { buildVideoImageUrl, buildVideoStreamUrl } from '@/lib/bunny'
 import { getMemeByIdQueryOpts } from '@/lib/queries'
+import { matchIsUserAdmin } from '@/lib/role'
 import { buildMemeSeo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 import { getRandomMeme } from '@/server/meme'
@@ -150,7 +150,7 @@ const RouteComponent = () => {
                   loading="eager"
                 />
               </div>
-              <VideoPlayer className="overflow-hidden w-full h-full max-h-full">
+              <VideoPlayer className="overflow-hidden w-full h-full max-h-full dark">
                 <VideoPlayerContent
                   crossOrigin=""
                   poster={buildVideoImageUrl(meme.video.bunnyId)}

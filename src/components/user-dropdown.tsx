@@ -21,12 +21,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { useStripeCheckout } from '@/hooks/use-stripe-checkout'
-import { authClient, matchIsUserAdmin } from '@/lib/auth-client'
+import { authClient } from '@/lib/auth-client'
 import {
   getActiveSubscriptionQueryOpts,
   getAuthUserQueryOpts,
   getFavoritesMemesQueryOpts
 } from '@/lib/queries'
+import { matchIsUserAdmin } from '@/lib/role'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useRouter } from '@tanstack/react-router'
 

@@ -12,6 +12,16 @@ import { Progress } from '@/components/animate-ui/radix/progress'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  VideoPlayer,
+  VideoPlayerContent,
+  VideoPlayerControlBar,
+  VideoPlayerMuteButton,
+  VideoPlayerPlayButton,
+  VideoPlayerTimeDisplay,
+  VideoPlayerTimeRange,
+  VideoPlayerVolumeRange
+} from '@/components/ui/kibo-ui/video-player'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -178,11 +188,28 @@ export const StudioDialog = ({
                   </div>
                 </div>
               ) : data ? (
-                <video
-                  src={data.url}
-                  autoPlay
-                  className="aspect-video w-full"
-                />
+                <VideoPlayer className="overflow-hidden w-full h-full max-h-full dark">
+                  <VideoPlayerContent
+                    crossOrigin=""
+                    className="w-full h-full"
+                    src={data.url}
+                    playsInline
+                    autoPlay
+                    loop
+                    disablePictureInPicture
+                    disableRemotePlayback
+                    preload="auto"
+                    slot="media"
+                    tabIndex={-1}
+                  />
+                  <VideoPlayerControlBar>
+                    <VideoPlayerPlayButton />
+                    <VideoPlayerTimeRange />
+                    <VideoPlayerTimeDisplay showDuration />
+                    <VideoPlayerMuteButton />
+                    <VideoPlayerVolumeRange />
+                  </VideoPlayerControlBar>
+                </VideoPlayer>
               ) : (
                 <div className="absolute top-0 left-0 w-full h-full bg-muted/50">
                   <img

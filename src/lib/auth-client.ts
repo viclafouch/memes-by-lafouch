@@ -1,5 +1,4 @@
 import { adminClient } from 'better-auth/client/plugins'
-import type { UserWithRole } from 'better-auth/plugins'
 import { createAuthClient } from 'better-auth/react'
 import type { StudioErrorCode } from '@/constants/error'
 import { stripeClient } from '@better-auth/stripe/client'
@@ -7,10 +6,6 @@ import { stripeClient } from '@better-auth/stripe/client'
 export const authClient = createAuthClient({
   plugins: [adminClient(), stripeClient({ subscription: true })]
 })
-
-export const matchIsUserAdmin = (user: UserWithRole) => {
-  return user.role === 'admin'
-}
 
 type ErrorTypes = Partial<
   Record<
