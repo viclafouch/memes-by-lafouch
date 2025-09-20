@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import { shareMeme } from '@/server/meme'
 import { downloadBlob } from '@/utils/download'
 import type { Meme } from '@prisma/client'
@@ -10,6 +11,9 @@ export const useDownloadMeme = () => {
       const blob = await response.blob()
 
       downloadBlob(blob, meme.title)
+    },
+    onError: () => {
+      toast.error('Une erreur s’est produite pendant le téléchargement')
     }
   })
 }

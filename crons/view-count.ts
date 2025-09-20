@@ -1,67 +1,12 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import type { ZodType } from 'zod'
-import { z } from 'zod'
 import { prismaClient } from '@/db'
 import {
   algoliaClient,
   algoliaIndexName,
   memeToAlgoliaRecord
 } from '@/lib/algolia'
-
-const BUNNY_CONFIG = {
-  collectionId: z.string().parse(process.env.BUNNY_COLLECTION_ID),
-  libraryId: z.string().parse(process.env.BUNNY_LIBRARY_ID)
-}
-
-async function fetchWithZod<T>(
-  schema: ZodType<T>,
-  ...args: Parameters<typeof fetch>
-): Promise<T> {
-  const response = await fetch(...args)
-
-  if (!response.ok) {
-    try {
-      const error = await response.json()
-
-      throw new Error(
-        `Fetch failed with status ${response.status}: ${error.message}`
-      )
-    } catch (error) {
-      throw new Error(`Fetch failed with status ${response.status}`)
-    }
-  }
-
-  const result = await response.json()
-
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`Response for url : ${response.url}`, result)
-  }
-
-  return schema.parse(result, {
-    reportInput: process.env.NODE_ENV === 'development'
-  })
-}
-
-const getHeaders = () => {
-  const headers = new Headers()
-  headers.set('AccessKey', z.string().parse(process.env.BUNNY_ACCESS_KEY))
-  headers.set('accept', 'application/json')
-  headers.set('Content-Type', 'application/json')
-
-  return headers
-}
-
-const getVideo = async (videoId: string) => {
-  return fetchWithZod(
-    z.object({ views: z.number() }),
-    `https://video.bunnycdn.com/library/${BUNNY_CONFIG.libraryId}/videos/${videoId}`,
-    {
-      method: 'GET',
-      headers: getHeaders()
-    }
-  )
-}
+import { getVideoPlayData } from '@/lib/bunny'
 
 const reindexMemes = async () => {
   const memes = await prismaClient.meme.findMany({
@@ -91,18 +36,18 @@ const task = async () => {
   for (const meme of memes) {
     const { bunnyId } = meme.video
 
-    const { views } = await getVideo(bunnyId)
+    const { video } = await getVideoPlayData(bunnyId)
 
     await prismaClient.meme.update({
       where: {
         id: meme.id
       },
       data: {
-        viewCount: views
+        viewCount: video.views
       }
     })
 
-    console.log(`Updated meme (${meme.id}) viewCount column to `, views)
+    console.log(`Updated meme (${meme.id}) viewCount column to `, video.views)
   }
 
   console.log('Finishing refreshing algolia index')
