@@ -105,7 +105,7 @@ const getAuthConfig = serverOnly(() => {
           plans: [
             {
               name: 'premium',
-              priceId: 'price_1S8cc10e6MoMDhyQiHSOvnm4'
+              priceId: ENV.STRIPE_PRICE_ID
             }
           ]
         }
