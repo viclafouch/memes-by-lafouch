@@ -11,6 +11,7 @@
     "prisma:seed": "tsx --env-file=.env prisma/seed.ts",
     "prisma:db-push": "npx prisma db push",
     "prisma:reset-db": "npx prisma migrate reset",
+    "crons:view-count": "vite-node crons/view-count.ts",
     "postinstall": "prisma generate",
     "lint": "npx tsc && eslint",
     "lint:fix": "npm run lint -- --fix",

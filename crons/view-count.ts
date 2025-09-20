@@ -2,14 +2,12 @@
 /* eslint-disable no-await-in-loop */
 import type { ZodType } from 'zod'
 import { z } from 'zod'
+import { prismaClient } from '@/db'
 import {
   algoliaClient,
   algoliaIndexName,
   memeToAlgoliaRecord
 } from '@/lib/algolia'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
 
 const BUNNY_CONFIG = {
   collectionId: z.string().parse(process.env.BUNNY_COLLECTION_ID),
@@ -66,7 +64,7 @@ const getVideo = async (videoId: string) => {
 }
 
 const reindexMemes = async () => {
-  const memes = await prisma.meme.findMany({
+  const memes = await prismaClient.meme.findMany({
     include: {
       video: true,
       categories: {
@@ -82,7 +80,7 @@ const reindexMemes = async () => {
 }
 
 const task = async () => {
-  const memes = await prisma.meme.findMany({
+  const memes = await prismaClient.meme.findMany({
     include: {
       video: true
     }
@@ -95,7 +93,7 @@ const task = async () => {
 
     const { views } = await getVideo(bunnyId)
 
-    await prisma.meme.update({
+    await prismaClient.meme.update({
       where: {
         id: meme.id
       },
@@ -110,6 +108,8 @@ const task = async () => {
   console.log('Finishing refreshing algolia index')
 
   await reindexMemes()
+
+  process.exit(0)
 }
 
 task()
