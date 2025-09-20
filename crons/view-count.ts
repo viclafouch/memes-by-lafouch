@@ -2,7 +2,14 @@
 /* eslint-disable no-await-in-loop */
 import type { ZodType } from 'zod'
 import { z } from 'zod'
+import {
+  algoliaClient,
+  algoliaIndexName,
+  memeToAlgoliaRecord
+} from '@/lib/algolia'
 import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 const BUNNY_CONFIG = {
   collectionId: z.string().parse(process.env.BUNNY_COLLECTION_ID),
@@ -58,9 +65,23 @@ const getVideo = async (videoId: string) => {
   )
 }
 
-const task = async () => {
-  const prisma = new PrismaClient()
+const reindexMemes = async () => {
+  const memes = await prisma.meme.findMany({
+    include: {
+      video: true,
+      categories: {
+        include: { category: true }
+      }
+    }
+  })
 
+  await algoliaClient.replaceAllObjects({
+    indexName: algoliaIndexName,
+    objects: memes.map(memeToAlgoliaRecord)
+  })
+}
+
+const task = async () => {
   const memes = await prisma.meme.findMany({
     include: {
       video: true
@@ -85,6 +106,10 @@ const task = async () => {
 
     console.log(`Updated meme (${meme.id}) viewCount column to `, views)
   }
+
+  console.log('Finishing refreshing algolia index')
+
+  await reindexMemes()
 }
 
 task()

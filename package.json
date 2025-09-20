@@ -98,6 +98,7 @@
     "prisma": "^6.16.2",
     "react-email": "4.2.11",
     "typescript": "^5",
+    "vite-node": "^3.2.4",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
