@@ -12,6 +12,7 @@
     "prisma:db-push": "npx prisma db push",
     "prisma:reset-db": "npx prisma migrate reset",
     "crons:view-count": "vite-node crons/view-count.ts",
+    "crons:update-title-bunny": "vite-node crons/update-title-bunny.ts",
     "postinstall": "prisma generate",
     "lint": "npx tsc && eslint",
     "lint:fix": "npm run lint -- --fix",
