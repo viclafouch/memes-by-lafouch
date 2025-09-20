@@ -21,6 +21,7 @@ import { Route as Public__rootDefaultRouteRouteImport } from './routes/_public__
 import { Route as AdminLibraryIndexRouteImport } from './routes/admin/library/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminLibraryMemeIdRouteImport } from './routes/admin/library/$memeId'
+import { Route as Public__rootDefaultTermsOfUseRouteImport } from './routes/_public__root/_default/terms-of-use'
 import { Route as Public__rootDefaultPricingRouteImport } from './routes/_public__root/_default/pricing'
 import { Route as Public__rootDefaultFavoritesRouteImport } from './routes/_public__root/_default/favorites'
 import { Route as Public__rootDefaultSettingsRouteRouteImport } from './routes/_public__root/_default/settings/route'
@@ -86,6 +87,12 @@ const AdminLibraryMemeIdRoute = AdminLibraryMemeIdRouteImport.update({
   path: '/library/$memeId',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const Public__rootDefaultTermsOfUseRoute =
+  Public__rootDefaultTermsOfUseRouteImport.update({
+    id: '/terms-of-use',
+    path: '/terms-of-use',
+    getParentRoute: () => Public__rootDefaultRouteRoute,
+  } as any)
 const Public__rootDefaultPricingRoute =
   Public__rootDefaultPricingRouteImport.update({
     id: '/pricing',
@@ -171,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof Public__rootDefaultSettingsRouteRouteWithChildren
   '/favorites': typeof Public__rootDefaultFavoritesRoute
   '/pricing': typeof Public__rootDefaultPricingRoute
+  '/terms-of-use': typeof Public__rootDefaultTermsOfUseRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
@@ -190,6 +198,7 @@ export interface FileRoutesByTo {
   '/': typeof Public__rootIndexRoute
   '/favorites': typeof Public__rootDefaultFavoritesRoute
   '/pricing': typeof Public__rootDefaultPricingRoute
+  '/terms-of-use': typeof Public__rootDefaultTermsOfUseRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/library': typeof AdminLibraryIndexRoute
@@ -213,6 +222,7 @@ export interface FileRoutesById {
   '/_public__root/_default/settings': typeof Public__rootDefaultSettingsRouteRouteWithChildren
   '/_public__root/_default/favorites': typeof Public__rootDefaultFavoritesRoute
   '/_public__root/_default/pricing': typeof Public__rootDefaultPricingRoute
+  '/_public__root/_default/terms-of-use': typeof Public__rootDefaultTermsOfUseRoute
   '/admin/library/$memeId': typeof AdminLibraryMemeIdRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/library/': typeof AdminLibraryIndexRoute
@@ -235,6 +245,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/favorites'
     | '/pricing'
+    | '/terms-of-use'
     | '/admin/library/$memeId'
     | '/admin/categories'
     | '/admin/library'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/'
     | '/favorites'
     | '/pricing'
+    | '/terms-of-use'
     | '/admin/library/$memeId'
     | '/admin/categories'
     | '/admin/library'
@@ -276,6 +288,7 @@ export interface FileRouteTypes {
     | '/_public__root/_default/settings'
     | '/_public__root/_default/favorites'
     | '/_public__root/_default/pricing'
+    | '/_public__root/_default/terms-of-use'
     | '/admin/library/$memeId'
     | '/admin/categories/'
     | '/admin/library/'
@@ -395,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLibraryMemeIdRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_public__root/_default/terms-of-use': {
+      id: '/_public__root/_default/terms-of-use'
+      path: '/terms-of-use'
+      fullPath: '/terms-of-use'
+      preLoaderRoute: typeof Public__rootDefaultTermsOfUseRouteImport
+      parentRoute: typeof Public__rootDefaultRouteRoute
+    }
     '/_public__root/_default/pricing': {
       id: '/_public__root/_default/pricing'
       path: '/pricing'
@@ -512,6 +532,7 @@ interface Public__rootDefaultRouteRouteChildren {
   Public__rootDefaultSettingsRouteRoute: typeof Public__rootDefaultSettingsRouteRouteWithChildren
   Public__rootDefaultFavoritesRoute: typeof Public__rootDefaultFavoritesRoute
   Public__rootDefaultPricingRoute: typeof Public__rootDefaultPricingRoute
+  Public__rootDefaultTermsOfUseRoute: typeof Public__rootDefaultTermsOfUseRoute
   Public__rootDefaultCheckoutSuccessRoute: typeof Public__rootDefaultCheckoutSuccessRoute
   Public__rootDefaultMemesMemeIdRoute: typeof Public__rootDefaultMemesMemeIdRoute
   Public__rootDefaultPasswordCreateNewRoute: typeof Public__rootDefaultPasswordCreateNewRoute
@@ -526,6 +547,7 @@ const Public__rootDefaultRouteRouteChildren: Public__rootDefaultRouteRouteChildr
       Public__rootDefaultSettingsRouteRouteWithChildren,
     Public__rootDefaultFavoritesRoute: Public__rootDefaultFavoritesRoute,
     Public__rootDefaultPricingRoute: Public__rootDefaultPricingRoute,
+    Public__rootDefaultTermsOfUseRoute: Public__rootDefaultTermsOfUseRoute,
     Public__rootDefaultCheckoutSuccessRoute:
       Public__rootDefaultCheckoutSuccessRoute,
     Public__rootDefaultMemesMemeIdRoute: Public__rootDefaultMemesMemeIdRoute,

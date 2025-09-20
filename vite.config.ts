@@ -11,6 +11,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util', 'hls.js']
   },
+  assetsInclude: ['**/*.md'],
   plugins: [
     tailwindcss(),
     tsconfigPaths({

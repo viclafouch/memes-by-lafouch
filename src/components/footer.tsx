@@ -26,7 +26,7 @@ export const Footer = () => {
             Confidentialité
           </Link>
           <Link
-            to="/"
+            to="/terms-of-use"
             className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Conditions

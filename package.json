@@ -72,6 +72,7 @@
     "react": "^19",
     "react-dom": "^19",
     "react-hotkeys-hook": "^5.1.0",
+    "react-markdown": "^10.1.0",
     "react-tweet": "^3.2.2",
     "remeda": "^2.32.0",
     "resend": "^6.1.0",
